@@ -479,7 +479,7 @@
             },
             {
                 "name": "get_camera_parameters",
-                "command_type": "Vv",
+                "command_type": "Va",
                 "returned_fields": [
                     {
                         "field_name": "parameter",
