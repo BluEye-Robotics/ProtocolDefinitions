@@ -433,8 +433,38 @@
                     },
                     {
                         "description": "Debug flags (bitmask)",
-                        "dtype": "<u8",
+                        "dtype": "<u2",
                         "field_name": "debug_flags",
+                        "unit": ""
+                    },
+                    {
+                        "description": "Iperf received",
+                        "dtype": "<u1",
+                        "field_name": "iperf_recv",
+                        "unit": ""
+                    },
+                    {
+                        "description": "Iperf send",
+                        "dtype": "<u1",
+                        "field_name": "iperf_send",
+                        "unit": ""
+                    },
+                    {
+                        "description": "Number of spectators",
+                        "dtype": "<u1",
+                        "field_name": "spectators",
+                        "unit": ""
+                    },
+                    {
+                        "description": "Tilt angle",
+                        "dtype": "<i1",
+                        "field_name": "tilt_angle",
+                        "unit": ""
+                    },
+                    {
+                        "description": "Software version",
+                        "dtype": "<u2",
+                        "field_name": "sw_version",
                         "unit": ""
                     },
                     {
