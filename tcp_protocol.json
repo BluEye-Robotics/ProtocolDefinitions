@@ -407,6 +407,17 @@
                ]
             },
             {
+                "name": "set_water_density",
+                "command_type": "p",
+                "fields": [
+                    {
+                        "field_name": "water_density",
+                        "dtype": "<i2",
+                        "description": "water density in grams per liter"
+                    }
+                ]
+            },
+            {
                 "name": "set_camera_exposure",
                 "command_type": "ve",
                 "expected_reply": "a",
