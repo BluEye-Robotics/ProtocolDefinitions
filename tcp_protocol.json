@@ -409,6 +409,7 @@
             {
                 "name": "set_water_density",
                 "command_type": "W",
+                "description": "Set the water density for improved accuracy of the depth sensor.",
                 "fields": [
                     {
                         "field_name": "water_density",
