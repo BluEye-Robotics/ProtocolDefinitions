@@ -418,6 +418,11 @@
                 ]
             },
             {
+                "name": "take_still_picture",
+                "command_type": "s",
+                "description": "Takes a still picture and stores it locally on the drone."
+            },
+            {
                 "name": "set_camera_exposure",
                 "command_type": "ve",
                 "expected_reply": "a",
