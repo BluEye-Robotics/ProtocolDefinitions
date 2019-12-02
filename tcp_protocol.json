@@ -5,7 +5,7 @@
             {
                 "name": "motion_input",
                 "command_type": "j",
-                "fields":[
+                "fields": [
                     {
                         "field_name": "surge_motion_input",
                         "dtype": "<f4",
@@ -47,7 +47,7 @@
             {
                 "name": "set_lights",
                 "command_type": "l",
-                "fields":[
+                "fields": [
                     {
                         "field_name": "brightness_upper",
                         "dtype": "<u1",
@@ -162,7 +162,7 @@
                         "field_name": "unix_timestamp",
                         "dtype": "<i4"
                     }
-               ]
+                ]
             },
             {
                 "name": "set_camera_exposure",
@@ -247,7 +247,7 @@
             {
                 "name": "motion_input",
                 "command_type": "j",
-                "fields":[
+                "fields": [
                     {
                         "field_name": "surge_motion_input",
                         "dtype": "<f4",
@@ -289,7 +289,7 @@
             {
                 "name": "set_lights",
                 "command_type": "l",
-                "fields":[
+                "fields": [
                     {
                         "field_name": "brightness_upper",
                         "dtype": "<u1",
@@ -404,7 +404,7 @@
                         "field_name": "unix_timestamp",
                         "dtype": "<i4"
                     }
-               ]
+                ]
             },
             {
                 "name": "set_water_density",
