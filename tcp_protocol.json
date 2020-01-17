@@ -287,6 +287,55 @@
                 ]
             },
             {
+                "name": "motion_input_tilt",
+                "command_type": "J",
+                "fields": [
+                    {
+                        "field_name": "surge_motion_input",
+                        "dtype": "<f4",
+                        "upper_limit": 1,
+                        "lower_limit": -1
+                    },
+                    {
+                        "field_name": "sway_motion_input",
+                        "dtype": "<f4",
+                        "upper_limit": 1,
+                        "lower_limit": -1
+                    },
+                    {
+                        "field_name": "heave_motion_input",
+                        "dtype": "<f4",
+                        "upper_limit": 1,
+                        "lower_limit": -1
+                    },
+                    {
+                        "field_name": "yaw_motion_input",
+                        "dtype": "<f4",
+                        "upper_limit": 1,
+                        "lower_limit": -1
+                    },
+                    {
+                        "field_name": "slow_input",
+                        "dtype": "<f4",
+                        "upper_limit": 1,
+                        "lower_limit": 0
+                    },
+                    {
+                        "field_name": "boost_input",
+                        "dtype": "<f4",
+                        "upper_limit": 1,
+                        "lower_limit": 0
+                    },
+                    {
+                        "field_name": "tilt_speed_input",
+                        "dtype": "<f4",
+                        "upper_limit": 1,
+                        "lower_limit": -1,
+                        "description": "Speed input for the camera tilt angle. 1 for max up, -1 for max down, 0 for stop."
+                    }
+                ]
+            },
+            {
                 "name": "set_lights",
                 "command_type": "l",
                 "fields": [
