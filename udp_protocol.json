@@ -428,6 +428,12 @@
                                 "name": "ERR_COMPASS_CALIBRATION",
                                 "component": "compass",
                                 "description": "Invalid compass calibration"
+                            },
+                            {
+                                "value": "0x00000080",
+                                "name": "ERR_TILT_CALIBRATION",
+                                "component": "tilt",
+                                "description": "Invalid tilt calibration"
                             }
                         ]
                     },
