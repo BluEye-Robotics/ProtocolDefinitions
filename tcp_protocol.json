@@ -367,15 +367,12 @@
                 "command_type": "R"
             },
             {
-                "name": "set_overlay_enabled",
-                "command_type": "o",
-                "fields": [
-                    {
-                        "field_name": "overlay_enabled",
-                        "dtype": "<i4",
-                        "description": "an integer representing whether or not overlay should be enabled on video recordings, 1 = true, 0 = false"
-                    }
-                ]
+                "name": "enable_overlay",
+                "command_type": "o"
+            },
+            {
+                "name": "disable_overlay",
+                "command_type": "O"
             },
             {
                 "name": "start_compass_calibration",
@@ -587,17 +584,6 @@
                     {
                         "field_name": "camera_framerate",
                         "dtype": "<i4"
-                    }
-                ]
-            },
-            {
-                "name": "is_overlay_enabled",
-                "command_type": "O",
-                "returned_fields": [
-                    {
-                        "field_name": "is_overlay_enabled",
-                        "dtype": "<i4",
-                        "description": "an integer representing whether or not overlay is enabled on video recordings, 1 = true, 0 = false"
                     }
                 ]
             }
