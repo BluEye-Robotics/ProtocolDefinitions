@@ -415,6 +415,18 @@
                 ]
             },
             {
+                "name": "set_overlay_tilt_enabled",
+                "command_type": "ol",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_tilt_enabled",
+                        "dtype": "<u1",
+                        "description": "1 is true, 0 is false"
+                    }
+                ]
+            },
+            {
                 "name": "set_overlay_date_enabled",
                 "command_type": "oa",
                 "expected_reply": "a",
@@ -556,7 +568,11 @@
                         "dtype": "<u1"
                     },
                     {
-                        "field_name": "temperature_enabled",
+                        "field_name": "heading_enabled",
+                        "dtype": "<u1"
+                    },
+                    {
+                        "field_name": "tilt_enabled",
                         "dtype": "<u1"
                     },
                     {
