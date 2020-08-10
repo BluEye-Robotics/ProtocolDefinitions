@@ -506,7 +506,7 @@
                     {
                         "field_name": "overlay_font_size",
                         "dtype": "<i4",
-                        "description": "choose from: { 15, 20, 25, 30, 35, 40, 45 }"
+                        "description": "choose from: { 15, 20, 25, 30, 35, 40 }"
                     }
                 ]
             },
