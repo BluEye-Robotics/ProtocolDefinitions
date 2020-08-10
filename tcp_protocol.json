@@ -367,12 +367,12 @@
                 "command_type": "R"
             },
             {
-                "name": "set_overlay_enabled",
+                "name": "set_overlay_logo_enabled",
                 "command_type": "oo",
                 "expected_reply": "a",
                 "fields": [
                     {
-                        "field_name": "overlay_enabled",
+                        "field_name": "overlay_logo_enabled",
                         "dtype": "<u1",
                         "description": "1 is true, 0 is false"
                     }
@@ -556,7 +556,7 @@
                         "description": "a char describing what overlay parameters were returned, 'a' for all parameters"
                     },
                     {
-                        "field_name": "overlay_enabled",
+                        "field_name": "logo_enabled",
                         "dtype": "<u1"
                     },
                     {
