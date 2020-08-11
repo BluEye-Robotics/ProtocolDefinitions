@@ -367,18 +367,6 @@
                 "command_type": "R"
             },
             {
-                "name": "set_overlay_logo_enabled",
-                "command_type": "oo",
-                "expected_reply": "a",
-                "fields": [
-                    {
-                        "field_name": "overlay_logo_enabled",
-                        "dtype": "<u1",
-                        "description": "1 is true, 0 is false"
-                    }
-                ]
-            },
-            {
                 "name": "set_overlay_temperature_enabled",
                 "command_type": "ot",
                 "expected_reply": "a",
@@ -435,6 +423,18 @@
                         "field_name": "overlay_date_enabled",
                         "dtype": "<u1",
                         "description": "1 is true, 0 is false"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_logo_index",
+                "command_type": "oD",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_logo_index",
+                        "dtype": "<i4",
+                        "description": "enum { NONE = 0, DEFAULT = 1, CUSTOM = 2 }"
                     }
                 ]
             },
@@ -556,10 +556,6 @@
                         "description": "a char describing what overlay parameters were returned, 'a' for all parameters"
                     },
                     {
-                        "field_name": "logo_enabled",
-                        "dtype": "<u1"
-                    },
-                    {
                         "field_name": "temperature_enabled",
                         "dtype": "<u1"
                     },
@@ -578,6 +574,10 @@
                     {
                         "field_name": "date_enabled",
                         "dtype": "<u1"
+                    },
+                    {
+                        "field_name": "logo_index",
+                        "dtype": "<i4"
                     },
                     {
                         "field_name": "depth_unit",
