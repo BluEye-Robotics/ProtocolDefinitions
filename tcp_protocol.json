@@ -791,7 +791,7 @@
                     {
                         "field_name": "resolution_value",
                         "dtype": "<i4",
-                        "description": "valid values are 480, 720 or 1080"
+                        "description": "valid values are 720 or 1080"
                     }
                 ]
             },
