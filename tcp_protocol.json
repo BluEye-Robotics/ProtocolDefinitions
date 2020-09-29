@@ -367,6 +367,257 @@
                 "command_type": "R"
             },
             {
+                "name": "set_overlay_temperature_enabled",
+                "command_type": "ot",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_temperature_enabled",
+                        "dtype": "<u1",
+                        "description": "1 is true, 0 is false"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_depth_enabled",
+                "command_type": "od",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_depth_enabled",
+                        "dtype": "<u1",
+                        "description": "1 is true, 0 is false"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_heading_enabled",
+                "command_type": "oh",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_heading_enabled",
+                        "dtype": "<u1",
+                        "description": "1 is true, 0 is false"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_tilt_enabled",
+                "command_type": "ol",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_tilt_enabled",
+                        "dtype": "<u1",
+                        "description": "1 is true, 0 is false"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_date_enabled",
+                "command_type": "oa",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_date_enabled",
+                        "dtype": "<u1",
+                        "description": "1 is true, 0 is false"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_logo_index",
+                "command_type": "oD",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_logo_index",
+                        "dtype": "<i4",
+                        "description": "enum { NONE = 0, DEFAULT = 1, CUSTOM = 2 }"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_depth_unit",
+                "command_type": "oD",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_depth_unit",
+                        "dtype": "<i4",
+                        "description": "enum { METERS = 0, FEET = 1 }"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_temperature_unit",
+                "command_type": "oT",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_temperature_unit",
+                        "dtype": "<i4",
+                        "description": "enum { CELSIUS = 0, FAHRENHEIT = 1 }"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_tz_offset",
+                "command_type": "oz",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_tz_offset",
+                        "dtype": "<i4",
+                        "description": "time zone offset in minutes"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_margin_width",
+                "command_type": "ow",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_margin_width",
+                        "dtype": "<i4",
+                        "description": "margin width in pixels"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_margin_height",
+                "command_type": "oH",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_margin_height",
+                        "dtype": "<i4",
+                        "description": "margin height in pixels"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_font_size",
+                "command_type": "of",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_font_size",
+                        "dtype": "<i4",
+                        "description": "choose from: { 15, 20, 25, 30, 35, 40 }"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_title",
+                "command_type": "oi",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_title",
+                        "dtype": "<u1[64]",
+                        "description": "Null terminated ascii string padded to 64 characters"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_subtitle",
+                "command_type": "os",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_subtitle",
+                        "dtype": "<u1[64]",
+                        "description": "Null terminated ascii string padded to 64 characters"
+                    }
+                ]
+            },
+            {
+                "name": "set_overlay_date_format",
+                "command_type": "oA",
+                "expected_reply": "a",
+                "fields": [
+                    {
+                        "field_name": "overlay_date_format",
+                        "dtype": "<u1[64]",
+                        "description": "Null terminated ascii string padded to 64 characters"
+                    }
+                ]
+            },
+            {
+                "name": "get_overlay_parameters",
+                "command_type": "Oa",
+                "returned_fields": [
+                    {
+                        "field_name": "parameter",
+                        "dtype": "<u1",
+                        "description": "a char describing what overlay parameters were returned, 'a' for all parameters"
+                    },
+                    {
+                        "field_name": "temperature_enabled",
+                        "dtype": "<u1"
+                    },
+                    {
+                        "field_name": "depth_enabled",
+                        "dtype": "<u1"
+                    },
+                    {
+                        "field_name": "heading_enabled",
+                        "dtype": "<u1"
+                    },
+                    {
+                        "field_name": "tilt_enabled",
+                        "dtype": "<u1"
+                    },
+                    {
+                        "field_name": "date_enabled",
+                        "dtype": "<u1"
+                    },
+                    {
+                        "field_name": "logo_index",
+                        "dtype": "<i4"
+                    },
+                    {
+                        "field_name": "depth_unit",
+                        "dtype": "<i4"
+                    },
+                    {
+                        "field_name": "temperature_unit",
+                        "dtype": "<i4"
+                    },
+                    {
+                        "field_name": "tz_offset",
+                        "dtype": "<i4"
+                    },
+                    {
+                        "field_name": "margin_width",
+                        "dtype": "<i4"
+                    },
+                    {
+                        "field_name": "margin_height",
+                        "dtype": "<i4"
+                    },
+                    {
+                        "field_name": "font_size",
+                        "dtype": "<i4"
+                    },
+                    {
+                        "field_name": "title",
+                        "dtype": "<u1[64]"
+                    },
+                    {
+                        "field_name": "subtitle",
+                        "dtype": "<u1[64]"
+                    },
+                    {
+                        "field_name": "date_format",
+                        "dtype": "<u1[64]"
+                    }
+                ]
+            },
+            {
                 "name": "start_compass_calibration",
                 "command_type": "i"
             },
@@ -540,7 +791,7 @@
                     {
                         "field_name": "resolution_value",
                         "dtype": "<i4",
-                        "description": "valid values are 480, 720 or 1080"
+                        "description": "valid values are 720 or 1080"
                     }
                 ]
             },
