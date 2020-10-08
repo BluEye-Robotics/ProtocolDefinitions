@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package blueye.protocol;
+
+enum LogoIndex {
+    NONE = 0;
+    DEFAULT = 1;
+    CUSTOM = 2;
+}
+
+enum DepthUnit {
+    METERS = 0;
+    FEET = 1;
+}
+
+enum TemperatureUnit {
+    CELSIUS = 0;
+    FAHRENHEIT = 1;
+}
+
+enum FontSize {
+    PX15 = 0;
+    PX20 = 1;
+    PX25 = 2;
+    PX30 = 3;
+    PX35 = 4;
+    PX40 = 5;
+}
+
+message SetOverlayTemperatureEnabledRequest {
+    bool temperature_enabled = 1;
+}
+message SetOverlayTemperatureEnabledResponse {}
+
+message SetOverlayDepthEnabledRequest {
+    bool depth_enabled = 1;
+}
+message SetOverlayDepthEnabledResponse {}
+
+message SetOverlayHeadingEnabledRequest {
+    bool heading_enabled = 1;
+}
+message SetOverlayHeadingEnabledResponse {}
+
+message SetOverlayTiltEnabledRequest {
+    bool tilt_enabled = 1;
+}
+message SetOverlayTiltEnabledResponse {}
+
+message SetOverlayDateEnabledRequest {
+    bool date_enabled = 1;
+}
+message SetOverlayDateEnabledResponse {}
+
+message SetOverlayLogoIndexRequest {
+    LogoIndex logo_index = 1;
+}
+message SetOverlayLogoIndexResponse {}
+
+message SetOverlayDepthUnitRequest {
+    DepthUnit depth_unit = 1;
+}
+message SetOverlayDepthUnitResponse {}
+
+message SetOverlayTemperatureUnitRequest {
+    TemperatureUnit temperature_unit = 1;
+}
+message SetOverlayTemperatureUnitResponse {}
+
+message SetOverlayTimezoneOffsetRequest {
+    int32 timezone_offset = 1;
+}
+message SetOverlayTimezoneOffsetResponse {}
+
+message SetOverlayMarginWidthRequest {
+    int32 margin_width = 1;
+}
+message SetOverlayMarginWidthResponse {}
+
+message SetOverlayMarginHeightRequest {
+    int32 margin_height = 1;
+}
+message SetOverlayMarginHeightResponse {}
+
+message SetOverlayFontSizeRequest {
+    FontSize font_size = 1;
+}
+message SetOverlayFontSizeResponse {}
+
+message SetOverlayTitleRequest {
+    string title = 1;
+}
+message SetOverlayTitleResponse {}
+
+message SetOverlaySubtitleRequest {
+    string subtitle = 1;
+}
+message SetOverlaySubtitleResponse {}
+
+message SetOverlayDateFormatRequest {
+    string date_format = 1;
+}
+message SetOverlayDateFormatResponse {}
+
+message GetOverlayParametersRequest {}
+
+message GetOverlayParametersResponse {
+    bool temperature_enabled = 1;
+    bool depth_enabled = 2;
+    bool heading_enabled = 3;
+    bool tilt_enabled = 4;
+    bool date_enabled = 5;
+    LogoIndex logo_index = 6;
+    DepthUnit depth_unit = 7;
+    TemperatureUnit temperature_unit = 8;
+    int32 timezone_offset = 9;
+    int32 margin_width = 10;
+    int32 margin_height = 11;
+    FontSize font_size = 12;
+    string title = 13;
+    string subtitle = 14;
+    string date_format = 16;
+}
+
+service OverlayControl {
+    rpc SetOverlayTemperatureEnabled (SetOverlayTemperatureEnabledRequest) returns (SetOverlayTemperatureEnabledResponse);
+    rpc SetOverlayDepthEnabled (SetOverlayDepthEnabledRequest) returns (SetOverlayDepthEnabledResponse);
+    rpc SetOverlayHeadingEnabled (SetOverlayHeadingEnabledRequest) returns (SetOverlayHeadingEnabledResponse);
+    rpc SetOverlayTiltEnabled (SetOverlayTiltEnabledRequest) returns (SetOverlayTiltEnabledResponse);
+    rpc SetOverlayDateEnabled (SetOverlayDateEnabledRequest) returns (SetOverlayDateEnabledResponse);
+    rpc SetOverlayLogoIndex (SetOverlayLogoIndexRequest) returns (SetOverlayLogoIndexResponse);
+    rpc SetOverlayTemperatureUnit (SetOverlayTemperatureUnitRequest) returns (SetOverlayTemperatureUnitResponse);
+    rpc SetOverlayTimezoneOffset (SetOverlayTimezoneOffsetRequest) returns (SetOverlayTimezoneOffsetResponse);
+    rpc SetOverlayMarginWidth (SetOverlayMarginWidthRequest) returns (SetOverlayMarginWidthResponse);
+    rpc SetOverlayMarginHeight (SetOverlayMarginHeightRequest) returns (SetOverlayMarginHeightResponse);
+    rpc SetOverlayFontSize (SetOverlayFontSizeRequest) returns (SetOverlayFontSizeResponse);
+    rpc SetOverlayTitle (SetOverlayTitleRequest) returns (SetOverlayTitleResponse);
+    rpc SetOverlaySubtitle (SetOverlaySubtitleRequest) returns (SetOverlaySubtitleResponse);
+    rpc SetOverlayDateFormat (SetOverlayDateFormatRequest) returns (SetOverlayDateFormatResponse);
+    rpc GetOverlayParameters (GetOverlayParametersRequest) returns (GetOverlayParametersResponse);
+}
