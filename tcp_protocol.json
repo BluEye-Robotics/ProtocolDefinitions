@@ -842,7 +842,7 @@
                     {
                         "field_name": "gripping_velocity",
                         "dtype": "<f4",
-                        "description": "The opening/closing velocity of the gripper. Postive values for open, negative for closing",
+                        "description": "The opening/closing velocity of the gripper. Positive values for opening, negative for closing",
                         "upper_limit": 1,
                         "lower_limit": -1
                     },
