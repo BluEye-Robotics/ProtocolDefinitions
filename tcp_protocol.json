@@ -834,6 +834,26 @@
                         "dtype": "<i4"
                     }
                 ]
+            },
+            {
+                "name": "set_gripper_velocities",
+                "command_type": "G",
+                "fields": [
+                    {
+                        "field_name": "gripping_velocity",
+                        "dtype": "<f4",
+                        "description": "The opening/closing velocity of the gripper. Positive values for opening, negative for closing",
+                        "upper_limit": 1,
+                        "lower_limit": -1
+                    },
+                    {
+                        "field_name": "rotational_velocity",
+                        "dtype": "<f4",
+                        "description": "The rotational velocity of the gripper. Positive values for clockwise, negative for counter-clockwise",
+                        "upper_limit": 1,
+                        "lower_limit": -1
+                    }
+                ]
             }
         ]
     }
