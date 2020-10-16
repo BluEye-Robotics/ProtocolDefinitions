@@ -2,52 +2,7 @@ syntax = "proto3";
 
 package blueye.protocol;
 
-
-/*
- * Common messages
- *
- * These are used for logging as well as building requests and responses.
- */
-
-// The message for motion input
-message MotionInput {
-    float surge = 1;
-    float sway = 2;
-    float heave = 3;
-    float yaw = 4;
-    float slow = 5;
-    float boost = 6;
-}
-
-message Lights {
-    uint32 percentage = 1;
-}
-
-message LatLongPosition {
-    float latitude = 1;
-    float longitude = 2;
-}
-
-message ConnectionDuration {
-    int64 connection_duration = 1;
-}
-
-message AutoHeadingState {
-    bool enabled = 1;
-}
-
-message AutoDepthState {
-    bool enabled = 1;
-}
-
-enum Directions {
-    UP = 0;
-    DOWN = 1;
-}
-
-message SystemTime {
-    string unix_timestamp = 1;
-}
+import "common.proto";
 
 /*
  * Request/Response messages

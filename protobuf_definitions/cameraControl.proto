@@ -2,63 +2,7 @@ syntax = "proto3";
 
 package blueye.protocol;
 
-/*
- * Common messages
- */
-
-
-message CameraParameters {
-    message Bitrate {
-        int32 bitrate = 1;
-    }
-
-    message Exposure {
-        int32 exposure = 1;
-    }
-
-    message WhiteBalance {
-        int32 white_balance = 1;
-    }
-
-    message Hue {
-        int32 hue = 1;
-    }
-
-    message Resolution {
-        enum ValidResolutions {
-            FULLHD_1080P = 0;
-            HD_720P = 1;
-        }
-        ValidResolutions resolution = 1;
-    }
-
-    message FrameRate {
-        enum ValidFrameRates {
-            FPS_30 = 0;
-            FPS_25 = 1;
-        }
-        ValidFrameRates frame_rate = 1;
-    }
-
-    Bitrate bitrate = 1;
-    Exposure exposure = 2;
-    WhiteBalance white_balance = 3;
-    Hue hue = 4;
-    Resolution resolution = 5;
-    FrameRate frame_rate = 6;
-}
-
-message RecordingState {
-    bool is_recording = 1;
-}
-
-message TiltStabilizationState {
-    bool stabilization_enabled = 1;
-}
-
-message TiltSpeed {
-    float speed = 1;
-}
+import "common.proto";
 
 /*
  * Request/Response messages
