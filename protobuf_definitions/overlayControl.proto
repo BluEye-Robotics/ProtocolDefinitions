@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package blueye.protocol;
+option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 enum LogoIndex {
     NONE = 0;
