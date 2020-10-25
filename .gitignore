@@ -1,2 +1,8 @@
+# Generated files
+docs
+
+# macOS
+.DS_Store
+
 # Visual Studio Code
 .vscode
