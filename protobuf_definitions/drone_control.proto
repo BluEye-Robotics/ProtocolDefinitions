@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package blueye.protocol;
+option csharp_namespace = "Blueye.Protocol.Protobuf";
+
+import "common.proto";
+
+/*
+ * Request/Response messages
+ *
+ * These messages wrap the common messages. By using empty versions of these messages
+ * instead of the Empty message from Google we retain the flexibility of changing the
+ * response/request without making a breaking change. The downside is the added
+ * verbosity.
+ */
+
+// The motion input request
+message SetMotionInputRequest {
+  MotionInput motion_input = 1;
+}
+// The motion input response
+message SetMotionInputResponse {}
+
+
+message SetLightsRequest {
+  Lights lights = 1;
+}
+message SetLightsResponse {}
+
+
+message SetUserPositionRequest {
+  LatLongPosition position = 1;
+}
+message SetUserPositionResponse {}
+
+
+message PetWatchdogRequest {
+  ConnectionDuration connection_duration = 1;
+}
+message PetWatchdogResponse {}
+
+
+message StartCompassCalibrationRequest {}
+message StartCompassCalibrationResponse {}
+
+
+message CancelCompassCalibrationRequest {}
+message CancelCompassCalibrationResponse {}
+
+
+message SaveCompassCalibrationRequest {}
+message SaveCompassCalibrationResponse {}
+
+
+message SetAutoHeadingStateRequest {
+  AutoHeadingState auto_heading_state = 1;
+}
+message SetAutoHeadingStateResponse {}
+
+
+message SetAutoDepthStateRequest {
+  AutoDepthState auto_depth_state = 1;
+}
+message SetAutoDepthStateResponse {}
+
+message AdjustAutoDepthSetpointRequest {
+  Directions direction = 1;
+}
+message AdjustAutoDepthSetpointResponse {}
+
+message AdjustAutoHeadingSetpointRequest {
+  Directions direction = 1;
+}
+message AdjustAutoHeadingSetpointResponse {}
+
+message SetSystemTimeRequest {
+  SystemTime system_time = 1;
+}
+message SetSystemTimeResponse {}
+
+message SetWaterDensityRequest {
+  uint32 water_density = 1;
+}
+message SetWaterDensityResponse {}
+
+service DroneControl {
+  // The function for setting the motion input
+  rpc SetMotionInput (SetMotionInputRequest) returns (SetMotionInputResponse){
+      //
+      // Extra comment for the SetMotionInput rpc
+  }
+
+  rpc SetLights (SetLightsRequest) returns (SetLightsResponse);
+  rpc SetUserPosition (SetUserPositionRequest) returns (SetUserPositionResponse);
+  rpc PetWatchdog (PetWatchdogRequest) returns (PetWatchdogResponse);
+  rpc StartCompassCalibration (StartCompassCalibrationRequest) returns (StartCompassCalibrationResponse);
+  rpc CancelCompassCalibration (CancelCompassCalibrationRequest) returns (CancelCompassCalibrationResponse);
+  rpc SaveCompassCalibration (SaveCompassCalibrationRequest) returns (SaveCompassCalibrationResponse);
+  rpc SetAutoHeadingState (SetAutoHeadingStateRequest) returns (SetAutoHeadingStateResponse);
+  rpc SetAutoDepthState (SetAutoDepthStateRequest) returns (SetAutoDepthStateResponse);
+  rpc AdjustAutoDepthSetpoint (AdjustAutoDepthSetpointRequest) returns (AdjustAutoDepthSetpointResponse);
+  rpc AdjustAutoHeadingSetpoint (AdjustAutoHeadingSetpointRequest) returns (AdjustAutoHeadingSetpointResponse);
+  rpc SetSystemTime (SetSystemTimeRequest) returns (SetSystemTimeResponse);
+  rpc SetWaterDensity (SetWaterDensityRequest) returns (SetWaterDensityResponse);
+}

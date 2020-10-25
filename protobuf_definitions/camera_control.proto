@@ -10,26 +10,26 @@ import "common.proto";
  */
 
 message GetCameraParameterRequest {
-    oneof Parameter {
-        CameraParameters.Bitrate bitrate = 1;
-        CameraParameters.Exposure exposure = 2;
-        CameraParameters.WhiteBalance white_balance = 3;
-        CameraParameters.Hue hue = 4;
-        CameraParameters.Resolution resolution = 5;
-        CameraParameters.FrameRate frame_rate = 6;
-        CameraParameters all_parameters = 7;
-    }
+  oneof Parameter {
+    CameraParameters.Bitrate bitrate = 1;
+    CameraParameters.Exposure exposure = 2;
+    CameraParameters.WhiteBalance white_balance = 3;
+    CameraParameters.Hue hue = 4;
+    CameraParameters.Resolution resolution = 5;
+    CameraParameters.FrameRate frame_rate = 6;
+    CameraParameters all_parameters = 7;
+  }
 }
 message GetCameraParameterResponse {
-    oneof Parameter {
-        CameraParameters.Bitrate bitrate = 1;
-        CameraParameters.Exposure exposure = 2;
-        CameraParameters.WhiteBalance white_balance = 3;
-        CameraParameters.Hue hue = 4;
-        CameraParameters.Resolution resolution = 5;
-        CameraParameters.FrameRate frame_rate = 6;
-        CameraParameters all_parameters = 7;
-    }
+  oneof Parameter {
+    CameraParameters.Bitrate bitrate = 1;
+    CameraParameters.Exposure exposure = 2;
+    CameraParameters.WhiteBalance white_balance = 3;
+    CameraParameters.Hue hue = 4;
+    CameraParameters.Resolution resolution = 5;
+    CameraParameters.FrameRate frame_rate = 6;
+    CameraParameters all_parameters = 7;
+  }
 }
 
 message SetCameraParameterRequest {

@@ -11,94 +11,94 @@ option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 // The message for motion input
 message MotionInput {
-    float surge = 1;
-    float sway = 2;
-    float heave = 3;
-    float yaw = 4;
-    float slow = 5;
-    float boost = 6;
+  float surge = 1;
+  float sway = 2;
+  float heave = 3;
+  float yaw = 4;
+  float slow = 5;
+  float boost = 6;
 }
 
 message Lights {
-    uint32 percentage = 1;
+  uint32 percentage = 1;
 }
 
 message LatLongPosition {
-    float latitude = 1;
-    float longitude = 2;
+  float latitude = 1;
+  float longitude = 2;
 }
 
 message ConnectionDuration {
-    int64 connection_duration = 1;
+  int64 connection_duration = 1;
 }
 
 message AutoHeadingState {
-    bool enabled = 1;
+  bool enabled = 1;
 }
 
 message AutoDepthState {
-    bool enabled = 1;
+  bool enabled = 1;
 }
 
 enum Directions {
-    UP = 0;
-    DOWN = 1;
+  UP = 0;
+  DOWN = 1;
 }
 
 message SystemTime {
-    string unix_timestamp = 1;
+  string unix_timestamp = 1;
 }
 
 
 message CameraParameters {
-    message Bitrate {
-        int32 bitrate = 1;
-    }
+  message Bitrate {
+    int32 bitrate = 1;
+  }
 
-    message Exposure {
-        int32 exposure = 1;
-    }
+  message Exposure {
+    int32 exposure = 1;
+  }
 
-    message WhiteBalance {
-        int32 white_balance = 1;
-    }
+  message WhiteBalance {
+    int32 white_balance = 1;
+  }
 
-    message Hue {
-        int32 hue = 1;
-    }
+  message Hue {
+    int32 hue = 1;
+  }
 
-    message Resolution {
-        enum ValidResolutions {
-            FULLHD_1080P = 0;
-            HD_720P = 1;
-        }
-        ValidResolutions resolution = 1;
+  message Resolution {
+    enum ValidResolutions {
+      FULLHD_1080P = 0;
+      HD_720P = 1;
     }
+    ValidResolutions resolution = 1;
+  }
 
-    message FrameRate {
-        enum ValidFrameRates {
-            FPS_30 = 0;
-            FPS_25 = 1;
-        }
-        ValidFrameRates frame_rate = 1;
+  message FrameRate {
+    enum ValidFrameRates {
+      FPS_30 = 0;
+      FPS_25 = 1;
     }
+    ValidFrameRates frame_rate = 1;
+  }
 
-    Bitrate bitrate = 1;
-    Exposure exposure = 2;
-    WhiteBalance white_balance = 3;
-    Hue hue = 4;
-    Resolution resolution = 5;
-    FrameRate frame_rate = 6;
+  Bitrate bitrate = 1;
+  Exposure exposure = 2;
+  WhiteBalance white_balance = 3;
+  Hue hue = 4;
+  Resolution resolution = 5;
+  FrameRate frame_rate = 6;
 }
 
 message RecordingState {
-    bool is_recording = 1;
+  bool is_recording = 1;
 }
 
 message TiltStabilizationState {
-    bool stabilization_enabled = 1;
+  bool stabilization_enabled = 1;
 }
 
 message TiltSpeed {
-    float speed = 1;
+  float speed = 1;
 }
