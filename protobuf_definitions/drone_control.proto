@@ -1,10 +1,3 @@
-syntax = "proto3";
-
-package blueye.protocol;
-option csharp_namespace = "Blueye.Protocol.Protobuf";
-
-import "common.proto";
-
 /*
  * Request/Response messages
  *
@@ -13,6 +6,13 @@ import "common.proto";
  * response/request without making a breaking change. The downside is the added
  * verbosity.
  */
+
+syntax = "proto3";
+
+package blueye.protocol;
+option csharp_namespace = "Blueye.Protocol.Protobuf";
+
+import "common.proto";
 
 // The motion input request
 message SetMotionInputRequest {

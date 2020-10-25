@@ -1,13 +1,13 @@
-syntax = "proto3";
-
-package blueye.protocol;
-option csharp_namespace = "Blueye.Protocol.Protobuf";
-
 /*
  * Common messages
  *
  * These are used for logging as well as building requests and responses.
  */
+
+syntax = "proto3";
+
+package blueye.protocol;
+option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 // The message for motion input
 message MotionInput {
