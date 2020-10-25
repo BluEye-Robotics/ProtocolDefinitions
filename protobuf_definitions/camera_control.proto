@@ -7,9 +7,8 @@
 syntax = "proto3";
 
 package blueye.protocol;
-option csharp_namespace = "Blueye.Protocol.Protobuf";
-
 import "common.proto";
+option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 message GetCameraParameterRequest {
   oneof Parameter {
@@ -35,30 +34,30 @@ message GetCameraParameterResponse {
 }
 
 message SetCameraParameterRequest {
-    oneof Parameter {
-        CameraParameters.Bitrate bitrate = 1;
-        CameraParameters.Exposure exposure = 2;
-        CameraParameters.WhiteBalance white_balance = 3;
-        CameraParameters.Hue hue = 4;
-        CameraParameters.Resolution resolution = 5;
-        CameraParameters.FrameRate frame_rate = 6;
-        CameraParameters all_parameters = 7;
-    }
+  oneof Parameter {
+    CameraParameters.Bitrate bitrate = 1;
+    CameraParameters.Exposure exposure = 2;
+    CameraParameters.WhiteBalance white_balance = 3;
+    CameraParameters.Hue hue = 4;
+    CameraParameters.Resolution resolution = 5;
+    CameraParameters.FrameRate frame_rate = 6;
+    CameraParameters all_parameters = 7;
+  }
 }
 message SetCameraParameterResponse {
-    oneof Parameter {
-        CameraParameters.Bitrate bitrate = 1;
-        CameraParameters.Exposure exposure = 2;
-        CameraParameters.WhiteBalance white_balance = 3;
-        CameraParameters.Hue hue = 4;
-        CameraParameters.Resolution resolution = 5;
-        CameraParameters.FrameRate frame_rate = 6;
-        CameraParameters all_parameters = 7;
-    }
+  oneof Parameter {
+    CameraParameters.Bitrate bitrate = 1;
+    CameraParameters.Exposure exposure = 2;
+    CameraParameters.WhiteBalance white_balance = 3;
+    CameraParameters.Hue hue = 4;
+    CameraParameters.Resolution resolution = 5;
+    CameraParameters.FrameRate frame_rate = 6;
+    CameraParameters all_parameters = 7;
+  }
 }
 
 message SetRecordingStatusRequest {
-    RecordingState recording_state = 1;
+  RecordingState recording_state = 1;
 }
 message SetRecordingStatusResponse {}
 
@@ -66,20 +65,20 @@ message TakeStillPictureRequest {}
 message TakeStillPictureResponse {}
 
 message SetTiltStabilizationRequest {
-    TiltStabilizationState state = 1;
+  TiltStabilizationState state = 1;
 }
 message SetTiltStabilizationResponse {}
 
 message SetTiltSpeedRequest {
-    TiltSpeed tilt_speed = 1;
+  TiltSpeed tilt_speed = 1;
 }
 message SetTiltSpeedResponse {}
 
 service CameraControl {
-    rpc GetCameraParameter (GetCameraParameterRequest) returns (GetCameraParameterResponse);
-    rpc SetCameraParameter (SetCameraParameterRequest) returns (SetCameraParameterResponse);
-    rpc SetRecordingStatus (SetRecordingStatusRequest) returns (SetRecordingStatusResponse);
-    rpc TakeStillPicture (TakeStillPictureRequest) returns (TakeStillPictureResponse);
-    rpc SetTiltStabilization (SetTiltStabilizationRequest) returns (SetTiltStabilizationResponse);
-    rpc SetTiltSpeed (SetTiltSpeedRequest) returns (SetTiltSpeedResponse);
+  rpc GetCameraParameter (GetCameraParameterRequest) returns (GetCameraParameterResponse);
+  rpc SetCameraParameter (SetCameraParameterRequest) returns (SetCameraParameterResponse);
+  rpc SetRecordingStatus (SetRecordingStatusRequest) returns (SetRecordingStatusResponse);
+  rpc TakeStillPicture (TakeStillPictureRequest) returns (TakeStillPictureResponse);
+  rpc SetTiltStabilization (SetTiltStabilizationRequest) returns (SetTiltStabilizationResponse);
+  rpc SetTiltSpeed (SetTiltSpeedRequest) returns (SetTiltSpeedResponse);
 }

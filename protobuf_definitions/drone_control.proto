@@ -10,9 +10,8 @@
 syntax = "proto3";
 
 package blueye.protocol;
-option csharp_namespace = "Blueye.Protocol.Protobuf";
-
 import "common.proto";
+option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 // The motion input request
 message SetMotionInputRequest {

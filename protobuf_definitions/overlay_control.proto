@@ -36,6 +36,7 @@ message SetOverlayTemperatureEnabledResponse {}
 message SetOverlayDepthEnabledRequest {
   bool depth_enabled = 1;
 }
+
 message SetOverlayDepthEnabledResponse {}
 
 message SetOverlayHeadingEnabledRequest {
@@ -79,7 +80,7 @@ message SetOverlayMarginWidthRequest {
 message SetOverlayMarginWidthResponse {}
 
 message SetOverlayMarginHeightRequest {
-    int32 margin_height = 1;
+  int32 margin_height = 1;
 }
 message SetOverlayMarginHeightResponse {}
 
