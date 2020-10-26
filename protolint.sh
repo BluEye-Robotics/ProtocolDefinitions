@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [[ "$(docker images -q yoheimuta/protolint:latest 2> /dev/null)" == "" ]]; then
   echo "Image yoheimuta/protolint:latest not found, run docker pull to install:"
   echo "docker pull yoheimuta/protolint"
