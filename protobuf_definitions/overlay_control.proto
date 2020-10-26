@@ -4,28 +4,32 @@ package blueye.protocol;
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 enum LogoIndex {
-  NONE = 0;
-  DEFAULT = 1;
-  CUSTOM = 2;
+  LOGO_INDEX_UNSPECIFIED = 0;
+  NONE = 1;
+  DEFAULT = 2;
+  CUSTOM = 3;
 }
 
 enum DepthUnit {
-  METERS = 0;
-  FEET = 1;
+  DEPTH_UNIT_UNSPECIFIED = 0;
+  METERS = 1;
+  FEET = 2;
 }
 
 enum TemperatureUnit {
-  CELSIUS = 0;
-  FAHRENHEIT = 1;
+  TEMPERATURE_UNIT_UNSPECIFIED = 0;
+  CELSIUS = 1;
+  FAHRENHEIT = 2;
 }
 
 enum FontSize {
-  PX15 = 0;
-  PX20 = 1;
-  PX25 = 2;
-  PX30 = 3;
-  PX35 = 4;
-  PX40 = 5;
+  FONT_SIZE_UNSPECIFIED = 0;
+  PX15 = 1;
+  PX20 = 2;
+  PX25 = 3;
+  PX30 = 4;
+  PX35 = 5;
+  PX40 = 6;
 }
 
 message SetOverlayTemperatureEnabledRequest {

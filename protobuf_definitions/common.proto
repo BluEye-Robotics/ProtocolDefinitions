@@ -41,8 +41,9 @@ message AutoDepthState {
 }
 
 enum Directions {
-  UP = 0;
-  DOWN = 1;
+  DIRECTIONS_UNSPECIFIED = 0;
+  UP = 1;
+  DOWN = 2;
 }
 
 message SystemTime {
@@ -69,16 +70,18 @@ message CameraParameters {
 
   message Resolution {
     enum ValidResolutions {
-      FULLHD_1080P = 0;
-      HD_720P = 1;
+      RESOLUTION_UNSPECIFIED = 0;
+      FULLHD_1080P = 1;
+      HD_720P = 2;
     }
     ValidResolutions resolution = 1;
   }
 
   message FrameRate {
     enum ValidFrameRates {
-      FPS_30 = 0;
-      FPS_25 = 1;
+      FRAMERATE_UNSPECIFIED = 0;
+      FPS_30 = 1;
+      FPS_25 = 2;
     }
     ValidFrameRates frame_rate = 1;
   }
