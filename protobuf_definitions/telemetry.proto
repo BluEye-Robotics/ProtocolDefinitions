@@ -1,0 +1,11 @@
+/*
+ * Telemetry messages
+ *
+ * These messages wrap telemetry information from the Blueye drone.
+ */
+
+syntax = "proto3";
+
+package blueye.protocol;
+import "common.proto";
+option csharp_namespace = "Blueye.Protocol.Protobuf";
