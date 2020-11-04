@@ -9,3 +9,120 @@ syntax = "proto3";
 package blueye.protocol;
 import "common.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
+
+message ErrorFlags {
+  bool missing_ack_from_pmu = 1;
+  bool pmu_communication_timeout = 2;
+  bool depth_sensor_read_error = 3;
+  bool depth_sensor_spike = 4;
+  bool inner_pressure_sensor_read_error = 5;
+  bool inner_pressure_sensor_spike = 6;
+  bool invalid_compass_calibration = 7;
+  bool invalid_tilt_calibration = 8;
+}
+
+message DroneInfo {
+  string serial_number = 1;
+  string blunux_version = 2;
+}
+
+message WaterTemperature {
+  int32 temperature = 1;
+}
+
+message CPUTemperature {
+  int32 temperature = 1;
+}
+
+message CanisterTemperature {
+  int32 top = 1;
+  int32 bottom = 2;
+}
+
+message CanisterHumidity {
+  int32 top = 1;
+  int32 bottom = 2;
+}
+
+message Battery{
+  message Voltage {
+    int32 total = 1;
+    int32 cell_1 = 2;
+    int32 cell_2 = 3;
+    int32 cell_3 = 4;
+    int32 cell_4 = 5;
+  }
+  Voltage voltage = 1;
+
+  message Temperature {
+    int32 average = 1;
+    int32 cell_1 = 2;
+    int32 cell_2 = 3;
+    int32 cell_3 = 4;
+    int32 cell_4 = 5;
+  }
+  Temperature temperature = 2;
+
+  enum State {
+    STATE_UNSPECIFIED = 0;
+    INITIALIZATION = 1;
+    DISCHARGING_OR_RELAX = 2;
+    FULLY_CHARGED = 3;
+    FULLY_DISCHARGED = 4;
+  }
+  State state = 3;
+
+  message Alarms {
+    bool overcharged = 1;
+    bool terminate_charge = 2;
+    bool over_temperature = 3;
+    bool terminate_discharge = 4;
+    bool remaining_capacity = 5;
+    bool remaining_time = 6;
+  }
+  Alarms alarms = 4;
+
+  message Errors {
+    bool unknown_error = 1;
+    bool overflow_underflow = 2;
+    bool access_denied = 3;
+    bool unsupported_command = 4;
+    bool reserved_command = 5;
+    bool busy = 6;
+  }
+  Errors errors = 5;
+
+  int32 current = 6;
+  int32 average_current = 7;
+  int32 relative_state_of_charge = 8;
+  int32 absolute_state_of_charge = 9;
+  int32 remaining_capacity = 10;
+  int32 full_charge_capacity = 11;
+  int32 runtime_to_empty = 12;
+  int32 average_time_to_empty = 13;
+  int32 average_time_to_full = 14;
+  int32 time_to_full_at_current_rate = 15;
+  int32 time_to_empty_at_current_rate = 16;
+  int32 charging_current = 17;
+  int32 charging_voltage = 18;
+}
+
+message Attitude {
+    float roll = 1;
+    float pitch = 2;
+    float yaw = 3;
+}
+
+message ControlForceSetPoint {
+    float surge = 1;
+    float sway = 2;
+    float heave = 3;
+    float yaw = 4;
+}
+
+message ControlInputReference {
+    float surge = 1;
+    float sway = 2;
+    float heave = 3;
+    float yaw = 4;
+}
