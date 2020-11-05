@@ -6,3 +6,15 @@ docs
 
 # Visual Studio Code
 .vscode
+
+# vim
+*.swp
+*.swo
+
+# protobuf
+*.pb.h
+*.pb.cc
+
+# c/c++ outputs
+lib*.so
+*.o
