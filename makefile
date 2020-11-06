@@ -9,10 +9,14 @@ PROTO_CFILES = $(PROTOS:%.proto=%.pb.cc)
 PROTO_OUTPUTS = $(PROTO_CFILES) $(PROTO_HEADERS)
 
 
-CXXFLAGS := -O2 -Wall -std=c++17 -fPIC
-LDFLAGS := -fPIC
+CXXFLAGS += -O2 -Wall -std=c++17 -fPIC
+LDFLAGS += -fPIC
 
 OBJECTS = $(PROTO_CFILES:%.cc=%.o)
+
+ifeq ($(PREFIX),)
+        PREFIX=/usr
+endif
 
 SO := libprotocoldefinitions.so
 
