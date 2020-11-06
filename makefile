@@ -28,10 +28,6 @@ $(PROTO_OUTPUTS): $(PROTOS)
 clean:
 	@rm -f $(PROTO_OUTPUTS) $(OBJECTS) $(SO)
 
-ifeq ($(PREFIX),)
-        PREFIX=/usr
-endif
-
 install:
 	@install -d $(DESTDIR)$(PREFIX)/lib
 	@install -m 755 $(SO) $(DESTDIR)$(PREFIX)/lib
