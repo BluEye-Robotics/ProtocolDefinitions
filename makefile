@@ -17,7 +17,7 @@ ifeq ($(PREFIX),)
         PREFIX=/usr
 endif
 
-SO := libprotocoldefinitions.so
+SO := libblueyeprotocol.so
 
 $(SO): $(OBJECTS)
 	$(CXX) -shared $(LDFLAGS) -o $@ $^
@@ -34,6 +34,8 @@ clean:
 install:
 	@install -d $(DESTDIR)$(PREFIX)/lib
 	@install -m 755 $(SO) $(DESTDIR)$(PREFIX)/lib
+	@install -d $(DESTDIR)$(PREFIX)/include/blueyeprotocol
+	@install -m 755 $(PROTO_HEADERS) $(DESTDIR)$(PREFIX)/include/blueyeprotocol
 
 uninstall:
 	@rm $(DESTDIR)$(PREFIX)/lib/$(SO)
