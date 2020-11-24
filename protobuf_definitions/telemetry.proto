@@ -109,7 +109,7 @@ message Battery{
 
 /**
  * The attitude of the drone.
-*/
+ */
 message Attitude {
   float roll = 1; // Roll angle (-180..180).
   float pitch = 2; // Pitch angle (-180..180).

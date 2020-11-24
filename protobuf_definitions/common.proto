@@ -15,7 +15,7 @@ option csharp_namespace = "Blueye.Protocol.Protobuf";
  * Used to indicate the desired motion in each direction.
  * Typically these values map to the left and right joystick for motion,
  * and the left and right trigger for the slow and boost modifiers.
-*/
+ */
 message MotionInput {
   float surge = 1; // Forward (positive) and backwards (negative) movement. (-1..1).
   float sway = 2; // Right (positive) and left (negative) lateral movement (-1..1).
