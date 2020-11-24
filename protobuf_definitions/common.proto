@@ -1,4 +1,4 @@
-/*
+/**
  * Common messages
  *
  * These are used for logging as well as building requests and responses.
@@ -9,14 +9,20 @@ syntax = "proto3";
 package blueye.protocol;
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
-// The message for motion input
+/**
+ * Motion input from client.
+ *
+ * Used to indicate the desired motion in each direction.
+ * Typically these values map to the left and right joystick for motion,
+ * and the left and right trigger for the slow and boost modifiers.
+*/
 message MotionInput {
-  float surge = 1;
-  float sway = 2;
-  float heave = 3;
-  float yaw = 4;
-  float slow = 5;
-  float boost = 6;
+  float surge = 1; // Forward (positive) and backwards (negative) movement. (-1..1).
+  float sway = 2; // Right (positive) and left (negative) lateral movement (-1..1).
+  float heave = 3; // Descend (positive) and ascend (negative) movement (-1..1).
+  float yaw = 4; // Left (positive) and right (negative) movement (-1..1).
+  float slow = 5; // Multiplier used to reduce the speed of the motion (0..1).
+  float boost = 6; // Multiplier used to increase the speed of the motion (0..1).
 }
 
 message Lights {

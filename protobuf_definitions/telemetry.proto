@@ -107,22 +107,25 @@ message Battery{
   int32 charging_voltage = 18;
 }
 
+/**
+ * The attitude of the drone.
+*/
 message Attitude {
-    float roll = 1;
-    float pitch = 2;
-    float yaw = 3;
+  float roll = 1; // Roll angle (-180..180).
+  float pitch = 2; // Pitch angle (-180..180).
+  float yaw = 3; // Yaw angle (-180..180).
 }
 
 message ControlForceSetPoint {
-    float surge = 1;
-    float sway = 2;
-    float heave = 3;
-    float yaw = 4;
+  float surge = 1;
+  float sway = 2;
+  float heave = 3;
+  float yaw = 4;
 }
 
 message ControlInputReference {
-    float surge = 1;
-    float sway = 2;
-    float heave = 3;
-    float yaw = 4;
+  float surge = 1;
+  float sway = 2;
+  float heave = 3;
+  float yaw = 4;
 }
