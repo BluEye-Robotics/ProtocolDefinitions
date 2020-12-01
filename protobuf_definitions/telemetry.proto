@@ -134,6 +134,6 @@ message ControlInputReference {
  * Drone altitude over seabed, typically obtained from a DVL
  */
 message Altitude {
-  int32 altitude = 1; // Drone altitude over seabed in mm
+  int32 value = 1; // Drone altitude over seabed in mm
   bool valid = 2; // Altitude valid or not
 }
