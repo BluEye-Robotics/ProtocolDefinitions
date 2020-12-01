@@ -129,3 +129,11 @@ message ControlInputReference {
   float heave = 3;
   float yaw = 4;
 }
+
+/**
+ * Drone altitude over seabed, typically obtained from a DVL
+ */
+message Altitude {
+  int32 altitude = 1; // Drone altitude over seabed in mm
+  bool valid = 2; // Altitude valid or not
+}
