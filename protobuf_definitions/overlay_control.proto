@@ -70,6 +70,6 @@ message OverlayParameters {
   FontSize font_size = 12; // Font size of text elements
   string title = 13; // Optional title
   string subtitle = 14; // Optional subtitle
-  string date_format = 16; // Python strftime format string for time stamp
+  string date_format = 16; // Posix strftime format string for time stamp
   int32 shading = 17; // Pixel intensity to subtract from text background. (restricted to 0-255), (result background intensity is restricted to max 100)
 }
