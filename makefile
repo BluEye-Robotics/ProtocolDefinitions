@@ -11,7 +11,7 @@ PROTO_OUTPUTS := $(PROTO_CFILES) $(PROTO_HEADERS)
 OBJECTS := $(PROTO_CFILES:%.cc=%.o)
 
 CXXFLAGS += -O2 -Wall -std=c++17 -fPIC
-LDFLAGS += -fPIC
+LDFLAGS += -fPIC -lprotobuf
 
 ifeq ($(PREFIX),)
         PREFIX=/usr
@@ -39,3 +39,4 @@ install:
 
 uninstall:
 	@rm $(DESTDIR)$(PREFIX)/lib/$(SO)
+	@rm -r $(DESTDIR)$(PREFIX)/include/blueyeprotocol
