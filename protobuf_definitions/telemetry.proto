@@ -130,6 +130,14 @@ message ControlInputReference {
   float yaw = 4;
 }
 
+message UserModifiers {
+  float surge_modifier = 1;
+  float sway_modifier = 2;
+  float heave_modifier = 3;
+  float yaw_modifier = 4;
+  float jerk_modifier = 5;
+}
+
 /**
  * Drone altitude over seabed, typically obtained from a DVL
  */
