@@ -160,3 +160,29 @@ message Altitude {
   int32 value = 1; // Drone altitude over seabed in mm
   bool valid = 2; // Altitude valid or not
 }
+
+/**
+ * Water depth of drone
+ */
+message Depth {
+  int32 depth = 1; // Drone depth below surface in mm
+}
+
+message Reference {
+  float surge = 1;
+  float sway = 2;
+  float heave = 3;
+  float yaw = 4;
+  float depth = 5;
+
+// Can be added as needed:
+  //float depth_rate = 6;
+  //float depth_acc = 7;
+  //float heading = 8;
+  //float heading_rate = 9;
+  //float heading_acc = 10;
+}
+
+message DiveTime {
+  int32 time = 1;
+}

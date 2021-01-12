@@ -110,3 +110,15 @@ message TiltStabilizationState {
 message TiltSpeed {
   float speed = 1;
 }
+
+message WaterDensity {
+  int32 density = 1;
+}
+
+/**
+ * Duration of the currently running video recording
+ * -1 if no running recording
+ */
+message RecordTime {
+  int32 time = 1; // record time in seconds
+}
