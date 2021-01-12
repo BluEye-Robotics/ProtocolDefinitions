@@ -33,13 +33,22 @@ message WaterTemperature {
   float temperature = 1; // Water temperature in °C
 }
 
+/**
+ * CPU temperature.
+ */
 message CPUTemperature {
-  int32 temperature = 1;
+  float temperature = 1; // CPU temperature in °C
 }
 
+
+/** 
+  * Canister temperature
+  *
+  * Temperature measured in the top and bottom canister of the drone.
+  */
 message CanisterTemperature {
-  int32 top = 1;
-  int32 bottom = 2;
+  float top = 1; // Temperature in °C
+  float bottom = 2; // Temperature in °C
 }
 
 message CanisterHumidity {
@@ -57,12 +66,15 @@ message Battery{
   }
   Voltage voltage = 1;
 
+  /**
+   * Battery temperature
+   */
   message Temperature {
-    int32 average = 1;
-    int32 cell_1 = 2;
-    int32 cell_2 = 3;
-    int32 cell_3 = 4;
-    int32 cell_4 = 5;
+    float average = 1; // Average temperature accross cells in °C
+    float cell_1 = 2; // Cell 1 temperature in °C
+    float cell_2 = 3; // Cell 2 temperature in °C
+    float cell_3 = 4; // Cell 3 temperature in °C
+    float cell_4 = 5; // Cell 4 temperature in °C
   }
   Temperature temperature = 2;
 
