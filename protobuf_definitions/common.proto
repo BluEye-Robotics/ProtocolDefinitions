@@ -56,7 +56,6 @@ message SystemTime {
   string unix_timestamp = 1;
 }
 
-
 message CameraParameters {
   message Bitrate {
     int32 bitrate = 1;

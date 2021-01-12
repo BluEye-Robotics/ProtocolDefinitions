@@ -26,8 +26,11 @@ message DroneInfo {
   string blunux_version = 2;
 }
 
+/**
+ * Water temperature measured by the drone's combined depth and temperature sensor. 
+ */
 message WaterTemperature {
-  int32 temperature = 1;
+  float temperature = 1; // Water temperature in °C
 }
 
 message CPUTemperature {
