@@ -428,7 +428,7 @@
             },
             {
                 "name": "set_overlay_logo_index",
-                "command_type": "oD",
+                "command_type": "oo",
                 "expected_reply": "a",
                 "fields": [
                     {
