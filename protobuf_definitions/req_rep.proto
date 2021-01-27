@@ -1,0 +1,41 @@
+/**
+ * Request reply
+ *
+ * These messages define request / reply messages for the Blueye drone
+ */
+
+syntax = "proto3";
+
+package blueye.protocol;
+import "message_formats.proto";
+option csharp_namespace = "Blueye.Protocol.Protobuf";
+
+
+message SetOverlayParametersReq {
+  OverlayParameters overlay_parameters = 1;
+}
+
+message SetOverlayParametersRep {
+}
+
+message GetOverlayParametersReq {
+}
+
+message GetOverlayParametersRep {
+  OverlayParameters overlay_parameters = 1;
+}
+
+
+message SetCameraParametersReq {
+  CameraParameters camera_parameters = 1;
+}
+
+message SetCameraParametersRep {
+}
+
+message GetCameraParametersReq {
+}
+
+message GetCameraParametersRep {
+  CameraParameters camera_parameters = 1;
+}

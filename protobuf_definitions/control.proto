@@ -1,0 +1,73 @@
+/*
+ * Control
+ *
+ * These messages define control messages accepted by the Blueye drone
+ */
+
+syntax = "proto3";
+
+package blueye.protocol;
+import "message_formats.proto";
+option csharp_namespace = "Blueye.Protocol.Protobuf";
+
+message MotionInputCtrl {
+  MotionInput motion_input = 1;
+}
+
+message UserModifiersCtrl {
+  UserModifiers user_modifiers = 1;
+}
+
+message LightsCtrl {
+  Lights lights = 1;
+}
+
+message PilotGPSPositionCtrl {
+  LatLongPosition position = 1;
+}
+
+message WatchdogCtrl {
+  ConnectionDuration connection_duration = 1;
+}
+
+message StartRecordCtrl {
+}
+
+message StopRecordCtrl {
+}
+
+message TakePictureCtrl {
+}
+
+message StartCalibrationCtrl {
+}
+
+message CancelCalibrationCtrl {
+}
+
+message FinishCalibrationCtrl {
+}
+
+message AutoHeadingCtrl {
+  AutoHeadingState state = 1;
+}
+
+message AutoDepthCtrl {
+  AutoDepthState state = 1;
+}
+
+message TiltStabilizationCtrl {
+  // toggle
+}
+
+message TiltSpeedCtrl {
+  TiltSpeed speed = 1;
+}
+
+message WaterDensityCtrl {
+  WaterDensity density = 1;
+}
+
+message SystemTimeCtrl {
+  SystemTime system_time = 1;
+}

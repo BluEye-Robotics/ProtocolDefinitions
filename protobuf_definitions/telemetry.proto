@@ -1,188 +1,63 @@
 /*
- * Telemetry messages
+ * Telemetry
  *
- * These messages wrap telemetry information from the Blueye drone.
+ * These messages define telemetry messages from the Blueye drone
  */
 
 syntax = "proto3";
 
 package blueye.protocol;
-import "common.proto";
+import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
-message ErrorFlags {
-  bool missing_ack_from_pmu = 1;
-  bool pmu_communication_timeout = 2;
-  bool depth_sensor_read_error = 3;
-  bool depth_sensor_spike = 4;
-  bool inner_pressure_sensor_read_error = 5;
-  bool inner_pressure_sensor_spike = 6;
-  bool invalid_compass_calibration = 7;
-  bool invalid_tilt_calibration = 8;
+message AttitudeTel {
+  Attitude attitude = 1;
 }
 
-message DroneInfo {
-  string serial_number = 1;
-  string blunux_version = 2;
+message AltitudeTel {
+  Altitude altitude = 1;
 }
 
-/**
- * Water temperature measured by the drone's combined depth and temperature sensor. 
- */
-message WaterTemperature {
-  float temperature = 1; // Water temperature in °C
+message DepthTel {
+  Depth depth = 1;
 }
 
-/**
- * CPU temperature.
- */
-message CPUTemperature {
-  float temperature = 1; // CPU temperature in °C
+message ReferenceTel {
+  Reference reference = 1;
 }
 
-
-/** 
-  * Canister temperature
-  *
-  * Temperature measured in the top and bottom canister of the drone.
-  */
-message CanisterTemperature {
-  float top = 1; // Temperature in °C
-  float bottom = 2; // Temperature in °C
+message LightsTel {
+  Lights lights = 1;
 }
 
-message CanisterHumidity {
-  int32 top = 1;
-  int32 bottom = 2;
+message PilotGPSPositionTel {
+  LatLongPosition position = 1;
 }
 
-message Battery{
-  message Voltage {
-    int32 total = 1;
-    int32 cell_1 = 2;
-    int32 cell_2 = 3;
-    int32 cell_3 = 4;
-    int32 cell_4 = 5;
-  }
-  Voltage voltage = 1;
-
-  /**
-   * Battery temperature
-   */
-  message Temperature {
-    float average = 1; // Average temperature accross cells in °C
-    float cell_1 = 2; // Cell 1 temperature in °C
-    float cell_2 = 3; // Cell 2 temperature in °C
-    float cell_3 = 4; // Cell 3 temperature in °C
-    float cell_4 = 5; // Cell 4 temperature in °C
-  }
-  Temperature temperature = 2;
-
-  enum State {
-    STATE_UNSPECIFIED = 0;
-    INITIALIZATION = 1;
-    DISCHARGING_OR_RELAX = 2;
-    FULLY_CHARGED = 3;
-    FULLY_DISCHARGED = 4;
-  }
-  State state = 3;
-
-  message Alarms {
-    bool overcharged = 1;
-    bool terminate_charge = 2;
-    bool over_temperature = 3;
-    bool terminate_discharge = 4;
-    bool remaining_capacity = 5;
-    bool remaining_time = 6;
-  }
-  Alarms alarms = 4;
-
-  message Errors {
-    bool unknown_error = 1;
-    bool overflow_underflow = 2;
-    bool access_denied = 3;
-    bool unsupported_command = 4;
-    bool reserved_command = 5;
-    bool busy = 6;
-  }
-  Errors errors = 5;
-
-  int32 current = 6;
-  int32 average_current = 7;
-  int32 relative_state_of_charge = 8;
-  int32 absolute_state_of_charge = 9;
-  int32 remaining_capacity = 10;
-  int32 full_charge_capacity = 11;
-  int32 runtime_to_empty = 12;
-  int32 average_time_to_empty = 13;
-  int32 average_time_to_full = 14;
-  int32 time_to_full_at_current_rate = 15;
-  int32 time_to_empty_at_current_rate = 16;
-  int32 charging_current = 17;
-  int32 charging_voltage = 18;
+message RecordTimeTel {
+  RecordTime record_time = 1;
 }
 
-/**
- * The attitude of the drone.
- */
-message Attitude {
-  float roll = 1; // Roll angle (-180..180).
-  float pitch = 2; // Pitch angle (-180..180).
-  float yaw = 3; // Yaw angle (-180..180).
+message BatteryTel{
+  Battery battery = 1;
 }
 
-message ControlForceSetPoint {
-  float surge = 1;
-  float sway = 2;
-  float heave = 3;
-  float yaw = 4;
+message DiveTimeTel {
+  DiveTime dive_time = 1;
 }
 
-message ControlInputReference {
-  float surge = 1;
-  float sway = 2;
-  float heave = 3;
-  float yaw = 4;
+message WaterTemperatureTel {
+  WaterTemperature temperature = 1;
 }
 
-message UserModifiers {
-  float surge_modifier = 1;
-  float sway_modifier = 2;
-  float heave_modifier = 3;
-  float yaw_modifier = 4;
-  float jerk_modifier = 5;
+message CPUTemperatureTel {
+  CPUTemperature temperature = 1;
 }
 
-/**
- * Drone altitude over seabed, typically obtained from a DVL
- */
-message Altitude {
-  int32 value = 1; // Drone altitude over seabed in mm
-  bool valid = 2; // Altitude valid or not
+message CanisterTemperatureTel {
+  CanisterTemperature temperature = 1;
 }
 
-/**
- * Water depth of drone
- */
-message Depth {
-  int32 depth = 1; // Drone depth below surface in mm
-}
-
-message Reference {
-  float surge = 1;
-  float sway = 2;
-  float heave = 3;
-  float yaw = 4;
-  float depth = 5;
-
-// Can be added as needed:
-  //float depth_rate = 6;
-  //float depth_acc = 7;
-  //float heading = 8;
-  //float heading_rate = 9;
-  //float heading_acc = 10;
-}
-
-message DiveTime {
-  int32 time = 1;
+message CanisterHumidityTel {
+  CanisterHumidity humidity = 1;
 }
