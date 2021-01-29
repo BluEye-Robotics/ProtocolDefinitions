@@ -7,6 +7,7 @@
 syntax = "proto3";
 
 package blueye.protocol;
+import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 /**
@@ -58,8 +59,12 @@ message TiltStabilizationState {
   bool enabled = 1;
 }
 
+message TiltSpeed {
+  float speed = 1;
+}
+
 message SystemTime {
-  string unix_timestamp = 1;
+  google.protobuf.Timestamp unix_timestamp = 1;
 }
 
 message ErrorFlags {
@@ -76,10 +81,6 @@ message ErrorFlags {
 message DroneInfo {
   string serial_number = 1;
   string blunux_version = 2;
-}
-
-message TiltSpeed {
-  float speed = 1;
 }
 
 message RecordState {

@@ -64,6 +64,10 @@ message TiltSpeedCtrl {
   TiltSpeed speed = 1;
 }
 
+message SyncTimeCtrl {
+  SystemTime time = 1;
+}
+
 message WaterDensityCtrl {
   WaterDensity density = 1;
 }
