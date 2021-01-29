@@ -34,8 +34,8 @@ message PilotGPSPositionTel {
   LatLongPosition position = 1;
 }
 
-message RecordTimeTel {
-  RecordTime record_time = 1;
+message RecordStateTel {
+  RecordState record_state = 1;
 }
 
 message BatteryTel{

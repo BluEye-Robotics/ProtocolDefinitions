@@ -78,24 +78,17 @@ message DroneInfo {
   string blunux_version = 2;
 }
 
-message RecordingState {
-  bool is_recording = 1;
-}
-
 message TiltSpeed {
   float speed = 1;
 }
 
-message WaterDensity {
-  int32 density = 1;
+message RecordState {
+  bool is_recording = 1;
+  int32 seconds = 2; // record time in seconds
 }
 
-/**
- * Duration of the currently running video recording
- * -1 if no running recording
- */
-message RecordTime {
-  int32 time = 1; // record time in seconds
+message WaterDensity {
+  int32 density = 1;
 }
 
 /**
