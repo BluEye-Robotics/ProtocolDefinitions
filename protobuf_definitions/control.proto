@@ -57,7 +57,7 @@ message AutoDepthCtrl {
 }
 
 message TiltStabilizationCtrl {
-  // toggle
+  TiltStabilizationState state = 1;
 }
 
 message TiltSpeedCtrl {

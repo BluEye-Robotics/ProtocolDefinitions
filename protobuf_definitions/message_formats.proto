@@ -54,6 +54,10 @@ message AutoDepthState {
   bool enabled = 1;
 }
 
+message TiltStabilizationState {
+  bool enabled = 1;
+}
+
 message SystemTime {
   string unix_timestamp = 1;
 }
