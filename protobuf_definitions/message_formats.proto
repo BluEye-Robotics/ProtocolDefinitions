@@ -230,6 +230,11 @@ message DiveTime {
   int32 time = 1;
 }
 
+message StorageSpace {
+  int64 total_space = 1;
+  int64 free_space = 2;
+}
+
 message CameraParameters {
   int32 bitrate = 1;
   int32 exposure = 2;

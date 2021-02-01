@@ -61,3 +61,7 @@ message CanisterTemperatureTel {
 message CanisterHumidityTel {
   CanisterHumidity humidity = 1;
 }
+
+message StorageSpaceTel {
+  StorageSpace storage_space = 1;
+}
