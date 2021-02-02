@@ -62,6 +62,10 @@ message CanisterHumidityTel {
   CanisterHumidity humidity = 1;
 }
 
-message StorageSpaceTel {
+message VideoStorageSpaceTel {
+  StorageSpace storage_space = 1;
+}
+
+message DataStorageSpaceTel {
   StorageSpace storage_space = 1;
 }
