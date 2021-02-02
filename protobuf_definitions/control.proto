@@ -75,3 +75,7 @@ message WaterDensityCtrl {
 message SystemTimeCtrl {
   SystemTime system_time = 1;
 }
+
+message ClientInfoCtrl {
+  ClientInfo client_info = 1;
+}

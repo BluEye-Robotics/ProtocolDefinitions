@@ -67,6 +67,14 @@ message SystemTime {
   google.protobuf.Timestamp unix_timestamp = 1;
 }
 
+message ClientInfo {
+  string type = 1;
+  string version = 2;
+  string device_type = 3;
+  string platform = 4;
+  string platform_version = 5;
+}
+
 message ErrorFlags {
   bool missing_ack_from_pmu = 1;
   bool pmu_communication_timeout = 2;
