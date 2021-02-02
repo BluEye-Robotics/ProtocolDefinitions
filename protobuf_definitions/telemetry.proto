@@ -69,3 +69,7 @@ message VideoStorageSpaceTel {
 message DataStorageSpaceTel {
   StorageSpace storage_space = 1;
 }
+
+message CalibrationStateTel {
+  CalibrationState calibration_state = 1;
+}

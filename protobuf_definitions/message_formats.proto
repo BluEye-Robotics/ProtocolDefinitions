@@ -243,6 +243,17 @@ message StorageSpace {
   int64 free_space = 2;
 }
 
+message CalibrationState {
+  int32 active_status = 1;
+  int32 progress_x_up = 2;
+  int32 progress_x_down = 3;
+  int32 progress_y_up = 4;
+  int32 progress_y_down = 5;
+  int32 progress_z_up = 6;
+  int32 progress_z_down = 7;
+  int32 progress_thruster = 8;
+}
+
 message CameraParameters {
   int32 bitrate = 1;
   int32 exposure = 2;
