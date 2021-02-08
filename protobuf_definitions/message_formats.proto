@@ -7,8 +7,16 @@
 syntax = "proto3";
 
 package blueye.protocol;
+import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
+
+message BinlogRecord
+{
+  google.protobuf.Any payload = 1;
+  google.protobuf.Timestamp unix_timestamp = 2; // Unix timestamp in UTC.
+  google.protobuf.Timestamp clock_monotonic = 3; // Posix CLOCK_MONOTONIC timestamp.
+}
 
 /**
  * Motion input from client.
