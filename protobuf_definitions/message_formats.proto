@@ -1,0 +1,349 @@
+/**
+ * Common messages
+ *
+ * These are used for logging as well as building requests and responses.
+ */
+
+syntax = "proto3";
+
+package blueye.protocol;
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "Blueye.Protocol.Protobuf";
+
+message BinlogRecord
+{
+  google.protobuf.Any payload = 1;
+  google.protobuf.Timestamp unix_timestamp = 2; // Unix timestamp in UTC.
+  google.protobuf.Timestamp clock_monotonic = 3; // Posix CLOCK_MONOTONIC timestamp.
+}
+
+/**
+ * Motion input from client.
+ *
+ * Used to indicate the desired motion in each direction.
+ * Typically these values map to the left and right joystick for motion,
+ * and the left and right trigger for the slow and boost modifiers.
+ */
+message MotionInput {
+  float surge = 1; // Forward (positive) and backwards (negative) movement. (-1..1).
+  float sway = 2; // Right (positive) and left (negative) lateral movement (-1..1).
+  float heave = 3; // Descend (positive) and ascend (negative) movement (-1..1).
+  float yaw = 4; // Left (positive) and right (negative) movement (-1..1).
+  float slow = 5; // Multiplier used to reduce the speed of the motion (0..1).
+  float boost = 6; // Multiplier used to increase the speed of the motion (0..1).
+}
+
+message UserModifiers {
+  float surge_modifier = 1;
+  float sway_modifier = 2;
+  float heave_modifier = 3;
+  float yaw_modifier = 4;
+  float jerk_modifier = 5;
+}
+
+message Lights {
+  uint32 percentage = 1;
+}
+
+message LatLongPosition {
+  float latitude = 1;
+  float longitude = 2;
+}
+
+message ConnectionDuration {
+  int64 connection_duration = 1;
+}
+
+message AutoHeadingState {
+  bool enabled = 1;
+}
+
+message AutoDepthState {
+  bool enabled = 1;
+}
+
+message TiltStabilizationState {
+  bool enabled = 1;
+}
+
+message TiltSpeed {
+  float speed = 1;
+}
+
+message SystemTime {
+  google.protobuf.Timestamp unix_timestamp = 1;
+}
+
+message ClientInfo {
+  string type = 1;
+  string version = 2;
+  string device_type = 3;
+  string platform = 4;
+  string platform_version = 5;
+}
+
+message ErrorFlags {
+  bool missing_ack_from_pmu = 1;
+  bool pmu_communication_timeout = 2;
+  bool depth_sensor_read_error = 3;
+  bool depth_sensor_spike = 4;
+  bool inner_pressure_sensor_read_error = 5;
+  bool inner_pressure_sensor_spike = 6;
+  bool invalid_compass_calibration = 7;
+  bool invalid_tilt_calibration = 8;
+}
+
+message DroneInfo {
+  string serial_number = 1;
+  string blunux_version = 2;
+}
+
+message RecordState {
+  bool is_recording = 1;
+  int32 seconds = 2; // record time in seconds
+}
+
+message WaterDensity {
+  int32 density = 1;
+}
+
+/**
+ * Water temperature measured by the drone's combined depth and temperature sensor. 
+ */
+message WaterTemperature {
+  float temperature = 1; // Water temperature in °C
+}
+
+/**
+ * CPU temperature.
+ */
+message CPUTemperature {
+  float temperature = 1; // CPU temperature in °C
+}
+
+/** 
+  * Canister temperature
+  *
+  * Temperature measured in the top and bottom canister of the drone.
+  */
+message CanisterTemperature {
+  float top = 1; // Temperature in °C
+  float bottom = 2; // Temperature in °C
+}
+
+message CanisterHumidity {
+  int32 top = 1;
+  int32 bottom = 2;
+}
+
+message Battery{
+  message Voltage {
+    int32 total = 1;
+    int32 cell_1 = 2;
+    int32 cell_2 = 3;
+    int32 cell_3 = 4;
+    int32 cell_4 = 5;
+  }
+  Voltage voltage = 1;
+
+  /**
+   * Battery temperature
+   */
+  message Temperature {
+    float average = 1; // Average temperature accross cells in °C
+    float cell_1 = 2; // Cell 1 temperature in °C
+    float cell_2 = 3; // Cell 2 temperature in °C
+    float cell_3 = 4; // Cell 3 temperature in °C
+    float cell_4 = 5; // Cell 4 temperature in °C
+  }
+  Temperature temperature = 2;
+
+  enum State {
+    STATE_UNSPECIFIED = 0;
+    INITIALIZATION = 1;
+    DISCHARGING_OR_RELAX = 2;
+    FULLY_CHARGED = 3;
+    FULLY_DISCHARGED = 4;
+  }
+  State state = 3;
+
+  message Alarms {
+    bool overcharged = 1;
+    bool terminate_charge = 2;
+    bool over_temperature = 3;
+    bool terminate_discharge = 4;
+    bool remaining_capacity = 5;
+    bool remaining_time = 6;
+  }
+  Alarms alarms = 4;
+
+  message Errors {
+    bool unknown_error = 1;
+    bool overflow_underflow = 2;
+    bool access_denied = 3;
+    bool unsupported_command = 4;
+    bool reserved_command = 5;
+    bool busy = 6;
+  }
+  Errors errors = 5;
+
+  int32 current = 6;
+  int32 average_current = 7;
+  int32 relative_state_of_charge = 8;
+  int32 absolute_state_of_charge = 9;
+  int32 remaining_capacity = 10;
+  int32 full_charge_capacity = 11;
+  int32 runtime_to_empty = 12;
+  int32 average_time_to_empty = 13;
+  int32 average_time_to_full = 14;
+  int32 time_to_full_at_current_rate = 15;
+  int32 time_to_empty_at_current_rate = 16;
+  int32 charging_current = 17;
+  int32 charging_voltage = 18;
+}
+
+/**
+ * The attitude of the drone.
+ */
+message Attitude {
+  float roll = 1; // Roll angle (-180..180).
+  float pitch = 2; // Pitch angle (-180..180).
+  float yaw = 3; // Yaw angle (-180..180).
+}
+
+/**
+ * Drone altitude over seabed, typically obtained from a DVL
+ */
+message Altitude {
+  int32 value = 1; // Drone altitude over seabed in mm
+  bool valid = 2; // Altitude valid or not
+}
+
+/**
+ * Water depth of drone
+ */
+message Depth {
+  int32 depth = 1; // Drone depth below surface in mm
+}
+
+message Reference {
+  float surge = 1;
+  float sway = 2;
+  float heave = 3;
+  float yaw = 4;
+  float depth = 5;
+
+// Can be added as needed:
+  //float depth_rate = 6;
+  //float depth_acc = 7;
+  //float heading = 8;
+  //float heading_rate = 9;
+  //float heading_acc = 10;
+}
+
+message DiveTime {
+  int32 time = 1;
+}
+
+message StorageSpace {
+  int64 total_space = 1;
+  int64 free_space = 2;
+}
+
+message CalibrationState {
+  int32 active_status = 1;
+  int32 progress_x_up = 2;
+  int32 progress_x_down = 3;
+  int32 progress_y_up = 4;
+  int32 progress_y_down = 5;
+  int32 progress_z_up = 6;
+  int32 progress_z_down = 7;
+  int32 progress_thruster = 8;
+}
+
+message CameraParameters {
+  int32 bitrate = 1;
+  int32 exposure = 2;
+  int32 white_balance = 3;
+  int32 hue = 4;
+
+  enum ValidResolutions {
+    RESOLUTION_UNSPECIFIED = 0;
+    FULLHD_1080P = 1;
+    HD_720P = 2;
+  }
+  ValidResolutions resolution = 5;
+
+  enum ValidFrameRates {
+    FRAMERATE_UNSPECIFIED = 0;
+    FPS_30 = 1;
+    FPS_25 = 2;
+  }
+  ValidFrameRates frame_rate = 6;
+}
+
+/**
+ * Overlay parameters.
+ *
+ * All available parameters that can be used to configure telemetry overlay on video recordings.
+ */
+message OverlayParameters {
+  /**
+   * Available logo index options.
+   */
+  enum LogoIndex {
+    LOGO_INDEX_UNSPECIFIED = 0; // Logo index not specified
+    NONE = 1; // Do not add any logo
+    DEFAULT = 2; // Add default logo
+    CUSTOM = 3; // Add user defined logo
+  }
+
+  /**
+   * Available depth units.
+   */
+  enum DepthUnit {
+    DEPTH_UNIT_UNSPECIFIED = 0; // Depth unit not specified
+    METERS = 1; // Depth should be displayed as meters
+    FEET = 2; // Depth should be displayed as feet
+  }
+
+  /**
+   * Available temperature units.
+   */
+  enum TemperatureUnit {
+    TEMPERATURE_UNIT_UNSPECIFIED = 0; // Temperature unit not specfied
+    CELSIUS = 1; // Temperature should be displayed as Celcius
+    FAHRENHEIT = 2; // Temperature should be displayed as Fahrenheit
+  }
+
+  /**
+   * Available font sizes for overlay text elements.
+   */
+  enum FontSize {
+    FONT_SIZE_UNSPECIFIED = 0; // Font size not specified
+    PX15 = 1; // 15 px
+    PX20 = 2; // 20 px
+    PX25 = 3; // 25 px
+    PX30 = 4; // 30 px
+    PX35 = 5; // 35 px
+    PX40 = 6; // 40 px
+  }
+
+  bool temperature_enabled = 1; // If temperature should be included
+  bool depth_enabled = 2; // If depth should be included
+  bool heading_enabled = 3; // If heading should be included
+  bool tilt_enabled = 4; // If camera tilt angle should be included
+  bool date_enabled = 5; // If date should be included
+  LogoIndex logo_index = 6; // Which logo should be used
+  DepthUnit depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
+  TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celcius or Fahrenheit
+  int32 timezone_offset = 9; // Timezone offset from UTC
+  int32 margin_width = 10; // Horizontal margins of text elements
+  int32 margin_height = 11; // Vertical margins of text elements
+  FontSize font_size = 12; // Font size of text elements
+  string title = 13; // Optional title
+  string subtitle = 14; // Optional subtitle
+  string date_format = 16; // Posix strftime format string for time stamp
+  int32 shading = 17; // Pixel intensity to subtract from text background. (restricted to 0-255), (result background intensity is restricted to max 100)
+}
