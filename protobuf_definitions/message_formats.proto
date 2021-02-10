@@ -263,24 +263,26 @@ message CalibrationState {
 }
 
 message CameraParameters {
-  int32 bitrate = 1;
-  int32 exposure = 2;
-  int32 white_balance = 3;
-  int32 hue = 4;
 
   enum ValidResolutions {
     RESOLUTION_UNSPECIFIED = 0;
     FULLHD_1080P = 1;
     HD_720P = 2;
   }
-  ValidResolutions resolution = 5;
 
   enum ValidFrameRates {
     FRAMERATE_UNSPECIFIED = 0;
     FPS_30 = 1;
     FPS_25 = 2;
   }
-  ValidFrameRates frame_rate = 6;
+
+  int32 h264_bitrate = 1;
+  int32 mjpg_bitrate = 2;
+  int32 exposure = 3;
+  int32 white_balance = 4;
+  int32 hue = 5;
+  ValidResolutions resolution = 6;
+  ValidFrameRates frame_rate = 7;
 }
 
 /**
