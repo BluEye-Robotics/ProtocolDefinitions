@@ -518,7 +518,7 @@
                     {
                         "field_name": "overlay_title",
                         "dtype": "<u1[64]",
-                        "description": "Null terminated ascii string padded to 64 characters"
+                        "description": "Null terminated utf8 string padded to 64 characters. Only utf8 characters representable in latin1 will be rendered correctly."
                     }
                 ]
             },
@@ -530,7 +530,7 @@
                     {
                         "field_name": "overlay_subtitle",
                         "dtype": "<u1[64]",
-                        "description": "Null terminated ascii string padded to 64 characters"
+                        "description": "Null terminated utf8 string padded to 64 characters. Only utf8 characters representable in latin1 will be rendered correctly."
                     }
                 ]
             },
@@ -542,7 +542,7 @@
                     {
                         "field_name": "overlay_date_format",
                         "dtype": "<u1[64]",
-                        "description": "Null terminated ascii string padded to 64 characters"
+                        "description": "Null terminated utf8 string padded to 64 characters. Only utf8 characters representable in latin1 will be rendered correctly."
                     }
                 ]
             },
