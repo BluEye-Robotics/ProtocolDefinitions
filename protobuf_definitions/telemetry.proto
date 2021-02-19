@@ -73,3 +73,7 @@ message DataStorageSpaceTel {
 message CalibrationStateTel {
   CalibrationState calibration_state = 1;
 }
+
+message TiltStabilizationTel {
+  TiltStabilizationState state = 1;
+}
