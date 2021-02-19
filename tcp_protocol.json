@@ -131,28 +131,6 @@
                 "command_type": "D"
             },
             {
-                "name": "auto_depth_step",
-                "command_type": "a",
-                "fields": [
-                    {
-                        "field_name": "direction",
-                        "dtype": "<i2",
-                        "description": " 1 for up, -1 for down"
-                    }
-                ]
-            },
-            {
-                "name": "auto_heading_step",
-                "command_type": "A",
-                "fields": [
-                    {
-                        "field_name": "direction",
-                        "dtype": "<i2",
-                        "description": "1 for up, -1 for down"
-                    }
-                ]
-            },
-            {
                 "name": "set_system_time",
                 "command_type": "t",
                 "description": "set the system time on the on-board computer",
