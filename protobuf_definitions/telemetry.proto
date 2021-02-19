@@ -77,3 +77,19 @@ message CalibrationStateTel {
 message TiltStabilizationTel {
   TiltStabilizationState state = 1;
 }
+
+message IperfTel {
+  IperfStatus status = 1;
+}
+
+message SpectatorsTel {
+  Spectators spectators = 1;
+}
+
+message TiltAngleTel {
+  TiltAngle angle = 1;
+}
+
+message BlunuxVersionTel {
+  BlunuxVersion version = 1;
+}

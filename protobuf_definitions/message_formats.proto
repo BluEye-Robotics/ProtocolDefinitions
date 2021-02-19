@@ -262,6 +262,40 @@ message CalibrationState {
   int32 progress_thruster = 8;
 }
 
+message IperfStatus
+{
+  int32 sent = 1;
+  int32 received = 2;
+}
+
+/**
+ * Number of spectators connected to video stream
+ */
+message Spectators {
+  int32 spectators = 1;
+}
+
+/**
+ * Angle of tilt camera in degrees
+ */
+message TiltAngle {
+  int32 angle = 1;
+}
+
+/**
+ * Blunux version id:
+    The first 12 bits encodes the build number.
+    The next 4 bits encode the builder number according to:
+      0x1 = warrior-dev
+      0x2 = warrior-master
+      0x3 = dunfell-dev
+      0x4 = dunfell-master
+    The last 16 bits are irrelevant
+ */
+message BlunuxVersion {
+  int32 version_id = 1;
+}
+
 message CameraParameters {
 
   enum ValidResolutions {
