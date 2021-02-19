@@ -282,18 +282,19 @@ message TiltAngle {
   int32 angle = 1;
 }
 
-/**
- * Blunux version id:
-    The first 12 bits encodes the build number.
-    The next 4 bits encode the builder number according to:
-      0x1 = warrior-dev
-      0x2 = warrior-master
-      0x3 = dunfell-dev
-      0x4 = dunfell-master
-    The last 16 bits are irrelevant
- */
 message BlunuxVersion {
-  int32 version_id = 1;
+  enum Builder {
+    UNSPECIFIED = 0;
+    WARRIOR_DEV = 1;
+    WARRIOR_MASTER = 2;
+    DUNFELL_DEV = 3;
+    DUNFELL_MASTER = 4;
+    GATESGARTH_DEV = 5;
+    GATESGARTH_MASTER = 6;
+  }
+
+  Builder builder = 1;
+  int32 build_number = 2;
 }
 
 message CameraParameters {
