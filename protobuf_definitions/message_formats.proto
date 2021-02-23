@@ -83,22 +83,6 @@ message ClientInfo {
   string platform_version = 5;
 }
 
-message ErrorFlags {
-  bool missing_ack_from_pmu = 1;
-  bool pmu_communication_timeout = 2;
-  bool depth_sensor_read_error = 3;
-  bool depth_sensor_spike = 4;
-  bool inner_pressure_sensor_read_error = 5;
-  bool inner_pressure_sensor_spike = 6;
-  bool invalid_compass_calibration = 7;
-  bool invalid_tilt_calibration = 8;
-}
-
-message DroneInfo {
-  string serial_number = 1;
-  string blunux_version = 2;
-}
-
 message RecordState {
   bool is_recording = 1;
   int32 seconds = 2; // record time in seconds
@@ -282,19 +266,45 @@ message TiltAngle {
   int32 angle = 1;
 }
 
-message BlunuxVersion {
-  enum Builder {
-    UNSPECIFIED = 0;
-    WARRIOR_DEV = 1;
-    WARRIOR_MASTER = 2;
-    DUNFELL_DEV = 3;
-    DUNFELL_MASTER = 4;
-    GATESGARTH_DEV = 5;
-    GATESGARTH_MASTER = 6;
+message DroneInfo {
+  message BlunuxVersion {
+    enum Builder {
+      UNSPECIFIED = 0;
+      WARRIOR_DEV = 1;
+      WARRIOR_MASTER = 2;
+      DUNFELL_DEV = 3;
+      DUNFELL_MASTER = 4;
+      GATESGARTH_DEV = 5;
+      GATESGARTH_MASTER = 6;
+    }
+
+    string version_string = 1;
+    Builder builder = 2;
+    int32 build_number = 3;
   }
 
-  Builder builder = 1;
-  int32 build_number = 2;
+  BlunuxVersion blunux_version = 1;
+  string serial_number = 2;
+  string hardware_id = 3;
+  string model_name = 4;
+  string mb_serial = 5;
+  string bb_serial = 6;
+  string mb_uid = 7;
+  string bb_uid = 8;
+  string gp1_id = 9;
+  string gp2_id = 10;
+  string gp3_id = 11;
+}
+
+message ErrorFlags {
+  bool pmu_comm_ack = 1;
+  bool pmu_comm_stream = 2;
+  bool depth_read = 3;
+  bool depth_spike = 4;
+  bool inner_pressure_read = 5;
+  bool inner_pressure_spike = 6;
+  bool compass_calibration = 7;
+  bool tilt_calibration = 8;
 }
 
 message CameraParameters {

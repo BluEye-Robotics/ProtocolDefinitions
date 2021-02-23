@@ -90,6 +90,10 @@ message TiltAngleTel {
   TiltAngle angle = 1;
 }
 
-message BlunuxVersionTel {
-  BlunuxVersion version = 1;
+message DroneInfoTel {
+  DroneInfo drone_info = 1;
+}
+
+message ErrorFlagsTel {
+  ErrorFlags error_flags = 1;
 }
