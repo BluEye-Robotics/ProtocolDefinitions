@@ -1,0 +1,16 @@
+name: cross-imx-update
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone cross-imx repo
+      uses: actions/checkout@master
+      with:
+        repository: BluEye-Robotics/cross-imx
+    - name: Pull, update and push blunux sdk
+      run: |
+        cross-imx-pull-docker && cross-imx-update && cross-imx-PUSH-docker
