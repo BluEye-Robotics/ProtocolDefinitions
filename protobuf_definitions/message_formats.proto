@@ -268,19 +268,7 @@ message TiltAngle {
 
 message DroneInfo {
   message BlunuxVersion {
-    enum Builder {
-      UNSPECIFIED = 0;
-      WARRIOR_DEV = 1;
-      WARRIOR_MASTER = 2;
-      DUNFELL_DEV = 3;
-      DUNFELL_MASTER = 4;
-      GATESGARTH_DEV = 5;
-      GATESGARTH_MASTER = 6;
-    }
-
     string version_string = 1;
-    Builder builder = 2;
-    int32 build_number = 3;
   }
 
   BlunuxVersion blunux_version = 1;
