@@ -268,20 +268,20 @@ message TiltAngle {
 
 message DroneInfo {
   message BlunuxVersion {
-    string version_string = 1;
+    bytes version_string = 1;
   }
 
   BlunuxVersion blunux_version = 1;
-  string serial_number = 2;
-  string hardware_id = 3;
-  string model_name = 4;
-  string mb_serial = 5;
-  string bb_serial = 6;
-  string mb_uid = 7;
-  string bb_uid = 8;
-  string gp1_id = 9;
-  string gp2_id = 10;
-  string gp3_id = 11;
+  bytes serial_number = 2;
+  bytes hardware_id = 3;
+  bytes model_name = 4;
+  bytes mb_serial = 5;
+  bytes bb_serial = 6;
+  bytes mb_uid = 7;
+  bytes bb_uid = 8;
+  bytes gp1_id = 9;
+  bytes gp2_id = 10;
+  bytes gp3_id = 11;
 }
 
 message ErrorFlags {
