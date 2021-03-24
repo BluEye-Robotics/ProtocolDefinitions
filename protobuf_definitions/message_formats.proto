@@ -200,7 +200,7 @@ message Battery{
 
   uint32 cycle_count = 19;
   uint32 design_capacity = 20;
-  uint32 manufacture_date = 21;
+  google.protobuf.Timestamp manufacture_date = 21;
   uint32 serial_number = 22;
   string manufacturer_name = 23;
   string device_name = 24;
