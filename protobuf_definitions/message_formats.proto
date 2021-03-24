@@ -143,12 +143,17 @@ message Battery{
   }
   Temperature temperature = 2;
 
-  enum State {
-    STATE_UNSPECIFIED = 0;
-    INITIALIZATION = 1;
-    DISCHARGING_OR_RELAX = 2;
-    FULLY_CHARGED = 3;
-    FULLY_DISCHARGED = 4;
+  // Wrapper message around enum in order to avoid name clashes
+  message State {
+    enum StateEnum {
+      STATE_UNSPECIFIED = 0;
+      INITIALIZATION = 1;
+      CHARGING = 2;
+      DISCHARGING_OR_RELAX = 3;
+      FULLY_CHARGED = 4;
+      FULLY_DISCHARGED = 5;
+    }
+    StateEnum state_enum = 1;
   }
   State state = 3;
 
@@ -162,15 +167,22 @@ message Battery{
   }
   Alarms alarms = 4;
 
-  message Errors {
-    bool unknown_error = 1;
-    bool overflow_underflow = 2;
-    bool access_denied = 3;
-    bool unsupported_command = 4;
-    bool reserved_command = 5;
-    bool busy = 6;
+  // Wrapper message around enum in order to avoid name clashes
+  message Error {
+    enum ErrorEnum {
+      ERROR_UNSPECIFIED = 0;
+      OK = 1;
+      BUSY = 2;
+      RESERVED_COMMAND = 3;
+      UNSUPPORTED_COMMAND = 4;
+      ACCESS_DENIED = 5;
+      OVERFLOW_UNDERFLOW = 6;
+      BAD_SIZE = 7;
+      UNKNOWN_ERROR = 8;
+    }
+    ErrorEnum error_enum = 1;
   }
-  Errors errors = 5;
+  Error error = 5;
 
   int32 current = 6;
   int32 average_current = 7;
@@ -185,6 +197,14 @@ message Battery{
   int32 time_to_empty_at_current_rate = 16;
   int32 charging_current = 17;
   int32 charging_voltage = 18;
+
+  uint32 cycle_count = 19;
+  uint32 design_capacity = 20;
+  uint32 manufacture_date = 21;
+  uint32 serial_number = 22;
+  string manufacturer_name = 23;
+  string device_name = 24;
+  string device_chemistry = 25;
 }
 
 /**
