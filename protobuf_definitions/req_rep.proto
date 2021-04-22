@@ -39,3 +39,19 @@ message GetCameraParametersReq {
 message GetCameraParametersRep {
   CameraParameters camera_parameters = 1;
 }
+
+
+message SyncTimeReq {
+  SystemTime time = 1;
+}
+
+message SyncTimeRep {
+  bool success = 1;
+}
+
+
+message PingReq {
+}
+
+message PingRep {
+}

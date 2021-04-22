@@ -43,7 +43,7 @@ message UserModifiers {
 }
 
 message Lights {
-  uint32 percentage = 1;
+  float value = 1; // Light intensity (0..1)
 }
 
 message LatLongPosition {
@@ -52,7 +52,7 @@ message LatLongPosition {
 }
 
 message ConnectionDuration {
-  int64 connection_duration = 1;
+  int64 value = 1;
 }
 
 message AutoHeadingState {
@@ -65,10 +65,6 @@ message AutoDepthState {
 
 message TiltStabilizationState {
   bool enabled = 1;
-}
-
-message TiltSpeed {
-  float speed = 1;
 }
 
 message SystemTime {
@@ -89,21 +85,21 @@ message RecordState {
 }
 
 message WaterDensity {
-  int32 density = 1;
+  int32 value = 1;
 }
 
 /**
  * Water temperature measured by the drone's combined depth and temperature sensor. 
  */
 message WaterTemperature {
-  float temperature = 1; // Water temperature in °C
+  float value = 1; // Water temperature in °C
 }
 
 /**
  * CPU temperature.
  */
 message CPUTemperature {
-  float temperature = 1; // CPU temperature in °C
+  float value = 1; // CPU temperature in °C
 }
 
 /** 
@@ -145,7 +141,7 @@ message Battery{
 
   // Wrapper message around enum in order to avoid name clashes
   message State {
-    enum StateEnum {
+    enum Enum {
       STATE_UNSPECIFIED = 0;
       INITIALIZATION = 1;
       CHARGING = 2;
@@ -153,7 +149,7 @@ message Battery{
       FULLY_CHARGED = 4;
       FULLY_DISCHARGED = 5;
     }
-    StateEnum state_enum = 1;
+    Enum value = 1;
   }
   State state = 3;
 
@@ -169,7 +165,7 @@ message Battery{
 
   // Wrapper message around enum in order to avoid name clashes
   message Error {
-    enum ErrorEnum {
+    enum Enum {
       ERROR_UNSPECIFIED = 0;
       OK = 1;
       BUSY = 2;
@@ -180,7 +176,7 @@ message Battery{
       BAD_SIZE = 7;
       UNKNOWN_ERROR = 8;
     }
-    ErrorEnum error_enum = 1;
+    Enum value = 1;
   }
   Error error = 5;
 
@@ -228,7 +224,7 @@ message Altitude {
  * Water depth of drone
  */
 message Depth {
-  int32 depth = 1; // Drone depth below surface in mm
+  int32 value = 1; // Drone depth below surface in mm
 }
 
 message Reference {
@@ -236,7 +232,7 @@ message Reference {
   float sway = 2;
   float heave = 3;
   float yaw = 4;
-  float depth = 5;
+  float depth = 5; // Reference drone depth below surface in mm
 
 // Can be added as needed:
   //float depth_rate = 6;
@@ -247,7 +243,7 @@ message Reference {
 }
 
 message DiveTime {
-  int32 time = 1;
+  int32 value = 1;
 }
 
 message StorageSpace {
@@ -276,14 +272,14 @@ message IperfStatus
  * Number of spectators connected to video stream
  */
 message Spectators {
-  int32 spectators = 1;
+  int32 value = 1;
 }
 
 /**
  * Angle of tilt camera in degrees
  */
 message TiltAngle {
-  int32 angle = 1;
+  int32 value = 1;
 }
 
 message DroneInfo {
@@ -316,17 +312,22 @@ message ErrorFlags {
 }
 
 message CameraParameters {
-
-  enum ValidResolutions {
-    RESOLUTION_UNSPECIFIED = 0;
-    FULLHD_1080P = 1;
-    HD_720P = 2;
+  message Resolution {
+    enum Enum {
+      UNSPECIFIED = 0;
+      FULLHD_1080P = 1;
+      HD_720P = 2;
+    }
+    Enum value = 1;
   }
 
-  enum ValidFrameRates {
-    FRAMERATE_UNSPECIFIED = 0;
-    FPS_30 = 1;
-    FPS_25 = 2;
+  message Framerate {
+    enum Enum {
+      UNSPECIFIED = 0;
+      FPS_30 = 1;
+      FPS_25 = 2;
+    }
+    Enum value = 1;
   }
 
   int32 h264_bitrate = 1;
@@ -334,8 +335,8 @@ message CameraParameters {
   int32 exposure = 3;
   int32 white_balance = 4;
   int32 hue = 5;
-  ValidResolutions resolution = 6;
-  ValidFrameRates frame_rate = 7;
+  Resolution resolution = 6;
+  Framerate framerate = 7;
 }
 
 /**
@@ -345,44 +346,56 @@ message CameraParameters {
  */
 message OverlayParameters {
   /**
-   * Available logo index options.
+   * Available logo type options.
    */
-  enum LogoIndex {
-    LOGO_INDEX_UNSPECIFIED = 0; // Logo index not specified
-    NONE = 1; // Do not add any logo
-    DEFAULT = 2; // Add default logo
-    CUSTOM = 3; // Add user defined logo
+  message LogoType {
+    enum Enum {
+      UNSPECIFIED = 0; // Logo type not specified
+      NONE = 1; // Do not add any logo
+      DEFAULT = 2; // Add default logo
+      CUSTOM = 3; // Add user defined logo
+    }
+    Enum value = 1;
   }
 
   /**
    * Available depth units.
    */
-  enum DepthUnit {
-    DEPTH_UNIT_UNSPECIFIED = 0; // Depth unit not specified
-    METERS = 1; // Depth should be displayed as meters
-    FEET = 2; // Depth should be displayed as feet
+  message DepthUnit {
+    enum Enum {
+      UNSPECIFIED = 0; // Depth unit not specified
+      METERS = 1; // Depth should be displayed as meters
+      FEET = 2; // Depth should be displayed as feet
+    }
+    Enum value = 1;
   }
 
   /**
    * Available temperature units.
    */
-  enum TemperatureUnit {
-    TEMPERATURE_UNIT_UNSPECIFIED = 0; // Temperature unit not specfied
-    CELSIUS = 1; // Temperature should be displayed as Celcius
-    FAHRENHEIT = 2; // Temperature should be displayed as Fahrenheit
+  message TemperatureUnit {
+    enum Enum {
+      UNSPECIFIED = 0; // Temperature unit not specfied
+      CELSIUS = 1; // Temperature should be displayed as Celcius
+      FAHRENHEIT = 2; // Temperature should be displayed as Fahrenheit
+    }
+    Enum value = 1;
   }
 
   /**
    * Available font sizes for overlay text elements.
    */
-  enum FontSize {
-    FONT_SIZE_UNSPECIFIED = 0; // Font size not specified
-    PX15 = 1; // 15 px
-    PX20 = 2; // 20 px
-    PX25 = 3; // 25 px
-    PX30 = 4; // 30 px
-    PX35 = 5; // 35 px
-    PX40 = 6; // 40 px
+  message FontSize {
+    enum Enum {
+      UNSPECIFIED = 0; // Font size not specified
+      PX15 = 1; // 15 px
+      PX20 = 2; // 20 px
+      PX25 = 3; // 25 px
+      PX30 = 4; // 30 px
+      PX35 = 5; // 35 px
+      PX40 = 6; // 40 px
+    }
+    Enum value = 1;
   }
 
   bool temperature_enabled = 1; // If temperature should be included
@@ -390,7 +403,7 @@ message OverlayParameters {
   bool heading_enabled = 3; // If heading should be included
   bool tilt_enabled = 4; // If camera tilt angle should be included
   bool date_enabled = 5; // If date should be included
-  LogoIndex logo_index = 6; // Which logo should be used
+  LogoType logo_type = 6; // Which logo should be used
   DepthUnit depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
   TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celcius or Fahrenheit
   int32 timezone_offset = 9; // Timezone offset from UTC
