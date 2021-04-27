@@ -14,4 +14,4 @@ jobs:
         - name: Checkout source
           uses: actions/checkout@v1
         - name: Generate documentation
-          run: protoc -Iprotos
+          run: protoc -Iprotos protobuf_definitions/*.proto --doc_opt=html,index.html
