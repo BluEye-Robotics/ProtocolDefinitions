@@ -18,7 +18,7 @@ jobs:
       - name: List files
         run: ls -la
       - name: Generate documentation
-        run: protoc --doc_out=docs --doc_opt=html,protocol.html protobuf_definitions/*.proto
+        run: protoc --doc_out=docs --doc_opt=html,protocol.html --proto_path=protobuf_definitions protobuf_definitions/*.proto
       - name: List doc files
         run: ls -la docs
 
