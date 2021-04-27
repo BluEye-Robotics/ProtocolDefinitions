@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [[ "$(docker images -q yoheimuta/protolint:latest 2> /dev/null)" == "" ]]; then
-  echo "Image yoheimuta/protolint:latest not found, run docker pull to install:"
-  echo "docker pull yoheimuta/protolint"
+if [[ "$(docker images -q yoheimuta/protolint:v0.31.0 2> /dev/null)" == "" ]]; then
+  echo "Image yoheimuta/protolint:v0.31.0 not found, run docker pull to install:"
+  echo "docker pull yoheimuta/protolint:v0.31.0"
 else
   docker run --rm \
     -v $(pwd):/workspace \
