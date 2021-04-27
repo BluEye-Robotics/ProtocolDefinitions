@@ -12,9 +12,9 @@ jobs:
   protolint:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout source
+      - name: Checkout source
         uses: actions/checkout@v1
-      - name: run protolint
+      - name: Run protolint
         uses: plexsystems/protolint-action@v0.4.0
         with:
           configDirectory: .

@@ -1,0 +1,17 @@
+name: Generate documentation
+
+on:
+  push:
+    branches:
+      - port-protocol-to-protobuf
+
+jobs:
+  generate-documentation:
+    runs-on: ubuntu-latest
+    container:
+      image: pseudomuto/protoc-gen-doc:1.4.1
+    steps:
+        - name: Checkout source
+          uses: actions/checkout@v1
+        - name: Generate documentation
+          run: protoc -Iprotos
