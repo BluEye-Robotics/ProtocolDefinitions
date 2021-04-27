@@ -24,8 +24,10 @@ jobs:
       - name: List doc files
         run: ls -la docs
       - name: Publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: fixpoint/azblob-upload-artifact@v4
         with:
-          name: documentation
+          connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+          container: protocoldefinitions
+          name: docs
           path: docs
 
