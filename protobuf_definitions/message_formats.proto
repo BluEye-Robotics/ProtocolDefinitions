@@ -442,7 +442,7 @@ enum DepthUnit {
 /**
   * Available font sizes for overlay text elements.
   */
-  enum FontSize {
+enum FontSize {
   FONT_SIZE_UNSPECIFIED = 0; // Font size not specified
   FONT_SIZE_PX15 = 1; // 15 px
   FONT_SIZE_PX20 = 2; // 20 px
