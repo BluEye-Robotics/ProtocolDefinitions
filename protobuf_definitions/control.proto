@@ -1,9 +1,8 @@
 /*
  * Control
  *
- * These messages define control messages accepted by the Blueye drone
+ * These messages define control messages accepted by the Blueye drone.
  */
-
 syntax = "proto3";
 
 package blueye.protocol;

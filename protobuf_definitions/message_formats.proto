@@ -3,7 +3,6 @@
  *
  * These are used for logging as well as building requests and responses.
  */
-
 syntax = "proto3";
 
 package blueye.protocol;
@@ -11,9 +10,16 @@ import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
-message BinlogRecord
-{
-  google.protobuf.Any payload = 1;
+/**
+  * Wrapper message for each entry in the drone telemetry logfile.
+  *
+  * Each entry contains the unix timestamp in UTC, the monotonic timestamp (time since boot),
+  * and an Any message wrapping the custom Blueye message.
+  *
+  * See separate documentation for the logfile format for more details.
+  */
+message BinlogRecord {
+  google.protobuf.Any payload = 1; // The log entry payload.
   google.protobuf.Timestamp unix_timestamp = 2; // Unix timestamp in UTC.
   google.protobuf.Timestamp clock_monotonic = 3; // Posix CLOCK_MONOTONIC timestamp.
 }
@@ -26,12 +32,12 @@ message BinlogRecord
  * and the left and right trigger for the slow and boost modifiers.
  */
 message MotionInput {
-  float surge = 1; // Forward (positive) and backwards (negative) movement. (-1..1).
-  float sway = 2; // Right (positive) and left (negative) lateral movement (-1..1).
-  float heave = 3; // Descend (positive) and ascend (negative) movement (-1..1).
-  float yaw = 4; // Left (positive) and right (negative) movement (-1..1).
-  float slow = 5; // Multiplier used to reduce the speed of the motion (0..1).
-  float boost = 6; // Multiplier used to increase the speed of the motion (0..1).
+  float surge = 1; // Forward (positive) and backwards (negative) movement. (-1..1)
+  float sway = 2; // Right (positive) and left (negative) lateral movement (-1..1)
+  float heave = 3; // Descend (positive) and ascend (negative) movement (-1..1)
+  float yaw = 4; // Left (positive) and right (negative) movement (-1..1)
+  float slow = 5; // Multiplier used to reduce the speed of the motion (0..1)
+  float boost = 6; // Multiplier used to increase the speed of the motion (0..1)
 }
 
 message UserModifiers {
@@ -42,54 +48,90 @@ message UserModifiers {
   float jerk_modifier = 5;
 }
 
+/**
+  * Lights message used to represent the intensity of the main light or external lights.
+  */
 message Lights {
   float value = 1; // Light intensity (0..1)
 }
 
+/**
+  * Latitude and longitude position in WGS 84 format.
+  */
 message LatLongPosition {
-  float latitude = 1;
-  float longitude = 2;
+  float latitude = 1; // Latitude
+  float longitude = 2; // Longitude
 }
 
+/**
+  * Connection duration of a remote client.
+  */
 message ConnectionDuration {
   int64 value = 1;
 }
 
+/**
+  * Auto heading state.
+  */
 message AutoHeadingState {
-  bool enabled = 1;
+  bool enabled = 1; // If auto heading is enabled
 }
 
+/**
+  * Auto depth state.
+  */
 message AutoDepthState {
-  bool enabled = 1;
+  bool enabled = 1; // If auto depth is enabled
 }
 
+/**
+  * Tilt stabilization state.
+  *
+  * Blueye drones with mechanical tilt has the ability to enable
+  * camera stabilization.
+  */
 message TiltStabilizationState {
   bool enabled = 1;
 }
 
+/**
+  * System time.
+  */
 message SystemTime {
-  google.protobuf.Timestamp unix_timestamp = 1;
-}
-
-message ClientInfo {
-  string type = 1;
-  string version = 2;
-  string device_type = 3;
-  string platform = 4;
-  string platform_version = 5;
-}
-
-message RecordState {
-  bool is_recording = 1;
-  int32 seconds = 2; // record time in seconds
-}
-
-message WaterDensity {
-  int32 value = 1;
+  google.protobuf.Timestamp unix_timestamp = 1; // Unix timestamp
 }
 
 /**
- * Water temperature measured by the drone's combined depth and temperature sensor. 
+  * Information about a remote client.
+  */
+message ClientInfo {
+  string type = 1; // The type of client (such as Blueye App, Observer App, SDK, etc)
+  string version = 2; // Client software version string
+  string device_type = 3; // Device type, such as mobile, tablet, or computer
+  string platform = 4; // Platform, such as iOS, Android, Linux, etc
+  string platform_version = 5; // Platform software version string
+}
+
+/**
+  * Camera recording state.
+  */
+message RecordState {
+  bool is_recording = 1; // If the camera is recording
+  int32 seconds = 2; // Record time in seconds
+}
+
+/**
+  * Water density.
+  *
+  * Used to specify the water density the drone is operating in,
+  * to achieve more accruate depth measurements.
+  */
+message WaterDensity {
+  int32 value = 1; // Salinity in grams per liter
+}
+
+/**
+ * Water temperature measured by the drone's combined depth and temperature sensor.
  */
 message WaterTemperature {
   float value = 1; // Water temperature in °C
@@ -102,7 +144,7 @@ message CPUTemperature {
   float value = 1; // CPU temperature in °C
 }
 
-/** 
+/**
   * Canister temperature
   *
   * Temperature measured in the top and bottom canister of the drone.
@@ -117,6 +159,11 @@ message CanisterHumidity {
   int32 bottom = 2;
 }
 
+/**
+  * Battery information message.
+  *
+  * Detailed information about all aspects of the connected Blueye smart battery.
+  */
 message Battery{
   message Voltage {
     int32 total = 1;
@@ -207,13 +254,13 @@ message Battery{
  * The attitude of the drone.
  */
 message Attitude {
-  float roll = 1; // Roll angle (-180..180).
-  float pitch = 2; // Pitch angle (-180..180).
-  float yaw = 3; // Yaw angle (-180..180).
+  float roll = 1; // Roll angle (-180..180)
+  float pitch = 2; // Pitch angle (-180..180)
+  float yaw = 3; // Yaw angle (-180..180)
 }
 
 /**
- * Drone altitude over seabed, typically obtained from a DVL
+ * Drone altitude over seabed, typically obtained from a DVL.
  */
 message Altitude {
   int32 value = 1; // Drone altitude over seabed in mm
@@ -221,7 +268,7 @@ message Altitude {
 }
 
 /**
- * Water depth of drone
+ * Water depth of the drone.
  */
 message Depth {
   int32 value = 1; // Drone depth below surface in mm
@@ -242,13 +289,21 @@ message Reference {
   //float heading_acc = 10;
 }
 
+/**
+  * Amount of time the drone has been submerged.
+  *
+  * The drone starts incrementing this value when the depth is above 250 mm.
+  */
 message DiveTime {
-  int32 value = 1;
+  int32 value = 1; // Number of seconds the drone has been submerged
 }
 
+/**
+  * Storage space.
+  */
 message StorageSpace {
-  int64 total_space = 1;
-  int64 free_space = 2;
+  int64 total_space = 1; // Total bytes of storage space
+  int64 free_space = 2; // Available bytes of storage space
 }
 
 message CalibrationState {
@@ -262,81 +317,135 @@ message CalibrationState {
   int32 progress_thruster = 8;
 }
 
-message IperfStatus
-{
-  int32 sent = 1;
-  int32 received = 2;
+/**
+  * Connection speed between drone and Surface Unit.
+  */
+message IperfStatus {
+  int32 sent = 1; // Transfer rate from drone to Surface Unit in Mbit/s
+  int32 received = 2; // Transfer rate from Surface Unit to drone in Mbit/s
 }
 
 /**
- * Number of spectators connected to video stream
+ * Number of spectators connected to video stream.
  */
 message Spectators {
-  int32 value = 1;
+  int32 value = 1; // The number of connected spectators
 }
 
 /**
- * Angle of tilt camera in degrees
+ * Angle of tilt camera in degrees.
  */
 message TiltAngle {
-  int32 value = 1;
+  int32 value = 1; // Tilt angle in degrees °
 }
 
+/**
+  * Information about the drone.
+  *
+  * This message contains serial numbers and version informattion for
+  * internal components in the drone. Primarily used for diagnostics, or to
+  * determine the origin of a logfile.
+  */
 message DroneInfo {
   message BlunuxVersion {
     bytes version_string = 1;
   }
 
-  BlunuxVersion blunux_version = 1;
-  bytes serial_number = 2;
-  bytes hardware_id = 3;
-  bytes model_name = 4;
-  bytes mb_serial = 5;
-  bytes bb_serial = 6;
-  bytes mb_uid = 7;
-  bytes bb_uid = 8;
-  bytes gp1_id = 9;
-  bytes gp2_id = 10;
-  bytes gp3_id = 11;
+  BlunuxVersion blunux_version = 1; // Blunux version number
+  bytes serial_number = 2; // Drone serial number
+  bytes hardware_id = 3; // Main computer unique identifier
+  bytes model_name = 4; // Drone model name (Pioneer, Pro, or X3)
+  bytes mb_serial = 5; // Motherboard serial number
+  bytes bb_serial = 6; // Backbone serial number
+  bytes mb_uid = 7; // Motherboard unique identifier
+  bytes bb_uid = 8; // Backbone unique identifier
+  bytes gp1_uid = 9; // Guestport 1 unique identifier
+  bytes gp2_uid = 10; // Guestport 2 unique identifier
+  bytes gp3_uid = 11; // Guesport 3 unique identifier
 }
 
+/**
+  * Known error states for the drone.
+  */
 message ErrorFlags {
+  // Acknowledge message not received for a message published to internal micro controller
   bool pmu_comm_ack = 1;
-  bool pmu_comm_stream = 2;
-  bool depth_read = 3;
-  bool depth_spike = 4;
-  bool inner_pressure_read = 5;
-  bool inner_pressure_spike = 6;
-  bool compass_calibration = 7;
-  bool tilt_calibration = 8;
+  bool pmu_comm_stream = 2; // Error in communication with internal micro controller
+  bool depth_read = 3; // Error reading depth sensor value
+  bool depth_spike = 4; // Sudden spike in value read from depth sensor
+  bool inner_pressure_read = 5; // Error reading inner pressure of the drone
+  bool inner_pressure_spike = 6; // Sudden spike in inner preassure
+  bool compass_calibration = 7; // Compass needs calibration
+  bool tilt_calibration = 8; // Error during calibration of tilt endpoints
 }
 
+/**
+  * Available camera resolutions.
+  */
+message Resolution {
+  enum Enum {
+    UNSPECIFIED = 0; // Resolution not specified
+    FULLHD_1080P = 1; // 1080p Full HD resolution
+    HD_720P = 2; // 720p HD resolution
+  }
+}
+
+/**
+  * Available camera framerates.
+  */
+message Framerate {
+  enum Enum {
+    UNSPECIFIED = 0; // Framerate not specified
+    FPS_30 = 1; // 30 frames per second
+    FPS_25 = 2; // 25 frames per second
+  }
+}
+
+/**
+  * Camera parameters.
+  */
 message CameraParameters {
-  message Resolution {
-    enum Enum {
-      UNSPECIFIED = 0;
-      FULLHD_1080P = 1;
-      HD_720P = 2;
-    }
-    Enum value = 1;
-  }
+  int32 h264_bitrate = 1; // Bitrate of the h264 stream
+  int32 mjpg_bitrate = 2; // Bitrate of the MJPG stream used for still pictures
+  int32 exposure = 3; // Shutter speed in 10000/th second (-1 for automatic exposure)
+  int32 white_balance = 4; // White balance temperature in range 2800..9300 (-1 for automatic white balance)
+  int32 hue = 5; // Hue in range -40..40 (0 as default)
+  Resolution.Enum resolution = 6; // Stream, recording and image resolution
+  Framerate.Enum framerate = 7; // Stream and recording framerate
+}
 
-  message Framerate {
-    enum Enum {
-      UNSPECIFIED = 0;
-      FPS_30 = 1;
-      FPS_25 = 2;
-    }
-    Enum value = 1;
+/**
+  * Available temperature units.
+  */
+message TemperatureUnit {
+  enum Enum {
+    UNSPECIFIED = 0; // Temperature unit not specfied
+    CELSIUS = 1; // Temperature should be displayed as Celcius
+    FAHRENHEIT = 2; // Temperature should be displayed as Fahrenheit
   }
+}
 
-  int32 h264_bitrate = 1;
-  int32 mjpg_bitrate = 2;
-  int32 exposure = 3;
-  int32 white_balance = 4;
-  int32 hue = 5;
-  Resolution resolution = 6;
-  Framerate framerate = 7;
+/**
+  * Available logo type options.
+  */
+message LogoType {
+  enum Enum {
+    UNSPECIFIED = 0; // Logo type not specified
+    NONE = 1; // Do not add any logo
+    DEFAULT = 2; // Add default logo
+    CUSTOM = 3; // Add user defined logo
+  }
+}
+
+/**
+  * Available depth units.
+  */
+message DepthUnit {
+  enum Enum {
+    UNSPECIFIED = 0; // Depth unit not specified
+    METERS = 1; // Depth should be displayed as meters
+    FEET = 2; // Depth should be displayed as feet
+  }
 }
 
 /**
@@ -345,43 +454,6 @@ message CameraParameters {
  * All available parameters that can be used to configure telemetry overlay on video recordings.
  */
 message OverlayParameters {
-  /**
-   * Available logo type options.
-   */
-  message LogoType {
-    enum Enum {
-      UNSPECIFIED = 0; // Logo type not specified
-      NONE = 1; // Do not add any logo
-      DEFAULT = 2; // Add default logo
-      CUSTOM = 3; // Add user defined logo
-    }
-    Enum value = 1;
-  }
-
-  /**
-   * Available depth units.
-   */
-  message DepthUnit {
-    enum Enum {
-      UNSPECIFIED = 0; // Depth unit not specified
-      METERS = 1; // Depth should be displayed as meters
-      FEET = 2; // Depth should be displayed as feet
-    }
-    Enum value = 1;
-  }
-
-  /**
-   * Available temperature units.
-   */
-  message TemperatureUnit {
-    enum Enum {
-      UNSPECIFIED = 0; // Temperature unit not specfied
-      CELSIUS = 1; // Temperature should be displayed as Celcius
-      FAHRENHEIT = 2; // Temperature should be displayed as Fahrenheit
-    }
-    Enum value = 1;
-  }
-
   /**
    * Available font sizes for overlay text elements.
    */
@@ -395,7 +467,6 @@ message OverlayParameters {
       PX35 = 5; // 35 px
       PX40 = 6; // 40 px
     }
-    Enum value = 1;
   }
 
   bool temperature_enabled = 1; // If temperature should be included
@@ -403,15 +474,19 @@ message OverlayParameters {
   bool heading_enabled = 3; // If heading should be included
   bool tilt_enabled = 4; // If camera tilt angle should be included
   bool date_enabled = 5; // If date should be included
-  LogoType logo_type = 6; // Which logo should be used
-  DepthUnit depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
-  TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celcius or Fahrenheit
+  LogoType.Enum logo_type = 6; // Which logo should be used
+  DepthUnit.Enum depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
+  TemperatureUnit.Enum temperature_unit = 8; // Which unit should be used for temperature: Celcius or Fahrenheit
   int32 timezone_offset = 9; // Timezone offset from UTC
   int32 margin_width = 10; // Horizontal margins of text elements
   int32 margin_height = 11; // Vertical margins of text elements
-  FontSize font_size = 12; // Font size of text elements
+  FontSize.Enum font_size = 12; // Font size of text elements
   string title = 13; // Optional title
   string subtitle = 14; // Optional subtitle
   string date_format = 16; // Posix strftime format string for time stamp
-  int32 shading = 17; // Pixel intensity to subtract from text background. (restricted to 0-255), (result background intensity is restricted to max 100)
+  /**
+    * Pixel intensity to subtract from text background (restricted to 0..255),
+    * (result background intensity is restricted to max 100)
+    */
+  int32 shading = 17;
 }

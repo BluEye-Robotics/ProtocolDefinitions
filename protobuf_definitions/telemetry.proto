@@ -1,9 +1,8 @@
 /*
  * Telemetry
  *
- * These messages define telemetry messages from the Blueye drone
+ * These messages define telemetry messages from the Blueye drone.
  */
-
 syntax = "proto3";
 
 package blueye.protocol;

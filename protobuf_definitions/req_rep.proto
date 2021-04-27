@@ -1,9 +1,8 @@
 /**
  * Request reply
  *
- * These messages define request / reply messages for the Blueye drone
+ * These messages define request / reply messages for the Blueye drone.
  */
-
 syntax = "proto3";
 
 package blueye.protocol;
