@@ -16,6 +16,6 @@ jobs:
       - name: Print path
         run: echo "${{ github.workspace }}/protobuf_definitions"
       - name: List files
-        run: ls ${{ github.workspace}}/protobuf_definitions/*.proto
+        run: ls ${{ github.workspace}}
       - name: Generate documentation
-        run: protoc -Iprotos ${{ github.workspace}}/protobuf_definitions/*.proto
+        run: protoc --doc_out=./docs --doc_opt=html,protocol.html ${{ github.workspace}}/protobuf_definitions/*.proto
