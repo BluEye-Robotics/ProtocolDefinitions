@@ -347,14 +347,10 @@ message TiltAngle {
   * determine the origin of a logfile.
   */
 message DroneInfo {
-  message BlunuxVersion {
-    bytes version_string = 1;
-  }
-
-  BlunuxVersion blunux_version = 1; // Blunux version number
+  string blunux_version = 1; // Blunux version string
   bytes serial_number = 2; // Drone serial number
   bytes hardware_id = 3; // Main computer unique identifier
-  bytes model_name = 4; // Drone model name (Pioneer, Pro, or X3)
+  string model_name = 4; // Drone model name (Pioneer, Pro, or X3)
   bytes mb_serial = 5; // Motherboard serial number
   bytes bb_serial = 6; // Backbone serial number
   bytes mb_uid = 7; // Motherboard unique identifier
