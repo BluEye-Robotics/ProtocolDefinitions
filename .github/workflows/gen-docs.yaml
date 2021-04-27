@@ -11,7 +11,7 @@ jobs:
     container:
       image: pseudomuto/protoc-gen-doc:1.4.1
     steps:
-        - name: Checkout source
-          uses: actions/checkout@v1
-        - name: Generate documentation
-          run: protoc -Iprotos protobuf_definitions/*.proto --doc_opt=html,index.html
+      - name: Checkout source
+        uses: actions/checkout@v1
+      - name: Generate documentation
+        run: protoc -Iprotos $GITHUB_WORKSPACE/protobuf_definitions/*.proto --doc_opt=html,index.html
