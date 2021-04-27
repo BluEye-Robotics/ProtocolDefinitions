@@ -15,10 +15,17 @@ jobs:
         uses: actions/checkout@v1
       - name: Print path
         run: echo "${{ github.workspace }}/protobuf_definitions"
+      - name: Create output configDirectory
+        run: mkdir -p docs
       - name: List files
         run: ls -la
       - name: Generate documentation
         run: protoc --doc_out=docs --doc_opt=html,protocol.html --proto_path=protobuf_definitions protobuf_definitions/*.proto
       - name: List doc files
         run: ls -la docs
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: documentation
+          path: docs
 
