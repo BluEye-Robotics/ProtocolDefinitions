@@ -1,0 +1,20 @@
+name: CI build
+
+on:
+  push:
+    branches:
+      - port-protocol-to-protobuf
+  pull_request:
+    branches:
+      - port-protocol-to-protobuf
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source
+        uses: actions/checkout@v1
+      - name: run protolint
+        uses: plexsystems/protolint-action@v0.4.0
+        with:
+          configDirectory: .
