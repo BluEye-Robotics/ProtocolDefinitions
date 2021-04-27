@@ -154,9 +154,34 @@ message CanisterTemperature {
   float bottom = 2; // Temperature in °C
 }
 
+/**
+  * Canister humidity
+  */
 message CanisterHumidity {
   int32 top = 1;
   int32 bottom = 2;
+}
+
+enum BatteryState {
+  BATTERY_STATE_UNSPECIFIED = 0;
+  BATTERY_STATE_INITIALIZATION = 1;
+  BATTERY_STATE_CHARGING = 2;
+  BATTERY_STATE_DISCHARGING_OR_RELAX = 3;
+  BATTERY_STATE_FULLY_CHARGED = 4;
+  BATTERY_STATE_FULLY_DISCHARGED = 5;
+}
+
+// Wrapper message around enum in order to avoid name clashes
+enum BatteryError {
+  BATTERY_ERROR_UNSPECIFIED = 0;
+  BATTERY_ERROR_OK = 1;
+  BATTERY_ERROR_BUSY = 2;
+  BATTERY_ERROR_RESERVED_COMMAND = 3;
+  BATTERY_ERROR_UNSUPPORTED_COMMAND = 4;
+  BATTERY_ERROR_ACCESS_DENIED = 5;
+  BATTERY_ERROR_OVERFLOW_UNDERFLOW = 6;
+  BATTERY_ERROR_BAD_SIZE = 7;
+  BATTERY_ERROR_UNKNOWN_ERROR = 8;
 }
 
 /**
@@ -165,12 +190,15 @@ message CanisterHumidity {
   * Detailed information about all aspects of the connected Blueye smart battery.
   */
 message Battery{
+  /**
+    * Battery voltage levels
+    */
   message Voltage {
-    int32 total = 1;
-    int32 cell_1 = 2;
-    int32 cell_2 = 3;
-    int32 cell_3 = 4;
-    int32 cell_4 = 5;
+    int32 total = 1; // Battery pack voltage level
+    int32 cell_1 = 2; // Cell 1 voltage level
+    int32 cell_2 = 3; // Vell 2 voltage level
+    int32 cell_3 = 4; // Cell 3 voltage level
+    int32 cell_4 = 5; // Cell 4 voltage level
   }
   Voltage voltage = 1;
 
@@ -185,21 +213,11 @@ message Battery{
     float cell_4 = 5; // Cell 4 temperature in °C
   }
   Temperature temperature = 2;
+  BatteryState state = 3;
 
-  // Wrapper message around enum in order to avoid name clashes
-  message State {
-    enum Enum {
-      STATE_UNSPECIFIED = 0;
-      INITIALIZATION = 1;
-      CHARGING = 2;
-      DISCHARGING_OR_RELAX = 3;
-      FULLY_CHARGED = 4;
-      FULLY_DISCHARGED = 5;
-    }
-    Enum value = 1;
-  }
-  State state = 3;
-
+  /**
+    * Active battery alarms.
+    */
   message Alarms {
     bool overcharged = 1;
     bool terminate_charge = 2;
@@ -209,23 +227,7 @@ message Battery{
     bool remaining_time = 6;
   }
   Alarms alarms = 4;
-
-  // Wrapper message around enum in order to avoid name clashes
-  message Error {
-    enum Enum {
-      ERROR_UNSPECIFIED = 0;
-      OK = 1;
-      BUSY = 2;
-      RESERVED_COMMAND = 3;
-      UNSUPPORTED_COMMAND = 4;
-      ACCESS_DENIED = 5;
-      OVERFLOW_UNDERFLOW = 6;
-      BAD_SIZE = 7;
-      UNKNOWN_ERROR = 8;
-    }
-    Enum value = 1;
-  }
-  Error error = 5;
+  BatteryError error = 5;
 
   int32 current = 6;
   int32 average_current = 7;
@@ -306,6 +308,9 @@ message StorageSpace {
   int64 free_space = 2; // Available bytes of storage space
 }
 
+/**
+  * Compass calibration state.
+  */
 message CalibrationState {
   int32 active_status = 1;
   int32 progress_x_up = 2;
@@ -348,16 +353,16 @@ message TiltAngle {
   */
 message DroneInfo {
   string blunux_version = 1; // Blunux version string
-  bytes serial_number = 2; // Drone serial number
-  bytes hardware_id = 3; // Main computer unique identifier
+  string serial_number = 2; // Drone serial number
+  string hardware_id = 3; // Main computer unique identifier
   string model_name = 4; // Drone model name (Pioneer, Pro, or X3)
-  bytes mb_serial = 5; // Motherboard serial number
-  bytes bb_serial = 6; // Backbone serial number
-  bytes mb_uid = 7; // Motherboard unique identifier
-  bytes bb_uid = 8; // Backbone unique identifier
-  bytes gp1_uid = 9; // Guestport 1 unique identifier
-  bytes gp2_uid = 10; // Guestport 2 unique identifier
-  bytes gp3_uid = 11; // Guesport 3 unique identifier
+  string mb_serial = 5; // Motherboard serial number
+  string bb_serial = 6; // Backbone serial number
+  string mb_uid = 7; // Motherboard unique identifier
+  string bb_uid = 8; // Backbone unique identifier
+  string gp1_uid = 9; // Guestport 1 unique identifier
+  string gp2_uid = 10; // Guestport 2 unique identifier
+  string gp3_uid = 11; // Guesport 3 unique identifier
 }
 
 /**
@@ -378,23 +383,19 @@ message ErrorFlags {
 /**
   * Available camera resolutions.
   */
-message Resolution {
-  enum Enum {
-    UNSPECIFIED = 0; // Resolution not specified
-    FULLHD_1080P = 1; // 1080p Full HD resolution
-    HD_720P = 2; // 720p HD resolution
-  }
+enum Resolution {
+  RESOLUTION_UNSPECIFIED = 0; // Resolution not specified
+  RESOLUTION_FULLHD_1080P = 1; // 1080p Full HD resolution
+  RESOLUTION_HD_720P = 2; // 720p HD resolution
 }
 
 /**
   * Available camera framerates.
   */
-message Framerate {
-  enum Enum {
-    UNSPECIFIED = 0; // Framerate not specified
-    FPS_30 = 1; // 30 frames per second
-    FPS_25 = 2; // 25 frames per second
-  }
+enum Framerate {
+  FRAMERATE_UNSPECIFIED = 0; // Framerate not specified
+  FRAMERATE_FPS_30 = 1; // 30 frames per second
+  FRAMERATE_FPS_25 = 2; // 25 frames per second
 }
 
 /**
@@ -406,42 +407,49 @@ message CameraParameters {
   int32 exposure = 3; // Shutter speed in 10000/th second (-1 for automatic exposure)
   int32 white_balance = 4; // White balance temperature in range 2800..9300 (-1 for automatic white balance)
   int32 hue = 5; // Hue in range -40..40 (0 as default)
-  Resolution.Enum resolution = 6; // Stream, recording and image resolution
-  Framerate.Enum framerate = 7; // Stream and recording framerate
+  Resolution resolution = 6; // Stream, recording and image resolution
+  Framerate framerate = 7; // Stream and recording framerate
 }
 
 /**
   * Available temperature units.
   */
-message TemperatureUnit {
-  enum Enum {
-    UNSPECIFIED = 0; // Temperature unit not specfied
-    CELSIUS = 1; // Temperature should be displayed as Celcius
-    FAHRENHEIT = 2; // Temperature should be displayed as Fahrenheit
-  }
+enum TemperatureUnit {
+  TEMPERATURE_UNIT_UNSPECIFIED = 0; // Temperature unit not specfied
+  TEMPERATURE_UNIT_CELSIUS = 1; // Temperature should be displayed as Celcius
+  TEMPERATURE_UNIT_FAHRENHEIT = 2; // Temperature should be displayed as Fahrenheit
 }
 
 /**
-  * Available logo type options.
+  * Available logo types.
   */
-message LogoType {
-  enum Enum {
-    UNSPECIFIED = 0; // Logo type not specified
-    NONE = 1; // Do not add any logo
-    DEFAULT = 2; // Add default logo
-    CUSTOM = 3; // Add user defined logo
-  }
+enum LogoType {
+  LOGO_TYPE_UNSPECIFIED = 0; // Logo type not specified
+  LOGO_TYPE_NONE = 1; // Do not add any logo
+  LOGO_TYPE_DEFAULT = 2; // Add default logo
+  LOGO_TYPE_CUSTOM = 3; // Add user defined logo
 }
 
 /**
   * Available depth units.
   */
-message DepthUnit {
-  enum Enum {
-    UNSPECIFIED = 0; // Depth unit not specified
-    METERS = 1; // Depth should be displayed as meters
-    FEET = 2; // Depth should be displayed as feet
-  }
+enum DepthUnit {
+  DEPTH_UNIT_UNSPECIFIED = 0; // Depth unit not specified
+  DEPTH_UNIT_METERS = 1; // Depth should be displayed as meters
+  DEPTH_UNIT_FEET = 2; // Depth should be displayed as feet
+}
+
+/**
+  * Available font sizes for overlay text elements.
+  */
+  enum FontSize {
+  FONT_SIZE_UNSPECIFIED = 0; // Font size not specified
+  FONT_SIZE_PX15 = 1; // 15 px
+  FONT_SIZE_PX20 = 2; // 20 px
+  FONT_SIZE_PX25 = 3; // 25 px
+  FONT_SIZE_PX30 = 4; // 30 px
+  FONT_SIZE_PX35 = 5; // 35 px
+  FONT_SIZE_PX40 = 6; // 40 px
 }
 
 /**
@@ -450,33 +458,18 @@ message DepthUnit {
  * All available parameters that can be used to configure telemetry overlay on video recordings.
  */
 message OverlayParameters {
-  /**
-   * Available font sizes for overlay text elements.
-   */
-  message FontSize {
-    enum Enum {
-      UNSPECIFIED = 0; // Font size not specified
-      PX15 = 1; // 15 px
-      PX20 = 2; // 20 px
-      PX25 = 3; // 25 px
-      PX30 = 4; // 30 px
-      PX35 = 5; // 35 px
-      PX40 = 6; // 40 px
-    }
-  }
-
   bool temperature_enabled = 1; // If temperature should be included
   bool depth_enabled = 2; // If depth should be included
   bool heading_enabled = 3; // If heading should be included
   bool tilt_enabled = 4; // If camera tilt angle should be included
   bool date_enabled = 5; // If date should be included
-  LogoType.Enum logo_type = 6; // Which logo should be used
-  DepthUnit.Enum depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
-  TemperatureUnit.Enum temperature_unit = 8; // Which unit should be used for temperature: Celcius or Fahrenheit
+  LogoType logo_type = 6; // Which logo should be used
+  DepthUnit depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
+  TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celcius or Fahrenheit
   int32 timezone_offset = 9; // Timezone offset from UTC
   int32 margin_width = 10; // Horizontal margins of text elements
   int32 margin_height = 11; // Vertical margins of text elements
-  FontSize.Enum font_size = 12; // Font size of text elements
+  FontSize font_size = 12; // Font size of text elements
   string title = 13; // Optional title
   string subtitle = 14; // Optional subtitle
   string date_format = 16; // Posix strftime format string for time stamp

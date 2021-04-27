@@ -1,8 +1,5 @@
 # Lint directives.
 lint:
-  rules:
-    remove:
-      - ENUM_FIELD_NAMES_PREFIX
   rules_option:
     max_line_length:
       max_chars: 120

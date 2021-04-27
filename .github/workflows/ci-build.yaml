@@ -9,7 +9,7 @@ on:
       - port-protocol-to-protobuf
 
 jobs:
-  lint:
+  protolint:
     runs-on: ubuntu-latest
     steps:
       - name: checkout source
