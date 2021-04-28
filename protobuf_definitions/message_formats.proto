@@ -67,7 +67,7 @@ message LatLongPosition {
   * Connection duration of a remote client.
   */
 message ConnectionDuration {
-  int64 value = 1;
+  int32 value = 1; // time in seconds since connected to drone
 }
 
 /**
@@ -127,7 +127,7 @@ message RecordState {
   * to achieve more accruate depth measurements.
   */
 message WaterDensity {
-  int32 value = 1; // Salinity in grams per liter
+  float value = 1; // Salinity in kg/l
 }
 
 /**
@@ -158,8 +158,8 @@ message CanisterTemperature {
   * Canister humidity
   */
 message CanisterHumidity {
-  int32 top = 1;
-  int32 bottom = 2;
+  float top = 1; // Air humidity in %
+  float bottom = 2; // Air humidity in %
 }
 
 enum BatteryState {
@@ -194,11 +194,11 @@ message Battery{
     * Battery voltage levels
     */
   message Voltage {
-    int32 total = 1; // Battery pack voltage level
-    int32 cell_1 = 2; // Cell 1 voltage level
-    int32 cell_2 = 3; // Vell 2 voltage level
-    int32 cell_3 = 4; // Cell 3 voltage level
-    int32 cell_4 = 5; // Cell 4 voltage level
+    float total = 1; // Battery pack voltage level
+    float cell_1 = 2; // Cell 1 voltage level
+    float cell_2 = 3; // Vell 2 voltage level
+    float cell_3 = 4; // Cell 3 voltage level
+    float cell_4 = 5; // Cell 4 voltage level
   }
   Voltage voltage = 1;
 
@@ -229,22 +229,22 @@ message Battery{
   Alarms alarms = 4;
   BatteryError error = 5;
 
-  int32 current = 6;
-  int32 average_current = 7;
-  int32 relative_state_of_charge = 8;
-  int32 absolute_state_of_charge = 9;
-  int32 remaining_capacity = 10;
-  int32 full_charge_capacity = 11;
+  float current = 6;
+  float average_current = 7;
+  float relative_state_of_charge = 8;
+  float absolute_state_of_charge = 9;
+  float remaining_capacity = 10;
+  float full_charge_capacity = 11;
   int32 runtime_to_empty = 12;
   int32 average_time_to_empty = 13;
   int32 average_time_to_full = 14;
   int32 time_to_full_at_current_rate = 15;
   int32 time_to_empty_at_current_rate = 16;
-  int32 charging_current = 17;
-  int32 charging_voltage = 18;
+  float charging_current = 17;
+  float charging_voltage = 18;
 
   uint32 cycle_count = 19;
-  uint32 design_capacity = 20;
+  float design_capacity = 20;
   google.protobuf.Timestamp manufacture_date = 21;
   uint32 serial_number = 22;
   string manufacturer_name = 23;
@@ -265,7 +265,7 @@ message Attitude {
  * Drone altitude over seabed, typically obtained from a DVL.
  */
 message Altitude {
-  int32 value = 1; // Drone altitude over seabed in mm
+  float value = 1; // Drone altitude over seabed in m
   bool valid = 2; // Altitude valid or not
 }
 
@@ -273,7 +273,7 @@ message Altitude {
  * Water depth of the drone.
  */
 message Depth {
-  int32 value = 1; // Drone depth below surface in mm
+  float value = 1; // Drone depth below surface in m
 }
 
 message Reference {
@@ -281,7 +281,7 @@ message Reference {
   float sway = 2;
   float heave = 3;
   float yaw = 4;
-  float depth = 5; // Reference drone depth below surface in mm
+  float depth = 5; // Reference drone depth below surface in m
 
 // Can be added as needed:
   //float depth_rate = 6;
@@ -312,22 +312,36 @@ message StorageSpace {
   * Compass calibration state.
   */
 message CalibrationState {
-  int32 active_status = 1;
-  int32 progress_x_up = 2;
-  int32 progress_x_down = 3;
-  int32 progress_y_up = 4;
-  int32 progress_y_down = 5;
-  int32 progress_z_up = 6;
-  int32 progress_z_down = 7;
-  int32 progress_thruster = 8;
+
+  enum Status
+  {
+    STATUS_UNSPECIFIED = 0;
+    STATUS_NOT_CALIBRATING = 1;
+    STATUS_CALIBRATING_NO_AXIS = 2;
+    STATUS_CALIBRATING_X_PLUS = 3;
+    STATUS_CALIBRATING_X_MINUS = 4;
+    STATUS_CALIBRATING_Y_PLUS = 5;
+    STATUS_CALIBRATING_Y_MINUS = 6;
+    STATUS_CALIBRATING_Z_PLUS = 7;
+    STATUS_CALIBRATING_Z_MINUS = 8;
+  }
+
+  Status status = 1;
+  float progress_x_up = 2;
+  float progress_x_down = 3;
+  float progress_y_up = 4;
+  float progress_y_down = 5;
+  float progress_z_up = 6;
+  float progress_z_down = 7;
+  float progress_thruster = 8;
 }
 
 /**
   * Connection speed between drone and Surface Unit.
   */
 message IperfStatus {
-  int32 sent = 1; // Transfer rate from drone to Surface Unit in Mbit/s
-  int32 received = 2; // Transfer rate from Surface Unit to drone in Mbit/s
+  float sent = 1; // Transfer rate from drone to Surface Unit in Mbit/s
+  float received = 2; // Transfer rate from Surface Unit to drone in Mbit/s
 }
 
 /**
@@ -341,7 +355,7 @@ message Spectators {
  * Angle of tilt camera in degrees.
  */
 message TiltAngle {
-  int32 value = 1; // Tilt angle in degrees °
+  float value = 1; // Tilt angle in degrees °
 }
 
 /**
@@ -352,17 +366,28 @@ message TiltAngle {
   * determine the origin of a logfile.
   */
 message DroneInfo {
+
+  /**
+    * Drone models produced by Blueye
+    */
+  enum Model {
+    MODEL_UNSPECIFIED = 0; // ModelName not specified
+    MODEL_PIONEER = 1; // Blueye Pioneer, the first model.
+    MODEL_PRO = 2; // Blueye Pro. Features camera tilt.
+    MODEL_X3 = 3; // Blueye X3. Features support for peripherals.
+  }
+
   string blunux_version = 1; // Blunux version string
   bytes serial_number = 2; // Drone serial number
   bytes hardware_id = 3; // Main computer unique identifier
-  string model_name = 4; // Drone model name (Pioneer, Pro, or X3)
+  Model model = 4; // Drone model
   bytes mb_serial = 5; // Motherboard serial number
   bytes bb_serial = 6; // Backbone serial number
   bytes mb_uid = 7; // Motherboard unique identifier
   bytes bb_uid = 8; // Backbone unique identifier
   bytes gp1_uid = 9; // Guestport 1 unique identifier
   bytes gp2_uid = 10; // Guestport 2 unique identifier
-  bytes gp3_uid = 11; // Guesport 3 unique identifier
+  bytes gp3_uid = 11; // Guestport 3 unique identifier
 }
 
 /**
