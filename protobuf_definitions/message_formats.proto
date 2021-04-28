@@ -353,16 +353,16 @@ message TiltAngle {
   */
 message DroneInfo {
   string blunux_version = 1; // Blunux version string
-  string serial_number = 2; // Drone serial number
-  string hardware_id = 3; // Main computer unique identifier
+  bytes serial_number = 2; // Drone serial number
+  bytes hardware_id = 3; // Main computer unique identifier
   string model_name = 4; // Drone model name (Pioneer, Pro, or X3)
-  string mb_serial = 5; // Motherboard serial number
-  string bb_serial = 6; // Backbone serial number
-  string mb_uid = 7; // Motherboard unique identifier
-  string bb_uid = 8; // Backbone unique identifier
-  string gp1_uid = 9; // Guestport 1 unique identifier
-  string gp2_uid = 10; // Guestport 2 unique identifier
-  string gp3_uid = 11; // Guesport 3 unique identifier
+  bytes mb_serial = 5; // Motherboard serial number
+  bytes bb_serial = 6; // Backbone serial number
+  bytes mb_uid = 7; // Motherboard unique identifier
+  bytes bb_uid = 8; // Backbone unique identifier
+  bytes gp1_uid = 9; // Guestport 1 unique identifier
+  bytes gp2_uid = 10; // Guestport 2 unique identifier
+  bytes gp3_uid = 11; // Guesport 3 unique identifier
 }
 
 /**
