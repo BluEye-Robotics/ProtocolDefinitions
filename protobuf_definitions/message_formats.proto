@@ -385,9 +385,9 @@ message DroneInfo {
   bytes bb_serial = 6; // Backbone serial number
   bytes mb_uid = 7; // Motherboard unique identifier
   bytes bb_uid = 8; // Backbone unique identifier
-  bytes gp1_uid = 9; // Guestport 1 unique identifier
-  bytes gp2_uid = 10; // Guestport 2 unique identifier
-  bytes gp3_uid = 11; // Guestport 3 unique identifier
+  GuestPortInfo gp1 = 9; // Guestport 1
+  GuestPortInfo gp2 = 10; // Guestport 2
+  GuestPortInfo gp3 = 11; // Guestport 3
 }
 
 /**
@@ -503,4 +503,53 @@ message OverlayParameters {
     * (result background intensity is restricted to max 100)
     */
   int32 shading = 17;
+}
+
+/**
+ * Guestport device ID.
+ */
+enum GuestportDeviceID {
+  GUESTPORT_DEVICE_ID_UNSPECIFIED = 0; // Unspecified
+  GUESTPORT_DEVICE_ID_BLIND_PLUG = 1; // Blueye blind plug
+  GUESTPORT_DEVICE_ID_TEST_STATION = 2; // Blueye test station
+  GUESTPORT_DEVICE_ID_DEBUG_SERIAL = 3; // Blueye debug serial
+  GUESTPORT_DEVICE_ID_BLUEYE_LIGHT = 4; // Blueye Light
+  GUESTPORT_DEVICE_ID_BLUEYE_CAM = 5; // Blueye Cam
+  GUESTPORT_DEVICE_ID_BLUE_ROBOTICS_LUMEN = 6; // Blue Robotics Lumen
+  GUESTPORT_DEVICE_ID_BLUE_ROBOTICS_NEWTON = 7; // Blue Robotics Newton
+  GUESTPORT_DEVICE_ID_BLUE_ROBOTICS_PING_SONAR = 8; // Blue Robotics Ping Sonar
+  GUESTPORT_DEVICE_ID_BLUEPRINT_LAB_REACH_ALPHA = 9; // Blueprint Lab Reach Alpha
+  GUESTPORT_DEVICE_ID_WATERLINKED_DVL_A50 = 10; // Waterlinked DVL A50
+  GUESTPORT_DEVICE_ID_IMPACT_SUBSEA_ISS360 = 11; // Impact Subsea ISS360 Sonar
+  GUESTPORT_DEVICE_ID_BLUEPRINT_SUBSEA_SEATRAC_X110 = 12; // Blueprint Subsea Seatrac X110
+}
+
+/**
+ * Guestport device.
+ */
+message GuestportDevice {
+  GuestportDeviceID device_id = 1; // Blueye device identifier
+  string manufacturer = 2; // Manufacturer name
+  string name = 3; // Device name
+  string serial_number = 4; // Serial number
+  float depth_rating = 5; // Depth rating in meters
+}
+
+/**
+ * Guestport error.
+ */
+enum GuestportError {
+  GUESTPORT_ERROR_UNSPECIFIED = 0; // Unspecified value
+  GUESTPORT_ERROR_NOT_CONNECTED = 1; // Device not connected
+  GUESTPORT_ERROR_READ_ERROR = 2; // Device read error
+}
+
+/**
+ * Guestport information.
+ */
+message GuestPortInfo {
+  oneof connected_device {
+    GuestportDevice device = 1; // Blueye device identifier
+    GuestportError error = 2; // Guest port error
+  }
 }
