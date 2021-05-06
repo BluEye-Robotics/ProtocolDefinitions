@@ -22,19 +22,22 @@ install(TARGETS blueyeprotocol
 install(FILES ${ProtoHeaders} DESTINATION include/blueyeprotocol)
 
 
-
 # ---------------------------------------------------------------------------------------
 # Install cmake config
 # ---------------------------------------------------------------------------------------
-set(project_config_in "${CMAKE_CURRENT_LIST_DIR}/cmake/blueyeprotocolConfig.cmake.in")
-set(project_config_out "${CMAKE_CURRENT_BINARY_DIR}/blueyeprotocolConfig.cmake")
-set(config_targets_file "blueyeprotocolConfigTargets.cmake")
-set(version_config_file "${CMAKE_CURRENT_BINARY_DIR}/blueyeprotocolConfigVersion.cmake")
-set(export_dest_dir "${CMAKE_INSTALL_LIBDIR}/cmake/blueyeprotocol")
-install(EXPORT blueyeprotocol DESTINATION ${export_dest_dir} NAMESPACE blueyeprotocol:: FILE ${config_targets_file})
+
+set(INCLUDE_INSTALL_DIR include/blueyeprotocol )
+set(LIB_INSTALL_DIR lib/)
 
 include(CMakePackageConfigHelpers)
-configure_file("${project_config_in}" "${project_config_out}" @ONLY)
-
-write_basic_package_version_file("${version_config_file}" COMPATIBILITY SameMajorVersion)
-install(FILES "${project_config_out}" "${version_config_file}" DESTINATION "${export_dest_dir}")
+configure_package_config_file(cmake/blueyeprotocolConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/blueyeprotocolConfig.cmake
+  INSTALL_DESTINATION ${LIB_INSTALL_DIR}/blueyeprotocol/cmake
+  PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/blueyeprotocolConfigVersion.cmake
+  VERSION 1.0.0
+  COMPATIBILITY SameMajorVersion )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/blueyeprotocolConfig.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/blueyeprotocolConfigVersion.cmake
+        DESTINATION ${LIB_INSTALL_DIR}/cmake/blueyeprotocol )
