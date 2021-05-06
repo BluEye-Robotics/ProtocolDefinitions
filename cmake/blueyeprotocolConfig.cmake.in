@@ -3,8 +3,8 @@
 set(config_targets_file @config_targets_file@)
 include("${CMAKE_CURRENT_LIST_DIR}/${config_targets_file}")
 
-set (blueyeprotocol_INCLUDE_DIR  "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@")
-set (blueyeprotocol_INCLUDE_DIRS "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@")
-set (blueyeprotocol_LIBRARY_DIR  "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@")
-set (blueyeprotocol_LIBRARY_DIRS "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@")
+set (blueyeprotocol_INCLUDE_DIR  "${CMAKE_PREFIX_PATH}/@CMAKE_INSTALL_INCLUDEDIR@")
+set (blueyeprotocol_INCLUDE_DIRS "${CMAKE_PREFIX_PATH}/@CMAKE_INSTALL_INCLUDEDIR@")
+set (blueyeprotocol_LIBRARY_DIR  "${CMAKE_PREFIX_PATH}/@CMAKE_INSTALL_LIBDIR@")
+set (blueyeprotocol_LIBRARY_DIRS "${CMAKE_PREFIX_PATH}/@CMAKE_INSTALL_LIBDIR@")
 set (blueyeprotocol_LIBRARIES blueyeprotocol::blueyeprotocol)
