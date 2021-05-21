@@ -70,3 +70,7 @@ message SystemTimeCtrl {
 message ClientInfoCtrl {
   ClientInfo client_info = 1;
 }
+
+message GripperCtrl {
+  GripperVelocities gripper_velocities = 1;
+}
