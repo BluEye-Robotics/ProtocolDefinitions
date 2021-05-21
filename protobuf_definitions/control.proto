@@ -21,6 +21,10 @@ message LightsCtrl {
   Lights lights = 1;
 }
 
+message GuestportLightsCtrl {
+  Lights lights = 1;
+}
+
 message PilotGPSPositionCtrl {
   LatLongPosition position = 1;
 }

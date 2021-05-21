@@ -101,8 +101,7 @@ message SystemTime {
   google.protobuf.Timestamp unix_timestamp = 1; // Unix timestamp
 }
 
-message GripperVelocities
-{
+message GripperVelocities {
   float grip_velocity = 1;
   float rotate_velocity = 2;
 }
