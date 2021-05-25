@@ -385,9 +385,7 @@ message DroneInfo {
   bytes bb_serial = 6; // Backbone serial number
   bytes mb_uid = 7; // Motherboard unique identifier
   bytes bb_uid = 8; // Backbone unique identifier
-  GuestPortInfo gp1 = 9; // Guestport 1
-  GuestPortInfo gp2 = 10; // Guestport 2
-  GuestPortInfo gp3 = 11; // Guestport 3
+  GuestPortInfo gp = 9; // GuestportInfo
 }
 
 /**
@@ -533,6 +531,14 @@ message GuestportDevice {
   string name = 3; // Device name
   string serial_number = 4; // Serial number
   float depth_rating = 5; // Depth rating in meters
+  string required_blunux_version = 6; // Device name
+}
+
+/**
+ * List of guest port devices.
+ */
+message GuestportDeviceList {
+  repeated GuestportDevice devices = 1; // List of guest port devices
 }
 
 /**
@@ -545,11 +551,20 @@ enum GuestportError {
 }
 
 /**
+ * Guestport connector information.
+ */
+message GuestPortConnectorInfo {
+  oneof connected_device {
+    GuestportDeviceList device_list = 1; // List of devices on this connector
+    GuestportError error = 2; // Guest port error
+  }
+}
+
+/**
  * Guestport information.
  */
 message GuestPortInfo {
-  oneof connected_device {
-    GuestportDevice device = 1; // Blueye device identifier
-    GuestportError error = 2; // Guest port error
-  }
+  GuestPortConnectorInfo gp1 = 1; // GuestPortConnectorInfo 1
+  GuestPortConnectorInfo gp2 = 2; // GuestPortConnectorInfo 2
+  GuestPortConnectorInfo gp3 = 3; // GuestPortConnectorInfo 3
 }
