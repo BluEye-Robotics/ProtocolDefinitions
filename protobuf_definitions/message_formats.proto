@@ -385,7 +385,7 @@ message DroneInfo {
   bytes bb_serial = 6; // Backbone serial number
   bytes mb_uid = 7; // Motherboard unique identifier
   bytes bb_uid = 8; // Backbone unique identifier
-  GuestPortInfo gp = 9; // GuestportInfo
+  GuestPortInfo gp = 9; // GuestPortInfo
 }
 
 /**
@@ -504,29 +504,29 @@ message OverlayParameters {
 }
 
 /**
- * Guestport device ID.
+ * GuestPort device ID.
  */
-enum GuestportDeviceID {
-  GUESTPORT_DEVICE_ID_UNSPECIFIED = 0; // Unspecified
-  GUESTPORT_DEVICE_ID_BLIND_PLUG = 1; // Blueye blind plug
-  GUESTPORT_DEVICE_ID_TEST_STATION = 2; // Blueye test station
-  GUESTPORT_DEVICE_ID_DEBUG_SERIAL = 3; // Blueye debug serial
-  GUESTPORT_DEVICE_ID_BLUEYE_LIGHT = 4; // Blueye Light
-  GUESTPORT_DEVICE_ID_BLUEYE_CAM = 5; // Blueye Cam
-  GUESTPORT_DEVICE_ID_BLUE_ROBOTICS_LUMEN = 6; // Blue Robotics Lumen
-  GUESTPORT_DEVICE_ID_BLUE_ROBOTICS_NEWTON = 7; // Blue Robotics Newton
-  GUESTPORT_DEVICE_ID_BLUE_ROBOTICS_PING_SONAR = 8; // Blue Robotics Ping Sonar
-  GUESTPORT_DEVICE_ID_BLUEPRINT_LAB_REACH_ALPHA = 9; // Blueprint Lab Reach Alpha
-  GUESTPORT_DEVICE_ID_WATERLINKED_DVL_A50 = 10; // Waterlinked DVL A50
-  GUESTPORT_DEVICE_ID_IMPACT_SUBSEA_ISS360 = 11; // Impact Subsea ISS360 Sonar
-  GUESTPORT_DEVICE_ID_BLUEPRINT_SUBSEA_SEATRAC_X110 = 12; // Blueprint Subsea Seatrac X110
+enum GuestPortDeviceID {
+  GUEST_PORT_DEVICE_ID_UNSPECIFIED = 0; // Unspecified
+  GUEST_PORT_DEVICE_ID_BLIND_PLUG = 1; // Blueye blind plug
+  GUEST_PORT_DEVICE_ID_TEST_STATION = 2; // Blueye test station
+  GUEST_PORT_DEVICE_ID_DEBUG_SERIAL = 3; // Blueye debug serial
+  GUEST_PORT_DEVICE_ID_BLUEYE_LIGHT = 4; // Blueye Light
+  GUEST_PORT_DEVICE_ID_BLUEYE_CAM = 5; // Blueye Cam
+  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_LUMEN = 6; // Blue Robotics Lumen
+  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_NEWTON = 7; // Blue Robotics Newton
+  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_PING_SONAR = 8; // Blue Robotics Ping Sonar
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_LAB_REACH_ALPHA = 9; // Blueprint Lab Reach Alpha
+  GUEST_PORT_DEVICE_ID_WATERLINKED_DVL_A50 = 10; // Waterlinked DVL A50
+  GUEST_PORT_DEVICE_ID_IMPACT_SUBSEA_ISS360 = 11; // Impact Subsea ISS360 Sonar
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_SEATRAC_X110 = 12; // Blueprint Subsea Seatrac X110
 }
 
 /**
- * Guestport device.
+ * GuestPort device.
  */
-message GuestportDevice {
-  GuestportDeviceID device_id = 1; // Blueye device identifier
+message GuestPortDevice {
+  GuestPortDeviceID device_id = 1; // Blueye device identifier
   string manufacturer = 2; // Manufacturer name
   string name = 3; // Device name
   string serial_number = 4; // Serial number
@@ -537,31 +537,31 @@ message GuestportDevice {
 /**
  * List of guest port devices.
  */
-message GuestportDeviceList {
-  repeated GuestportDevice devices = 1; // List of guest port devices
+message GuestPortDeviceList {
+  repeated GuestPortDevice devices = 1; // List of guest port devices
 }
 
 /**
- * Guestport error.
+ * GuestPort error.
  */
-enum GuestportError {
-  GUESTPORT_ERROR_UNSPECIFIED = 0; // Unspecified value
-  GUESTPORT_ERROR_NOT_CONNECTED = 1; // Device not connected
-  GUESTPORT_ERROR_READ_ERROR = 2; // Device read error
+enum GuestPortError {
+  GUEST_PORT_ERROR_UNSPECIFIED = 0; // Unspecified value
+  GUEST_PORT_ERROR_NOT_CONNECTED = 1; // Device not connected
+  GUEST_PORT_ERROR_READ_ERROR = 2; // Device read error
 }
 
 /**
- * Guestport connector information.
+ * GuestPort connector information.
  */
 message GuestPortConnectorInfo {
   oneof connected_device {
-    GuestportDeviceList device_list = 1; // List of devices on this connector
-    GuestportError error = 2; // Guest port error
+    GuestPortDeviceList device_list = 1; // List of devices on this connector
+    GuestPortError error = 2; // Guest port error
   }
 }
 
 /**
- * Guestport information.
+ * GuestPort information.
  */
 message GuestPortInfo {
   GuestPortConnectorInfo gp1 = 1; // GuestPortConnectorInfo 1
