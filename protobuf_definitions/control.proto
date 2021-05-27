@@ -21,6 +21,10 @@ message LightsCtrl {
   Lights lights = 1;
 }
 
+message GuestportLightsCtrl {
+  Lights lights = 1;
+}
+
 message PilotGPSPositionCtrl {
   LatLongPosition position = 1;
 }
@@ -29,10 +33,8 @@ message WatchdogCtrl {
   ConnectionDuration connection_duration = 1;
 }
 
-message StartRecordCtrl {
-}
-
-message StopRecordCtrl {
+message RecordCtrl {
+  RecordOn record_on = 1;
 }
 
 message TakePictureCtrl {
@@ -69,4 +71,8 @@ message SystemTimeCtrl {
 
 message ClientInfoCtrl {
   ClientInfo client_info = 1;
+}
+
+message GripperCtrl {
+  GripperVelocities gripper_velocities = 1;
 }
