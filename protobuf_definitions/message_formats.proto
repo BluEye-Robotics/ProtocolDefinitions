@@ -582,8 +582,8 @@ message GuestPortInfo {
   GuestPortConnectorInfo gp1 = 1; // GuestPortConnectorInfo 1
   GuestPortConnectorInfo gp2 = 2; // GuestPortConnectorInfo 2
   GuestPortConnectorInfo gp3 = 3; // GuestPortConnectorInfo 3
-  float gp1_current = 4; // GP1 battery current
-  float gp2_current = 5; // GP2 battery current
-  float gp3_current = 6; // GP3 battery current
-  float v20_current = 7; // Shared 20V current
+  float gp1_current = 4; // GP1 battery current in A
+  float gp2_current = 5; // GP2 battery current in A
+  float gp3_current = 6; // GP3 battery current in A
+  float v20_current = 7; // Shared 20 V current in A
 }
