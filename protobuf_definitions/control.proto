@@ -13,8 +13,8 @@ message MotionInputCtrl {
   MotionInput motion_input = 1;
 }
 
-message TiltAngleCtrl {
-  TiltAngle angle = 1;
+message TiltVelocityCtrl {
+  TiltVelocity velocity = 1;
 }
 
 message UserModifiersCtrl {
