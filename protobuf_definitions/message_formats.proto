@@ -377,7 +377,7 @@ message TiltAngle {
  * Relative velocity of tilt
  */
 message TiltVelocity {
-  float value = 1; // Relative velocity of tilt (-1 to 1, negative means down and positive means up)
+  float value = 1; // Relative angular velocity of tilt (-1 to 1, negative means down and positive means up)
 }
 
 /**
