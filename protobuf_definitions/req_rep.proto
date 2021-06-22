@@ -33,6 +33,7 @@ message SetCameraParametersRep {
 }
 
 message GetCameraParametersReq {
+  Camera camera = 1;
 }
 
 message GetCameraParametersRep {
