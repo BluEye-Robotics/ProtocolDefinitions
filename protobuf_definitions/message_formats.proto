@@ -448,8 +448,8 @@ enum Framerate {
   */
 enum Camera {
   CAMERA_UNSPECIFIED = 0; // Camera not specified
-  CAMERA_MAIN = 1; // main camera
-  CAMERA_GUESTPORT = 2; // guestport camera
+  CAMERA_MAIN = 1; // Main camera
+  CAMERA_GUESTPORT = 2; // Guestport camera
 }
 
 /**
