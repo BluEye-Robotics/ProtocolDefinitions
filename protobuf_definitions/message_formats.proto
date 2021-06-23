@@ -444,6 +444,15 @@ enum Framerate {
 }
 
 /**
+  * Which camera to control.
+  */
+enum Camera {
+  CAMERA_UNSPECIFIED = 0; // Camera not specified
+  CAMERA_MAIN = 1; // Main camera
+  CAMERA_GUESTPORT = 2; // Guestport camera
+}
+
+/**
   * Camera parameters.
   */
 message CameraParameters {
@@ -454,6 +463,7 @@ message CameraParameters {
   int32 hue = 5; // Hue in range -40..40 (0 as default)
   Resolution resolution = 6; // Stream, recording and image resolution
   Framerate framerate = 7; // Stream and recording framerate
+  Camera camera = 8; // Which camera the parameters belong to.
 }
 
 /**
