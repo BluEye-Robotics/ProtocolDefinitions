@@ -362,6 +362,15 @@ message IperfStatus {
 /**
  * Number of spectators connected to video stream.
  */
+message NStreamers {
+  int32 main = 1; // The number of clients to the main camera stream
+  int32 guestport = 2; // The number of clients to the guestport camera stream
+}
+
+// TODO: deprecate
+/**
+ * Number of spectators connected to video stream.
+ */
 message Spectators {
   int32 value = 1; // The number of connected spectators
 }
