@@ -81,6 +81,11 @@ message IperfTel {
   IperfStatus status = 1;
 }
 
+message NStreamersTel {
+  NStreamers n_streamers = 1;
+}
+
+// TODO: deprecate
 message SpectatorsTel {
   Spectators spectators = 1;
 }
