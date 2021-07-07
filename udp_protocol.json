@@ -899,7 +899,7 @@
                     },
                     {
                         "description": "EchoCount",
-                        "dtype": "<i1",
+                        "dtype": "<u1",
                         "field_name": "echocount",
                         "unit": ""
                     },
