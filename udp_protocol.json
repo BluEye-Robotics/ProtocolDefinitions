@@ -895,7 +895,7 @@
                         "description": "Thickness",
                         "dtype": "<f8",
                         "field_name": "thickness",
-                        "unit": "mm"
+                        "unit": "m"
                     },
                     {
                         "description": "EchoCount",
