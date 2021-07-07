@@ -895,7 +895,7 @@
                         "description": "Thickness",
                         "dtype": "<i2",
                         "field_name": "thickness",
-                        "unit": "mm"
+                        "unit": "100mm"
                     },
                     {
                         "description": "EchoCount",
