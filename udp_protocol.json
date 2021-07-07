@@ -872,6 +872,44 @@
                         "unit": ""
                     }
                 ]
+            },
+            {
+                "name": "cygnus",
+                "message_type": "3",
+                "fields":[
+                    {
+                        "description": "Protocol version",
+                        "dtype": "<u1",
+                        "field_name": "version",
+                        "unit": "",
+                        "init": "2"
+                    },
+                    {
+                        "description": "Command type",
+                        "dtype": "<u1",
+                        "field_name": "command_type",
+                        "unit": "",
+                        "init": "3"
+                    },
+                    {
+                        "description": "Thickness",
+                        "dtype": "<f8",
+                        "field_name": "thickness",
+                        "unit": "m"
+                    },
+                    {
+                        "description": "EchoCount",
+                        "dtype": "<u1",
+                        "field_name": "echocount",
+                        "unit": ""
+                    },
+                    {
+                        "description": "Velocity",
+                        "dtype": "<i2",
+                        "field_name": "velocity",
+                        "unit": "m/s"
+                    }
+                ]
             }
         ]
     }
