@@ -1,0 +1,4 @@
+# This file is for overriding the configuration options specified in https://github.com/BluEye-Robotics/docker_images/blob/e40e3a2fcf61515c57e41e7e7b369c1fd096de9b/cross-imx/config.sh
+# Included from https://github.com/BluEye-Robotics/docker_images/blob/e40e3a2fcf61515c57e41e7e7b369c1fd096de9b/cross-imx/config.sh#L16
+PROJECT_NAME=blueyeprotocol
+TARGET_PATH_PREFIX=/usr

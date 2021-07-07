@@ -1,0 +1,103 @@
+/*
+ * Telemetry
+ *
+ * These messages define telemetry messages from the Blueye drone.
+ */
+syntax = "proto3";
+
+package blueye.protocol;
+import "message_formats.proto";
+option csharp_namespace = "Blueye.Protocol.Protobuf";
+
+message AttitudeTel {
+  Attitude attitude = 1;
+}
+
+message AltitudeTel {
+  Altitude altitude = 1;
+}
+
+message DepthTel {
+  Depth depth = 1;
+}
+
+message ReferenceTel {
+  Reference reference = 1;
+}
+
+message LightsTel {
+  Lights lights = 1;
+}
+
+message PilotGPSPositionTel {
+  LatLongPosition position = 1;
+}
+
+message RecordStateTel {
+  RecordState record_state = 1;
+}
+
+message BatteryTel{
+  Battery battery = 1;
+}
+
+message DiveTimeTel {
+  DiveTime dive_time = 1;
+}
+
+message WaterTemperatureTel {
+  WaterTemperature temperature = 1;
+}
+
+message CPUTemperatureTel {
+  CPUTemperature temperature = 1;
+}
+
+message CanisterTemperatureTel {
+  CanisterTemperature temperature = 1;
+}
+
+message CanisterHumidityTel {
+  CanisterHumidity humidity = 1;
+}
+
+message VideoStorageSpaceTel {
+  StorageSpace storage_space = 1;
+}
+
+message DataStorageSpaceTel {
+  StorageSpace storage_space = 1;
+}
+
+message CalibrationStateTel {
+  CalibrationState calibration_state = 1;
+}
+
+message TiltStabilizationTel {
+  TiltStabilizationState state = 1;
+}
+
+message IperfTel {
+  IperfStatus status = 1;
+}
+
+message NStreamersTel {
+  NStreamers n_streamers = 1;
+}
+
+// TODO: deprecate
+message SpectatorsTel {
+  Spectators spectators = 1;
+}
+
+message TiltAngleTel {
+  TiltAngle angle = 1;
+}
+
+message DroneInfoTel {
+  DroneInfo drone_info = 1;
+}
+
+message ErrorFlagsTel {
+  ErrorFlags error_flags = 1;
+}
