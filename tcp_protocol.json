@@ -834,7 +834,7 @@
                 ]
             },
             {
-                "name": "thickness_gauge",
+                "name": "set_thickness_gauge_sound_veloctiy",
                 "command_type": "C",
                 "fields": [
                     {
