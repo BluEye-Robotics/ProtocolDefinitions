@@ -5,7 +5,7 @@
             {
                 "name": "telemetry",
                 "message_type": "1",
-                "fields":[
+                "fields": [
                     {
                         "description": "Protocol version",
                         "dtype": "<u1",
@@ -354,7 +354,7 @@
             {
                 "name": "telemetry",
                 "message_type": "1",
-                "fields":[
+                "fields": [
                     {
                         "description": "Protocol version",
                         "dtype": "<u1",
@@ -386,7 +386,7 @@
                         "dtype": "<u8",
                         "field_name": "error_flags",
                         "unit": "",
-                        "flags": [ 
+                        "flags": [
                             {
                                 "value": "0x00000001",
                                 "name": "ERR_PMU_COMM_ACK",
@@ -803,12 +803,12 @@
                         "field_name": "battery_serial_number",
                         "unit": ""
                     }
-              ]
+                ]
             },
             {
                 "name": "compasscalibration",
                 "message_type": "2",
-                "fields":[
+                "fields": [
                     {
                         "description": "Protocol version",
                         "dtype": "<u1",
@@ -874,9 +874,9 @@
                 ]
             },
             {
-                "name": "cygnus",
+                "name": "thicknessgauge",
                 "message_type": "3",
-                "fields":[
+                "fields": [
                     {
                         "description": "Protocol version",
                         "dtype": "<u1",
@@ -894,20 +894,26 @@
                     {
                         "description": "Thickness",
                         "dtype": "<f8",
-                        "field_name": "thickness",
+                        "field_name": "thickness_measurement",
                         "unit": "m"
                     },
                     {
-                        "description": "EchoCount",
+                        "description": "Echo count",
                         "dtype": "<u1",
-                        "field_name": "echocount",
+                        "field_name": "echo_count",
                         "unit": ""
                     },
                     {
-                        "description": "Velocity",
+                        "description": "Sound velocity",
                         "dtype": "<i2",
-                        "field_name": "velocity",
+                        "field_name": "sound_velocity",
                         "unit": "m/s"
+                    },
+                    {
+                        "description": "Valid measurement",
+                        "dtype": "<u1",
+                        "field_name": "valid_measurement",
+                        "unit": ""
                     }
                 ]
             }

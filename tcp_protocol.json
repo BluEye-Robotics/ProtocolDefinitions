@@ -832,6 +832,17 @@
                         "lower_limit": -1
                     }
                 ]
+            },
+            {
+                "name": "set_thickness_gauge_sound_veloctiy",
+                "command_type": "C",
+                "fields": [
+                    {
+                        "field_name": "sound_velocity",
+                        "dtype": "<i2",
+                        "description": "Sound velocity used for thickness calculation [m/s]"
+                    }
+                ]
             }
         ]
     }
