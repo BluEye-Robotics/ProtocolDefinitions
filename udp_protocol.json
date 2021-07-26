@@ -911,7 +911,7 @@
                     },
                     {
                         "description": "Valid measurement",
-                        "dtype": "<u8",
+                        "dtype": "<u1",
                         "field_name": "valid_measurement",
                         "unit": ""
                     }
