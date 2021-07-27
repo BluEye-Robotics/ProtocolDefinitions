@@ -390,6 +390,16 @@ message TiltVelocity {
 }
 
 /**
+  * Drone models produced by Blueye
+  */
+enum Model {
+  MODEL_UNSPECIFIED = 0; // ModelName not specified
+  MODEL_PIONEER = 1; // Blueye Pioneer, the first model.
+  MODEL_PRO = 2; // Blueye Pro. Features camera tilt.
+  MODEL_X3 = 3; // Blueye X3. Features support for peripherals.
+}
+
+/**
   * Information about the drone.
   *
   * This message contains serial numbers and version informattion for
@@ -397,17 +407,6 @@ message TiltVelocity {
   * determine the origin of a logfile.
   */
 message DroneInfo {
-
-  /**
-    * Drone models produced by Blueye
-    */
-  enum Model {
-    MODEL_UNSPECIFIED = 0; // ModelName not specified
-    MODEL_PIONEER = 1; // Blueye Pioneer, the first model.
-    MODEL_PRO = 2; // Blueye Pro. Features camera tilt.
-    MODEL_X3 = 3; // Blueye X3. Features support for peripherals.
-  }
-
   string blunux_version = 1; // Blunux version string
   bytes serial_number = 2; // Drone serial number
   bytes hardware_id = 3; // Main computer unique identifier
