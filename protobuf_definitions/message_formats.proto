@@ -413,9 +413,10 @@ message DroneInfo {
   Model model = 4; // Drone model
   bytes mb_serial = 5; // Motherboard serial number
   bytes bb_serial = 6; // Backbone serial number
-  bytes mb_uid = 7; // Motherboard unique identifier
-  bytes bb_uid = 8; // Backbone unique identifier
-  GuestPortInfo gp = 9; // GuestPortInfo
+  bytes ds_serial = 7; // Drone stack serial number
+  bytes mb_uid = 8; // Motherboard unique identifier
+  bytes bb_uid = 9; // Backbone unique identifier
+  GuestPortInfo gp = 10; // GuestPortInfo
 }
 
 /**
