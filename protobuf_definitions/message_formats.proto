@@ -507,6 +507,15 @@ enum DepthUnit {
 }
 
 /**
+  * Available thickness units.
+  */
+enum ThicknessUnit {
+  THICKNESS_UNIT_UNSPECIFIED = 0; // Thickness unit not specified
+  THICKNESS_UNIT_MILLIMETERS = 1; // Thickness should be displayed as millimeters
+  THICKNESS_UNIT_INCHES = 2; // Thickness should be displayed as inches
+}
+
+/**
   * Available font sizes for overlay text elements.
   */
 enum FontSize {
@@ -529,10 +538,12 @@ message OverlayParameters {
   bool depth_enabled = 2; // If depth should be included
   bool heading_enabled = 3; // If heading should be included
   bool tilt_enabled = 4; // If camera tilt angle should be included
+  bool thickness_enabled = 18;// If camera tilt angle should be included
   bool date_enabled = 5; // If date should be included
   LogoType logo_type = 6; // Which logo should be used
   DepthUnit depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
   TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celcius or Fahrenheit
+  ThicknessUnit thickness_unit = 19; // Which unit should be used for thickness: Millimeters or Inches
   int32 timezone_offset = 9; // Timezone offset from UTC
   int32 margin_width = 10; // Horizontal margins of text elements
   int32 margin_height = 11; // Vertical margins of text elements
