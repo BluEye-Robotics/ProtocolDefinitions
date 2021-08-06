@@ -588,7 +588,7 @@ message GuestPortDevice {
   string name = 3; // Device name
   string serial_number = 4; // Serial number
   float depth_rating = 5; // Depth rating in meters
-  string required_blunux_version = 6; // Device name
+  string required_blunux_version = 6; // Required Blunux version (x.y.z)
 }
 
 /**
