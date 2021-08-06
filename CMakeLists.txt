@@ -8,12 +8,6 @@ include(GNUInstallDirs)
 find_package(Protobuf REQUIRED)
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 
-if(DEFINED ENV{VIRTUAL_ENV} OR DEFINED ENV{CONDA_PREFIX})
-  set(_pip_args)
-else()
-  set(_pip_args "--user")
-endif()
-
 file(GLOB ProtoFiles "protobuf_definitions/*.proto")
 PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${ProtoFiles})
 protobuf_generate_python(PROTO_PYS ${ProtoFiles})
