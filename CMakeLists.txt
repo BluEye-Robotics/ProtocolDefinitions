@@ -22,10 +22,12 @@ install(TARGETS blueyeprotocol
         LIBRARY DESTINATION lib)
 install(FILES ${ProtoHeaders} DESTINATION include/blueyeprotocol)
 
-add_custom_target(pyblueyeprotocol ALL
+add_custom_target(pyblueyeprotocol 
                   DEPENDS ${PROTO_PYS})
 
-install(FILES ${PROTO_PYS} DESTINATION ${Python3_SITELIB})
+install(FILES ${PROTO_PYS} DESTINATION ${Python3_SITELIB} OPTIONAL)
+add_custom_target(python_bindings)
+add_dependencies(python_bindings pyblueyeprotocol)
 
 # ---------------------------------------------------------------------------------------
 # Install cmake config
