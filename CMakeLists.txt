@@ -23,7 +23,7 @@ install(TARGETS blueyeprotocol
 install(FILES ${ProtoHeaders} DESTINATION include/blueyeprotocol)
 
 add_custom_target(pyblueyeprotocol 
-                  DEPENDS ${PROTO_PYS})
+                  DEPENDS ${PROTO_PYS} blueyeprotocol)
 
 install(FILES ${PROTO_PYS} DESTINATION ${Python3_SITELIB} OPTIONAL)
 add_custom_target(python_bindings)
