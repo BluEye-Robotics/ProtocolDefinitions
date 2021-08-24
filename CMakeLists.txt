@@ -6,10 +6,11 @@ include(GNUInstallDirs)
 
 
 find_package(Protobuf REQUIRED)
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
 
 file(GLOB ProtoFiles "protobuf_definitions/*.proto")
 PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${ProtoFiles})
-protobuf_generate_python(PROTO_PY ${ProtoFiles})
+protobuf_generate_python(PROTO_PYS ${ProtoFiles})
 
 add_library(blueyeprotocol SHARED ${ProtoSources} ${ProtoHeaders})
 
@@ -21,6 +22,12 @@ install(TARGETS blueyeprotocol
         LIBRARY DESTINATION lib)
 install(FILES ${ProtoHeaders} DESTINATION include/blueyeprotocol)
 
+add_custom_target(pyblueyeprotocol 
+                  DEPENDS ${PROTO_PYS} blueyeprotocol)
+
+install(FILES ${PROTO_PYS} DESTINATION ${Python3_SITELIB} OPTIONAL)
+add_custom_target(python_bindings)
+add_dependencies(python_bindings pyblueyeprotocol)
 
 # ---------------------------------------------------------------------------------------
 # Install cmake config
@@ -40,4 +47,4 @@ write_basic_package_version_file(
   COMPATIBILITY SameMajorVersion )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/blueyeprotocolConfig.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/blueyeprotocolConfigVersion.cmake
-        DESTINATION ${LIB_INSTALL_DIR}/cmake/blueyeprotocol )
+        DESTINATION ${LIB_INSTALL_DIR}/cmake/blueyeprotocol)
