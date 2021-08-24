@@ -29,6 +29,10 @@ message LightsTel {
   Lights lights = 1;
 }
 
+message GuestPortLightsTel {
+  Lights lights = 1;
+}
+
 message PilotGPSPositionTel {
   LatLongPosition position = 1;
 }
