@@ -434,6 +434,132 @@
                                 "name": "ERR_TILT_CALIBRATION",
                                 "component": "tilt",
                                 "description": "Invalid tilt calibration"
+                            },
+                            {
+                                "value": "0x00000100",
+                                "name": "ERR_GP1_READ",
+                                "component": "guest_port",
+                                "description": "Guest port 1 read error"
+                            },
+                            {
+                                "value": "0x00000200",
+                                "name": "ERR_GP2_READ",
+                                "component": "guest_port",
+                                "description": "Guest port 2 read error"
+                            },
+                            {
+                                "value": "0x00000400",
+                                "name": "ERR_GP3_READ",
+                                "component": "guest_port",
+                                "description": "Guest port 3 read error"
+                            },
+                            {
+                                "value": "0x00000800",
+                                "name": "ERR_GP1_NOT_FLASHED",
+                                "component": "guest_port",
+                                "description": "Guest port 1 not flashed"
+                            },
+                            {
+                                "value": "0x00001000",
+                                "name": "ERR_GP2_NOT_FLASHED",
+                                "component": "guest_port",
+                                "description": "Guest port 2 not flashed"
+                            },
+                            {
+                                "value": "0x00002000",
+                                "name": "ERR_GP3_NOT_FLASHED",
+                                "component": "guest_port",
+                                "description": "Guest port 3 not flashed"
+                            },
+                            {
+                                "value": "0x00004000",
+                                "name": "ERR_GP1_UNKNOWN_DEVICE",
+                                "component": "guest_port",
+                                "description": "Unknown device on guest port 1"
+                            },
+                            {
+                                "value": "0x00008000",
+                                "name": "ERR_GP2_UNKNOWN_DEVICE",
+                                "component": "guest_port",
+                                "description": "Unknown device on guest port 2"
+                            },
+                            {
+                                "value": "0x00010000",
+                                "name": "ERR_GP3_UNKNOWN_DEVICE",
+                                "component": "guest_port",
+                                "description": "Unknown device on guest port 3"
+                            },
+                            {
+                                "value": "0x00020000",
+                                "name": "ERR_GP1_DEVICE_CONNECTION",
+                                "component": "guest_port",
+                                "description": "Guest port 1 connection error"
+                            },
+                            {
+                                "value": "0x00040000",
+                                "name": "ERR_GP2_DEVICE_CONNECTION",
+                                "component": "guest_port",
+                                "description": "Guest port 2 connection error"
+                            },
+                            {
+                                "value": "0x00080000",
+                                "name": "ERR_GP3_DEVICE_CONNECTION",
+                                "component": "guest_port",
+                                "description": "Guest port 3 connection error"
+                            },
+                            {
+                                "value": "0x00100000",
+                                "name": "ERR_GP1_DEVICE",
+                                "component": "guest_port",
+                                "description": "Guest port 1 device error"
+                            },
+                            {
+                                "value": "0x00200000",
+                                "name": "ERR_GP2_DEVICE",
+                                "component": "guest_port",
+                                "description": "Guest port 2 device error"
+                            },
+                            {
+                                "value": "0x00400000",
+                                "name": "ERR_GP3_DEVICE",
+                                "component": "guest_port",
+                                "description": "Guest port 3 device error"
+                            },
+                            {
+                                "value": "0x00800000",
+                                "name": "ERR_DRONE_SERIAL_NOT_SET",
+                                "component": "drone_serial",
+                                "description": "Drone serial number not set"
+                            },
+                            {
+                                "value": "0x01000000",
+                                "name": "ERR_DRONE_SERIAL",
+                                "component": "drone_serial",
+                                "description": "Drone serial number error"
+                            },
+                            {
+                                "value": "0x02000000",
+                                "name": "ERR_MB_EEPROM_READ",
+                                "component": "mb_eeeprom",
+                                "description": "MB eeprom read error"
+                            },
+                            {
+                                "value": "0x04000000",
+                                "name": "ERR_BB_EEPROM_READ",
+                                "component": "bb_eeeprom",
+                                "description": "BB eeprom read error"
+                            },
+                            {
+                                "value": "0x08000000",
+                                "name": "ERR_MB_EEPROM_NOT_FLASHED",
+                                "component": "mb_eeeprom",
+                                "description": "MB eeprom not flashed"
+                            },
+                            {
+                                "value": "0x10000000",
+                                "name": "ERR_BB_EEPROM_NOT_FLASHED",
+                                "component": "bb_eeeprom",
+                                "description": "BB eeprom not flashed"
                             }
                         ]
                     },
