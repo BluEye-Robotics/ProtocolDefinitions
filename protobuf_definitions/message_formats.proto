@@ -432,6 +432,29 @@ message ErrorFlags {
   bool inner_pressure_spike = 6; // Sudden spike in inner preassure
   bool compass_calibration = 7; // Compass needs calibration
   bool tilt_calibration = 8; // Error during calibration of tilt endpoints
+  bool gp1_read = 9;  // Guest port 1 read error
+  bool gp2_read = 10;  // Guest port 2 read error
+  bool gp3_read = 11;  // Guest port 3 read error
+  bool gp1_not_flashed = 12;  // Guest port 1 not flashed
+  bool gp2_not_flashed = 13;  // Guest port 2 not flashed
+  bool gp3_not_flashed = 14;  // Guest port 3 not flashed
+  bool gp1_unknown_device = 15;  // Unknown device on guest port 1
+  bool gp2_unknown_device = 16;  // Unknown device on guest port 2
+  bool gp3_unknown_device = 17;  // Unknown device on guest port 3
+  bool gp1_device_connection = 18;  // Guest port 1 connection error
+  bool gp2_device_connection = 19;  // Guest port 2 connection error
+  bool gp3_device_connection = 20;  // Guest port 3 connection error
+  bool gp1_device = 21;  // Guest port 1 device error
+  bool gp2_device = 22;  // Guest port 2 device error
+  bool gp3_device = 23;  // Guest port 3 device error
+  bool drone_serial_not_set = 24;  // Drone serial number not set
+  bool drone_serial = 25;  // Drone serial number error
+  bool mb_eeprom_read = 26;  // MB eeprom read error
+  bool bb_eeprom_read = 27;  // BB eeprom read error
+  bool mb_eeprom_not_flashed = 28;  // MB eeprom not flashed
+  bool bb_eeprom_not_flashed = 29;  // BB eeprom not flashed
+  bool camera_connection = 30;
+  bool camera_firmware = 31;
 }
 
 /**
