@@ -560,6 +560,12 @@
                                 "name": "ERR_BB_EEPROM_NOT_FLASHED",
                                 "component": "bb_eeeprom",
                                 "description": "BB eeprom not flashed"
+                            },
+                            {
+                                "value": "0x20000000",
+                                "name": "ERR_MAIN_CAMERA_CONNECTION",
+                                "component": "main_camera",
+                                "description": "Main camera is unreachable"
                             }
                         ]
                     },
