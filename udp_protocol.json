@@ -563,15 +563,9 @@
                             },
                             {
                                 "value": "0x20000000",
-                                "name": "ERR_CAMERA_CONNECTION",
-                                "component": "camera",
-                                "description": "Camera unreachable"
-                            },
-                            {
-                                "value": "0x40000000",
-                                "name": "ERR_CAMERA_FIRMWARE",
-                                "component": "camera",
-                                "description": "Camera has wrong firmware"
+                                "name": "ERR_MAIN_CAMERA_CONNECTION",
+                                "component": "main camera",
+                                "description": "Main camera is unreachable"
                             }
                         ]
                     },
