@@ -455,8 +455,8 @@ message ErrorFlags {
   bool bb_eeprom_not_flashed = 29;  // BB eeprom not flashed
   bool main_camera_connection = 30;  // We don't get buffers from the main camera
   bool main_camera_firmware = 31;  // The main camera firmware is wrong
-  bool guesport_camera_connection = 32;  // We don't get buffers from the guestport camera
-  bool guesport_camera_firmware = 33;  // The guestport camera firmware is wrong
+  bool guestport_camera_connection = 32;  // We don't get buffers from the guestport camera
+  bool guestport_camera_firmware = 33;  // The guestport camera firmware is wrong
 }
 
 /**
