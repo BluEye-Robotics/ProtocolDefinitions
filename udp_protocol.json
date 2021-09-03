@@ -566,6 +566,24 @@
                                 "name": "ERR_MAIN_CAMERA_CONNECTION",
                                 "component": "main_camera",
                                 "description": "Main camera is unreachable"
+                            },
+                            {
+                                "value": "0x40000000",
+                                "name": "ERR_MAIN_CAMERA_FIRMWARE",
+                                "component": "main_camera",
+                                "description": "Main camera has wrong firmware"
+                            },
+                            {
+                                "value": "0x80000000",
+                                "name": "ERR_GUESTPORT_CAMERA_CONNECTION",
+                                "component": "guestport_camera",
+                                "description": "Guestport camera is unreachable"
+                            },
+                            {
+                                "value": "0x100000000",
+                                "name": "ERR_GUESTPORT_CAMERA_FIRMWARE",
+                                "component": "guestport_camera",
+                                "description": "Guestport camera has wrong firmware"
                             }
                         ]
                     },
