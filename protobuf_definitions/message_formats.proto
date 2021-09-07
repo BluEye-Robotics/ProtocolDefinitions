@@ -630,6 +630,9 @@ enum GuestPortError {
   GUEST_PORT_ERROR_UNSPECIFIED = 0; // Unspecified value
   GUEST_PORT_ERROR_NOT_CONNECTED = 1; // Device not connected
   GUEST_PORT_ERROR_READ_ERROR = 2; // Device read error
+  GUEST_PORT_ERROR_NOT_FLASHED = 3; // Device read error
+  GUEST_PORT_ERROR_CRC_ERROR = 4; // Device read error
+  GUEST_PORT_ERROR_PARSE_ERROR = 5; // Device read error
 }
 
 /**
