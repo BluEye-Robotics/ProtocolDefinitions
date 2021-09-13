@@ -528,13 +528,13 @@
                             {
                                 "value": "0x00800000",
                                 "name": "ERR_DRONE_SERIAL_NOT_SET",
-                                "component": "drone_serial",
+                                "component": "drone_info",
                                 "description": "Drone serial number not set"
                             },
                             {
                                 "value": "0x01000000",
                                 "name": "ERR_DRONE_SERIAL",
-                                "component": "drone_serial",
+                                "component": "drone_info",
                                 "description": "Drone serial number error"
                             },
                             {
@@ -546,19 +546,19 @@
                             {
                                 "value": "0x04000000",
                                 "name": "ERR_BB_EEPROM_READ",
-                                "component": "bb_eeeprom",
+                                "component": "drone_info",
                                 "description": "BB eeprom read error"
                             },
                             {
                                 "value": "0x08000000",
                                 "name": "ERR_MB_EEPROM_NOT_FLASHED",
-                                "component": "mb_eeeprom",
+                                "component": "drone_info",
                                 "description": "MB eeprom not flashed"
                             },
                             {
                                 "value": "0x10000000",
                                 "name": "ERR_BB_EEPROM_NOT_FLASHED",
-                                "component": "bb_eeeprom",
+                                "component": "drone_info",
                                 "description": "BB eeprom not flashed"
                             },
                             {
@@ -584,6 +584,24 @@
                                 "name": "ERR_GUESTPORT_CAMERA_FIRMWARE",
                                 "component": "guestport_camera",
                                 "description": "Guestport camera has wrong firmware"
+                            },
+                            {
+                                "value": "0x200000000",
+                                "name": "ERR_MB_SERIAL",
+                                "component": "drone_info",
+                                "description": "MB serial number error"
+                            },
+                            {
+                                "value": "0x400000000",
+                                "name": "ERR_BB_SERIAL",
+                                "component": "drone_info",
+                                "description": "BB serial number error"
+                            },
+                            {
+                                "value": "0x800000000",
+                                "name": "ERR_DS_SERIAL",
+                                "component": "drone_info",
+                                "description": "DS serial number error"
                             }
                         ]
                     },
