@@ -457,6 +457,9 @@ message ErrorFlags {
   bool main_camera_firmware = 31;  // The main camera firmware is wrong
   bool guestport_camera_connection = 32;  // We don't get buffers from the guestport camera
   bool guestport_camera_firmware = 33;  // The guestport camera firmware is wrong
+  bool mb_serial = 34;  // MB serial number error
+  bool bb_serial = 35;  // BB serial number error
+  bool ds_serial = 36;  // DS serial number error
 }
 
 /**
