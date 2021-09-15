@@ -602,6 +602,18 @@
                                 "name": "ERR_DS_SERIAL",
                                 "component": "drone_info",
                                 "description": "DS serial number error"
+                            },
+                            {
+                                "value": "0x1000000000",
+                                "name": "ERR_GP_CURRENT_READ",
+                                "component": "drone_info",
+                                "description": "Error reading GP current"
+                            },
+                            {
+                                "value": "0x2000000000",
+                                "name": "ERR_GP_CURRENT",
+                                "component": "drone_info",
+                                "description": "Max GP current exceeded"
                             }
                         ]
                     },
