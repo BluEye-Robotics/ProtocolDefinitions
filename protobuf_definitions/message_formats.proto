@@ -460,6 +460,8 @@ message ErrorFlags {
   bool mb_serial = 34;  // MB serial number error
   bool bb_serial = 35;  // BB serial number error
   bool ds_serial = 36;  // DS serial number error
+  bool gp_current_read = 37;  // Error reading GP current
+  bool gp_current = 38;  // Max GP current exceeded
 }
 
 /**
