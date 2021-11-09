@@ -24,7 +24,6 @@ message GetOverlayParametersRep {
   OverlayParameters overlay_parameters = 1;
 }
 
-
 message SetCameraParametersReq {
   CameraParameters camera_parameters = 1;
 }
@@ -40,7 +39,6 @@ message GetCameraParametersRep {
   CameraParameters camera_parameters = 1;
 }
 
-
 message SyncTimeReq {
   SystemTime time = 1;
 }
@@ -49,9 +47,20 @@ message SyncTimeRep {
   bool success = 1;
 }
 
-
 message PingReq {
 }
 
 message PingRep {
+}
+
+/**
+ * Request to set parameters for ultrasonic thickness gauge.
+ *
+ * The sound velocity is used to calculate the thickness of the material being measured.
+ */
+message SetThicknessGaugeParametersReq {
+  uint32 sound_velocity = 1; // Sound velocity in m/s
+}
+
+message SetThicknessGaugeParametersRep {
 }
