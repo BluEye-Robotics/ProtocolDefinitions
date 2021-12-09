@@ -53,16 +53,25 @@ message CancelCalibrationCtrl {
 message FinishCalibrationCtrl {
 }
 
+/**
+  * Issue a command to set auto heading to a desired state.
+  */
 message AutoHeadingCtrl {
-  AutoHeadingState state = 1;
+  AutoHeadingState state = 1; // State of the heading controller
 }
 
+/**
+  * Issue a command to set auto depth to a desired state.
+  */
 message AutoDepthCtrl {
-  AutoDepthState state = 1;
+  AutoDepthState state = 1; // State of the depth controller
 }
 
+/**
+  * Issue a command to set auto altitude to a desired state.
+  */
 message AutoAltitudeCtrl {
-  AutoAltitudeState state = 1;
+  AutoAltitudeState state = 1; // State of the altitude controller
 } 
 
 message TiltStabilizationCtrl {

@@ -88,7 +88,7 @@ message AutoDepthState {
   * Auto altitude state.
   */
 message AutoAltitudeState {
-  bool enabled = 1; // If auto depth is enabled
+  bool enabled = 1; // If auto altitude is enabled
 }
 
 /**
