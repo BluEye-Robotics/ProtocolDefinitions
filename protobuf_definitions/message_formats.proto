@@ -85,6 +85,13 @@ message AutoDepthState {
 }
 
 /**
+  * Auto altitude state.
+  */
+message AutoAltitudeState {
+  bool enabled = 1; // If auto depth is enabled
+}
+
+/**
   * Tilt stabilization state.
   *
   * Blueye drones with mechanical tilt has the ability to enable

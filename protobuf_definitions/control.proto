@@ -61,6 +61,10 @@ message AutoDepthCtrl {
   AutoDepthState state = 1;
 }
 
+message AutoAltitudeCtrl {
+  AutoAltitudeState state = 1;
+} 
+
 message TiltStabilizationCtrl {
   TiltStabilizationState state = 1;
 }
