@@ -105,3 +105,24 @@ message DroneInfoTel {
 message ErrorFlagsTel {
   ErrorFlags error_flags = 1;
 }
+
+/**
+  * Receive the current state of the auto heading controller.
+  */
+message AutoHeadingTel {
+  AutoHeadingState state = 1; // State of the heading controller
+}
+
+/**
+  * Receive the current state of the auto depth controller.
+  */
+message AutoDepthTel {
+  AutoDepthState state = 1; // State of the depth controller
+}
+
+/**
+  * Receive the current state of the auto altitude controller.
+  */
+message AutoAltitudeTel {
+  AutoAltitudeState state = 1; // State of the altitude controller
+} 
