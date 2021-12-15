@@ -303,18 +303,13 @@ message Depth {
 }
 
 message Reference {
-  float surge = 1;
-  float sway = 2;
-  float heave = 3;
-  float yaw = 4;
+  float surge = 1; // Reference from joystick surge input
+  float sway = 2; // Reference from joystick sway input
+  float heave = 3; // Reference from joystick heave input
+  float yaw = 4; // Reference from joystick yaw input
   float depth = 5; // Reference drone depth below surface in m
-
-// Can be added as needed:
-  //float depth_rate = 6;
-  //float depth_acc = 7;
-  //float heading = 8;
-  //float heading_rate = 9;
-  //float heading_acc = 10;
+  float heading = 6; // Reference used in auto heading mode
+  float altitude = 7; // Reference used in auto altitude mode
 }
 
 /**
