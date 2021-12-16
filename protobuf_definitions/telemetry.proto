@@ -41,7 +41,7 @@ message RecordStateTel {
   RecordState record_state = 1;
 }
 
-message BatteryTel{
+message BatteryTel {
   Battery battery = 1;
 }
 
@@ -107,8 +107,8 @@ message ErrorFlagsTel {
 }
 
 /**
-  * Receive the current state of the control system.
-  */
-message CotrolModeTel {
-  ControlMode state = 1; // State of the control system.
+ * Receive the current state of the control system.
+ */
+message ControlModeTel {
+  ControlMode state = 1;  // State of the control system.
 }
