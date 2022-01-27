@@ -33,7 +33,7 @@ add_dependencies(python_bindings pyblueyeprotocol)
 # Install cmake config
 # ---------------------------------------------------------------------------------------
 
-set(INCLUDE_INSTALL_DIR include/blueyeprotocol )
+set(INCLUDE_INSTALL_DIR include )
 set(LIB_INSTALL_DIR lib/)
 
 include(CMakePackageConfigHelpers)
