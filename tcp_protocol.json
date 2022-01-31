@@ -680,7 +680,7 @@
                 "fields": [
                     {
                         "field_name": "unix_timestamp",
-                        "dtype": "<i4"
+                        "dtype": "<u4"
                     }
                 ]
             },
