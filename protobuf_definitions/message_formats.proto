@@ -292,7 +292,16 @@ message Attitude {
  */
 message Altitude {
   float value = 1; // Drone altitude over seabed in m
-  bool valid = 2; // Altitude valid or not
+  bool valid = 2; // If altitude is valid or not
+}
+
+/**
+ * Distance to an object infront of the drone, typically obtained from an 1D
+ * pinger.
+ */
+message ForwardDistance {
+  float value = 1; // Distance in front of drone in m
+  bool valid = 2; // If distance reading is valid or not
 }
 
 /**
