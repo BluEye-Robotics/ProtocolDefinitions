@@ -17,6 +17,10 @@ message AltitudeTel {
   Altitude altitude = 1;
 }
 
+message ForwardDistanceTel {
+  ForwardDistance forward_distance = 1;
+}
+
 message DepthTel {
   Depth depth = 1;
 }
