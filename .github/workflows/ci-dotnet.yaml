@@ -25,4 +25,6 @@ jobs:
           dotnet pack Blueye.Protocol.Protobuf.csproj --version-suffix "ci.$GITHUB_RUN_NUMBER" -c Release -o out  
 
       - name: Push generated package to GitHub registry
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}      
         run: dotnet nuget push ./out/*.nupkg --skip-duplicate --no-symbols true --api-key $NUGET_AUTH_TOKEN
