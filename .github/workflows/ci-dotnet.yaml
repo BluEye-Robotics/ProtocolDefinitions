@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - port-protocol-to-protobuf
+      - nuget-package
 
 jobs:
   protolint:
