@@ -8,7 +8,7 @@
     <Company>Blueye Robotics AS</Company>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <PackageDescription>Library with dotnet representation of the ProtocolDefinition protobuf files.</PackageDescription>
-    <RepositoryUrl>https://github.com/BluEye-Robotics/BlueyeApp</RepositoryUrl>
+    <RepositoryUrl>https://github.com/BluEye-Robotics/ProtocolDefinitions</RepositoryUrl>
   </PropertyGroup>
   
   <ItemGroup>
