@@ -19,6 +19,11 @@ docs
 lib*.so
 *.o
 
+# dotnet outputs
+bin
+obj
+out
+
 # Other
 build
 build_imx
