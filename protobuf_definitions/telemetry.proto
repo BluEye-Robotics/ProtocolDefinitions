@@ -29,6 +29,10 @@ message ReferenceTel {
   Reference reference = 1;
 }
 
+message ControllerHealthTel {
+  ControllerHealth controller_health = 1;
+}
+
 message LightsTel {
   Lights lights = 1;
 }
