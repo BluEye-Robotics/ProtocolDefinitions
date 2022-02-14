@@ -312,7 +312,8 @@ message Depth {
 }
 
 /**
- * Reference for the control system. Note that the internal heading referece is not relative to North. Use (ControlHealth.heading_error + pose.yaw) instead.
+ * Reference for the control system. Note that the internal heading referece is not relative to North. 
+ * Use (ControlHealth.heading_error + pose.yaw) instead.
  */
 message Reference {
   float surge = 1; // Reference from joystick surge input
@@ -327,7 +328,7 @@ message Reference {
 /**
  * Controller health is used for showing the state of the controller with an relative error and load from 0 to 1.
  */
- message ControllerHealth {
+message ControllerHealth {
   float depth_error = 1; // Depth error in meters
   float depth_health = 2; // Depth controller load (0..1)
   float heading_error = 3; // Heading error in degrees
