@@ -311,6 +311,9 @@ message Depth {
   float value = 1; // Drone depth below surface in m
 }
 
+/**
+ * Reference for the control system. Note that the internal heading referece is not relative to North. Use (ControlHealth.heading_error + pose.yaw) instead.
+ */
 message Reference {
   float surge = 1; // Reference from joystick surge input
   float sway = 2; // Reference from joystick sway input
@@ -319,6 +322,16 @@ message Reference {
   float depth = 5; // Reference drone depth below surface in m
   float heading = 6; // Reference used in auto heading mode
   float altitude = 7; // Reference used in auto altitude mode
+}
+
+/**
+ * Controller health is used for showing the state of the controller with an relative error and load from 0 to 1.
+ */
+ message ControllerHealth {
+  float depth_error = 1; // Depth error in meters
+  float depth_health = 2; // Depth controller load (0..1)
+  float heading_error = 3; // Heading error in degrees
+  float heading_health = 4; // Heading controller load (0..1)
 }
 
 /**
