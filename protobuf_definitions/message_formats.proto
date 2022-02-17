@@ -646,6 +646,7 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_CYGNUS_MINI_ROV_THICKNESS_GAUGE = 14; // Cygnus Mini ROV Thickness Gauge
   GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_PING360_SONAR = 15; // Blue Robotics Ping360 Scanning Imaging Sonar
   GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_720IM = 16; // Tritech Gemini 720im Multibeam Sonar
+  GUEST_PORT_DEVICE_ID_BLUEYE_LIGHT_PAIR = 17; // Blueye Light Pair
 }
 
 /**
