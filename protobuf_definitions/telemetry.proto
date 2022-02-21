@@ -120,3 +120,7 @@ message ErrorFlagsTel {
 message ControlModeTel {
   ControlMode state = 1;  // State of the control system.
 }
+
+message ThicknessGaugeTel {
+  ThicknessGauge thickness_gauge = 1;  // Tickness measurement with a cygnus gauge
+}
