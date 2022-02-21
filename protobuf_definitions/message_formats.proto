@@ -705,6 +705,6 @@ message GuestPortInfo {
 message ThicknessGauge {
   float thickness_measurement = 1; // Thickness measurement of a steel plate
   uint32 echo_count = 2; // Number of echoes recieved, indicating the quality of the reading when the reading is invalid. Range [0-3]
-  int32 sound_velocity = 3; // Speed of sound in the steel member
+  uint32 sound_velocity = 3; // Speed of sound in the steel member
   bool valid_measurement = 4; // Indicating if the measurement is valid
 }
