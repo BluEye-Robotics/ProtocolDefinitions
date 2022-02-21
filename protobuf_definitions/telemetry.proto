@@ -122,5 +122,5 @@ message ControlModeTel {
 }
 
 message ThicknessGaugeTel {
-  ThicknessGauge state = 1;  // Tickness 
+  ThicknessGauge thickness_gauge = 1;  // Tickness measurement with a cygnus gauge
 }
