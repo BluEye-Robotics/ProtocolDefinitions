@@ -92,6 +92,20 @@ message AutoAltitudeState {
 }
 
 /**
+  * Station keeping state.
+  */
+message StationKeepingState {
+  bool enabled = 1; // If station keeping is enabled
+}
+
+/**
+  * Weather weaning state.
+  */
+message WeatherWeaningState {
+  bool enabled = 1; // If weather weaning is enabled
+}
+
+/**
   * Control mode from drone supervisor
   */
 message ControlMode {

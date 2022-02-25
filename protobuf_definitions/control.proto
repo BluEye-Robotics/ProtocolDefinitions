@@ -72,6 +72,20 @@ message AutoDepthCtrl {
   */
 message AutoAltitudeCtrl {
   AutoAltitudeState state = 1; // State of the altitude controller
+}
+
+/**
+  * Issue a command to set station keeping to a desired state.
+  */
+message StationKeepingCtrl {
+  StationKeepingState state = 1; // State of the station keeping controller
+} 
+
+/**
+  * Issue a command to set station keeping with weather weaning to a desired state.
+  */
+message WeatherWeaningCtrl {
+  WeatherWeaningState state = 1; // State of the weather weaning controller
 } 
 
 message TiltStabilizationCtrl {
