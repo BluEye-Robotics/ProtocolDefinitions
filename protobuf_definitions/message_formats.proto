@@ -98,9 +98,8 @@ message ControlMode {
   bool auto_depth = 1; // If auto depth is enabled
   bool auto_heading = 2; // If auto heading is enabled
   bool auto_altitude = 3; // If auto altitude is enabled
-  // bool auto_station_keeping = 4; // Not implemented yet
-  // bool auto_surge_distance = 5; // Not implemented yet
-  // bool auto_path_following = 6; // Not implemented yet
+  bool station_keeping = 4; // If station keeping is enabled
+  bool weather_weaning = 5; // If weather weaning is enabled
 }
 
 /**
