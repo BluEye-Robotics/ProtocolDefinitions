@@ -394,29 +394,31 @@ message CalibrationState {
 
   /**
    * Status of the compass calibration procedure.
+   *
+   * When calibration is started, the status will indicate the active (upfacing) axis.
    */
   enum Status
   {
     STATUS_UNSPECIFIED = 0; // Unspecified status
     STATUS_NOT_CALIBRATING = 1; // Compass is not currently calibrating
     STATUS_CALIBRATING_NO_AXIS = 2; // Compass is calibrating but active calibration axis cannot be determined
-    STATUS_CALIBRATING_X_PLUS = 3; // Compass is calibrating and the X-up axis is active
-    STATUS_CALIBRATING_X_MINUS = 4; // Compass is calibrating and the X-down axis is active
-    STATUS_CALIBRATING_Y_PLUS = 5; // Compass is calibrating and the Y-up axis is active
-    STATUS_CALIBRATING_Y_MINUS = 6; // Compass is calibrating and the Y-down axis is active
-    STATUS_CALIBRATING_Z_PLUS = 7; // Compass is calibrating and the Z-up axis is active
-    STATUS_CALIBRATING_Z_MINUS = 8; // Compass is calibrating and the Z-down axis is active
+    STATUS_CALIBRATING_X_POSITIVE = 3; // Compass is calibrating and the positive X axis is active
+    STATUS_CALIBRATING_X_NEGATIVE = 4; // Compass is calibrating and the negative X axis is active
+    STATUS_CALIBRATING_Y_POSITIVE = 5; // Compass is calibrating and the positive Y axis is active
+    STATUS_CALIBRATING_Y_NEGATIVE = 6; // Compass is calibrating and the negative Y axis is active
+    STATUS_CALIBRATING_Z_POSITIVE = 7; // Compass is calibrating and the positive Z axis is active
+    STATUS_CALIBRATING_Z_NEGATIVE = 8; // Compass is calibrating and the negative Z axis is active
     STATUS_CALIBRATING_THRUSTER = 9; // Compass is calibrating for thruster interferance
   }
 
-  Status status = 1;
-  float progress_x_up = 2;
-  float progress_x_down = 3;
-  float progress_y_up = 4;
-  float progress_y_down = 5;
-  float progress_z_up = 6;
-  float progress_z_down = 7;
-  float progress_thruster = 8;
+  Status status = 1; // Current calibration status
+  float progress_x_positive = 2; // Progress for the positive X axis (0..1)
+  float progress_x_negative = 3; // Progress for the negative X axis (0..1)
+  float progress_y_positive = 4; // Progress for the positive Y axis (0..1)
+  float progress_y_negative = 5; // Progress for the negative X axis (0..1)
+  float progress_z_positive = 6; // Progress for the positive Z axis (0..1)
+  float progress_z_negative = 7; // Progress for the negative Z axis (0..1)
+  float progress_thruster = 8; // Progress for the thruster calibration (0..1)
 }
 
 /**
