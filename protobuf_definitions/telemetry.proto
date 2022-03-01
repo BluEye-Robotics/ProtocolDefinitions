@@ -21,6 +21,10 @@ message ForwardDistanceTel {
   ForwardDistance forward_distance = 1;
 }
 
+message PositionEstimateTel {
+  PositionEstimate position_estimate = 1;
+}
+
 message DepthTel {
   Depth depth = 1;
 }
