@@ -44,12 +44,21 @@ message RecordCtrl {
 message TakePictureCtrl {
 }
 
+/**
+  * Issue a command to start compass calibration.
+  */
 message StartCalibrationCtrl {
 }
 
+/**
+  * Issue a command to cancel compass calibration.
+  */
 message CancelCalibrationCtrl {
 }
 
+/**
+  * Issue a command to finish compass calibration.
+  */
 message FinishCalibrationCtrl {
 }
 

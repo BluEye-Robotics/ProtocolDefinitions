@@ -378,17 +378,21 @@ message StorageSpace {
   */
 message CalibrationState {
 
+  /**
+   * Status of the compass calibration procedure.
+   */
   enum Status
   {
-    STATUS_UNSPECIFIED = 0;
-    STATUS_NOT_CALIBRATING = 1;
-    STATUS_CALIBRATING_NO_AXIS = 2;
-    STATUS_CALIBRATING_X_PLUS = 3;
-    STATUS_CALIBRATING_X_MINUS = 4;
-    STATUS_CALIBRATING_Y_PLUS = 5;
-    STATUS_CALIBRATING_Y_MINUS = 6;
-    STATUS_CALIBRATING_Z_PLUS = 7;
-    STATUS_CALIBRATING_Z_MINUS = 8;
+    STATUS_UNSPECIFIED = 0; // Unspecified status
+    STATUS_NOT_CALIBRATING = 1; // Compass is not currently calibrating
+    STATUS_CALIBRATING_NO_AXIS = 2; // Compass is calibrating but active calibration axis cannot be determined
+    STATUS_CALIBRATING_X_PLUS = 3; // Compass is calibrating and the X-up axis is active
+    STATUS_CALIBRATING_X_MINUS = 4; // Compass is calibrating and the X-down axis is active
+    STATUS_CALIBRATING_Y_PLUS = 5; // Compass is calibrating and the Y-up axis is active
+    STATUS_CALIBRATING_Y_MINUS = 6; // Compass is calibrating and the Y-down axis is active
+    STATUS_CALIBRATING_Z_PLUS = 7; // Compass is calibrating and the Z-up axis is active
+    STATUS_CALIBRATING_Z_MINUS = 8; // Compass is calibrating and the Z-down axis is active
+    STATUS_CALIBRATING_THRUSTER = 9; // Compass is calibrating for thruster interferance
   }
 
   Status status = 1;
