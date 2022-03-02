@@ -327,8 +327,9 @@ message PositionEstimate {
   float surge_rate = 4; // Velocity in surge (m/s)
   float sway_rate = 5; // Velocity in sway (m/s)
   float yaw_rate = 6; // Rotaion rate in yaw (rad/s)
-  float odometer = 7; // Travelled distance since reset (m)
-  bool is_valid = 8; // If the estimate can be trusted
+  float ocean_current = 7; // Estimated ocean current (m/s)
+  float odometer = 8; // Travelled distance since reset (m)
+  bool is_valid = 9; // If the estimate can be trusted
 }
 
 /**
