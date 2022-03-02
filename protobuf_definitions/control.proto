@@ -95,7 +95,19 @@ message StationKeepingCtrl {
   */
 message WeatherWeaningCtrl {
   WeatherWeaningState state = 1; // State of the weather weaning controller
-} 
+}
+
+/**
+  * Issue a command to reset the position estimate.
+  */
+message ResetPositionCtrl {
+}
+
+/**
+  * Issue a command to reset the odometer.
+  */
+message ResetOdometerCtrl {
+}
 
 message TiltStabilizationCtrl {
   TiltStabilizationState state = 1;
