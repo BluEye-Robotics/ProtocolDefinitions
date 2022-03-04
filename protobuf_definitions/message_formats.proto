@@ -641,6 +641,8 @@ message OverlayParameters {
   bool tilt_enabled = 4; // If camera tilt angle should be included
   bool thickness_enabled = 18;// If camera tilt angle should be included
   bool date_enabled = 5; // If date should be included
+  bool distance_enabled = 20; // If distance should be included
+  bool altitude_enabled = 21; // If altitude should be included
   LogoType logo_type = 6; // Which logo should be used
   DepthUnit depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
   TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celcius or Fahrenheit
