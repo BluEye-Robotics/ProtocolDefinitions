@@ -101,11 +101,6 @@ message NStreamersTel {
   NStreamers n_streamers = 1;
 }
 
-// TODO: deprecate
-message SpectatorsTel {
-  Spectators spectators = 1;
-}
-
 message TiltAngleTel {
   TiltAngle angle = 1;
 }
