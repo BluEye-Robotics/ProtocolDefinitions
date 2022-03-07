@@ -39,12 +39,18 @@ message GetCameraParametersRep {
   CameraParameters camera_parameters = 1;
 }
 
+/***
+  * Request to set the system time on the drone.
+  */
 message SyncTimeReq {
   SystemTime time = 1;
 }
 
+/***
+  * Response after setting the system time on the drone.
+  */
 message SyncTimeRep {
-  bool success = 1;
+  bool success = 1; // If the time was set successfully.
 }
 
 /***
