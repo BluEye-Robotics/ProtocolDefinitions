@@ -9,7 +9,6 @@ package blueye.protocol;
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
-
 message SetOverlayParametersReq {
   OverlayParameters overlay_parameters = 1;
 }
@@ -39,21 +38,21 @@ message GetCameraParametersRep {
   CameraParameters camera_parameters = 1;
 }
 
-/***
+/**
   * Request to set the system time on the drone.
   */
 message SyncTimeReq {
   SystemTime time = 1;
 }
 
-/***
+/**
   * Response after setting the system time on the drone.
   */
 message SyncTimeRep {
   bool success = 1; // If the time was set successfully.
 }
 
-/***
+/**
   * The simplest message to use to test request/reply communication with the drone.
   *
   * The drone replies with a PingRep message immediately after receiving the PingReq.
@@ -61,7 +60,7 @@ message SyncTimeRep {
 message PingReq {
 }
 
-/***
+/**
   * Response message from a PingReq request.
   */
 message PingRep {

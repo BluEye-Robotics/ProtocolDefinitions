@@ -17,30 +17,54 @@ message TiltVelocityCtrl {
   TiltVelocity velocity = 1;
 }
 
+/**
+  * Issue a command with user defined modifiers for the control system.
+  */
 message UserModifiersCtrl {
-  UserModifiers user_modifiers = 1;
+  UserModifiers user_modifiers = 1; // Message with the desired modifiers to apply.
 }
 
+/**
+  * Issue a command to set the main light intensity.
+  */
 message LightsCtrl {
-  Lights lights = 1;
+  Lights lights = 1; // Message with the desired light intensity.
 }
 
+/**
+  * Issue a command to set the guest port light intensity.
+  */
 message GuestportLightsCtrl {
-  Lights lights = 1;
+  Lights lights = 1; // Message with the desired light intensity.
 }
 
+/**
+  * Issue a command with the GPS position of the pilot.
+  */
 message PilotGPSPositionCtrl {
-  LatLongPosition position = 1;
+  LatLongPosition position = 1; // The GPS position of the pilot.
 }
 
+/**
+  * Issue a watchdog message to indicate that the remote client is connected and working as expected.
+  *
+  * If a watchdog message is not received every second, the drone will turn off lights and other auto
+  * functions to indicate that connection with the client has been lost.
+  */
 message WatchdogCtrl {
-  ConnectionDuration connection_duration = 1;
+  ConnectionDuration connection_duration = 1; // Message with the number of seconds the client has been connected.
 }
 
+/**
+  * Issue a command to start video recording.
+  */
 message RecordCtrl {
-  RecordOn record_on = 1;
+  RecordOn record_on = 1; // Message specifying which cameras to record.
 }
 
+/**
+  * Issue a command to take a picture.
+  */
 message TakePictureCtrl {
 }
 
@@ -109,22 +133,37 @@ message ResetPositionCtrl {
 message ResetOdometerCtrl {
 }
 
+/**
+  * Issue a command to enable or disable tilt stabilization.
+  */
 message TiltStabilizationCtrl {
-  TiltStabilizationState state = 1;
+  TiltStabilizationState state = 1; // Message with the tilt stabilization state to set.
 }
 
+/**
+  * Issue a command to set the water density.
+  */
 message WaterDensityCtrl {
-  WaterDensity density = 1;
+  WaterDensity density = 1; // Message with the water density to set.
 }
 
+/**
+  * Issue a command to set the system time on the drone.
+  */
 message SystemTimeCtrl {
-  SystemTime system_time = 1;
+  SystemTime system_time = 1; // Message with the system time to set.
 }
 
+/**
+  * Issue a command with information about the remote client.
+  */
 message ClientInfoCtrl {
-  ClientInfo client_info = 1;
+  ClientInfo client_info = 1; // Message with information about the remote client.
 }
 
+/**
+  * Issue a command to control the gripper.
+  */
 message GripperCtrl {
-  GripperVelocities gripper_velocities = 1;
+  GripperVelocities gripper_velocities = 1; // The desired gripping and rotation velocity.
 }

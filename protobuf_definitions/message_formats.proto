@@ -133,9 +133,12 @@ message SystemTime {
   google.protobuf.Timestamp unix_timestamp = 1; // Unix timestamp
 }
 
+/**
+  * Gripper velocity values.
+  */
 message GripperVelocities {
-  float grip_velocity = 1;
-  float rotate_velocity = 2;
+  float grip_velocity = 1; // The gripping velocity (-1.0..1.0)
+  float rotate_velocity = 2; // The rotating velocity (-1.0..1.0)
 }
 
 /**
@@ -376,8 +379,8 @@ message DiveTime {
   * Which cameras are supposed to be recording
   */
 message RecordOn {
-  bool main = 1;
-  bool guestport = 2;
+  bool main = 1; // Record the main camera
+  bool guestport = 2; // Record external camera
 }
 
 /**
