@@ -40,14 +40,6 @@ message MotionInput {
   float boost = 6; // Multiplier used to increase the speed of the motion (0..1)
 }
 
-message UserModifiers {
-  float surge_modifier = 1;
-  float sway_modifier = 2;
-  float heave_modifier = 3;
-  float yaw_modifier = 4;
-  float jerk_modifier = 5;
-}
-
 /**
   * Lights message used to represent the intensity of the main light or external lights.
   */

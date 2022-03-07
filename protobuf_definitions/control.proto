@@ -18,13 +18,6 @@ message TiltVelocityCtrl {
 }
 
 /**
-  * Issue a command with user defined modifiers for the control system.
-  */
-message UserModifiersCtrl {
-  UserModifiers user_modifiers = 1; // Message with the desired modifiers to apply.
-}
-
-/**
   * Issue a command to set the main light intensity.
   */
 message LightsCtrl {
