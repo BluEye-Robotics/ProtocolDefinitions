@@ -47,9 +47,17 @@ message SyncTimeRep {
   bool success = 1;
 }
 
+/***
+  * The simplest message to use to test request/reply communication with the drone.
+  *
+  * The drone replies with a PingRep message immediately after receiving the PingReq.
+  */
 message PingReq {
 }
 
+/***
+  * Response message from a PingReq request.
+  */
 message PingRep {
 }
 
