@@ -165,6 +165,15 @@ message WaterDensity {
 }
 
 /**
+  * Pinger configuration.
+  *
+  * Used to specify the configuration the BR 1D-Pinger.
+  */
+message PingerConfiguration {
+  bool direction_is_forwards = 1; // If mounted in forwards direction
+}
+
+/**
  * Water temperature measured by the drone's combined depth and temperature sensor.
  */
 message WaterTemperature {
@@ -335,7 +344,7 @@ message Depth {
 }
 
 /**
- * Reference for the control system. Note that the internal heading referece is not relative to North. 
+ * Reference for the control system. Note that the internal heading referece is not relative to North.
  * Use (ControlHealth.heading_error + pose.yaw) instead.
  */
 message Reference {

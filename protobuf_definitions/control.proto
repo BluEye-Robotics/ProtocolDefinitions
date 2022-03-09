@@ -105,7 +105,7 @@ message AutoAltitudeCtrl {
   */
 message StationKeepingCtrl {
   StationKeepingState state = 1; // State of the station keeping controller
-} 
+}
 
 /**
   * Issue a command to set station keeping with weather weaning to a desired state.
@@ -138,6 +138,13 @@ message TiltStabilizationCtrl {
   */
 message WaterDensityCtrl {
   WaterDensity density = 1; // Message with the water density to set.
+}
+
+/**
+  * Issue a command to set the pinger configuration.
+  */
+message PingerConfigurationCtrl {
+  PingerConfiguration configuration = 1; // Message with the pinger configuration to set.
 }
 
 /**
