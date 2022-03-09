@@ -559,7 +559,7 @@ message CameraParameters {
   int32 white_balance = 4; // White balance temperature in range 2800..9300 (-1 for automatic white balance)
   int32 hue = 5; // Hue in range -40..40 (0 as default)
 
-  int32 gain = 9; // Iso gain in range 0..100
+  float gain = 9; // Iso gain in range 0.0-1.0
 
   Resolution resolution = 6; // Stream, recording and image resolution
   Framerate framerate = 7; // Stream and recording framerate
