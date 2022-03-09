@@ -642,10 +642,10 @@ message OverlayParameters {
   string subtitle = 14; // Optional subtitle
   string date_format = 16; // Posix strftime format string for time stamp
   /**
-    * Pixel intensity to subtract from text background (restricted to 0..255),
-    * (result background intensity is restricted to max 100)
+    * Pixel intensity to subtract from text background (range is 0.0-1.0),
+    * (0 is transparent and 1 is black)
     */
-  int32 shading = 17;
+  float shading = 17;
 }
 
 /**
