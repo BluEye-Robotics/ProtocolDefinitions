@@ -170,7 +170,13 @@ message WaterDensity {
   * Used to specify the configuration the BR 1D-Pinger.
   */
 message PingerConfiguration {
-  bool direction_is_forwards = 1; // If mounted in forward direction
+  enum MountingDirection {
+    MOUNTING_DIRECTION_UNSPECIFIED = 0; // Mounting direction is unspecified
+    MOUNTING_DIRECTION_FORWARDS = 1; // Pointing forwards from the drones perspective
+    MOUNTING_DIRECTION_DOWNWARDS = 2; // Pointing downwards from the drones perspective
+  }
+
+  MountingDirection mounting_direction = 1; // Mounting direction of the pinger
 }
 
 /**
