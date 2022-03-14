@@ -194,7 +194,7 @@ message CPUTemperature {
 }
 
 /**
-  * Canister temperature
+  * Canister temperature.
   *
   * Temperature measured in the top and bottom canister of the drone.
   */
@@ -204,33 +204,20 @@ message CanisterTemperature {
 }
 
 /**
-  * Canister humidity
+  * Canister humidity.
   */
 message CanisterHumidity {
   float top = 1; // Air humidity in %
   float bottom = 2; // Air humidity in %
 }
 
-enum BatteryState {
-  BATTERY_STATE_UNSPECIFIED = 0;
-  BATTERY_STATE_INITIALIZATION = 1;
-  BATTERY_STATE_CHARGING = 2;
-  BATTERY_STATE_DISCHARGING_OR_RELAX = 3;
-  BATTERY_STATE_FULLY_CHARGED = 4;
-  BATTERY_STATE_FULLY_DISCHARGED = 5;
-}
-
-// Wrapper message around enum in order to avoid name clashes
-enum BatteryError {
-  BATTERY_ERROR_UNSPECIFIED = 0;
-  BATTERY_ERROR_OK = 1;
-  BATTERY_ERROR_BUSY = 2;
-  BATTERY_ERROR_RESERVED_COMMAND = 3;
-  BATTERY_ERROR_UNSUPPORTED_COMMAND = 4;
-  BATTERY_ERROR_ACCESS_DENIED = 5;
-  BATTERY_ERROR_OVERFLOW_UNDERFLOW = 6;
-  BATTERY_ERROR_BAD_SIZE = 7;
-  BATTERY_ERROR_UNKNOWN_ERROR = 8;
+/**
+  * Essential battery information.
+  */
+message Battery {
+  float voltage = 1; // Battery voltage in V
+  float level = 2; // Battery level (0..1)
+  float temperature = 3; // Battery temperature in °C
 }
 
 /**
@@ -238,21 +225,23 @@ enum BatteryError {
   *
   * Detailed information about all aspects of the connected Blueye smart battery.
   */
-message Battery{
+message BatteryBQ40Z50 {
+  reserved 3, 5;
+
   /**
-    * Battery voltage levels
+    * Battery voltage levels.
     */
   message Voltage {
-    float total = 1; // Battery pack voltage level
-    float cell_1 = 2; // Cell 1 voltage level
-    float cell_2 = 3; // Vell 2 voltage level
-    float cell_3 = 4; // Cell 3 voltage level
-    float cell_4 = 5; // Cell 4 voltage level
+    float total = 1; // Battery pack voltage level in V
+    float cell_1 = 2; // Cell 1 voltage level in V
+    float cell_2 = 3; // Vell 2 voltage level in V
+    float cell_3 = 4; // Cell 3 voltage level in V
+    float cell_4 = 5; // Cell 4 voltage level in V
   }
   Voltage voltage = 1;
 
   /**
-   * Battery temperature
+   * Battery temperature.
    */
   message Temperature {
     float average = 1; // Average temperature accross cells in °C
@@ -262,38 +251,56 @@ message Battery{
     float cell_4 = 5; // Cell 4 temperature in °C
   }
   Temperature temperature = 2;
-  BatteryState state = 3;
 
   /**
-    * Active battery alarms.
+    * Battery errror code from BQ40Z50 BMS data sheet.
     */
-  message Alarms {
-    bool overcharged = 1;
-    bool terminate_charge = 2;
-    bool over_temperature = 3;
-    bool terminate_discharge = 4;
-    bool remaining_capacity = 5;
-    bool remaining_time = 6;
+  enum BatteryError {
+    BATTERY_ERROR_UNSPECIFIED = 0;
+    BATTERY_ERROR_OK = 1;
+    BATTERY_ERROR_BUSY = 2;
+    BATTERY_ERROR_RESERVED_COMMAND = 3;
+    BATTERY_ERROR_UNSUPPORTED_COMMAND = 4;
+    BATTERY_ERROR_ACCESS_DENIED = 5;
+    BATTERY_ERROR_OVERFLOW_UNDERFLOW = 6;
+    BATTERY_ERROR_BAD_SIZE = 7;
+    BATTERY_ERROR_UNKNOWN_ERROR = 8;
   }
-  Alarms alarms = 4;
-  BatteryError error = 5;
 
-  float current = 6;
-  float average_current = 7;
-  float relative_state_of_charge = 8;
-  float absolute_state_of_charge = 9;
-  float remaining_capacity = 10;
-  float full_charge_capacity = 11;
+  /**
+    * Battery status from BQ40Z50 ref data sheet 0x16.
+    */
+  message BatteryStatus {
+    bool overcharged_alarm = 1;
+    bool terminate_charge_alarm = 2;
+    bool over_temperature_alarm = 3;
+    bool terminate_discharge_alarm = 4;
+    bool remaining_capacity_alarm = 5;
+    bool remaining_time_alarm = 6;
+    bool initialization = 7;
+    bool discharging_or_relax = 8;
+    bool fully_charged = 9;
+    bool fully_discharged = 10;
+    BatteryError error = 11;
+  }
+  BatteryStatus status = 4;
+
+  uint32 current = 6;
+  uint32 average_current = 7;
+  uint32 relative_state_of_charge = 8;
+  uint32 absolute_state_of_charge = 9;
+  uint32 remaining_capacity = 10;
+  uint32 full_charge_capacity = 11;
   int32 runtime_to_empty = 12;
   int32 average_time_to_empty = 13;
   int32 average_time_to_full = 14;
   int32 time_to_full_at_current_rate = 15;
   int32 time_to_empty_at_current_rate = 16;
-  float charging_current = 17;
-  float charging_voltage = 18;
+  uint32 charging_current = 17;
+  uint32 charging_voltage = 18;
 
   uint32 cycle_count = 19;
-  float design_capacity = 20;
+  uint32 design_capacity = 20;
   google.protobuf.Timestamp manufacture_date = 21;
   uint32 serial_number = 22;
   string manufacturer_name = 23;
