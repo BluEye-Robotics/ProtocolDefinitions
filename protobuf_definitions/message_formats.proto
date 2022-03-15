@@ -223,7 +223,8 @@ message Battery {
 /**
   * Battery information message.
   *
-  * Detailed information about all aspects of the connected Blueye smart battery.
+  * Detailed information about all aspects of the connected Blueye Smart Battery,
+  * using the BQ40Z50 BMS.
   */
 message BatteryBQ40Z50 {
   reserved 3, 5;
@@ -238,7 +239,7 @@ message BatteryBQ40Z50 {
     float cell_3 = 4; // Cell 3 voltage level in V
     float cell_4 = 5; // Cell 4 voltage level in V
   }
-  Voltage voltage = 1;
+  Voltage voltage = 1; // Voltage of the battery cells
 
   /**
    * Battery temperature.
@@ -250,22 +251,7 @@ message BatteryBQ40Z50 {
     float cell_3 = 4; // Cell 3 temperature in °C
     float cell_4 = 5; // Cell 4 temperature in °C
   }
-  Temperature temperature = 2;
-
-  /**
-    * Battery errror code from BQ40Z50 BMS data sheet.
-    */
-  enum BatteryError {
-    BATTERY_ERROR_UNSPECIFIED = 0;
-    BATTERY_ERROR_OK = 1;
-    BATTERY_ERROR_BUSY = 2;
-    BATTERY_ERROR_RESERVED_COMMAND = 3;
-    BATTERY_ERROR_UNSUPPORTED_COMMAND = 4;
-    BATTERY_ERROR_ACCESS_DENIED = 5;
-    BATTERY_ERROR_OVERFLOW_UNDERFLOW = 6;
-    BATTERY_ERROR_BAD_SIZE = 7;
-    BATTERY_ERROR_UNKNOWN_ERROR = 8;
-  }
+  Temperature temperature = 2; // Temperature of the battery cells
 
   /**
     * Battery status from BQ40Z50 ref data sheet 0x16.
@@ -281,31 +267,46 @@ message BatteryBQ40Z50 {
     bool discharging_or_relax = 8;
     bool fully_charged = 9;
     bool fully_discharged = 10;
-    BatteryError error = 11;
+
+    /**
+      * Battery errror code from BQ40Z50 BMS data sheet.
+      */
+    enum BatteryError {
+      BATTERY_ERROR_UNSPECIFIED = 0;
+      BATTERY_ERROR_OK = 1;
+      BATTERY_ERROR_BUSY = 2;
+      BATTERY_ERROR_RESERVED_COMMAND = 3;
+      BATTERY_ERROR_UNSUPPORTED_COMMAND = 4;
+      BATTERY_ERROR_ACCESS_DENIED = 5;
+      BATTERY_ERROR_OVERFLOW_UNDERFLOW = 6;
+      BATTERY_ERROR_BAD_SIZE = 7;
+      BATTERY_ERROR_UNKNOWN_ERROR = 8;
+    }
+    BatteryError error = 11; // Battery error codes
   }
-  BatteryStatus status = 4;
+  BatteryStatus status = 4; // Battery status flags
 
-  uint32 current = 6;
-  uint32 average_current = 7;
-  uint32 relative_state_of_charge = 8;
-  uint32 absolute_state_of_charge = 9;
-  uint32 remaining_capacity = 10;
-  uint32 full_charge_capacity = 11;
-  int32 runtime_to_empty = 12;
-  int32 average_time_to_empty = 13;
-  int32 average_time_to_full = 14;
-  int32 time_to_full_at_current_rate = 15;
-  int32 time_to_empty_at_current_rate = 16;
-  uint32 charging_current = 17;
-  uint32 charging_voltage = 18;
+  float current = 6; // Current in A
+  float average_current = 7; // Average current in A
+  float relative_state_of_charge = 8; // Relative state of charge (0..1)
+  float absolute_state_of_charge = 9; // Absolute state of charge (0..1)
+  float remaining_capacity = 10; // Remaining capacity in Ah
+  float full_charge_capacity = 11; // Full charge capacity in Ah
+  uint32 runtime_to_empty = 12; // Runtime to empty in seconds
+  uint32 average_time_to_empty = 13; // Average time to empty in seconds
+  uint32 average_time_to_full = 14; // Average time to full in seconds
+  uint32 time_to_full_at_current_rate = 15; // Time to fully charged at current rate in seconds
+  uint32 time_to_empty_at_current_rate = 16; // Time to empty at current rate in seconds
+  float charging_current = 17; // Charging current in A
+  float charging_voltage = 18; // Charging voltage in V
 
-  uint32 cycle_count = 19;
-  uint32 design_capacity = 20;
-  google.protobuf.Timestamp manufacture_date = 21;
-  uint32 serial_number = 22;
-  string manufacturer_name = 23;
-  string device_name = 24;
-  string device_chemistry = 25;
+  uint32 cycle_count = 19; // Number of charging cycles
+  float design_capacity = 20; // Design capacity in Ah
+  google.protobuf.Timestamp manufacture_date = 21; // Manufacture date
+  uint32 serial_number = 22; // Serial number
+  string manufacturer_name = 23; // Manufacturer name
+  string device_name = 24; // Device name
+  string device_chemistry = 25; // Battery chemistry
 }
 
 /**
