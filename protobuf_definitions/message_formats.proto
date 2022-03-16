@@ -693,6 +693,8 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_PING360_SONAR = 15; // Blue Robotics Ping360 Scanning Imaging Sonar
   GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_720IM = 16; // Tritech Gemini 720im Multibeam Sonar
   GUEST_PORT_DEVICE_ID_BLUEYE_LIGHT_PAIR = 17; // Blueye Light Pair
+  GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_MICRON = 18; // Tritech Micron Gemini
+  GUEST_PORT_DEVICE_ID_OCEAN_TOOLS_DIGICP = 19; // Ocean Tools DigiCP
 }
 
 /**
