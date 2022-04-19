@@ -108,10 +108,10 @@ message StationKeepingCtrl {
 }
 
 /**
-  * Issue a command to set station keeping with weather weaning to a desired state.
+  * Issue a command to set station keeping with weather vaning to a desired state.
   */
-message WeatherWeaningCtrl {
-  WeatherWeaningState state = 1; // State of the weather weaning controller
+message WeatherVaningCtrl {
+  WeatherVaningState state = 1; // State of the weather vaning controller
 }
 
 /**

@@ -91,10 +91,10 @@ message StationKeepingState {
 }
 
 /**
-  * Weather weaning state.
+  * Weather vaning state.
   */
-message WeatherWeaningState {
-  bool enabled = 1; // If weather weaning is enabled
+message WeatherVaningState {
+  bool enabled = 1; // If weather vaning is enabled
 }
 
 /**
@@ -105,7 +105,7 @@ message ControlMode {
   bool auto_heading = 2; // If auto heading is enabled
   bool auto_altitude = 3; // If auto altitude is enabled
   bool station_keeping = 4; // If station keeping is enabled
-  bool weather_weaning = 5; // If weather weaning is enabled
+  bool weather_vaning = 5; // If weather vaning is enabled
 }
 
 /**
