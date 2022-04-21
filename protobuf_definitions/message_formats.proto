@@ -348,6 +348,7 @@ message PositionEstimate {
   float ocean_current = 7; // Estimated ocean current (m/s)
   float odometer = 8; // Travelled distance since reset (m)
   bool is_valid = 9; // If the estimate can be trusted
+  LatLongPosition global_position = 10; // Best estimate of the global position in decimal degrees
 }
 
 /**
