@@ -9,12 +9,18 @@ package blueye.protocol;
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
+/**
+  * Issue a command to move the drone in the surge, sway, heave, or yaw direction.
+  */
 message MotionInputCtrl {
-  MotionInput motion_input = 1;
+  MotionInput motion_input = 1; // Message with the desired movement in each direction.
 }
 
+/**
+  * Issue a command to tilt the drone camera.
+  */
 message TiltVelocityCtrl {
-  TiltVelocity velocity = 1;
+  TiltVelocity velocity = 1; // Message with the desired tilt velocity (direction and speed).
 }
 
 /**

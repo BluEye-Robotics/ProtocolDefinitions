@@ -9,12 +9,18 @@ package blueye.protocol;
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
+/**
+  * Receive the current attitude of the drone.
+  */
 message AttitudeTel {
-  Attitude attitude = 1;
+  Attitude attitude = 1; // The attitude of the drone.
 }
 
+/**
+  * Receive the current altitude of the drone.
+  */
 message AltitudeTel {
-  Altitude altitude = 1;
+  Altitude altitude = 1; // The altitude of the drone.
 }
 
 message ForwardDistanceTel {
@@ -109,12 +115,18 @@ message TiltAngleTel {
   TiltAngle angle = 1;
 }
 
+/*
+ * Receive metadata and information about the connected drone.
+ */
 message DroneInfoTel {
-  DroneInfo drone_info = 1;
+  DroneInfo drone_info = 1; // Various metadata such as software versions and serial number.
 }
 
+/**
+  * Receive currently set error flags.
+  */
 message ErrorFlagsTel {
-  ErrorFlags error_flags = 1;
+  ErrorFlags error_flags = 1; // Currently set error flags on the drone.
 }
 
 /**
@@ -124,6 +136,9 @@ message ControlModeTel {
   ControlMode state = 1;  // State of the control system.
 }
 
+/**
+  * Thickness gauge measurement telemetry message.
+  */
 message ThicknessGaugeTel {
   ThicknessGauge thickness_gauge = 1;  // Tickness measurement with a cygnus gauge
 }

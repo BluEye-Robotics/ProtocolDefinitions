@@ -9,40 +9,64 @@ package blueye.protocol;
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
+/**
+  * Request to set video overlay parameters.
+  */
 message SetOverlayParametersReq {
-  OverlayParameters overlay_parameters = 1;
+  OverlayParameters overlay_parameters = 1; // The video overlay parameters to apply.
 }
 
+/**
+  * Response after setting video overlay parameters.
+  */
 message SetOverlayParametersRep {
 }
 
+/**
+  * Request to get currently set video overlay parameters.
+  */
 message GetOverlayParametersReq {
 }
 
+/**
+  * Response with the currently set video overlay parameters.
+  */
 message GetOverlayParametersRep {
-  OverlayParameters overlay_parameters = 1;
+  OverlayParameters overlay_parameters = 1; // The currently set overlay parameters.
 }
 
+/**
+  * Request to set camera parameters.
+  */
 message SetCameraParametersReq {
-  CameraParameters camera_parameters = 1;
+  CameraParameters camera_parameters = 1; // The camera parameters to apply.
 }
 
+/**
+  * Response after setting the camera parameters.
+  */
 message SetCameraParametersRep {
 }
 
+/**
+  * Request to get the currently set camera parameters.
+  */
 message GetCameraParametersReq {
-  Camera camera = 1;
+  Camera camera = 1; // Which camera to read camera parameters from.
 }
 
+/**
+  * Response with the currently set camera parameters.
+  */
 message GetCameraParametersRep {
-  CameraParameters camera_parameters = 1;
+  CameraParameters camera_parameters = 1; // The currently set camera parameters.
 }
 
 /**
   * Request to set the system time on the drone.
   */
 message SyncTimeReq {
-  SystemTime time = 1;
+  SystemTime time = 1; // The time to set on the drone.
 }
 
 /**
@@ -75,5 +99,8 @@ message SetThicknessGaugeParametersReq {
   uint32 sound_velocity = 1; // Sound velocity in m/s
 }
 
+/**
+  * Response after setting thicknes gauge parameters.
+  */
 message SetThicknessGaugeParametersRep {
 }
