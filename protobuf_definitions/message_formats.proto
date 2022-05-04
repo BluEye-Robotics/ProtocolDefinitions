@@ -51,8 +51,8 @@ message Lights {
   * Latitude and longitude position in WGS 84 format.
   */
 message LatLongPosition {
-  float latitude = 1; // Latitude
-  float longitude = 2; // Longitude
+  double latitude = 1; // Latitude
+  double longitude = 2; // Longitude
 }
 
 /**
