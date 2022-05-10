@@ -16,16 +16,16 @@ jobs:
       - name: Setup .NET Core @ Latest
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.102'
+          dotnet-version: '6.0.x'
           source-url: https://nuget.pkg.github.com/BluEye-Robotics/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Build project and generate NuGet package
-        run: |          
-          dotnet pack Blueye.Protocol.Protobuf.csproj --version-suffix "ci.$GITHUB_RUN_NUMBER" -c Release -o out  
+        run: |
+          dotnet pack Blueye.Protocol.Protobuf.csproj --version-suffix "ci.$GITHUB_RUN_NUMBER" -c Release -o out
 
       - name: Push generated package to GitHub registry
         env:
-          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}      
-        run: dotnet nuget push ./out/*.nupkg --skip-duplicate --no-symbols true --api-key $NUGET_AUTH_TOKEN
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: dotnet nuget push ./out/*.nupkg --skip-duplicate --no-symbols --api-key $NUGET_AUTH_TOKEN
