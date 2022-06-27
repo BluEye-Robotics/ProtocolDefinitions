@@ -509,7 +509,7 @@ message DroneInfo {
   bytes mb_uid = 7; // Motherboard unique identifier
   bytes bb_uid = 8; // Backbone unique identifier
   GuestPortInfo gp = 9; // GuestPortInfo
-  DepthSensorType depth_sensor = 11; // Type of depth sensor that is connected to the drone
+  DepthSensorType depth_sensor = 10; // Type of depth sensor that is connected to the drone
 }
 
 /**
