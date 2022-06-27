@@ -485,10 +485,10 @@ enum Model {
   * Depth sensors used by the drone.
   */
 enum DepthSensorType {
-  DEPTH_SENSOR_UNSPECIFIED = 0; // Depth sensor type not specified
-  DEPTH_SENSOR_NOT_CONNECTED = 1; // Depth sensor is not connected
-  DEPTH_SENSOR_MS5837_30BA26 = 2; // The standard sensor using the MS5837 30BA26 sensor
-  DEPTH_SENSOR_KELLER_PA7LD = 3; // The extended depth sensor using the Keller PA7LD sensor
+  DEPTH_SENSOR_TYPE_UNSPECIFIED = 0; // Depth sensor type not specified
+  DEPTH_SENSOR_TYPE_NOT_CONNECTED = 1; // Depth sensor is not connected
+  DEPTH_SENSOR_TYPE_MS5837_30BA26 = 2; // The standard sensor using the MS5837 30BA26 sensor
+  DEPTH_SENSOR_TYPE_KELLER_PA7LD = 3; // The extended depth sensor using the Keller PA7LD sensor
 }
 
 /**
