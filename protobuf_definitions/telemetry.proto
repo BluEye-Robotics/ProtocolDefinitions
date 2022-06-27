@@ -67,8 +67,12 @@ message BatteryBQ40Z50Tel {
   BatteryBQ40Z50 battery = 1;
 }
 
+/*
+ * Receive the dive time and power on time of the drone.
+ */
 message DiveTimeTel {
-  DiveTime dive_time = 1;
+  DiveTime dive_time = 1; // The current dive time of the drone
+  SystemTime power_on_time = 2; // The amount of time since the drone was powered on
 }
 
 message WaterTemperatureTel {
