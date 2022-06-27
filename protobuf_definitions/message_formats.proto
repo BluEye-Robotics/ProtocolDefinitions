@@ -115,7 +115,7 @@ message ControlMode {
   * camera stabilization.
   */
 message TiltStabilizationState {
-  bool enabled = 1;
+  bool enabled = 1; // If tilt stabilization is enabled
 }
 
 /**
@@ -476,9 +476,11 @@ message TiltVelocity {
   */
 enum Model {
   MODEL_UNSPECIFIED = 0; // ModelName not specified
-  MODEL_PIONEER = 1; // Blueye Pioneer, the first model.
-  MODEL_PRO = 2; // Blueye Pro. Features camera tilt.
-  MODEL_X3 = 3; // Blueye X3. Features support for peripherals.
+  MODEL_PIONEER = 1; // Blueye Pioneer, the first model
+  MODEL_PRO = 2; // Blueye Pro, features camera tilt
+  MODEL_X3 = 3; // Blueye X3, features support for peripherals
+}
+
 /**
   * Depth sensors used by the drone.
   */
