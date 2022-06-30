@@ -78,7 +78,7 @@ message DiveTimeTel {
  * Receive time information from the drone.
  */
 message DroneTimeTel {
-  SystemTime real_time_clock = 1; // The real time clock of the drone.
+  SystemTime real_time_clock = 1; // The real-time clock of the drone.
   SystemTime monotonic_clock = 2; // The monotonic clock of the drone (time since power on).
 }
 
