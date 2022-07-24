@@ -71,7 +71,7 @@ message BatteryBQ40Z50Tel {
  * Receive the dive time of the drone.
  */
 message DiveTimeTel {
-  DiveTime dive_time = 1; // The current dive time of the drone
+  DiveTime dive_time = 1; // The current dive time of the drone.
 }
 
 /*
@@ -151,5 +151,12 @@ message ControlModeTel {
   * Thickness gauge measurement telemetry message.
   */
 message ThicknessGaugeTel {
-  ThicknessGauge thickness_gauge = 1;  // Tickness measurement with a cygnus gauge
+  ThicknessGauge thickness_gauge = 1;  // Tickness measurement with a cygnus gauge.
+}
+
+/**
+  * Cathodic Protection Potential probe telemetry message
+  */
+message CpProbeTel {
+  CpProbe cp_probe = 1; // Reading from cp probe.
 }

@@ -763,11 +763,19 @@ message GuestPortInfo {
 }
 
 /**
- * Thickness measurement data from a Cygnus Thickness Gauge
+ * Thickness measurement data from a Cygnus Thickness Gauge.
  */
 message ThicknessGauge {
   float thickness_measurement = 1; // Thickness measurement of a steel plate
-  uint32 echo_count = 2; // Indicating the quality of the reading when invalid (0-3).
+  uint32 echo_count = 2; // Indicating the quality of the reading when invalid (0-3)
   uint32 sound_velocity = 3; // Speed of sound in the steel member
   bool is_valid = 4; // Indicating if the measurement is valid
+}
+
+/**
+ * Reading from a Cathodic Protection Potential probe.
+ */
+message CpProbe {
+  float reading = 1; // Potential reading in V
+  bool is_valid = 2; // Indicating if the reading is valid
 }
