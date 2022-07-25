@@ -769,7 +769,7 @@ message ThicknessGauge {
   float thickness_measurement = 1; // Thickness measurement of a steel plate
   uint32 echo_count = 2; // Indicating the quality of the reading when invalid (0-3)
   uint32 sound_velocity = 3; // Speed of sound in the steel member
-  bool is_valid = 4; // Indicating if the measurement is valid
+  bool is_measurement_valid = 4; // Indicating if the measurement is valid
 }
 
 /**
