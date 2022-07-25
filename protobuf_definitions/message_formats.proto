@@ -776,6 +776,6 @@ message ThicknessGauge {
  * Reading from a Cathodic Protection Potential probe.
  */
 message CpProbe {
-  float reading = 1; // Potential reading in V
-  bool is_valid = 2; // Indicating if the reading is valid
+  float measurement = 1; // Potential measurement in V
+  bool is_measurement_valid = 2; // Indicating if the measurement is valid
 }
