@@ -323,7 +323,7 @@ message Attitude {
  */
 message Altitude {
   float value = 1; // Drone altitude over seabed in m
-  bool valid = 2; // If altitude is valid or not
+  bool is_valid = 2; // If altitude is valid or not
 }
 
 /**
@@ -332,7 +332,7 @@ message Altitude {
  */
 message ForwardDistance {
   float value = 1; // Distance in front of drone in m
-  bool valid = 2; // If distance reading is valid or not
+  bool is_valid = 2; // If distance reading is valid or not
 }
 
 /**
@@ -763,11 +763,19 @@ message GuestPortInfo {
 }
 
 /**
- * Thickness measurement data from a Cygnus Thickness Gauge
+ * Thickness measurement data from a Cygnus Thickness Gauge.
  */
 message ThicknessGauge {
   float thickness_measurement = 1; // Thickness measurement of a steel plate
-  uint32 echo_count = 2; // Indicating the quality of the reading when invalid (0-3).
+  uint32 echo_count = 2; // Indicating the quality of the reading when invalid (0-3)
   uint32 sound_velocity = 3; // Speed of sound in the steel member
-  bool valid_measurement = 4; // Indicating if the measurement is valid
+  bool is_measurement_valid = 4; // Indicating if the measurement is valid
+}
+
+/**
+ * Reading from a Cathodic Protection Potential probe.
+ */
+message CpProbe {
+  float measurement = 1; // Potential measurement in V
+  bool is_measurement_valid = 2; // Indicating if the measurement is valid
 }
