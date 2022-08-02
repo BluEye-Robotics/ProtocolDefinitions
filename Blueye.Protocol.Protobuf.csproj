@@ -11,10 +11,10 @@
     <PackageDescription>Library with dotnet representation of the ProtocolDefinition protobuf files.</PackageDescription>
     <RepositoryUrl>https://github.com/BluEye-Robotics/ProtocolDefinitions</RepositoryUrl>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.21.2" />
-    <PackageReference Include="Google.Protobuf.Tools" Version="3.21.1">
+    <PackageReference Include="Google.Protobuf" Version="3.21.4" />
+    <PackageReference Include="Google.Protobuf.Tools" Version="3.21.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
