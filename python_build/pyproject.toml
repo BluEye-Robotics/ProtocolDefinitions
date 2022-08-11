@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "blueye.protocol"
+version = "2.0.0"
+description = "Protobuf-based protocol definitions for the Blueye drones"
+authors = ["Sindre Hansen <sindre.hansen@blueye.no>"]
+license = "LGPL-3.0"
+
+packages = [
+  { include = "blueye" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
