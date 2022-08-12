@@ -1,0 +1,56 @@
+name: Python CI build
+
+on:
+  push:
+    branches:
+      - port-protocol-to-protobuf
+      - build-python-package
+  release:
+    types: [created]
+
+jobs:
+  build-python-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v1
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.1.4
+        with:
+          poetry-version: "1.1.14"
+
+      - name: Install dependencies
+        run: poetry install
+      - name: Build python definitions
+        run: |
+          protoc --python_out python_build/blueye/protocol \
+                 --proto_path protobuf_definitions/ \
+                 protobuf_definitions/*.proto
+
+      - name: Fix relative imports
+        working-directory: python_build/blueye/protocol
+        run: sed -i -E 's/^import.*_pb2/from . \0/' *.py
+
+      - name: Build package with poetry
+        working-directory: python_build
+        run: poetry build
+
+      - name: Upload dist-folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: blueye.protocol-dist
+          path: python_build/dist
+
+      - name: Publish to PyPi
+        if: ${{ github.event_name == 'release' }}
+        working-directory: python_build
+        run: poetry publish --username __token__ --password ${{ secrets.PYPI_TOKEN }}
