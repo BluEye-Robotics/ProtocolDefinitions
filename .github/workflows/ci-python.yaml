@@ -29,7 +29,9 @@ jobs:
           poetry-version: "1.1.14"
 
       - name: Install dependencies
+        working-directory: python_build
         run: poetry install
+
       - name: Build python definitions
         run: |
           protoc --python_out python_build/blueye/protocol \
