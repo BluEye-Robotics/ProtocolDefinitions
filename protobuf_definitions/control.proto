@@ -52,6 +52,7 @@ message PilotGPSPositionCtrl {
   */
 message WatchdogCtrl {
   ConnectionDuration connection_duration = 1; // Message with the number of seconds the client has been connected.
+  uint32 client_id = 2; // The ID of the client, received in the ConnectClientRep response.
 }
 
 /**
@@ -158,13 +159,6 @@ message PingerConfigurationCtrl {
   */
 message SystemTimeCtrl {
   SystemTime system_time = 1; // Message with the system time to set.
-}
-
-/**
-  * Issue a command with information about the remote client.
-  */
-message ClientInfoCtrl {
-  ClientInfo client_info = 1; // Message with information about the remote client.
 }
 
 /**
