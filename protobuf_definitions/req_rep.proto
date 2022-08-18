@@ -104,3 +104,22 @@ message SetThicknessGaugeParametersReq {
   */
 message SetThicknessGaugeParametersRep {
 }
+
+/**
+  * Connect a new client to the drone.
+  */
+message ConnectClientReq {
+  ClientInfo client_info = 1; // Information about the client connecting to the drone.
+}
+
+/**
+  * Response after connecting a client to the drone.
+  *
+  * Contains information about which client is in control, and a list of
+  * all connected clients.
+  */
+message ConnectClientRep {
+  uint32 client_id = 1; // The assigned ID of this client.
+  uint32 client_id_in_control = 2; // The ID of the client in control of the drone.
+  repeated ConenctedClient connected_clients = 3; // List of connected clients.
+}

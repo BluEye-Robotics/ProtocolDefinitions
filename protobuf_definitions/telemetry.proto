@@ -160,3 +160,12 @@ message ThicknessGaugeTel {
 message CpProbeTel {
   CpProbe cp_probe = 1; // Reading from cp probe.
 }
+
+
+/**
+  * List of connected clients telemetry message.
+  */
+message ConnectedClientsTel {
+  uint32 client_id_in_control = 1; // The client id of the client in control.
+  repeated ConenctedClient connected_clients = 2; // List of connected clients.
+}

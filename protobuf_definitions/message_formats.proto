@@ -142,6 +142,15 @@ message ClientInfo {
   string device_type = 3; // Device type, such as mobile, tablet, or computer
   string platform = 4; // Platform, such as iOS, Android, Linux, etc
   string platform_version = 5; // Platform software version string
+  string name = 6; // Name of the client  
+}
+
+/**
+  * Information about a connected client with an id assigned by the drone.
+  */
+message ConnectedClient {
+  uint32 client_id = 1; // The assigned client id
+  ClientInfo client_info = 2; // Client information.
 }
 
 /**
