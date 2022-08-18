@@ -3,7 +3,7 @@ name: Generate documentation
 on:
   push:
     branches:
-      - port-protocol-to-protobuf
+      - master
 
 jobs:
   generate-documentation:
@@ -30,4 +30,3 @@ jobs:
           container: protocoldefinitions
           name: docs
           path: docs
-

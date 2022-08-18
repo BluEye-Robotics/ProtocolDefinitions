@@ -1,12 +1,6 @@
 name: CI build
 
-on:
-  push:
-    branches:
-      - port-protocol-to-protobuf
-  pull_request:
-    branches:
-      - port-protocol-to-protobuf
+on: [push, pull_request]
 
 jobs:
   protolint:

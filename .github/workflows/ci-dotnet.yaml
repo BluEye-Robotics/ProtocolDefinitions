@@ -3,8 +3,7 @@ name: dotnet CI build
 on:
   push:
     branches:
-      - port-protocol-to-protobuf
-      - nuget-package
+      - master
 
 jobs:
   donet-ci-build:
@@ -16,7 +15,7 @@ jobs:
       - name: Setup .NET Core @ Latest
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: "6.0.x"
           source-url: https://nuget.pkg.github.com/BluEye-Robotics/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
