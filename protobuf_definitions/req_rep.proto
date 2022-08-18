@@ -121,5 +121,5 @@ message ConnectClientReq {
 message ConnectClientRep {
   uint32 client_id = 1; // The assigned ID of this client.
   uint32 client_id_in_control = 2; // The ID of the client in control of the drone.
-  repeated ConenctedClient connected_clients = 3; // List of connected clients.
+  repeated ConnectedClient connected_clients = 3; // List of connected clients.
 }
