@@ -1,0 +1,125 @@
+/**
+ * Request reply
+ *
+ * These messages define request / reply messages for the Blueye drone.
+ */
+syntax = "proto3";
+
+package blueye.protocol;
+import "message_formats.proto";
+option csharp_namespace = "Blueye.Protocol.Protobuf";
+
+/**
+  * Request to set video overlay parameters.
+  */
+message SetOverlayParametersReq {
+  OverlayParameters overlay_parameters = 1; // The video overlay parameters to apply.
+}
+
+/**
+  * Response after setting video overlay parameters.
+  */
+message SetOverlayParametersRep {
+}
+
+/**
+  * Request to get currently set video overlay parameters.
+  */
+message GetOverlayParametersReq {
+}
+
+/**
+  * Response with the currently set video overlay parameters.
+  */
+message GetOverlayParametersRep {
+  OverlayParameters overlay_parameters = 1; // The currently set overlay parameters.
+}
+
+/**
+  * Request to set camera parameters.
+  */
+message SetCameraParametersReq {
+  CameraParameters camera_parameters = 1; // The camera parameters to apply.
+}
+
+/**
+  * Response after setting the camera parameters.
+  */
+message SetCameraParametersRep {
+}
+
+/**
+  * Request to get the currently set camera parameters.
+  */
+message GetCameraParametersReq {
+  Camera camera = 1; // Which camera to read camera parameters from.
+}
+
+/**
+  * Response with the currently set camera parameters.
+  */
+message GetCameraParametersRep {
+  CameraParameters camera_parameters = 1; // The currently set camera parameters.
+}
+
+/**
+  * Request to set the system time on the drone.
+  */
+message SyncTimeReq {
+  SystemTime time = 1; // The time to set on the drone.
+}
+
+/**
+  * Response after setting the system time on the drone.
+  */
+message SyncTimeRep {
+  bool success = 1; // If the time was set successfully.
+}
+
+/**
+  * The simplest message to use to test request/reply communication with the drone.
+  *
+  * The drone replies with a PingRep message immediately after receiving the PingReq.
+  */
+message PingReq {
+}
+
+/**
+  * Response message from a PingReq request.
+  */
+message PingRep {
+}
+
+/**
+ * Request to set parameters for ultrasonic thickness gauge.
+ *
+ * The sound velocity is used to calculate the thickness of the material being measured.
+ */
+message SetThicknessGaugeParametersReq {
+  uint32 sound_velocity = 1; // Sound velocity in m/s
+}
+
+/**
+  * Response after setting thicknes gauge parameters.
+  */
+message SetThicknessGaugeParametersRep {
+}
+
+/**
+  * Connect a new client to the drone.
+  */
+message ConnectClientReq {
+  ClientInfo client_info = 1; // Information about the client connecting to the drone.
+}
+
+/**
+  * Response after connecting a client to the drone.
+  *
+  * Contains information about which client is in control, and a list of
+  * all connected clients.
+  */
+message ConnectClientRep {
+  uint32 client_id = 1; // The assigned ID of this client.
+  uint32 client_id_in_control = 2; // The ID of the client in control of the drone.
+  repeated ConnectedClient connected_clients = 3; // List of connected clients.
+}

@@ -1,0 +1,171 @@
+/*
+ * Telemetry
+ *
+ * These messages define telemetry messages from the Blueye drone.
+ */
+syntax = "proto3";
+
+package blueye.protocol;
+import "message_formats.proto";
+option csharp_namespace = "Blueye.Protocol.Protobuf";
+
+/**
+  * Receive the current attitude of the drone.
+  */
+message AttitudeTel {
+  Attitude attitude = 1; // The attitude of the drone.
+}
+
+/**
+  * Receive the current altitude of the drone.
+  */
+message AltitudeTel {
+  Altitude altitude = 1; // The altitude of the drone.
+}
+
+message ForwardDistanceTel {
+  ForwardDistance forward_distance = 1;
+}
+
+message PositionEstimateTel {
+  PositionEstimate position_estimate = 1;
+}
+
+message DepthTel {
+  Depth depth = 1;
+}
+
+message ReferenceTel {
+  Reference reference = 1;
+}
+
+message ControllerHealthTel {
+  ControllerHealth controller_health = 1;
+}
+
+message LightsTel {
+  Lights lights = 1;
+}
+
+message GuestPortLightsTel {
+  Lights lights = 1;
+}
+
+message PilotGPSPositionTel {
+  LatLongPosition position = 1;
+}
+
+message RecordStateTel {
+  RecordState record_state = 1;
+}
+
+message BatteryTel {
+  Battery battery = 1;
+}
+
+message BatteryBQ40Z50Tel {
+  BatteryBQ40Z50 battery = 1;
+}
+
+/*
+ * Receive the dive time of the drone.
+ */
+message DiveTimeTel {
+  DiveTime dive_time = 1; // The current dive time of the drone.
+}
+
+/*
+ * Receive time information from the drone.
+ */
+message DroneTimeTel {
+  SystemTime real_time_clock = 1; // The real-time clock of the drone.
+  SystemTime monotonic_clock = 2; // The monotonic clock of the drone (time since power on).
+}
+
+message WaterTemperatureTel {
+  WaterTemperature temperature = 1;
+}
+
+message CPUTemperatureTel {
+  CPUTemperature temperature = 1;
+}
+
+message CanisterTemperatureTel {
+  CanisterTemperature temperature = 1;
+}
+
+message CanisterHumidityTel {
+  CanisterHumidity humidity = 1;
+}
+
+message VideoStorageSpaceTel {
+  StorageSpace storage_space = 1;
+}
+
+message DataStorageSpaceTel {
+  StorageSpace storage_space = 1;
+}
+
+message CalibrationStateTel {
+  CalibrationState calibration_state = 1;
+}
+
+message TiltStabilizationTel {
+  TiltStabilizationState state = 1;
+}
+
+message IperfTel {
+  IperfStatus status = 1;
+}
+
+message NStreamersTel {
+  NStreamers n_streamers = 1;
+}
+
+message TiltAngleTel {
+  TiltAngle angle = 1;
+}
+
+/*
+ * Receive metadata and information about the connected drone.
+ */
+message DroneInfoTel {
+  DroneInfo drone_info = 1; // Various metadata such as software versions and serial number.
+}
+
+/**
+  * Receive currently set error flags.
+  */
+message ErrorFlagsTel {
+  ErrorFlags error_flags = 1; // Currently set error flags on the drone.
+}
+
+/**
+ * Receive the current state of the control system.
+ */
+message ControlModeTel {
+  ControlMode state = 1;  // State of the control system.
+}
+
+/**
+  * Thickness gauge measurement telemetry message.
+  */
+message ThicknessGaugeTel {
+  ThicknessGauge thickness_gauge = 1;  // Tickness measurement with a cygnus gauge.
+}
+
+/**
+  * Cathodic Protection Potential probe telemetry message
+  */
+message CpProbeTel {
+  CpProbe cp_probe = 1; // Reading from cp probe.
+}
+
+
+/**
+  * List of connected clients telemetry message.
+  */
+message ConnectedClientsTel {
+  uint32 client_id_in_control = 1; // The client id of the client in control.
+  repeated ConnectedClient connected_clients = 2; // List of connected clients.
+}

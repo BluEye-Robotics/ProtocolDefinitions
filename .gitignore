@@ -1,0 +1,37 @@
+# Generated files
+docs
+
+# macOS
+.DS_Store
+
+# Visual Studio Code
+.vscode
+
+# Visual Studio
+.vs
+
+# vim
+*.swp
+*.swo
+
+# protobuf
+*.pb.h
+*.pb.cc
+
+# c/c++ outputs
+lib*.so
+*.o
+
+# dotnet outputs
+bin
+obj
+out
+
+# Other
+build
+build_imx
+
+# python outputs
+dist
+__pycache__
+*_pb2.py

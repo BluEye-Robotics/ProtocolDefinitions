@@ -1,0 +1,169 @@
+/*
+ * Control
+ *
+ * These messages define control messages accepted by the Blueye drone.
+ */
+syntax = "proto3";
+
+package blueye.protocol;
+import "message_formats.proto";
+option csharp_namespace = "Blueye.Protocol.Protobuf";
+
+/**
+  * Issue a command to move the drone in the surge, sway, heave, or yaw direction.
+  */
+message MotionInputCtrl {
+  MotionInput motion_input = 1; // Message with the desired movement in each direction.
+}
+
+/**
+  * Issue a command to tilt the drone camera.
+  */
+message TiltVelocityCtrl {
+  TiltVelocity velocity = 1; // Message with the desired tilt velocity (direction and speed).
+}
+
+/**
+  * Issue a command to set the main light intensity.
+  */
+message LightsCtrl {
+  Lights lights = 1; // Message with the desired light intensity.
+}
+
+/**
+  * Issue a command to set the guest port light intensity.
+  */
+message GuestportLightsCtrl {
+  Lights lights = 1; // Message with the desired light intensity.
+}
+
+/**
+  * Issue a command with the GPS position of the pilot.
+  */
+message PilotGPSPositionCtrl {
+  LatLongPosition position = 1; // The GPS position of the pilot.
+}
+
+/**
+  * Issue a watchdog message to indicate that the remote client is connected and working as expected.
+  *
+  * If a watchdog message is not received every second, the drone will turn off lights and other auto
+  * functions to indicate that connection with the client has been lost.
+  */
+message WatchdogCtrl {
+  ConnectionDuration connection_duration = 1; // Message with the number of seconds the client has been connected.
+  uint32 client_id = 2; // The ID of the client, received in the ConnectClientRep response.
+}
+
+/**
+  * Issue a command to start video recording.
+  */
+message RecordCtrl {
+  RecordOn record_on = 1; // Message specifying which cameras to record.
+}
+
+/**
+  * Issue a command to take a picture.
+  */
+message TakePictureCtrl {
+}
+
+/**
+  * Issue a command to start compass calibration.
+  */
+message StartCalibrationCtrl {
+}
+
+/**
+  * Issue a command to cancel compass calibration.
+  */
+message CancelCalibrationCtrl {
+}
+
+/**
+  * Issue a command to finish compass calibration.
+  */
+message FinishCalibrationCtrl {
+}
+
+/**
+  * Issue a command to set auto heading to a desired state.
+  */
+message AutoHeadingCtrl {
+  AutoHeadingState state = 1; // State of the heading controller
+}
+
+/**
+  * Issue a command to set auto depth to a desired state.
+  */
+message AutoDepthCtrl {
+  AutoDepthState state = 1; // State of the depth controller
+}
+
+/**
+  * Issue a command to set auto altitude to a desired state.
+  */
+message AutoAltitudeCtrl {
+  AutoAltitudeState state = 1; // State of the altitude controller
+}
+
+/**
+  * Issue a command to set station keeping to a desired state.
+  */
+message StationKeepingCtrl {
+  StationKeepingState state = 1; // State of the station keeping controller
+}
+
+/**
+  * Issue a command to set station keeping with weather vaning to a desired state.
+  */
+message WeatherVaningCtrl {
+  WeatherVaningState state = 1; // State of the weather vaning controller
+}
+
+/**
+  * Issue a command to reset the position estimate.
+  */
+message ResetPositionCtrl {
+}
+
+/**
+  * Issue a command to reset the odometer.
+  */
+message ResetOdometerCtrl {
+}
+
+/**
+  * Issue a command to enable or disable tilt stabilization.
+  */
+message TiltStabilizationCtrl {
+  TiltStabilizationState state = 1; // Message with the tilt stabilization state to set.
+}
+
+/**
+  * Issue a command to set the water density.
+  */
+message WaterDensityCtrl {
+  WaterDensity density = 1; // Message with the water density to set.
+}
+
+/**
+  * Issue a command to set the pinger configuration.
+  */
+message PingerConfigurationCtrl {
+  PingerConfiguration configuration = 1; // Message with the pinger configuration to set.
+}
+
+/**
+  * Issue a command to set the system time on the drone.
+  */
+message SystemTimeCtrl {
+  SystemTime system_time = 1; // Message with the system time to set.
+}
+
+/**
+  * Issue a command to control the gripper.
+  */
+message GripperCtrl {
+  GripperVelocities gripper_velocities = 1; // The desired gripping and rotation velocity.
+}
