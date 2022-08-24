@@ -676,6 +676,7 @@ message OverlayParameters {
   bool distance_enabled = 20; // If distance should be included
   bool altitude_enabled = 21; // If altitude should be included
   bool cp_probe_enabled = 22; // If cp-probe should be included
+  bool drone_location_enabled = 23; // If the drone location coordinates should be included
   LogoType logo_type = 6; // Which logo should be used
   DepthUnit depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
   TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celcius or Fahrenheit
