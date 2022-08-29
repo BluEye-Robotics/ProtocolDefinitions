@@ -32,6 +32,4 @@ build
 build_imx
 
 # python outputs
-dist
-__pycache__
-*_pb2.py
+python_build

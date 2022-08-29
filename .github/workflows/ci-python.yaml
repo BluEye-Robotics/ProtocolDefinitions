@@ -29,15 +29,14 @@ jobs:
         working-directory: python_build
         run: poetry install
 
-      - name: Build python definitions
+      - name: Generate proto-plus project
         run: |
-          protoc --python_out python_build/blueye/protocol \
-                 --proto_path protobuf_definitions/ \
-                 protobuf_definitions/*.proto
-
-      - name: Fix relative imports
-        working-directory: python_build/blueye/protocol
-        run: sed -i -E 's/^import.*_pb2/from . \0/' *.py
+          docker run \
+          --mount type=bind,source=$(pwd)/protobuf_definitions/,destination=/in/ \
+          --mount type=bind,source=$(pwd)/python_build/,destination=/out/ \
+          --rm \
+          --user $UID \
+          gcr.io/gapic-images/gapic-generator-python:v0.40
 
       - name: Build package with poetry
         working-directory: python_build
