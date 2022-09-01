@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "blueye.protocol"
-version = "2.0.0"
+version = "3.0.0"
 description = "Protobuf-based protocol definitions for the Blueye drones"
 authors = ["Sindre Hansen <sindre.hansen@blueye.no>"]
 license = "LGPL-3.0"
@@ -11,6 +11,10 @@ include = ["blueye/protocol/*",
 packages = [
   { include = "blueye" },
 ]
+readme = "README.md"
+repository="https://github.com/blueye-robotics/ProtocolDefinitions"
+homepage ="https://www.blueyerobotics.com"
+keywords = ["Blueye", "Robotics", "Protocol"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
