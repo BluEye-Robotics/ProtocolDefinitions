@@ -142,7 +142,7 @@ message ClientInfo {
   string device_type = 3; // Device type, such as mobile, tablet, or computer
   string platform = 4; // Platform, such as iOS, Android, Linux, etc
   string platform_version = 5; // Platform software version string
-  string name = 6; // Name of the client  
+  string name = 6; // Name of the client
 }
 
 /**
@@ -358,6 +358,7 @@ message PositionEstimate {
   float odometer = 8; // Travelled distance since reset (m)
   bool is_valid = 9; // If the estimate can be trusted
   LatLongPosition global_position = 10; // Best estimate of the global position in decimal degrees
+  repeated NavigationSensorStatus navigation_sensors = 11; // List of available sensors with status
 }
 
 /**
@@ -721,6 +722,23 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_OCEAN_TOOLS_DIGICP = 19; // Ocean Tools DigiCP
   GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_720IK = 20; // Tritech Gemini 720ik Multibeam Sonar
   GUEST_PORT_DEVICE_ID_NORTEK_NUCLEUS_1000 = 21; // Nortek Nucleus 1000 DVL
+}
+
+/**
+ * List of navigation sensors that can be used by the position observer
+ */
+enum NavigationSensorID {
+  UNSPECIFIED = 0; // Unspecified
+  WATERLINKED_DVL_A50 = 1; // Water Linked DVL A50
+  WATERLINKED_UGPS_G2 = 2; // Water Linked UGPS G2
+}
+
+/**
+ * Navigation sensor used in the position observer with validity state
+ */
+message NavigationSensorStatus {
+  NavigationSensorID sensor_id = 1; // Sensor id
+  bool is_valid = 2; // Sensor validity
 }
 
 /**
