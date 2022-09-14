@@ -2,15 +2,15 @@
 
 [![CI build](https://github.com/BluEye-Robotics/ProtocolDefinitions/actions/workflows/ci-build.yaml/badge.svg)](https://github.com/BluEye-Robotics/ProtocolDefinitions/actions/workflows/ci-build.yaml)
 
-This repository contains protocol definitions for interacting with the Blueye Pioneer and Blueye Pro underwater drone.
+This repository contains protocol definitions for interacting with the Blueye underwater drones.
 
 ## Protocol v2
-See [blueye.protocol](https://github.com/BluEye-Robotics/blueye.protocol) and
-[blueye.sdk](https://github.com/BluEye-Robotics/blueye.sdk) for Python libraries that
-are built on these definitions and simplifies their use.
+Drones running a Blunux version \< 3.0 will need to use the legacy protocol. [blueye.legacyprotocol](https://github.com/BluEye-Robotics/blueye.legacyprotocol) contains a Python package that is built on this protocol and simplifies its use.
 
 ## Protocol v3
 Version 3 of the Blueye communication protocol is based on [Protocol Buffers](https://developers.google.com/protocol-buffers).
+
+The protobuf definitions are compiled to language specific libraries, and are available as a [NuGet package](https://github.com/BluEye-Robotics/ProtocolDefinitions/packages/1239508) and a [Python package](https://pypi.org/project/blueye.protocol/).
 
 Automatically generated documentation for the protocol format can be found at https://blueyebuildserver.blob.core.windows.net/protocoldefinitions/docs/protocol.html.
 
