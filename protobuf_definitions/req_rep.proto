@@ -123,3 +123,24 @@ message ConnectClientRep {
   uint32 client_id_in_control = 2; // The ID of the client in control of the drone.
   repeated ConnectedClient connected_clients = 3; // List of connected clients.
 }
+
+/**
+  * Disconnect a client from the drone.
+  *
+  * This request will remove the client from the list of connected clients.
+  * It allows clients to disconnect instantly, without waiting for a watchdog to
+  * clear the client in control, or promote a new client to be in control.
+  */
+message DisconnectClientReq {
+  uint32 client_id = 1; // The assigned ID of the client to disconnect.
+}
+
+/**
+  * Response after disconnecting a client from the drone.
+  *
+  * Contains information about which clients are connected and in control.
+  */
+message DisconnectClientRep {
+  uint32 client_id_in_control = 1; // The ID of the client in control of the drone.
+  repeated ConnectedClient connected_clients = 2; // List of connected clients.
+}
