@@ -128,7 +128,7 @@ message ConnectClientRep {
   * Disconnect a client from the drone.
   *
   * This request will remove the client from the list of connected clients.
-  * It allows clients from disconnecting instantly, without waiting for a watchdog to
+  * It allows clients to disconnect instantly, without waiting for a watchdog to
   * clear the client in control, or promote a new client to be in control.
   */
 message DisconnectClientReq {
