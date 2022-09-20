@@ -132,7 +132,7 @@ message ConnectClientRep {
   * clear the client in control, or promote a new client to be in control.
   */
 message DisconnectClientReq {
-  uint31 client_id = 1; // The assigned ID of the client to disconnect.
+  uint32 client_id = 1; // The assigned ID of the client to disconnect.
 }
 
 /**
