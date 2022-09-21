@@ -59,12 +59,19 @@ message RecordStateTel {
   RecordState record_state = 1;
 }
 
+/*
+ * Receive essential information about the battery status.
+ */
 message BatteryTel {
-  Battery battery = 1;
+  Battery battery = 1; // Essential battery information.
 }
 
+/*
+ * Receive detailed information about a battery using the
+* BQ40Z50 battery management system.
+ */
 message BatteryBQ40Z50Tel {
-  BatteryBQ40Z50 battery = 1;
+  BatteryBQ40Z50 battery = 1; // Detailed battery information.
 }
 
 /*
