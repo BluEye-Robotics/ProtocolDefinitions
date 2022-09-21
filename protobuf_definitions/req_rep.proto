@@ -144,3 +144,19 @@ message DisconnectClientRep {
   uint32 client_id_in_control = 1; // The ID of the client in control of the drone.
   repeated ConnectedClient connected_clients = 2; // List of connected clients.
 }
+
+/*
+ * Request essential battery information.
+ *
+ * Can be used to instantly get battery information,
+ * instead of having to wait for the BatteryTel message to be received.
+ */
+message GetBatteryReq {
+}
+
+/*
+ * Response with essential battery information.
+ */
+message GetBatteryRep {
+  Battery battery = 1; // Essential battery information.
+}
