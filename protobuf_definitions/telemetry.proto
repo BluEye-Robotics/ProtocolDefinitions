@@ -39,6 +39,10 @@ message ReferenceTel {
   Reference reference = 1;
 }
 
+message ControlForceTel {
+  ControlForce control_force = 1;
+}
+
 message ControllerHealthTel {
   ControllerHealth controller_health = 1;
 }
