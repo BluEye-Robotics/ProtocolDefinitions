@@ -383,6 +383,16 @@ message Reference {
 }
 
 /**
+ * Control Force is used for showing the requested control force in each direction in Newtons.
+ */
+message ControlForce {
+  float surge = 1; // Force in surge
+  float sway = 2; // Force in sway
+  float heave = 3; // Force in heave
+  float yaw = 4; // Moment in yaw
+}
+
+/**
  * Controller health is used for showing the state of the controller with an relative error and load from 0 to 1.
  */
 message ControllerHealth {
