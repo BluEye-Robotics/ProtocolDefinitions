@@ -1,54 +1,19 @@
-name: Python CI build
+name: Trigger update in blueye.protocol
 
 on:
   push:
-  release:
-    types: [created]
+    branches:
+      - "master"
 
 jobs:
-  build-python-package:
+  trigger-blueye-protocol:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v1
-
-      - name: Install Protoc
-        uses: arduino/setup-protoc@v1
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.10"
-
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.1.4
-        with:
-          poetry-version: "1.1.14"
-
-      - name: Install dependencies
-        working-directory: python_build
-        run: poetry install
-
-      - name: Generate proto-plus project
+      - name: Create a repository dispatch event
         run: |
-          docker run \
-          --mount type=bind,source=$(pwd)/protobuf_definitions/,destination=/in/ \
-          --mount type=bind,source=$(pwd)/python_build/,destination=/out/ \
-          --rm \
-          --user $UID \
-          gcr.io/gapic-images/gapic-generator-python:v0.40
-
-      - name: Build package with poetry
-        working-directory: python_build
-        run: poetry build
-
-      - name: Upload dist-folder
-        uses: actions/upload-artifact@v2
-        with:
-          name: blueye.protocol-dist
-          path: python_build/dist
-
-      - name: Publish to PyPi
-        if: ${{ github.event_name == 'release' }}
-        working-directory: python_build
-        run: poetry publish --username __token__ --password ${{ secrets.PYPI_TOKEN }}
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.CI_PAT }}" \
+          https://api.github.com/repos/blueye-robotics/blueye.protocol/dispatches \
+          -d '{"event_type":"protocol-update","client_payload":{"sha":"${{ github.sha }}"}}'
