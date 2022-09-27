@@ -30,6 +30,3 @@ out
 # Other
 build
 build_imx
-
-# python outputs
-python_build
