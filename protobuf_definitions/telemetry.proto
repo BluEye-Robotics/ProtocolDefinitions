@@ -101,12 +101,32 @@ message CPUTemperatureTel {
   CPUTemperature temperature = 1;
 }
 
-message CanisterTemperatureTel {
-  CanisterTemperature temperature = 1;
+/*
+ * Receive temperature information from the top canister.
+ */
+message CanisterTopTemperatureTel {
+  CanisterTemperature temperature = 1; // Temperature information.
 }
 
-message CanisterHumidityTel {
-  CanisterHumidity humidity = 1;
+/*
+ * Receive temperature information from the bottom canister.
+ */
+message CanisterBottomTemperatureTel {
+  CanisterTemperature temperature = 1; // Temperature information.
+}
+
+/*
+ * Receive humidity information from the top canister.
+ */
+message CanisterTopHumidityTel {
+  CanisterHumidity humidity = 1; // Humidity information
+}
+
+/*
+ * Receive humidity information from the bottom canister.
+ */
+message CanisterBottomHumidityTel {
+  CanisterHumidity humidity = 1; // Humidity information
 }
 
 message VideoStorageSpaceTel {
