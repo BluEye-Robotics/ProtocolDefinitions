@@ -205,19 +205,21 @@ message CPUTemperature {
 /**
   * Canister temperature.
   *
-  * Temperature measured in the top and bottom canister of the drone.
+  * Temperature measured in the top or bottom canister of the drone.
   */
 message CanisterTemperature {
-  float top = 1; // Temperature in °C
-  float bottom = 2; // Temperature in °C
+  reserved 1, 2;
+  float temperature = 3; // Temperature in °C
 }
 
 /**
   * Canister humidity.
+  *
+  * Humidity measured in the top or bottom canister of the drone.
   */
 message CanisterHumidity {
-  float top = 1; // Air humidity in %
-  float bottom = 2; // Air humidity in %
+  reserved 1, 2;
+  float humidity = 3; // Air humidity in %
 }
 
 /**
