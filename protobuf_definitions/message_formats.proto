@@ -367,7 +367,7 @@ message PositionEstimate {
  * Water depth of the drone.
  */
 message Depth {
-  float value = 1; // Drone depth below surface in m
+  float value = 1; // Drone depth below surface in (m)
 }
 
 /**
@@ -375,32 +375,32 @@ message Depth {
  * Use (ControlHealth.heading_error + pose.yaw) instead.
  */
 message Reference {
-  float surge = 1; // Reference from joystick surge input
-  float sway = 2; // Reference from joystick sway input
-  float heave = 3; // Reference from joystick heave input
-  float yaw = 4; // Reference from joystick yaw input
-  float depth = 5; // Reference drone depth below surface in m
-  float heading = 6; // Reference used in auto heading mode
-  float altitude = 7; // Reference used in auto altitude mode
+  float surge = 1; // Reference from joystick surge input (0..1)
+  float sway = 2; // Reference from joystick sway input (0..1)
+  float heave = 3; // Reference from joystick heave input (0..1)
+  float yaw = 4; // Reference from joystick yaw input (0..1)
+  float depth = 5; // Reference drone depth below surface in (m)
+  float heading = 6; // Reference used in auto heading mode, gyro based (deg)
+  float altitude = 7; // Reference used in auto altitude mode in (m)
 }
 
 /**
  * Control Force is used for showing the requested control force in each direction in Newtons.
  */
 message ControlForce {
-  float surge = 1; // Force in surge
-  float sway = 2; // Force in sway
-  float heave = 3; // Force in heave
-  float yaw = 4; // Moment in yaw
+  float surge = 1; // Force in surge (N)
+  float sway = 2; // Force in sway (N)
+  float heave = 3; // Force in heave (N)
+  float yaw = 4; // Moment in yaw (Nm)
 }
 
 /**
  * Controller health is used for showing the state of the controller with an relative error and load from 0 to 1.
  */
 message ControllerHealth {
-  float depth_error = 1; // Depth error in meters
+  float depth_error = 1; // Depth error in meters (m)
   float depth_health = 2; // Depth controller load (0..1)
-  float heading_error = 3; // Heading error in degrees
+  float heading_error = 3; // Heading error in degrees (deg)
   float heading_health = 4; // Heading controller load (0..1)
 }
 
