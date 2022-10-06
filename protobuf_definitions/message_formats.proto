@@ -48,18 +48,18 @@ message Lights {
 }
 
 /**
-  * Latitude and longitude position in WGS 84 format.
+  * Latitude and longitude position in WGS 84 decimal degrees format.
   */
 message LatLongPosition {
-  double latitude = 1; // Latitude
-  double longitude = 2; // Longitude
+  double latitude = 1; // Latitude (°)
+  double longitude = 2; // Longitude (°)
 }
 
 /**
   * Connection duration of a remote client.
   */
 message ConnectionDuration {
-  int32 value = 1; // time in seconds since connected to drone
+  int32 value = 1; // time since connected to drone (s)
 }
 
 /**
@@ -158,9 +158,9 @@ message ConnectedClient {
   */
 message RecordState {
   bool main_is_recording = 1; // If the main camera is recording
-  int32 main_seconds = 2; // Main record time in seconds
+  int32 main_seconds = 2; // Main record time (s)
   bool guestport_is_recording = 3; // If the guestport camera is recording
-  int32 guestport_seconds = 4; // Guestport record time in seconds
+  int32 guestport_seconds = 4; // Guestport record time (s)
 }
 
 /**
@@ -170,7 +170,7 @@ message RecordState {
   * to achieve more accruate depth measurements.
   */
 message WaterDensity {
-  float value = 1; // Salinity in kg/l
+  float value = 1; // Salinity (kg/l)
 }
 
 /**
@@ -192,14 +192,14 @@ message PingerConfiguration {
  * Water temperature measured by the drone's combined depth and temperature sensor.
  */
 message WaterTemperature {
-  float value = 1; // Water temperature in °C
+  float value = 1; // Water temperature (°C)
 }
 
 /**
  * CPU temperature.
  */
 message CPUTemperature {
-  float value = 1; // CPU temperature in °C
+  float value = 1; // CPU temperature (°C)
 }
 
 /**
@@ -209,7 +209,7 @@ message CPUTemperature {
   */
 message CanisterTemperature {
   reserved 1, 2;
-  float temperature = 3; // Temperature in °C
+  float temperature = 3; // Temperature (°C)
 }
 
 /**
@@ -219,16 +219,16 @@ message CanisterTemperature {
   */
 message CanisterHumidity {
   reserved 1, 2;
-  float humidity = 3; // Air humidity in %
+  float humidity = 3; // Air humidity (%)
 }
 
 /**
   * Essential battery information.
   */
 message Battery {
-  float voltage = 1; // Battery voltage in V
+  float voltage = 1; // Battery voltage (V)
   float level = 2; // Battery level (0..1)
-  float temperature = 3; // Battery temperature in °C
+  float temperature = 3; // Battery temperature (°C)
 }
 
 /**
@@ -244,11 +244,11 @@ message BatteryBQ40Z50 {
     * Battery voltage levels.
     */
   message Voltage {
-    float total = 1; // Battery pack voltage level in V
-    float cell_1 = 2; // Cell 1 voltage level in V
-    float cell_2 = 3; // Vell 2 voltage level in V
-    float cell_3 = 4; // Cell 3 voltage level in V
-    float cell_4 = 5; // Cell 4 voltage level in V
+    float total = 1; // Battery pack voltage level (V)
+    float cell_1 = 2; // Cell 1 voltage level (V)
+    float cell_2 = 3; // Vell 2 voltage level (V)
+    float cell_3 = 4; // Cell 3 voltage level (V)
+    float cell_4 = 5; // Cell 4 voltage level (V)
   }
   Voltage voltage = 1; // Voltage of the battery cells
 
@@ -256,11 +256,11 @@ message BatteryBQ40Z50 {
    * Battery temperature.
    */
   message Temperature {
-    float average = 1; // Average temperature accross cells in °C
-    float cell_1 = 2; // Cell 1 temperature in °C
-    float cell_2 = 3; // Cell 2 temperature in °C
-    float cell_3 = 4; // Cell 3 temperature in °C
-    float cell_4 = 5; // Cell 4 temperature in °C
+    float average = 1; // Average temperature accross cells (°C)
+    float cell_1 = 2; // Cell 1 temperature (°C)
+    float cell_2 = 3; // Cell 2 temperature (°C)
+    float cell_3 = 4; // Cell 3 temperature (°C)
+    float cell_4 = 5; // Cell 4 temperature (°C)
   }
   Temperature temperature = 2; // Temperature of the battery cells
 
@@ -297,22 +297,22 @@ message BatteryBQ40Z50 {
   }
   BatteryStatus status = 4; // Battery status flags
 
-  float current = 6; // Current in A
-  float average_current = 7; // Average current in A
+  float current = 6; // Current (A)
+  float average_current = 7; // Average current (A)
   float relative_state_of_charge = 8; // Relative state of charge (0..1)
   float absolute_state_of_charge = 9; // Absolute state of charge (0..1)
-  float remaining_capacity = 10; // Remaining capacity in Ah
-  float full_charge_capacity = 11; // Full charge capacity in Ah
-  uint32 runtime_to_empty = 12; // Runtime to empty in seconds
-  uint32 average_time_to_empty = 13; // Average time to empty in seconds
-  uint32 average_time_to_full = 14; // Average time to full in seconds
-  uint32 time_to_full_at_current_rate = 15; // Time to fully charged at current rate in seconds
-  uint32 time_to_empty_at_current_rate = 16; // Time to empty at current rate in seconds
-  float charging_current = 17; // Charging current in A
-  float charging_voltage = 18; // Charging voltage in V
+  float remaining_capacity = 10; // Remaining capacity (Ah)
+  float full_charge_capacity = 11; // Full charge capacity (Ah)
+  uint32 runtime_to_empty = 12; // Runtime to empty (s)
+  uint32 average_time_to_empty = 13; // Average time to empty (s)
+  uint32 average_time_to_full = 14; // Average time to full (s)
+  uint32 time_to_full_at_current_rate = 15; // Time to fully charged at current rate (s)
+  uint32 time_to_empty_at_current_rate = 16; // Time to empty at current rate (s)
+  float charging_current = 17; // Charging current (A)
+  float charging_voltage = 18; // Charging voltage (V)
 
   uint32 cycle_count = 19; // Number of charging cycles
-  float design_capacity = 20; // Design capacity in Ah
+  float design_capacity = 20; // Design capacity (Ah)
   google.protobuf.Timestamp manufacture_date = 21; // Manufacture date
   uint32 serial_number = 22; // Serial number
   string manufacturer_name = 23; // Manufacturer name
@@ -324,16 +324,16 @@ message BatteryBQ40Z50 {
  * The attitude of the drone.
  */
 message Attitude {
-  float roll = 1; // Roll angle (-180..180)
-  float pitch = 2; // Pitch angle (-180..180)
-  float yaw = 3; // Yaw angle (-180..180)
+  float roll = 1; // Roll angle (-180°..180°)
+  float pitch = 2; // Pitch angle (-180°..180°)
+  float yaw = 3; // Yaw angle (-180°..180°)
 }
 
 /**
  * Drone altitude over seabed, typically obtained from a DVL.
  */
 message Altitude {
-  float value = 1; // Drone altitude over seabed in m
+  float value = 1; // Drone altitude over seabed (m)
   bool is_valid = 2; // If altitude is valid or not
 }
 
@@ -342,7 +342,7 @@ message Altitude {
  * pinger.
  */
 message ForwardDistance {
-  float value = 1; // Distance in front of drone in m
+  float value = 1; // Distance in front of drone (m)
   bool is_valid = 2; // If distance reading is valid or not
 }
 
@@ -367,7 +367,7 @@ message PositionEstimate {
  * Water depth of the drone.
  */
 message Depth {
-  float value = 1; // Drone depth below surface in m
+  float value = 1; // Drone depth below surface (m)
 }
 
 /**
@@ -375,32 +375,32 @@ message Depth {
  * Use (ControlHealth.heading_error + pose.yaw) instead.
  */
 message Reference {
-  float surge = 1; // Reference from joystick surge input
-  float sway = 2; // Reference from joystick sway input
-  float heave = 3; // Reference from joystick heave input
-  float yaw = 4; // Reference from joystick yaw input
-  float depth = 5; // Reference drone depth below surface in m
-  float heading = 6; // Reference used in auto heading mode
-  float altitude = 7; // Reference used in auto altitude mode
+  float surge = 1; // Reference from joystick surge input (0..1)
+  float sway = 2; // Reference from joystick sway input (0..1)
+  float heave = 3; // Reference from joystick heave input (0..1)
+  float yaw = 4; // Reference from joystick yaw input (0..1)
+  float depth = 5; // Reference drone depth below surface (m)
+  float heading = 6; // Reference used in auto heading mode, gyro based (°)
+  float altitude = 7; // Reference used in auto altitude mode (m)
 }
 
 /**
  * Control Force is used for showing the requested control force in each direction in Newtons.
  */
 message ControlForce {
-  float surge = 1; // Force in surge
-  float sway = 2; // Force in sway
-  float heave = 3; // Force in heave
-  float yaw = 4; // Moment in yaw
+  float surge = 1; // Force in surge (N)
+  float sway = 2; // Force in sway (N)
+  float heave = 3; // Force in heave (N)
+  float yaw = 4; // Moment in yaw (Nm)
 }
 
 /**
  * Controller health is used for showing the state of the controller with an relative error and load from 0 to 1.
  */
 message ControllerHealth {
-  float depth_error = 1; // Depth error in meters
+  float depth_error = 1; // Depth error in meters (m)
   float depth_health = 2; // Depth controller load (0..1)
-  float heading_error = 3; // Heading error in degrees
+  float heading_error = 3; // Heading error in degrees (°)
   float heading_health = 4; // Heading controller load (0..1)
 }
 
@@ -425,8 +425,8 @@ message RecordOn {
   * Storage space.
   */
 message StorageSpace {
-  int64 total_space = 1; // Total bytes of storage space
-  int64 free_space = 2; // Available bytes of storage space
+  int64 total_space = 1; // Total bytes of storage space (B)
+  int64 free_space = 2; // Available bytes of storage space (B)
 }
 
 /**
@@ -467,8 +467,8 @@ message CalibrationState {
   * Connection speed between drone and Surface Unit.
   */
 message IperfStatus {
-  float sent = 1; // Transfer rate from drone to Surface Unit in Mbit/s
-  float received = 2; // Transfer rate from Surface Unit to drone in Mbit/s
+  float sent = 1; // Transfer rate from drone to Surface Unit (Mbit/s)
+  float received = 2; // Transfer rate from Surface Unit to drone (Mbit/s)
 }
 
 /**
@@ -483,14 +483,14 @@ message NStreamers {
  * Angle of tilt camera in degrees.
  */
 message TiltAngle {
-  float value = 1; // Tilt angle in degrees °
+  float value = 1; // Tilt angle (°)
 }
 
 /**
  * Relative velocity of tilt
  */
 message TiltVelocity {
-  float value = 1; // Relative angular velocity of tilt (-1 to 1, negative means down and positive means up)
+  float value = 1; // Relative angular velocity of tilt (-1..1), negative means down and positive means up
 }
 
 /**
@@ -611,13 +611,13 @@ enum Camera {
   * Camera parameters.
   */
 message CameraParameters {
-  int32 h264_bitrate = 1; // Bitrate of the h264 stream
-  int32 mjpg_bitrate = 2; // Bitrate of the MJPG stream used for still pictures
-  int32 exposure = 3; // Shutter speed in 10000/th second (-1 for automatic exposure)
-  int32 white_balance = 4; // White balance temperature in range 2800..9300 (-1 for automatic white balance)
-  int32 hue = 5; // Hue in range -40..40 (0 as default)
+  int32 h264_bitrate = 1; // Bitrate of the h264 stream (bit/sec)
+  int32 mjpg_bitrate = 2; // Bitrate of the MJPG stream used for still pictures (bit/sec)
+  int32 exposure = 3; // Shutter speed  (1/10000 * s), -1 for automatic exposure
+  int32 white_balance = 4; // White balance temperature (2800..9300), -1 for automatic white balance
+  int32 hue = 5; // Hue (-40..40), 0 as default
 
-  float gain = 9; // Iso gain in range 0.0-1.0
+  float gain = 9; // Iso gain (0..1)
 
   Resolution resolution = 6; // Stream, recording and image resolution
   Framerate framerate = 7; // Stream and recording framerate
@@ -694,18 +694,14 @@ message OverlayParameters {
   DepthUnit depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
   TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celcius or Fahrenheit
   ThicknessUnit thickness_unit = 19; // Which unit should be used for thickness: Millimeters or Inches
-  int32 timezone_offset = 9; // Timezone offset from UTC
-  int32 margin_width = 10; // Horizontal margins of text elements
-  int32 margin_height = 11; // Vertical margins of text elements
+  int32 timezone_offset = 9; // Timezone offset from UTC (min)
+  int32 margin_width = 10; // Horizontal margins of text elements (px)
+  int32 margin_height = 11; // Vertical margins of text elements (px)
   FontSize font_size = 12; // Font size of text elements
   string title = 13; // Optional title
   string subtitle = 14; // Optional subtitle
   string date_format = 16; // Posix strftime format string for time stamp
-  /**
-    * Pixel intensity to subtract from text background (range is 0.0-1.0),
-    * (0 is transparent and 1 is black)
-    */
-  float shading = 17;
+  float shading = 17; // Pixel intensity to subtract from text background (0..1), 0: transparent, 1: black
 }
 
 /**
@@ -761,7 +757,7 @@ message GuestPortDevice {
   string manufacturer = 2; // Manufacturer name
   string name = 3; // Device name
   string serial_number = 4; // Serial number
-  float depth_rating = 5; // Depth rating in meters
+  float depth_rating = 5; // Depth rating (m)
   string required_blunux_version = 6; // Required Blunux version (x.y.z)
 }
 
@@ -809,7 +805,7 @@ message GuestPortInfo {
 message ThicknessGauge {
   float thickness_measurement = 1; // Thickness measurement of a steel plate
   uint32 echo_count = 2; // Indicating the quality of the reading when invalid (0-3)
-  uint32 sound_velocity = 3; // Speed of sound in the steel member
+  uint32 sound_velocity = 3; // Speed of sound in the steel member (m/s)
   bool is_measurement_valid = 4; // Indicating if the measurement is valid
 }
 
@@ -817,6 +813,6 @@ message ThicknessGauge {
  * Reading from a Cathodic Protection Potential probe.
  */
 message CpProbe {
-  float measurement = 1; // Potential measurement in V
+  float measurement = 1; // Potential measurement (V)
   bool is_measurement_valid = 2; // Indicating if the measurement is valid
 }
