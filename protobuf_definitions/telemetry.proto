@@ -192,11 +192,24 @@ message CpProbeTel {
   CpProbe cp_probe = 1; // Reading from cp probe.
 }
 
-
 /**
   * List of connected clients telemetry message.
   */
 message ConnectedClientsTel {
   uint32 client_id_in_control = 1; // The client id of the client in control.
   repeated ConnectedClient connected_clients = 2; // List of connected clients.
+}
+
+/**
+  * State of a generic servo
+  */
+message GenericServoTel {
+  GenericServo servo = 1; // Servo state
+}
+
+/**
+  * State of the servo installed in the multibeam
+  */
+message MultibeamServoTel {
+  MultibeamServo servo = 1; // Multibeam servo state
 }

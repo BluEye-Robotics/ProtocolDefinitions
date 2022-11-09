@@ -730,6 +730,8 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_OCEAN_TOOLS_DIGICP = 19; // Ocean Tools DigiCP
   GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_720IK = 20; // Tritech Gemini 720ik Multibeam Sonar
   GUEST_PORT_DEVICE_ID_NORTEK_NUCLEUS_1000 = 21; // Nortek Nucleus 1000 DVL
+  GUEST_PORT_DEVICE_ID_BLUEYE_SERVO_GENERIC = 22; // Blueye Servo Generic
+  GUEST_PORT_DEVICE_ID_BLUEYE_SERVO_MULTIBEAM = 23; // Blueye Servo Multibeam
 }
 
 /**
@@ -815,4 +817,19 @@ message ThicknessGauge {
 message CpProbe {
   float measurement = 1; // Potential measurement (V)
   bool is_measurement_valid = 2; // Indicating if the measurement is valid
+}
+
+/**
+  * Servo message used to represent the angle of the servo.
+  */
+message GenericServo {
+  float value = 1; // Servo value (0..1)
+  string serial = 2; // Serial number of the servo
+}
+
+/**
+  * Servo message used to represent the angle of the servo.
+  */
+message MultibeamServo {
+  float angle = 1; // Servo degrees (-30..30)
 }
