@@ -735,6 +735,16 @@ enum GuestPortDeviceID {
 }
 
 /**
+ * GuestPort number.
+ */
+enum GuestPortNumber {
+  GUEST_PORT_NUMBER_UNSPECIFIED = 0; // Unspecified
+  GUEST_PORT_NUMBER_PORT_1 = 1; // Guest port 1
+  GUEST_PORT_NUMBER_PORT_2 = 2; // Guest port 2
+  GUEST_PORT_NUMBER_PORT_3 = 3; // Guest port 3
+}
+
+/**
  * List of navigation sensors that can be used by the position observer
  */
 enum NavigationSensorID {
@@ -790,6 +800,7 @@ message GuestPortConnectorInfo {
     GuestPortDeviceList device_list = 1; // List of devices on this connector
     GuestPortError error = 2; // Guest port error
   }
+  GuestPortNumber guest_port = 3; // Guest port the connector is connected to
 }
 
 /**
@@ -824,7 +835,7 @@ message CpProbe {
   */
 message GenericServo {
   float value = 1; // Servo value (0..1)
-  string serial = 2; // Serial number of the servo
+  GuestPortNumber guest_port = 2; // Guest port the servo is on
 }
 
 /**
