@@ -167,3 +167,17 @@ message SystemTimeCtrl {
 message GripperCtrl {
   GripperVelocities gripper_velocities = 1; // The desired gripping and rotation velocity.
 }
+
+/**
+  * Issue a command to set a generic servo value.
+  */
+message GenericServoCtrl {
+  GenericServo servo = 1; // Message with the desired servo value.
+}
+
+/**
+  * Issue a command to set multibeam servo angle.
+  */
+message MultibeamServoCtrl {
+  MultibeamServo servo = 1; // Message with the desired servo angle.
+}
