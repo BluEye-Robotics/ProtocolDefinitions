@@ -800,7 +800,7 @@ message GuestPortConnectorInfo {
     GuestPortDeviceList device_list = 1; // List of devices on this connector
     GuestPortError error = 2; // Guest port error
   }
-  GuestPortNumber guest_port = 3; // Guest port the connector is connected to
+  GuestPortNumber guest_port_number = 3; // Guest port the connector is connected to
 }
 
 /**
@@ -835,7 +835,7 @@ message CpProbe {
   */
 message GenericServo {
   float value = 1; // Servo value (0..1)
-  GuestPortNumber guest_port = 2; // Guest port the servo is on
+  GuestPortNumber guest_port_number = 2; // Guest port the servo is on
 }
 
 /**
