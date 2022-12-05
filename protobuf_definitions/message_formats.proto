@@ -363,6 +363,44 @@ message PositionEstimate {
   repeated NavigationSensorStatus navigation_sensors = 11; // List of available sensors with status
 }
 
+/*
+ * Waypoint used to describe a location and depth on a map.
+ */
+message Waypoint {
+  uint32 id = 1; // waypoint id
+  double latitude = 2; // latitude (decimal degrees)
+  double longitude = 3; // longitude (decimal degrees)
+  float circle_of_acceptance = 4; // radius of the accepance circle around the waypoint (m)
+  float depth = 5; // desired depth at the wp (m)
+  DepthZeroReference detph_zero_reference = 6; // used to destinguish desired altitude or depth
+  bool visited = 7; // indicates if the point is visited during current mission
+  string name = 8; // waypoint name provided from the app
+}
+
+/*
+ * A list of waypoints describes a mission that the auto pilot can execute.
+ */
+message Mission {
+  uint32 id = 1; // mission id
+  repeated Waypoint waypoints = 2; // list of waypoints in the mission
+}
+
+/*
+ * Path segment used to describe segments of a mission as a line between to waypoints.
+ */
+message PathSegment {
+  uint32 id = 1; // path segment id starting at 0, -1 for inactive
+  float speed_over_ground = 2; // desired speed over ground in (m)
+  float course_to_target = 3; // course to target relative to north in radians
+  float heave_speed = 4; // desired speed in heave (m/s)
+  float horizontal_length = 5; // horizontal length of the path segment
+  float vertical_length = 6; // vertical legth of the path segment
+  bool completed = 7; // indicates if the path segment is completed in the mission
+  uint32 from_wp_id = 8; // id of the starting waypoint
+  uint32 to_wp_id = 9; // id of the ending waypoint
+  float time_to_complete = 10; // estmated time to complete given legth and desired speed
+}
+
 /**
  * Water depth of the drone.
  */
@@ -382,6 +420,21 @@ message Reference {
   float depth = 5; // Reference drone depth below surface (m)
   float heading = 6; // Reference used in auto heading mode, gyro based (°)
   float altitude = 7; // Reference used in auto altitude mode (m)
+}
+
+/*
+ * Reference for the auto pilot when a mission is active.
+ */
+message ReferenceAutoPilot {
+  float distance_to_target = 1; // distance to the next waypoint
+  float course_to_target = 2; // course to the next waypoint from north (rad)
+  float speed_over_ground = 3; // desired speed over ground.
+  float circle_of_acceptance = 4; // circle of acceptance to mark waypoint as visited
+  float heave_speed = 5; // desired heave speed in (m/s)
+  float horizontal_distance = 6; // horizontal distance to the next waypoint
+  float vertical_distance = 7; // vertical distance ot the next waypoint
+  uint32 active_path_segment_id = 8; // id of the active path segment
+  bool returning_to_home = 9; // indicatates if the drone is returning to home
 }
 
 /**
@@ -605,6 +658,15 @@ enum Camera {
   CAMERA_UNSPECIFIED = 0; // Camera not specified
   CAMERA_MAIN = 1; // Main camera
   CAMERA_GUESTPORT = 2; // Guestport camera
+}
+
+/*
+ * Depth zero reference from surface for depth, and seabed for altitude.
+ */
+enum DepthZeroReference {
+  DEPTH_ZERO_REFERENCE_UNDEFINED = 0;
+  DEPTH_ZERO_REFERENCE_SURFACE = 1;
+  DEPTH_ZERO_REFERENCE_SEABED = 2;
 }
 
 /**
