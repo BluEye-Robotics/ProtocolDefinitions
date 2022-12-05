@@ -426,14 +426,16 @@ message Reference {
  * Reference for the auto pilot when a mission is active.
  */
 message ReferenceAutoPilot {
-  float distance_to_target = 1; // horizontal distance to the next waypoint
+  uint32 active_path_segment_id = 1; // id of the active path segment
   float course_to_target = 2; // course to the next waypoint from north (rad)
   float speed_over_ground = 3; // desired speed over ground.
-  float circle_of_acceptance = 4; // circle of acceptance to mark waypoint as visited
-  float heave_speed = 5; // desired heave speed in (m/s)
-  float vertical_distance = 6; // vertical distance ot the next waypoint
-  uint32 active_path_segment_id = 7; // id of the active path segment
-  bool returning_to_home = 8; // indicatates if the drone is returning to home
+  float horizontal_distance_to_target = 4; // horizontal distance to the next waypoint
+  float circle_of_acceptance = 5; // circle of acceptance to mark waypoint as visited
+  float depth_set_point = 6; // desired depth set point (m)
+  float depth_speed = 7; // desired heave speed in (m/s)
+  DepthZeroReference detph_zero_reference = 8; // indicates if depth is measured from the surface or seabottom
+  float vertical_distance_to_target = 9; // vertical distance to the next waypoint
+  bool returning_to_home = 10; // indicatates if the drone is returning to home (user position)
 }
 
 /**
