@@ -664,7 +664,7 @@ enum Camera {
  * Depth zero reference from surface for depth, and seabed for altitude.
  */
 enum DepthZeroReference {
-  DEPTH_ZERO_REFERENCE_UNDEFINED = 0;
+  DEPTH_ZERO_REFERENCE_UNSPECIFIED = 0;
   DEPTH_ZERO_REFERENCE_SURFACE = 1;
   DEPTH_ZERO_REFERENCE_SEABED = 2;
 }
