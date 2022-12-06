@@ -175,6 +175,12 @@ message SetMissionReq {
 }
 
 /*
+ * Response after setting a new mission.
+ */
+message SetMissionRep {
+}
+
+/*
  * Get active mission response.
  */
 message GetMissionRep {
