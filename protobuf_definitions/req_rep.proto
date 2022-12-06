@@ -162,12 +162,6 @@ message GetBatteryRep {
 }
 
 /*
- * Service request to the reference_generator to get the active mission.
- */
-message GetMissionReq {
-}
-
-/*
  * Issue a desired mission to the reference_generator.
  */
 message SetMissionReq {
@@ -178,6 +172,12 @@ message SetMissionReq {
  * Response after setting a new mission.
  */
 message SetMissionRep {
+}
+
+/*
+ * Service request to the reference_generator to get the active mission.
+ */
+message GetMissionReq {
 }
 
 /*
@@ -195,4 +195,10 @@ message SetWaypointUpdateReq{
   uint32 mission_id = 1; // id of the mission containing the waypoint to update
   uint32 waypoint_id = 2; // id of the waypoint to update
   Waypoint waypoint = 3; // waypoint what will replace the desired waypoint
+}
+
+/*
+ * Response after updating a waypoint in the current mission.
+ */
+message SetWaypointUpdateRep {
 }
