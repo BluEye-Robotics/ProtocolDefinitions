@@ -193,8 +193,7 @@ message GetMissionRep {
  */
 message SetWaypointUpdateReq{
   uint32 mission_id = 1; // id of the mission containing the waypoint to update
-  uint32 waypoint_id = 2; // id of the waypoint to update
-  Waypoint waypoint = 3; // waypoint what will replace the desired waypoint
+  Waypoint waypoint = 2; // waypoint what will replace the desired waypoint
 }
 
 /*
