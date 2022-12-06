@@ -372,7 +372,7 @@ message Waypoint {
   float circle_of_acceptance = 3; // radius of the accepance circle around the waypoint (m)
   float speed_over_ground = 4; // desired speed to waypoint (m/s)
   float depth = 5; // desired depth at the wp (m)
-  float depth_speed = 6; // desired speed to desired depth set point
+  float depth_speed = 6; // desired speed to desired depth set point (m/s)
   DepthZeroReference depth_zero_reference = 7; // used to destinguish desired altitude or depth
   bool visited = 8; // indicates if the point is visited during current mission
   string name = 9; // waypoint name provided from the app
@@ -391,15 +391,15 @@ message Mission {
  */
 message PathSegment {
   uint32 id = 1; // path segment id starting at 0, -1 for inactive
-  float speed_over_ground = 2; // desired speed over ground in (m)
-  float course_to_target = 3; // course to target relative to north in radians
+  float speed_over_ground = 2; // desired speed over ground in (m/s)
+  float course_to_target = 3; // course to target relative to north (radians)
   float depth_speed = 4; // desired speed in heave (m/s)
-  float horizontal_length = 5; // horizontal length of the path segment
-  float vertical_length = 6; // vertical legth of the path segment
+  float horizontal_length = 5; // horizontal length of the path segment (m)
+  float vertical_length = 6; // vertical legth of the path segment (m)
   bool completed = 7; // indicates if the path segment is completed in the mission
   uint32 from_wp_id = 8; // id of the starting waypoint
   uint32 to_wp_id = 9; // id of the ending waypoint
-  float time_to_complete = 10; // estmated time to complete given legth and desired speed
+  float time_to_complete = 10; // estmated time to complete given legth and desired speed (s)
 }
 
 /**
@@ -429,12 +429,12 @@ message Reference {
 message ReferenceAutoPilot {
   uint32 active_path_segment_id = 1; // id of the active path segment
   float course_to_target = 2; // course to the next waypoint from north (rad)
-  float speed_over_ground = 3; // desired speed over ground.
-  float horizontal_distance_to_target = 4; // horizontal distance to the next waypoint
-  float circle_of_acceptance = 5; // circle of acceptance to mark waypoint as visited
+  float speed_over_ground = 3; // desired speed over ground (m/s)
+  float horizontal_distance_to_target = 4; // horizontal distance to the next waypoint (m)
+  float circle_of_acceptance = 5; // circle of acceptance to mark waypoint as visited (m)
   float depth_set_point = 6; // desired depth set point (m)
   float depth_speed = 7; // desired heave speed in (m/s)
-  float vertical_distance_to_target = 8; // vertical distance to the next waypoint
+  float vertical_distance_to_target = 8; // vertical distance to the next waypoint (m)
   DepthZeroReference depth_zero_reference = 9; // indicates if depth is measured from the surface or seabottom
   bool returning_to_home = 10; // indicatates if the drone is returning to home (user position)
 }
