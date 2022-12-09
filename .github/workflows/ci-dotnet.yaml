@@ -1,9 +1,6 @@
 name: dotnet CI build
 
-on:
-  push:
-    branches:
-      - master
+on: push
 
 jobs:
   donet-ci-build:
