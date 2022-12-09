@@ -189,15 +189,14 @@ message GetMissionRep {
 }
 
 /*
- * Updates a waypoint in current mission with a new waypoint payload.
+ * Updates an instruction in current mission with a new instruction payload.
  */
-message SetWaypointUpdateReq{
-  uint32 mission_id = 1; // id of the mission containing the waypoint to update
-  Waypoint waypoint = 2; // waypoint what will replace the desired waypoint
+message SetInstructionUpdateReq {
+  Instruction instruction = 1; // instruction that will replace the desired instruction
 }
 
 /*
- * Response after updating a waypoint in the current mission.
+ * Response after updating an instruction in the current mission.
  */
-message SetWaypointUpdateRep {
+message SetInstructionUpdateRep {
 }

@@ -372,11 +372,16 @@ message Mission {
   repeated Instruction instructions = 3; // list of instructions in the mission
 }
 
+/*
+ * A mission consitst of one or multiple instructions. One instruction can be of different types.
+ */
 message Instruction {
+  uint32 id = 1;
+  bool auto_continue = 2; // false will pause the mission after this instruction
   oneof oneof_instruction {
-    Waypoint waypoint = 1;
-    DepthSetPoint depth_set_point = 2;
-    Command commands = 3;
+    Waypoint waypoint = 3;
+    DepthSetPoint depth_set_point = 4;
+    Command command = 5;
   }
 }
 
@@ -385,9 +390,8 @@ message Instruction {
  */
 message DepthSetPoint {
   float depth = 1; // desired depth at the wp (m)
-  float depth_speed = 2; // desired speed to desired depth set point (m/s)
+  float speed_to_depth = 2; // desired speed to desired depth set point (m/s)
   DepthZeroReference depth_zero_reference = 3; // used to destinguish desired altitude or depth
-  bool auto_continue = 4; // false will pause the mission at this waypoint
 }
 
 /*
@@ -398,28 +402,36 @@ message Waypoint {
   string name = 2; // waypoint name provided from the app
   LatLongPosition global_position = 3; // position if the waypoint (decimal degrees)
   float circle_of_acceptance = 4; // radius of the accepance circle around the waypoint (m)
-  float speed_to_waypoint = 5; // desired speed over ground to waypoint (m/s)
+  float speed_to_target = 5; // desired speed over ground to waypoint (m/s)
   DepthSetPoint depth_set_point = 6; // depth set point (optional)
-  bool auto_continue = 7; // false will pause the mission at this waypoint
   // auto_pilot_mode: Path fallowing, Trajectory tracking, Constant heading
   // float fixed_heading
 }
 
+/*
+ * A Command is used to execute an action in a mission.
+ */
 message Command {
   oneof oneof_command {
     CameraCommand camera_command = 1; // camera commands
     ControlMode set_control_modes = 2; // set control modes
-    float set_tilt_main_camera =3; // set camera to angle x
+    float set_tilt_main_camera = 3; // set camera to angle x
     float set_tilt_servo = 4; // set tilt angle
     float wait_for_sec = 5; // wait for x seconds
   }
 }
 
+/*
+ * CameraCommands are used to control the camera from a mission.
+ */
 message CameraCommand {
-  CameraAction camaera_action = 1; // camera command
+  CameraAction camera_action = 1; // camera command
   float param = 2; // used for take photos time and distance
 }
 
+/*
+ * List of available camera actions.
+ */
 enum CameraAction {
   CAMERA_ACTION_UNSPECIFIED = 0; // Unspecified command
   CAMERA_ACTION_TAKE_PHOTO = 1; // Take one photo
@@ -435,7 +447,7 @@ enum CameraAction {
  */
 message PathSegment {
   uint32 id = 1; // path segment id starting at 0, -1 for inactive
-  float speed_over_ground = 2; // desired speed over ground in (m/s)
+  float speed_to_target = 2; // desired speed over ground in (m/s)
   float course_to_target = 3; // course to target relative to north (radians)
   float depth_speed = 4; // desired speed in heave (m/s)
   float horizontal_length = 5; // horizontal length of the path segment (m)
