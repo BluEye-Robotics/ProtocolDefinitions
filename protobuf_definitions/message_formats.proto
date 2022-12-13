@@ -98,6 +98,20 @@ message WeatherVaningState {
 }
 
 /**
+  * Auto pilot surge yaw state.
+  */
+message AutoPilotSurgeYawState {
+  bool enabled = 1; // If auto pilot surge yaw is enabled
+}
+
+/**
+  * Auto pilot heave state.
+  */
+message AutoPilotHeaveState {
+  bool enabled = 1; // If auto pilot heave is enabled
+}
+
+/**
   * Control mode from drone supervisor
   */
 message ControlMode {
@@ -106,6 +120,8 @@ message ControlMode {
   bool auto_altitude = 3; // If auto altitude is enabled
   bool station_keeping = 4; // If station keeping is enabled
   bool weather_vaning = 5; // If weather vaning is enabled
+  bool auto_pilot_surge_yaw = 6; // If auto pilot surge yaw is enabled
+  bool auto_pilot_heave = 7; // If auto pilot heave is enabled
 }
 
 /**

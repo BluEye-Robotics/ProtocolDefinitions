@@ -122,6 +122,20 @@ message WeatherVaningCtrl {
 }
 
 /**
+  * Issue a command to set Auto Pilot for cruising and turning to a desired state.
+  */
+message AutoPilotSurgeYawCtrl {
+  AutoPilotSurgeYawState state = 1; // State of the auto pilot surge yaw controller
+}
+
+/**
+  * Issue a command to set Auto Pilot for vertiacl movement to a desired state.
+  */
+message AutoPilotHeaveCtrl {
+  AutoPilotHeaveState state = 1; // State of the auto pilot heave controller
+}
+
+/**
   * Issue a command to reset the position estimate.
   */
 message ResetPositionCtrl {
