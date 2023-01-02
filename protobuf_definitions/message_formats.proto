@@ -468,9 +468,9 @@ message PathSegment {
   float depth_speed = 4; // desired speed in heave (m/s)
   float horizontal_length = 5; // horizontal length of the path segment (m)
   float vertical_length = 6; // vertical legth of the path segment (m)
-  uint32 from_wp_id = 8; // id of the starting waypoint
-  uint32 to_wp_id = 9; // id of the ending waypoint
-  float duration_time = 10; // estmated time it takes to complete given legth and desired speed (s)
+  uint32 from_wp_id = 7; // id of the starting waypoint
+  uint32 to_wp_id = 8; // id of the ending waypoint
+  float duration_time = 9; // estmated time it takes to complete given legth and desired speed (s)
 }
 
 /**
