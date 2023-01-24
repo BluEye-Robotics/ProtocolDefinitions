@@ -277,3 +277,10 @@ message GenericServoTel {
 message MultibeamServoTel {
   MultibeamServo servo = 1; // Multibeam servo state
 }
+
+/**
+  * GuestPort current readings
+  */
+message GuestPortCurrentTel {
+  GuestPortCurrent current = 1;
+}

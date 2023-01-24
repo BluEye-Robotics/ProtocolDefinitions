@@ -704,6 +704,10 @@ message ErrorFlags {
   bool ds_serial = 36;  // DS serial number error
   bool gp_current_read = 37;  // Error reading GP current
   bool gp_current = 38;  // Max GP current exceeded
+  bool gp1_bat_current = 39;  // Max battery current exceeded on GP1
+  bool gp2_bat_current = 40;  // Max battery current exceeded on GP2
+  bool gp3_bat_current = 41;  // Max battery current exceeded on GP3
+  bool gp_20v_current = 42;  // Max 20V current exceeded on GP
 }
 
 /**
@@ -980,3 +984,13 @@ message GenericServo {
 message MultibeamServo {
   float angle = 1; // Servo degrees (-30..30)
 }
+
+/**
+  * GuestPort current readings.
+  */
+message GuestPortCurrent {
+  double gp1_bat = 1; // Current on GP1 battery voltage (A)
+  double gp2_bat = 2; // Current on GP2 battery voltage (A)
+  double gp3_bat = 3; // Current on GP3 battery voltage (A)
+  double gp_20v = 4; // Current on common 20V supply (A)
+}  
