@@ -614,6 +614,30 @@
                                 "name": "ERR_GP_CURRENT",
                                 "component": "guest_port",
                                 "description": "Max GP current exceeded"
+                            },
+                            {
+                                "value": "0x4000000000",
+                                "name": "ERR_GP1_BAT_CURRENT",
+                                "component": "guest_port",
+                                "description": "Max battery current exceeded on GP1"
+                            },
+                            {
+                                "value": "0x8000000000",
+                                "name": "ERR_GP2_BAT_CURRENT",
+                                "component": "guest_port",
+                                "description": "Max battery current exceeded on GP2"
+                            },
+                            {
+                                "value": "0x10000000000",
+                                "name": "ERR_GP3_BAT_CURRENT",
+                                "component": "guest_port",
+                                "description": "Max battery current exceeded on GP3"
+                            },
+                            {
+                                "value": "0x20000000000",
+                                "name": "ERR_GP_20V_CURRENT",
+                                "component": "guest_port",
+                                "description": "Max 20V current exceeded on GP"
                             }
                         ]
                     },
