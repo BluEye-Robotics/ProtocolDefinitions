@@ -195,3 +195,15 @@ message GenericServoCtrl {
 message MultibeamServoCtrl {
   MultibeamServo servo = 1; // Message with the desired servo angle.
 }
+
+/**
+  * Deactivate the guest port power
+  */
+message DeactivateGuestPortsCtrl {
+}
+
+/**
+  * Activated the guest port power
+  */
+message ActivateGuestPortsCtrl {
+}
