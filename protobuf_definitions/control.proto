@@ -185,11 +185,11 @@ message MultibeamServoCtrl {
 /**
   * Deactivate the guest port power
   */
-message DeactivateGuestPortCtrl {
+message DeactivateGuestPortsCtrl {
 }
 
 /**
   * Activated the guest port power
   */
-message ActivateGuestPortCtrl {
+message ActivateGuestPortsCtrl {
 }
