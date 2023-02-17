@@ -160,3 +160,18 @@ message GetBatteryReq {
 message GetBatteryRep {
   Battery battery = 1; // Essential battery information.
 }
+
+/*
+ * Request to update the publish frequency
+ */
+message SetPubFrequencyReq {
+  string message_type = 1; // Fully specified message name.
+  float frequency = 2; // Publish frequency (max 100 Hz).
+}
+
+/*
+ * Response aftrer updating publish frequency
+ */
+message SetPubFrequencyRep {
+  bool success = 1; // True if message name valid and frequency successfully updated.
+}
