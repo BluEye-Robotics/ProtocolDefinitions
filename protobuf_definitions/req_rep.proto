@@ -165,13 +165,13 @@ message GetBatteryRep {
  * Request to update the publish frequency
  */
 message SetPubFrequencyReq {
-  string message_type = 1; // Fully specified message name
-  PubFrequency frequency = 2; // Publish frequency
+  string message_type = 1; // Fully specified message name.
+  PubFrequency frequency = 2; // Publish frequency.
 }
 
 /*
  * Response aftrer updating publish frequency
  */
 message SetPubFrequencyRep {
-  bool success = 1; // True if message name valid and frequency successfully updated
+  bool success = 1; // True if message name valid and frequency successfully updated.
 }
