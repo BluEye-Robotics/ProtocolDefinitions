@@ -165,7 +165,7 @@ message GetBatteryRep {
  * Request to update the publish frequency
  */
 message SetPubFrequencyReq {
-  string message_type = 1; // Fully specified message name.
+  string message_type = 1; // Message name, f. ex. "AttitudeTel"
   float frequency = 2; // Publish frequency (max 100 Hz).
 }
 
