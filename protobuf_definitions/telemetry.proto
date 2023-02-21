@@ -220,3 +220,24 @@ message MultibeamServoTel {
 message GuestPortCurrentTel {
   GuestPortCurrent current = 1;
 }
+
+/**
+  * Calibrated IMU data
+  */
+message CalibratedImuTel {
+  Imu imu = 1;
+}
+
+/**
+  * Raw IMU data from IMU 1
+  */
+message Imu1Tel {
+  Imu imu = 1;
+}
+
+/**
+  * Raw IMU data from IMU 2
+  */
+message Imu2Tel {
+  Imu imu = 1;
+}

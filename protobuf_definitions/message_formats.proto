@@ -859,3 +859,22 @@ message GuestPortCurrent {
   double gp3_bat = 3; // Current on GP3 battery voltage (A)
   double gp_20v = 4; // Current on common 20V supply (A)
 }
+
+/**
+  * Vector with 3 elements
+  */
+message Vector3 {
+  double x = 1; // x-component
+  double y = 2; // y-component
+  double z = 3; // z-component
+}
+
+/**
+  * Vector with 3 elements
+  */
+message Imu {
+  Vector3 accelerometer = 1; // Accelerometer (g)
+  Vector3 gyro = 2; // Gyro
+  Vector3 compass = 3; // Compass
+  float temperature = 4; // Temperature
+}
