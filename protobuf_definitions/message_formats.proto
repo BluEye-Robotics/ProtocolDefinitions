@@ -871,7 +871,11 @@ message Vector3 {
 }
 
 /**
-  * Imu data
+  * Imu data in drone body frame
+  *
+  * x - forward
+  * y - right
+  * z - down
   */
 message Imu {
   Vector3 accelerometer = 1; // Acceleration (g)
