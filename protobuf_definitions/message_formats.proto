@@ -870,11 +870,11 @@ message Vector3 {
 }
 
 /**
-  * Vector with 3 elements
+  * Imu data
   */
 message Imu {
-  Vector3 accelerometer = 1; // Accelerometer (g)
-  Vector3 gyro = 2; // Gyro
-  Vector3 compass = 3; // Compass
-  float temperature = 4; // Temperature
+  Vector3 accelerometer = 1; // Acceleration (g)
+  Vector3 gyroscope = 2; // Angular velocity (rad/s)
+  Vector3 magnetometer = 3; // Magnetic field (μT)
+  float temperature = 4; // Temperature (°C)
 }
