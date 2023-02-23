@@ -125,7 +125,7 @@ message WeatherVaningCtrl {
   * Issue a command to reset the position estimate.
   */
 message ResetPositionCtrl {
-  ResetPositionSettings settings = 1; // Reset options.
+  ResetPositionSettings settings = 1; // Reset settings.
 }
 
 /**
