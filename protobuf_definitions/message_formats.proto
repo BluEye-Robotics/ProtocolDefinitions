@@ -364,6 +364,22 @@ message PositionEstimate {
 }
 
 /**
+  * Heading source used during reset of the position estimate.
+  */
+enum HeadingSource {
+  HEADING_SOURCE_UNSPECIFIED = 0; // Unspecified
+  HEADING_SOURCE_DRONE_COMPASS = 1; // Uses the drone compass to set the heading
+  HEADING_SOURCE_DUE_NORTH = 2; // Used when the user orientes the drone due North manually
+}
+
+/**
+  * ResetPositionSettings used during reset of the position estimate.
+  */
+message ResetPositionSettings {
+  HeadingSource heading_source_during_reset = 1; // Option to use the drone compass or due North as heading during reset
+}
+
+/**
  * Water depth of the drone.
  */
 message Depth {
