@@ -369,7 +369,7 @@ message PositionEstimate {
 enum HeadingSource {
   HEADING_SOURCE_UNSPECIFIED = 0; // Unspecified
   HEADING_SOURCE_DRONE_COMPASS = 1; // Uses the drone compass to set the heading
-  HEADING_SOURCE_DUE_NORTH = 2; // Used when the user orientes the drone due North manually
+  HEADING_SOURCE_MANUAL_INPUT = 2; // Used when the user sets the heading manually
 }
 
 /**
@@ -377,6 +377,7 @@ enum HeadingSource {
   */
 message ResetPositionSettings {
   HeadingSource heading_source_during_reset = 1; // Option to use the drone compass or due North as heading during reset
+  float manual_heading = 2; // Heading in degrees (0-359)
 }
 
 /**
