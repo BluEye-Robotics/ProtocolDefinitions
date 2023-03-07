@@ -139,6 +139,7 @@ message AutoPilotHeaveCtrl {
   * Issue a command to reset the position estimate.
   */
 message ResetPositionCtrl {
+  ResetPositionSettings settings = 1; // Reset settings.
 }
 
 /**
