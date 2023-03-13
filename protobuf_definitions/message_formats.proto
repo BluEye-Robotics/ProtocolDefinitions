@@ -755,6 +755,8 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_BLUEYE_MULTIBEAM_SERVO = 23; // Blueye Multibeam Servo
   GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_DETACHABLE_NEWTON = 24; // Detachable Blue Robotics Newton
   GUEST_PORT_DEVICE_ID_INSITU_AQUA_TROLL_500 = 25; // In-Situ Aqua TROLL 500
+  GUEST_PORT_DEVICE_ID_MEDUSA_RADIOMETRICS_MS_100 = 26; // Medusa Radiometrics Gamma Ray Sensor
+
 }
 
 /**
@@ -899,4 +901,15 @@ message Imu {
   Vector3 gyroscope = 2; // Angular velocity (rad/s)
   Vector3 magnetometer = 3; // Magnetic field (μT)
   float temperature = 4; // Temperature (°C)
+}
+
+/**
+  * Medusa gamma ray sensor spectrometer data
+  */
+message MedusaSpectrometerData {
+  float realtime = 1; // Time the sensor actually measured (s)
+  float livetime = 2; // Time the measurement took (s)
+  uint32 total = 3; // Total counts inside the spectrum
+  uint32 countrate = 4; // Counts per second inside the spectrum (rounded)
+  uint32 cosmics = 5; // Detected counts above the last channel
 }
