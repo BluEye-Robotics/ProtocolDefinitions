@@ -243,8 +243,8 @@ message Imu2Tel {
 }
 
 /**
-  * Gamma ray sensor spectrometer data
+  * Medusa gamma ray sensor spectrometer data
   */
-message SpectrometerDataTel {
-  SpectrometerData data = 1;
+message MedusaSpectrometerDataTel {
+  MedusaSpectrometerData data = 1;
 }

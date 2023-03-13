@@ -904,9 +904,9 @@ message Imu {
 }
 
 /**
-  * Gamma ray sensor spectrometer data
+  * Medusa gamma ray sensor spectrometer data
   */
-message SpectrometerData {
+message MedusaSpectrometerData {
   float realtime = 1; // Time the sensor actually measured (s)
   float livetime = 2; // Time the measurement took (s)
   uint32 total = 3; // Total counts inside the spectrum
