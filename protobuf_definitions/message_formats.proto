@@ -913,3 +913,13 @@ message MedusaSpectrometerData {
   uint32 countrate = 4; // Counts per second inside the spectrum (rounded)
   uint32 cosmics = 5; // Detected counts above the last channel
 }
+
+/**
+  * Compass calibration.
+  */
+message CompassCalibration {
+  float radius = 1; // Radius of the sphere fit (μT)
+  Vector3 offset = 2; // Offset of the sphere fit (μT)
+  Vector3 expected = 3; // Compass value during calibration, x towards north, z down (μT)
+  bool valid = 4;
+}

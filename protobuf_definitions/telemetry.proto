@@ -248,3 +248,11 @@ message Imu2Tel {
 message MedusaSpectrometerDataTel {
   MedusaSpectrometerData data = 1;
 }
+
+/**
+  * Raw IMU data from IMU 2
+  */
+message CompassCalibrationTel {
+  CompassCalibration compass_1_calibration = 1;
+  CompassCalibration compass_2_calibration = 2;
+}
