@@ -241,3 +241,10 @@ message Imu1Tel {
 message Imu2Tel {
   Imu imu = 1;
 }
+
+/**
+  * Gamma ray sensor spectrometer data
+  */
+message SpectrometerDataTel {
+  SpectrometerData data = 1;
+}
