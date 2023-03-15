@@ -136,6 +136,19 @@ message AutoPilotHeaveCtrl {
 }
 
 /**
+  * Issue a command to start and pause the loaded mission.
+  */
+message RunMissionCtrl {
+  RunMissionState state = 1; // State of the loaded mission
+}
+
+/**
+  * Clear the loaded mission.
+  */
+message ClearMissionCtrl {
+}
+
+/**
   * Issue a command to reset the position estimate.
   */
 message ResetPositionCtrl {

@@ -483,6 +483,13 @@ enum HeadingSource {
 }
 
 /**
+  * Run Mission state
+  */
+message RunMissionState {
+  bool enabled = 1; // If the mission is running
+}
+
+/**
   * ResetPositionSettings used during reset of the position estimate.
   */
 message ResetPositionSettings {
