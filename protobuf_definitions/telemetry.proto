@@ -305,3 +305,10 @@ message Imu1Tel {
 message Imu2Tel {
   Imu imu = 1;
 }
+
+/**
+  * Medusa gamma ray sensor spectrometer data
+  */
+message MedusaSpectrometerDataTel {
+  MedusaSpectrometerData data = 1;
+}
