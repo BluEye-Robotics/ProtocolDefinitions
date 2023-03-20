@@ -47,12 +47,25 @@ message ControllerHealthTel {
   ControllerHealth controller_health = 1;
 }
 
+/**
+  * Receive the status of the main lights of the drone.
+  */
 message LightsTel {
   Lights lights = 1;
 }
 
+/**
+  * Receive the status of any guest port lights connected to the drone.
+  */
 message GuestPortLightsTel {
   Lights lights = 1;
+}
+
+/**
+  * Receive the status of any lasers connected to the drone.
+  */
+message LaserTel {
+  Lasers lasers = 1;
 }
 
 message PilotGPSPositionTel {
@@ -72,7 +85,7 @@ message BatteryTel {
 
 /*
  * Receive detailed information about a battery using the
-* BQ40Z50 battery management system.
+ * BQ40Z50 battery management system.
  */
 message BatteryBQ40Z50Tel {
   BatteryBQ40Z50 battery = 1; // Detailed battery information.
