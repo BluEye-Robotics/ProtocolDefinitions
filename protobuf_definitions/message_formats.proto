@@ -48,13 +48,13 @@ message Lights {
 }
 
 /**
-  * Lasers message used to represent the intensity of connected lasers.
+  * Laser message used to represent the intensity of connected laser.
   *
   * If the laser does not support dimming but only on and off,
   * a value of 0 turns the laser off, and any value above 0
   * turns the laser on.
   */
-message Lasers {
+message Laser {
   float value = 1; // Laser intensity, any value above 0 turns the laser on (0..1)
 }
 

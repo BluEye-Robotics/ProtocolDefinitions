@@ -65,7 +65,7 @@ message GuestPortLightsTel {
   * Receive the status of any lasers connected to the drone.
   */
 message LaserTel {
-  Lasers lasers = 1;
+  Laser lasers = 1;
 }
 
 message PilotGPSPositionTel {
