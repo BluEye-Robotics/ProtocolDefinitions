@@ -38,6 +38,13 @@ message GuestportLightsCtrl {
 }
 
 /**
+  * Issue a command to set the laser intensity.
+  */
+message LaserCtrl {
+  Laser laser = 1; // Message with the desired laser intensity.
+}
+
+/**
   * Issue a command with the GPS position of the pilot.
   */
 message PilotGPSPositionCtrl {
