@@ -419,7 +419,7 @@ message Waypoint {
   LatLongPosition global_position = 3; // position if the waypoint (decimal degrees)
   float circle_of_acceptance = 4; // radius of the accepance circle around the waypoint (m)
   float speed_to_target = 5; // desired speed over ground to waypoint (m/s)
-  DepthSetPoint depth_set_point = 6; // depth set point (optional)
+  optional DepthSetPoint depth_set_point = 6; // depth set point (optional)
   // auto_pilot_mode: Path fallowing, Trajectory tracking, Constant heading
   // float fixed_heading
 }
