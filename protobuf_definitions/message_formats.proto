@@ -961,7 +961,7 @@ message OculusPing {
     * (in 100th of a degree, multiply by 0.01 to get a value in degrees).
     * The sonar image is not sampled uniformly in the bearing direction.
     */
-  repeated uint32 bearings = 16 [packed=true];
+  repeated int32 bearings = 16 [packed=true];
 
   /**
     * Ping data (is a row major image in little-endian). 
