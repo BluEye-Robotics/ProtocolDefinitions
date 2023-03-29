@@ -974,5 +974,5 @@ message OculusPing {
     * root of this gain to have consistent value across
     * the image data).
     */
-  bytes pingData = 17;
+  bytes ping_data = 17;
 }
