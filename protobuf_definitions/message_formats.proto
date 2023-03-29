@@ -533,7 +533,7 @@ message Reference {
  * Reference for the auto pilot when a mission is active.
  */
 message ReferenceAutoPilot {
-  uint32 active_path_segment_id = 1; // id of the active path segment
+  int32 active_path_segment_id = 1; // id of the active path segment
   float course_to_target = 2; // course to the next waypoint from north (rad)
   float speed_over_ground = 3; // desired speed over ground (m/s)
   float horizontal_distance_to_target = 4; // horizontal distance to the next waypoint (m)
