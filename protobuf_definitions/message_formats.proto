@@ -938,13 +938,13 @@ message OculusPing {
    * Ping firing date (sonar internal clock, microseconds)
    */
   uint32 ping_firing_date = 2;
-  float64 range = 3; // Maximum range value in this ping
-  float64 gain_percent = 4; // Percentage of gain (not documented)
-  float64 frequency = 5; // Ping acoustic frequency (Hz)
-  float64 speed_of_sound_used = 6; // Speed of sound used by the sonar for range calculations (m/s)
-  float64 range_resolution = 7; // Distance between 2 rows in the ping image data.
-  float64 temperature = 8; // External temperature (Celcius)
-  float64 pressure = 9; // External pressure (bar)
+  double range = 3; // Maximum range value in this ping
+  double gain_percent = 4; // Percentage of gain (not documented)
+  double frequency = 5; // Ping acoustic frequency (Hz)
+  double speed_of_sound_used = 6; // Speed of sound used by the sonar for range calculations (m/s)
+  double range_resolution = 7; // Distance between 2 rows in the ping image data.
+  double temperature = 8; // External temperature (Celcius)
+  double pressure = 9; // External pressure (bar)
   uint32 master_mode = 10; // 1 is "low frequency" (1.2 MHz), 2 is high frequency (2.1 Mhz)
   /**
     * Each row in the image data comes with a gain  
