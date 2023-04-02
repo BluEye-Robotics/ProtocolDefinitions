@@ -529,7 +529,7 @@ message Reference {
   float altitude = 7; // Reference used in auto altitude mode (m)
 }
 
-/*
+/**
  * Reference for the auto pilot when a mission is active.
  */
 message ReferenceAutoPilot {
@@ -543,6 +543,74 @@ message ReferenceAutoPilot {
   float vertical_distance_to_target = 8; // vertical distance to the next waypoint (m)
   DepthZeroReference depth_zero_reference = 9; // indicates if depth is measured from the surface or seabottom
   bool returning_to_home = 10; // indicatates if the drone is returning to home (user position)
+}
+
+/**
+ * List of available instruction types.
+ */
+enum InstructionType {
+  INSTRUCTION_TYPE_UNSPECIFIED = 0; // Unspecified
+  INSTRUCTION_TYPE_NONE = 1; // None
+  INSTRUCTION_TYPE_WAYPOINT = 2; // Waypoint
+  INSTRUCTION_TYPE_WAYPOINT_WITH_DEPTH_SET_POINT = 3; // Waypoint with depth set point
+  INSTRUCTION_TYPE_DEPTH_SET_POINT = 4; // Depth set point
+  INSTRUCTION_TYPE_COMMAND = 5; // Command used to take photo repeatedly or start, stop recording.
+}
+
+/**
+ * Mission Status is used for showing the status of the mission.
+ */
+message MissionStatus {
+  int32 active_instruction_id = 1; // id of the active instruction
+  InstructionType active_instruction_type = 2; // type of the active instruction
+  int32 estimated_time_to_complete = 3; // estimated time to complete the mission
+  int32 time_elapsed = 4; // time elapsed since mission started
+  int32 completed_instruction_ids = 5; // ids of the completed instructions
+  int32 total_numer_of_instructions = 6; // total number of instructions in the mission
+  UserMessage status_message = 7; // status message
+}
+
+/**
+ * User Message Flags is used for displaying info, warnings, and errors to the user.
+ */
+enum UserMessageFlag {
+  USER_MESSAGE_FLAG_UNSPECIFIED = 0; // Unspecified
+  USER_MESSAGE_FLAG_POSISION_ESTIMATE_IS_INACCURATE = 1; // Position estimate is inaccurate
+  USER_MESSAGE_FLAG_DRONE_POSITION_IS_UNKNOWN = 2; // Drone position is unknown
+  USER_MESSAGE_FLAG_USER_POSITION_IS_UNKNOWN = 3; // User position is unknown
+  USER_MESSAGE_FLAG_NO_MISSION_LOADED = 4; // No mission is loaded
+  USER_MESSAGE_FLAG_MISSION_LOADED = 5; // Mission is loaded
+  USER_MESSAGE_FLAG_MISSION_COMPLETE = 6; // Mission is complete
+  USER_MESSAGE_FLAG_INSTRUCTION_COMPLETE = 7; // Instruction is complete
+  USER_MESSAGE_FLAG_FAILED_TO_LOAD_MISSION = 8; // Failed to load mission
+  USER_MESSAGE_FLAG_WAYPOINT_REACHED = 9; // Waypoint reached
+  USER_MESSAGE_FLAG_DEPTH_TARGET_REACHED = 10; // Depth set point is reached
+  USER_MESSAGE_FLAG_ALTITUDE_TARGET_REACHED = 11; // Altitude set point is reached
+  USER_MESSAGE_FLAG_WAYPOINT_IS_TO_FAR_AWAY = 12; // The waypoint is to far away
+  USER_MESSAGE_FLAG_DEPTH_SET_POINT_IS_TO_FAR_AWAY = 13; // The depth set point is to far away
+  USER_MESSAGE_FLAG_TIME_TO_COMPLETE_IS_TOO_LONG = 14; // The time to complete the mission is too long
+  USER_MESSAGE_FLAG_RETURNING_TO_HOME = 15; // Returning to home
+  USER_MESSAGE_FLAG_GO_TO_SURFACE = 16; // Go to surface
+  USER_MESSAGE_FLAG_GO_TO_SEABOTTOM = 17; // Go to seabottom with an alimeter
+}
+
+/**
+ * User Message is used for displaying info, warnings, and errors to the user.
+ */
+message UserMessage {
+  UserMessageFlag user_message_flag = 1; // Message to be displayed to the user
+  MessageLevel message_level = 3; // Level of the message, info, warning or error
+  optional google.protobuf.Any value = 2; // Optional value to be displayed in the message
+}
+
+/**
+ * List of available message levels.
+ */
+enum MessageLevel {
+  MESSAGE_LEVEL_UNSPECIFIED = 0; // Unspecified
+  MESSAGE_LEVEL_INFO = 1; // Info
+  MESSAGE_LEVEL_WARNING = 2; // Warning
+  MESSAGE_LEVEL_ERROR = 3; // Error
 }
 
 /**

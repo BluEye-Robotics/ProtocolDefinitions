@@ -59,6 +59,13 @@ message ReferenceAutoPilotTel {
 }
 
 /*
+ * Mission status from the mission supervisor.
+ */
+message MissionStatusTel {
+  MissionStatus mission_status = 1;
+}
+
+/*
  * Control force in all directions in (N).
  */
 message ControlForceTel {
