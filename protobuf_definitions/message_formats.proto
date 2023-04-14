@@ -390,7 +390,7 @@ message ResetPositionSettings {
   HeadingSource heading_source_during_reset = 1; // Option to use the drone compass or due North as heading during reset
   float manual_heading = 2; // Heading in degrees (0-359)
   ResetCoordinateSource reset_coordinate_source = 3; // Option to use the device GPS or a manual coordinate.
-  optional LatLongPosition reset_coordinate = 4; // Reset coordinate in decimal degrees
+  LatLongPosition reset_coordinate = 4; // Reset coordinate in decimal degrees
 }
 
 enum ResetCoordinateSource {
