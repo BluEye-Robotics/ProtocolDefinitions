@@ -7,6 +7,7 @@ syntax = "proto3";
 
 package blueye.protocol;
 import "message_formats.proto";
+import "aquatroll.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 /**
@@ -203,6 +204,13 @@ message ThicknessGaugeTel {
   */
 message CpProbeTel {
   CpProbe cp_probe = 1; // Reading from cp probe.
+}
+
+/**
+  * Sensor readings from In-Situ Aqua Troll probe
+  */
+message AquaTrollTel {
+  AquaTroll aqua_troll = 1; // AquaTroll message containing sensor array.
 }
 
 /**
