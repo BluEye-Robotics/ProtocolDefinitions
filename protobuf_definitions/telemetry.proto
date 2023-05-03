@@ -66,6 +66,13 @@ message MissionStatusTel {
 }
 
 /*
+ * Notification from the control system.
+ */
+message NotificationTel {
+  Notification notification = 1;
+}
+
+/*
  * Control force in all directions in (N).
  */
 message ControlForceTel {
