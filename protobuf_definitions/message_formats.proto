@@ -538,45 +538,61 @@ message Reference {
 }
 
 /**
- * Reference for the auto pilot when a mission is active.
- */
-message ReferenceAutoPilot {
-  int32 active_path_segment_id = 1; // id of the active path segment
-  float course_to_target = 2; // course to the next waypoint from north (rad)
-  float speed_over_ground = 3; // desired speed over ground (m/s)
-  float horizontal_distance_to_target = 4; // horizontal distance to the next waypoint (m)
-  float circle_of_acceptance = 5; // circle of acceptance to mark waypoint as visited (m)
-  float depth_set_point = 6; // desired depth set point (m)
-  float depth_speed = 7; // desired heave speed in (m/s)
-  float vertical_distance_to_target = 8; // vertical distance to the next waypoint (m)
-  DepthZeroReference depth_zero_reference = 9; // indicates if depth is measured from the surface or seabottom
-  bool returning_to_home = 10; // indicatates if the drone is returning to home (user position)
-}
-
-/**
  * List of available instruction types.
  */
 enum InstructionType {
   INSTRUCTION_TYPE_UNSPECIFIED = 0; // Unspecified
   INSTRUCTION_TYPE_NONE = 1; // None
-  INSTRUCTION_TYPE_WAYPOINT = 2; // Waypoint
-  INSTRUCTION_TYPE_WAYPOINT_WITH_DEPTH_SET_POINT = 3; // Waypoint with depth set point
-  INSTRUCTION_TYPE_DEPTH_SET_POINT = 4; // Depth set point
-  INSTRUCTION_TYPE_COMMAND = 5; // Command used to take photo repeatedly or start, stop recording.
+  INSTRUCTION_TYPE_WAYPOINT = 2; // Go to waypoint
+  INSTRUCTION_TYPE_WAYPOINT_WITH_DEPTH_SET_POINT = 3; // Go to waypoint with depth set point
+  INSTRUCTION_TYPE_DEPTH_SET_POINT = 4; // Go to depth set point
+  INSTRUCTION_TYPE_COMMAND = 5; // Command used to take photo repeatedly or start, stop recording
   INSTRUCTION_TYPE_RETURN_TO_SURFACE = 6; // Return to surface
   INSTRUCTION_TYPE_RETURN_HOME = 7; // Return to home
+}
+
+/**
+ * Reference for the auto pilot when a mission is active.
+ */
+message ReferenceAutoPilot {
+  InstructionType instruction_type = 1; // Instruction type
+  int32 active_instruction_id = 2; // Id of the active instruction
+  int32 active_path_segment_id = 3; // Id of the active path segment
+  float course_to_target = 4; // Course to the next waypoint from north (rad)
+  float speed_over_ground = 5; // Desired speed over ground (m/s)
+  float horizontal_distance_to_target = 6; // Horizontal distance to the next waypoint (m)
+  float circle_of_acceptance = 7; // Circle of acceptance to mark waypoint as visited (m)
+  float depth_set_point = 8; // Desired depth set point (m)
+  float heave_velocity = 9; // Desired heave velocity in (m/s)
+  float vertical_distance_to_target = 10; // Vertical distance to the next waypoint (m)
+  DepthZeroReference depth_zero_reference = 11; // Indicates if depth is measured from the surface or seabottom
+  float time_to_complete = 12; // Estimated time to complete the instruction (s)
+}
+
+/**
+ * List of mission supervisor states.
+ */
+enum MissionState {
+  MISSION_STATE_UNSPECIFIED = 0; // Unspecified
+  MISSION_STATE_INACTIVE = 1; // Mission supervisor is inactive
+  MISSION_STATE_READY = 2; // Ready to start mission
+  MISSION_STATE_RUNNING = 3; // Mission is running
+  MISSION_STATE_PAUSED = 4; // Mission is paused
+  MISSION_STATE_COMPLETED = 5; // Mission is completed
+  MISSION_STATE_ABORTED = 6; // Mission is aborted by the mission supervisor
+  MISSION_STATE_FAILED_TO_LOAD_MISSION = 7; // Mission has failed to load
+  MISSION_STATE_FAILED_TO_START_MISSION = 8; // Mission has failed to start
 }
 
 /**
  * Mission Status is used for showing the status of the mission.
  */
 message MissionStatus {
-  int32 active_instruction_id = 1; // id of the active instruction
-  InstructionType active_instruction_type = 2; // type of the active instruction
-  int32 estimated_time_to_complete = 3; // estimated time to complete the mission
-  int32 time_elapsed = 4; // time elapsed since mission started
-  repeated int32 completed_instruction_ids = 5; // ids of the completed instructions
-  int32 total_number_of_instructions = 6; // total number of instructions in the mission
+  MissionState state = 1; // State of the mission supervisor
+  int32 time_elapsed = 2; // Time elapsed since mission started
+  int32 estimated_time_to_complete = 3; // Estimated time to complete the mission
+  repeated int32 completed_instruction_ids = 4; // Ids of the completed instructions
+  int32 total_number_of_instructions = 5; // Total number of instructions in the mission
 }
 
 /**
@@ -584,8 +600,8 @@ message MissionStatus {
  */
 message Notification {
   NotificationType type = 1; // Notification to be displayed to the user
-  NotificationLevel level = 3; // Level of the notification, info, warning or error
-  optional google.protobuf.Any value = 2; // Optional value to be displayed in the message
+  NotificationLevel level = 2; // Level of the notification, info, warning or error
+  optional google.protobuf.Any value = 3; // Optional value to be displayed in the message
 }
 
 /**
