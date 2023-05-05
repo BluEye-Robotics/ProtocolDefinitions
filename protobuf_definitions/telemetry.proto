@@ -52,7 +52,7 @@ message ReferenceTel {
 }
 
 /*
- * Guest port light state.
+ * Reference for the auto pilot when a mission is active.
  */
 message ReferenceAutoPilotTel {
   ReferenceAutoPilot reference_auto_pilot = 1;
