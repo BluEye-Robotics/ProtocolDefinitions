@@ -1154,6 +1154,8 @@ message Imu {
   * Medusa gamma ray sensor spectrometer data
   */
 message MedusaSpectrometerData {
+  google.protobuf.Timestamp drone_time = 6; // Time stamp when the data is received
+  google.protobuf.Timestamp sensor_time = 7; // Time stamp the sensor reports
   float realtime = 1; // Time the sensor actually measured (s)
   float livetime = 2; // Time the measurement took (s)
   uint32 total = 3; // Total counts inside the spectrum
