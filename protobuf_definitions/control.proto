@@ -201,3 +201,10 @@ message DeactivateGuestPortsCtrl {
   */
 message ActivateGuestPortsCtrl {
 }
+
+/**
+  * Restart the guest ports by turning power on and off
+  */
+message RestartGuestPortsCtrl {
+  GuestPortRestartInfo restart_info = 1; // Message with information about how long to keep the guest ports off.
+}

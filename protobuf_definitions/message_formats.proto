@@ -859,6 +859,13 @@ message GuestPortInfo {
 }
 
 /**
+  * GuestPort restart information.
+  */
+message GuestPortRestartInfo {
+  double power_off_duration = 1; // Duration to keep the guest ports off (s)
+}
+
+/**
  * Thickness measurement data from a Cygnus Thickness Gauge.
  */
 message ThicknessGauge {
