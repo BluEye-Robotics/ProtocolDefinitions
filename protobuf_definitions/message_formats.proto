@@ -956,6 +956,7 @@ message OverlayParameters {
   bool distance_enabled = 20; // If distance should be included
   bool altitude_enabled = 21; // If altitude should be included
   bool cp_probe_enabled = 22; // If cp-probe should be included
+  bool medusa_enabled = 24; // If medusa measurement should be included
   bool drone_location_enabled = 23; // If the drone location coordinates should be included
   LogoType logo_type = 6; // Which logo should be used
   DepthUnit depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
@@ -988,7 +989,7 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_WATERLINKED_DVL_A50 = 10; // Waterlinked DVL A50
   GUEST_PORT_DEVICE_ID_IMPACT_SUBSEA_ISS360 = 11; // Impact Subsea ISS360 Sonar
   GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_SEATRAC_X010 = 12; // Blueprint Subsea Seatrac X110
-  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M750D = 13; // Blueprint Subsea Oculus M750D
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M750D = 13; // Blueprint Subsea Oculus M750d
   GUEST_PORT_DEVICE_ID_CYGNUS_MINI_ROV_THICKNESS_GAUGE = 14; // Cygnus Mini ROV Thickness Gauge
   GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_PING360_SONAR = 15; // Blue Robotics Ping360 Scanning Imaging Sonar
   GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_720IM = 16; // Tritech Gemini 720im Multibeam Sonar
@@ -1004,6 +1005,8 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_MEDUSA_RADIOMETRICS_MS100 = 26; // Medusa Radiometrics Gamma Ray Sensor
   GUEST_PORT_DEVICE_ID_LASER_TOOLS_SEA_BEAM = 27; // Laser Tools Sea Beam Underwater Laser
   GUEST_PORT_DEVICE_ID_SPOT_X_LASER_SCALERS = 28; // Spot X Laser Scalers
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M1200D = 29; // Blueprint Subsea Oculus M1200d
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M3000D = 30; // Blueprint Subsea Oculus M3000d
 }
 
 /**
@@ -1082,6 +1085,13 @@ message GuestPortInfo {
   GuestPortConnectorInfo gp1 = 1; // GuestPortConnectorInfo 1
   GuestPortConnectorInfo gp2 = 2; // GuestPortConnectorInfo 2
   GuestPortConnectorInfo gp3 = 3; // GuestPortConnectorInfo 3
+}
+
+/**
+  * GuestPort restart information.
+  */
+message GuestPortRestartInfo {
+  double power_off_duration = 1; // Duration to keep the guest ports off (s)
 }
 
 /**
