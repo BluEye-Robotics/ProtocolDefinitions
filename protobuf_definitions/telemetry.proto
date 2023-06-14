@@ -207,10 +207,17 @@ message CpProbeTel {
 }
 
 /**
-  * Sensor readings from In-Situ Aqua Troll probe
+  * Full sensor readings from In-Situ Aqua Troll probe
   */
 message AquaTrollTel {
   AquaTroll aqua_troll = 1; // AquaTroll message containing sensor array.
+}
+
+/**
+  * Single sensor from In-Situ Aqua Troll probe
+  */
+message AquaTrollSensorTel {
+  AquaTrollSensor sensor = 1; // AquaTroll message containing parameter array.
 }
 
 /**
