@@ -255,12 +255,12 @@ message SensorData {
   repeated ParameterBlock parameter_blocks = 21;
 }
 
-message AquaTroll {
+message AquaTrollSensor {
   google.protobuf.Timestamp timestamp = 1;
   repeated SensorData sensors = 2;
 }
 
-message AquaTrollSensor {
+message AquaTrollMeasurements {
   google.protobuf.Timestamp timestamp = 1;
   Sensor sensor_id = 2;
   repeated ParameterBlock parameter_blocks = 3;
