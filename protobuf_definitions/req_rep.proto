@@ -6,6 +6,7 @@
 syntax = "proto3";
 
 package blueye.protocol;
+import "aquatroll.proto";
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
@@ -170,8 +171,24 @@ message SetPubFrequencyReq {
 }
 
 /*
- * Response aftrer updating publish frequency
+ * Response after updating publish frequency
  */
 message SetPubFrequencyRep {
   bool success = 1; // True if message name valid and frequency successfully updated.
+}
+
+/*
+ * Request to set the and In-Situ Aqua Troll parameter unit
+ */
+message SetAquaTrollParameterUnitReq {
+  Sensor sensor_id = 1; // Sensor id, f. ex. "SENSOR_CONDUCTIVITY_SENSOR"
+  Parameter parameter_id = 2; // Parameter name, f. ex. "PARAMETER_TEMPERATURE"
+  Unit unit_id = 3; // Unit, f. ex. "UNIT_TEMP_CELSIUS"
+}
+
+/*
+ * Response after setting the In-Situ Aqua Troll parameter unit
+ */
+message SetAquaTrollParameterUnitRep {
+  bool success = 1; // True if sensor and parameter id valid and unit successfully updated.
 }

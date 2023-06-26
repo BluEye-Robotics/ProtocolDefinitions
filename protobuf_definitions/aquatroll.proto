@@ -331,6 +331,30 @@ message AquaTrollSensorMetadata {
   float low_alarm_set_value = 21;
 }
 
+message AquaTrollProbeMetadata {
+  google.protobuf.Timestamp timestamp = 1;
+  uint32 register_map_template_version = 2;
+  Device device_id = 3;
+  uint32 device_serial_number = 4;
+  google.protobuf.Timestamp manufacture_date = 5;
+  uint32 firmware_version = 6;
+  uint32 boot_code_version = 7;
+  uint32 hardware_version = 8;
+  uint32 max_data_logs = 9;
+  uint32 total_data_log_memory = 10;
+  uint32 total_battery_ticks = 11;
+  google.protobuf.Timestamp last_battery_change = 12;
+  string device_name = 13;
+  string site_name = 14;
+  double latitude_coordinate = 15;
+  double longitude_coordinate = 16;
+  double altitude_coordinate = 17;
+  google.protobuf.Timestamp current_time_utc = 18;
+  uint32 device_status = 19;
+  uint32 used_battery_ticks = 20;
+  uint32 used_data_log_memory = 21;
+}
+
 message AquaTrollSensorParameters {
   google.protobuf.Timestamp timestamp = 1;
   Sensor sensor_id = 2;

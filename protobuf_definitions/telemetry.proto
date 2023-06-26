@@ -206,8 +206,16 @@ message CpProbeTel {
   CpProbe cp_probe = 1; // Reading from cp probe.
 }
 
+
 /**
-  * Full sensor readings from In-Situ Aqua Troll probe
+  * Metadata from the In-Situ Aqua Troll probe's common registers
+  */
+  message AquaTrollProbeMetadataTel {
+    AquaTrollProbeMetadata probe = 1; // AquaTroll message containing sensor array.
+  }
+
+/**
+  * Metadata from a single sensor from In-Situ Aqua Troll probe
   */
 message AquaTrollSensorMetadataTel {
   AquaTrollSensorMetadata sensor = 1; // AquaTroll message containing sensor array.
