@@ -407,13 +407,13 @@ message Instruction {
   int32 group_id = 2; // group id used for polygoons
   bool auto_continue = 3; // false will pause the mission after this instruction
   oneof command {
-    SetWaypointCommand waypoint = 4; // go to waypoint
-    SetDepthSetPointCommand depth_set_point = 5; // go to depth
-    SetCameraCommand camera_command = 6; // camera commands
-    SetControlModeCommand set_control_modes = 7; // set control modes
-    SetTiltMainCameraCommand set_tilt_main_camera = 8; // set camera to angle x
-    SetTiltServoCommand set_tilt_servo = 9; // set tilt angle
-    SetWaitForCommand wait_for_sec = 10; // wait for x seconds
+    SetWaypointCommand set_waypoint_command = 4; // go to waypoint
+    SetDepthSetPointCommand set_depth_set_point_command = 5; // go to depth
+    SetCameraCommand set_camera_command = 6; // camera commands
+    SetControlModeCommand set_control_mode_command = 7; // set control modes
+    SetTiltMainCameraCommand set_tilt_main_camera_command = 8; // set camera to angle x
+    SetTiltServoCommand set_tilt_servo_command = 9; // set tilt angle
+    SetWaitForCommand set_wait_for_command = 10; // wait for x seconds
   }
 }
 
@@ -469,7 +469,7 @@ message SetWaitForCommand {
  */
 message SetCameraCommand {
   CameraAction camera_action = 1; // camera command
-  float param = 2; // used for take photos time and distance
+  float action_param = 2; // used for taking photos based on a time or distance interval
 }
 
 /*
@@ -559,12 +559,16 @@ message Reference {
 enum InstructionType {
   INSTRUCTION_TYPE_UNSPECIFIED = 0; // Unspecified
   INSTRUCTION_TYPE_NONE = 1; // None
-  INSTRUCTION_TYPE_WAYPOINT = 2; // Go to waypoint
-  INSTRUCTION_TYPE_WAYPOINT_WITH_DEPTH_SET_POINT = 3; // Go to waypoint with depth set point
-  INSTRUCTION_TYPE_DEPTH_SET_POINT = 4; // Go to depth set point
-  INSTRUCTION_TYPE_COMMAND = 5; // Command used to take photo repeatedly or start, stop recording
-  INSTRUCTION_TYPE_RETURN_TO_SURFACE = 6; // Return to surface
-  INSTRUCTION_TYPE_RETURN_HOME = 7; // Return to home
+  INSTRUCTION_TYPE_GO_TO_WAYPOINT = 2; // Go to waypoint
+  INSTRUCTION_TYPE_GO_TO_WAYPOINT_WITH_DEPTH_SET_POINT = 3; // Go to waypoint with depth set point
+  INSTRUCTION_TYPE_GO_TO_DEPTH_SET_POINT = 4; // Go to depth set point
+  INSTRUCTION_TYPE_SET_CAMERA_ACTION = 5; // Command used to take photo repeatedly or start, stop recording
+  INSTRUCTION_TYPE_SET_CONTROL_MODE = 6; // Sets a new control mode
+  INSTRUCTION_TYPE_SET_TILT_MAIN_CAMERA = 7; // Sets a new angle for the tilt servo
+  INSTRUCTION_TYPE_SET_TILT_SERVO = 8; // Sets a new angle for the tilt servo
+  INSTRUCTION_TYPE_WAIT_FOR_SEC = 9; // Waiting for requested time in seconds
+  INSTRUCTION_TYPE_RETURN_TO_SURFACE = 10; // Returning to the surface
+  INSTRUCTION_TYPE_RETURN_TO_HOME = 11; // Returning to home
 }
 
 /**
