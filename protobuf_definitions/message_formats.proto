@@ -458,7 +458,7 @@ message WaypointCommand {
  * A DepthSetPointCommand is used to go to a desired depth or altitude.
  */
 message DepthSetPointCommand {
-  DepthSetPoint depth_point = 1; // depth point to go to
+  DepthSetPoint depth_set_point = 1; // depth set point to go to
 }
 
 /*
