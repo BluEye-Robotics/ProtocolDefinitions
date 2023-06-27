@@ -407,13 +407,13 @@ message Instruction {
   int32 group_id = 2; // group id used for polygoons
   bool auto_continue = 3; // false will pause the mission after this instruction
   oneof command {
-    SetWaypointCommand set_waypoint_command = 4; // go to waypoint
-    SetDepthSetPointCommand set_depth_set_point_command = 5; // go to depth
-    SetCameraCommand set_camera_command = 6; // camera commands
-    SetControlModeCommand set_control_mode_command = 7; // set control modes
-    SetTiltMainCameraCommand set_tilt_main_camera_command = 8; // set camera to angle x
-    SetTiltServoCommand set_tilt_servo_command = 9; // set tilt angle
-    SetWaitForCommand set_wait_for_command = 10; // wait for x seconds
+    WaypointCommand waypoint_command = 4; // go to waypoint
+    DepthSetPointCommand depth_set_point_command = 5; // go to depth
+    CameraCommand camera_command = 6; // camera commands
+    ControlModeCommand control_mode_command = 7; // set control modes
+    TiltMainCameraCommand tilt_main_camera_command = 8; // set camera to angle x
+    TiltServoCommand tilt_servo_command = 9; // set tilt angle
+    WaitForCommand wait_for_command = 10; // wait for x seconds
   }
 }
 
@@ -440,34 +440,34 @@ message Waypoint {
   // float fixed_heading
 }
 
-message SetControlModeCommand {
+message ControlModeCommand {
   ControlMode control_mode = 1; // requested control mode
 }
 
-message SetWaypointCommand {
+message WaypointCommand {
   Waypoint waypoint = 1; // waypoint to go to
 }
 
-message SetDepthSetPointCommand {
-  DepthSetPoint depth_set_point = 1; // depth point to go to
+message DepthSetPointCommand {
+  DepthSetPoint depth_point = 1; // depth point to go to
 }
 
-message SetTiltMainCameraCommand {
+message TiltMainCameraCommand {
   TiltAngle tilt_angle = 1; // tilt angle of the camera (-30..30)
 }
 
-message SetTiltServoCommand {
+message TiltServoCommand {
   MultibeamServo tilt_angle = 1; // tilt angle for the multibeam
 }
 
-message SetWaitForCommand {
+message WaitForCommand {
   float wait_for_seconds = 1; // wait for x seconds
 }
 
 /*
  * CameraCommands are used to control the camera from a mission.
  */
-message SetCameraCommand {
+message CameraCommand {
   CameraAction camera_action = 1; // camera command
   float action_param = 2; // used for taking photos based on a time or distance interval
 }
