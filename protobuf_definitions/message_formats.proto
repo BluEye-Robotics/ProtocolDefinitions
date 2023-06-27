@@ -440,26 +440,44 @@ message Waypoint {
   // float fixed_heading
 }
 
+/*
+ * A ControlModeCommand is used to enable a controlmode during a mission.
+ */
 message ControlModeCommand {
   ControlMode control_mode = 1; // requested control mode
 }
 
+/*
+ * A WaypointCommand will request the drone to drive to a point automatically.
+ */
 message WaypointCommand {
   Waypoint waypoint = 1; // waypoint to go to
 }
 
+/*
+ * A DepthSetPointCommand is used to go to a desired depth or altitude.
+ */
 message DepthSetPointCommand {
   DepthSetPoint depth_point = 1; // depth point to go to
 }
 
+/*
+ * The TiltMainCameraCommand can set the desired camera tilt angle.
+ */
 message TiltMainCameraCommand {
   TiltAngle tilt_angle = 1; // tilt angle of the camera (-30..30)
 }
 
+/*
+ * The TiltServoCommand is used to set the tilt angle of the servo.
+ */
 message TiltServoCommand {
-  MultibeamServo tilt_angle = 1; // tilt angle for the multibeam
+  MultibeamServo tilt_angle = 1; // tilt angle for the servo, i.e. multibeam
 }
 
+/*
+ * WaitForCommand is used to wait duringing a mission.
+ */
 message WaitForCommand {
   float wait_for_seconds = 1; // wait for x seconds
 }
