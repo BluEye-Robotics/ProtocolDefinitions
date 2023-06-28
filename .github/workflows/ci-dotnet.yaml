@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - aqua-troll
 
 jobs:
   donet-ci-build:
