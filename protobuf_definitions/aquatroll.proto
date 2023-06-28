@@ -10,8 +10,8 @@ import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 /**
-  * In-Situ Type IDs.
-  */
+* Aqua Troll Type IDs
+*/
 enum AquaTrollType {
   AQUA_TROLL_TYPE_UNSPECIFIED = 0;
   AQUA_TROLL_TYPE_SHORT = 1;
@@ -26,7 +26,7 @@ enum AquaTrollType {
 }
 
 /**
-  * In-Situ Device IDs.
+  * Aqua Troll Device IDs
   */
 enum AquaTrollDevice {
   AQUA_TROLL_DEVICE_UNSPECIFIED = 0;
@@ -52,7 +52,7 @@ enum AquaTrollDevice {
 }
 
 /**
-  * In-Situ Quality IDs.
+  * Aqua Troll Quality IDs
   */
 // protolint:disable ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
 enum AquaTrollQuality {
@@ -65,10 +65,10 @@ enum AquaTrollQuality {
   AQUA_TROLL_QUALITY_CALIBRATING = 6;
   AQUA_TROLL_QUALITY_OFF_LINE = 7;
 }
-// protolint:disable ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
+// protolint:enable ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
 
 /**
-  * In-Situ Parameter IDs
+  * Aqua Troll Parameter IDs
   */
 enum AquaTrollParameter {
   AQUA_TROLL_PARAMETER_UNSPECIFIED = 0;
@@ -132,7 +132,7 @@ enum AquaTrollParameter {
 }
 
 /**
-  * In-Situ Unit IDs
+  * Aqua Troll Unit IDs
   */
 enum AquaTrollUnit {
   AQUA_TROLL_UNIT_UNSPECIFIED = 0;
@@ -222,8 +222,8 @@ enum AquaTrollUnit {
 }
 
 /**
- * In-Situ Sensor IDs
- */
+  * Aqua Troll Sensor IDs
+  */
 enum AquaTrollSensor {
   AQUA_TROLL_SENSOR_UNSPECIFIED = 0;
   AQUA_TROLL_SENSOR_TEMPERATURE = 1;
