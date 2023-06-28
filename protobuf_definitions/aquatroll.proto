@@ -356,6 +356,7 @@ message AquaTrollProbeMetadata {
   uint32 device_status = 19;
   uint32 used_battery_ticks = 20;
   uint32 used_data_log_memory = 21;
+  repeated Sensor sensors = 22;
 }
 
 message AquaTrollSensorParameters {
