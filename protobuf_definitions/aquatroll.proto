@@ -12,7 +12,7 @@ option csharp_namespace = "Blueye.Protocol.Protobuf";
 /**
   * In-Situ Type IDs.
   */
-enum Type {
+enum AquaTrollType {
   TYPE_UNSPECIFIED = 0;
   TYPE_SHORT = 1;
   TYPE_UNSIGNED_SHORT = 2;
@@ -28,7 +28,7 @@ enum Type {
 /**
   * In-Situ Device IDs.
   */
-enum Device {
+enum AquaTrollDevice {
   DEVICE_UNSPECIFIED = 0;
   DEVICE_LEVEL_TROLL_500 = 1;
   DEVICE_LEVEL_TROLL_700 = 2;
@@ -55,7 +55,7 @@ enum Device {
   * In-Situ Quality IDs.
   */
 // protolint:disable ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
-enum Quality {
+enum AquaTrollQuality {
   QUALITY_NORMAL = 0;
   QUALITY_USER_CAL_EXPIRED = 1;
   QUALITY_FACTORY_CAL_EXPIRED = 2;
@@ -70,7 +70,7 @@ enum Quality {
 /**
   * In-Situ Parameter IDs
   */
-enum Parameter {
+enum AquaTrollParameter {
   PARAMETER_UNSPECIFIED = 0;
   PARAMETER_TEMPERATURE = 1;
   PARAMETER_PRESSURE = 2;
@@ -134,7 +134,7 @@ enum Parameter {
 /**
   * In-Situ Unit IDs
   */
-enum Unit {
+enum AquaTrollUnit {
   UNIT_UNSPECIFIED = 0;
   UNIT_TEMP_CELSIUS = 1;
   UNIT_TEMP_FARENHEIT = 2;
@@ -224,7 +224,7 @@ enum Unit {
 /**
  * In-Situ Sensor IDs
  */
-enum Sensor {
+enum AquaTrollSensor {
   SENSOR_UNSPECIFIED = 0;
   SENSOR_TEMPERATURE = 1;
   SENSOR_S5_PSI_FULL_SCALE_GAUGE_PRESSURE_WITH_LEVEL_AND_TEMPERATURE = 2;
@@ -294,11 +294,11 @@ enum Sensor {
  */
 message AquaTrollParameterBlock {
   float measured_value = 1;
-  Parameter parameter_id = 2;
-  Unit units_id = 3;
-  Quality data_quality_id = 4;
+  AquaTrollParameter parameter_id = 2;
+  AquaTrollUnit units_id = 3;
+  AquaTrollQuality data_quality_id = 4;
   float off_line_sentinel_value = 5;
-  repeated Unit available_units = 6;
+  repeated AquaTrollUnit available_units = 6;
 }
 
 /**
@@ -311,7 +311,7 @@ message AquaTrollParameterBlock {
  */
 message AquaTrollSensorMetadata {
   google.protobuf.Timestamp timestamp = 1;
-  Sensor sensor_id = 2;
+  AquaTrollSensor sensor_id = 2;
   uint32 sensor_serial_number = 3;
   uint32 sensor_status = 4;
   google.protobuf.Timestamp last_factory_calibration = 5;
@@ -337,7 +337,7 @@ message AquaTrollSensorMetadata {
 message AquaTrollProbeMetadata {
   google.protobuf.Timestamp timestamp = 1;
   uint32 register_map_template_version = 2;
-  Device device_id = 3;
+  AquaTrollDevice device_id = 3;
   uint32 device_serial_number = 4;
   google.protobuf.Timestamp manufacture_date = 5;
   uint32 firmware_version = 6;
@@ -356,11 +356,11 @@ message AquaTrollProbeMetadata {
   uint32 device_status = 19;
   uint32 used_battery_ticks = 20;
   uint32 used_data_log_memory = 21;
-  repeated Sensor sensors = 22;
+  repeated AquaTrollSensor sensors = 22;
 }
 
 message AquaTrollSensorParameters {
   google.protobuf.Timestamp timestamp = 1;
-  Sensor sensor_id = 2;
+  AquaTrollSensor sensor_id = 2;
   repeated AquaTrollParameterBlock parameter_blocks = 3;
 }

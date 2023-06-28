@@ -181,9 +181,9 @@ message SetPubFrequencyRep {
  * Request to set the and In-Situ Aqua Troll parameter unit
  */
 message SetAquaTrollParameterUnitReq {
-  Sensor sensor_id = 1; // Sensor id, f. ex. "SENSOR_CONDUCTIVITY_SENSOR"
-  Parameter parameter_id = 2; // Parameter name, f. ex. "PARAMETER_TEMPERATURE"
-  Unit unit_id = 3; // Unit, f. ex. "UNIT_TEMP_CELSIUS"
+  AquaTrollSensor sensor_id = 1; // Sensor id, f. ex. "SENSOR_CONDUCTIVITY_SENSOR"
+  AquaTrollParameter parameter_id = 2; // Parameter name, f. ex. "PARAMETER_TEMPERATURE"
+  AquaTrollUnit unit_id = 3; // Unit, f. ex. "UNIT_TEMP_CELSIUS"
 }
 
 /*
