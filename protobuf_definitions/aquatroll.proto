@@ -329,6 +329,7 @@ message AquaTrollSensorMetadata {
   float low_warning_set_value = 19;
   float low_alarm_clear_value = 20;
   float low_alarm_set_value = 21;
+  repeated AquaTrollParameterBlock parameter_blocks = 22;
 }
 
 message AquaTrollProbeMetadata {
