@@ -54,6 +54,7 @@ enum Device {
 /**
   * In-Situ Quality IDs.
   */
+// protolint:disable ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
 enum Quality {
   QUALITY_NORMAL = 0;
   QUALITY_USER_CAL_EXPIRED = 1;
@@ -64,6 +65,7 @@ enum Quality {
   QUALITY_CALIBRATING = 6;
   QUALITY_OFF_LINE = 7;
 }
+// protolint:disable ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
 
 /**
   * In-Situ Parameter IDs
