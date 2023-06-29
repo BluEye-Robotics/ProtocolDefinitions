@@ -218,14 +218,14 @@ message AquaTrollProbeMetadataTel {
   * Metadata from a single sensor from In-Situ Aqua Troll probe
   */
 message AquaTrollSensorMetadataTel {
-  AquaTrollSensorMetadata sensor = 1; // AquaTroll message containing sensor array.
+  AquaTrollSensorMetadataArray sensors = 1; // AquaTroll message containing sensor array.
 }
 
 /**
   * Single sensor from In-Situ Aqua Troll probe
   */
 message AquaTrollSensorParametersTel {
-  AquaTrollSensorParameters parameters = 1; // AquaTroll message containing parameter array.
+  AquaTrollSensorParametersArray sensors = 1; // AquaTroll message containing parameter array.
 }
 
 /**

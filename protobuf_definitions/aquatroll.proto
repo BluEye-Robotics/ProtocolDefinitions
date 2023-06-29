@@ -334,6 +334,11 @@ message AquaTrollSensorMetadata {
   repeated AquaTrollParameterBlock parameter_blocks = 22;
 }
 
+message AquaTrollSensorMetadataArray {
+  google.protobuf.Timestamp timestamp = 1;
+  repeated AquaTrollSensorMetadata sensors = 2;
+}
+
 message AquaTrollProbeMetadata {
   google.protobuf.Timestamp timestamp = 1;
   uint32 register_map_template_version = 2;
@@ -360,7 +365,11 @@ message AquaTrollProbeMetadata {
 }
 
 message AquaTrollSensorParameters {
-  google.protobuf.Timestamp timestamp = 1;
   AquaTrollSensor sensor_id = 2;
   repeated AquaTrollParameterBlock parameter_blocks = 3;
+}
+
+message AquaTrollSensorParametersArray {
+  google.protobuf.Timestamp timestamp = 1;
+  repeated AquaTrollSensorParameters sensors = 2;
 }
