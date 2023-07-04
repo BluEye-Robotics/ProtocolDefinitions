@@ -7,5 +7,5 @@ else
   docker run --rm \
     -v $(pwd):/workspace \
     --workdir /workspace \
-    yoheimuta/protolint:v0.31.0 lint protobuf_definitions
+    yoheimuta/protolint:0.44.0 lint protobuf_definitions
 fi

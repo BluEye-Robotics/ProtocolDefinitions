@@ -20,9 +20,13 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+      - name: Sanitize branch name
+        id: branches
+        uses: transferwise/sanitize-branch-name@v1
+
       - name: Build project and generate NuGet package
         run: |
-          dotnet pack Blueye.Protocol.Protobuf.csproj --version-suffix "ci.$GITHUB_RUN_NUMBER" -c Release -o out
+          dotnet pack Blueye.Protocol.Protobuf.csproj --version-suffix "${{ steps.branches.outputs.sanitized-branch-name }}.$GITHUB_RUN_NUMBER" -c Release -o out
 
       - name: Push generated package to GitHub registry
         env:

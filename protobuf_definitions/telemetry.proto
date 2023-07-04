@@ -6,6 +6,7 @@
 syntax = "proto3";
 
 package blueye.protocol;
+import "aquatroll.proto";
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
@@ -203,6 +204,28 @@ message ThicknessGaugeTel {
   */
 message CpProbeTel {
   CpProbe cp_probe = 1; // Reading from cp probe.
+}
+
+
+/**
+  * Metadata from the In-Situ Aqua Troll probe's common registers
+  */
+message AquaTrollProbeMetadataTel {
+  AquaTrollProbeMetadata probe = 1; // AquaTroll message containing sensor array.
+}
+
+/**
+  * Metadata from a single sensor from In-Situ Aqua Troll probe
+  */
+message AquaTrollSensorMetadataTel {
+  AquaTrollSensorMetadataArray sensors = 1; // AquaTroll message containing sensor array.
+}
+
+/**
+  * Single sensor from In-Situ Aqua Troll probe
+  */
+message AquaTrollSensorParametersTel {
+  AquaTrollSensorParametersArray sensors = 1; // AquaTroll message containing parameter array.
 }
 
 /**
