@@ -181,7 +181,7 @@ message SetPubFrequencyRep {
 /**
  * Request to get latest telemetry data
  */
- message GetTelemetryReq {
+message GetTelemetryReq {
   string message_type = 1; // Message name, f. ex. "AttitudeTel"
 }
 
