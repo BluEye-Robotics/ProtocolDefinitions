@@ -302,6 +302,27 @@ enum AquaTrollSensorStatus {
 }
 // protolint:enable ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
 
+/**
+  * Aqua Troll Device Status IDs
+  */
+// protolint:disable ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
+enum AquaTrollDeviceStatus {
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_HIGH_ALARM = 0;
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_HIGH_WARNING = 1;
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_LOW_WARNING = 2;
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_LOW_ALARM = 3;
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_CALIBRATION_WARNING = 4;
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_MALFUNCTION = 5;
+  AQUA_TROLL_DEVICE_STATUS_POWER_MANAGEMENT_DISABLED = 8;
+  AQUA_TROLL_DEVICE_STATUS_DEVICE_OFF_LINE = 9;
+  AQUA_TROLL_DEVICE_STATUS_DEVICE_HARDWARE_RESET_OCCURRED = 10;
+  AQUA_TROLL_DEVICE_STATUS_DEVICE_MALFUNCTION = 11;
+  AQUA_TROLL_DEVICE_STATUS_NO_EXTERNAL_POWER = 12;
+  AQUA_TROLL_DEVICE_STATUS_LOW_BATTERY = 13;
+  AQUA_TROLL_DEVICE_STATUS_LOW_MEMORY = 14;
+}
+// protolint:enable ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
+
 
 /**
  * In-Situ Parameter Block
@@ -312,7 +333,7 @@ message AquaTrollParameterBlock {
   float measured_value = 1;
   AquaTrollParameter parameter_id = 2;
   AquaTrollUnit units_id = 3;
-  AquaTrollQuality data_quality_id = 4;
+  repeated AquaTrollQuality data_quality_id = 7;
   float off_line_sentinel_value = 5;
   repeated AquaTrollUnit available_units = 6;
 }
@@ -329,7 +350,7 @@ message AquaTrollSensorMetadata {
   google.protobuf.Timestamp timestamp = 1;
   AquaTrollSensor sensor_id = 2;
   uint32 sensor_serial_number = 3;
-  uint32 sensor_status = 4;
+  repeated AquaTrollSensorStatus sensor_status = 23;
   google.protobuf.Timestamp last_factory_calibration = 5;
   google.protobuf.Timestamp next_factory_calibration = 6;
   google.protobuf.Timestamp last_user_calibration = 7;
@@ -374,7 +395,7 @@ message AquaTrollProbeMetadata {
   double longitude_coordinate = 16;
   double altitude_coordinate = 17;
   google.protobuf.Timestamp current_time_utc = 18;
-  uint32 device_status = 19;
+  repeated AquaTrollDeviceStatus device_status = 23;
   uint32 used_battery_ticks = 20;
   uint32 used_data_log_memory = 21;
   repeated AquaTrollSensor sensors = 22;
