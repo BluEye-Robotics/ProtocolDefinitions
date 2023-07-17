@@ -397,6 +397,10 @@ message Mission {
   uint32 id = 1; // mission id
   string name = 2; // mission name provided from the app
   repeated Instruction instructions = 3; // list of instructions in the mission
+  int32 toatal_distance = 4; // total distance of the mission (m)
+  int32 total_duration_time = 5; // total duration time of the mission (s)
+  int32 default_surge_speed = 6; // default cruise speed of the mission (m/s)
+  int32 default_heave_speed = 7; // default heave speed of the mission (m/s)
 }
 
 /*
@@ -629,8 +633,9 @@ message MissionStatus {
   MissionState state = 1; // State of the mission supervisor
   int32 time_elapsed = 2; // Time elapsed since mission started
   int32 estimated_time_to_complete = 3; // Estimated time to complete the mission
-  repeated int32 completed_instruction_ids = 4; // Ids of the completed instructions
-  int32 total_number_of_instructions = 5; // Total number of instructions in the mission
+  int32 distance_to_complete = 4; // Distance left of the mission in meters
+  repeated int32 completed_instruction_ids = 5; // Ids of the completed instructions
+  int32 total_number_of_instructions = 6; // Total number of instructions in the mission
 }
 
 /**
