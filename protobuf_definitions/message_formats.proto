@@ -397,10 +397,12 @@ message Mission {
   uint32 id = 1; // mission id
   string name = 2; // mission name provided from the app
   repeated Instruction instructions = 3; // list of instructions in the mission
-  int32 toatal_distance = 4; // total distance of the mission (m)
-  int32 total_duration_time = 5; // total duration time of the mission (s)
-  int32 default_surge_speed = 6; // default cruise speed of the mission (m/s)
-  int32 default_heave_speed = 7; // default heave speed of the mission (m/s)
+  repeated PathSegment path_segments = 4; // calculated path segments from the reference generator (optinal)
+  int32 total_distance = 5; // total distance of the mission (m) (optinal)
+  int32 total_duration_time = 6; // total duration time of the mission (s) (optinal)
+  float default_surge_speed = 7; // default cruise speed of the mission (m/s) (optinal)
+  float default_heave_speed = 8; // default heave speed of the mission (m/s) (optinal)
+  float default_circle_of_acceptance = 9; // default circle of acceptance for waypoints (m) (optinal)
 }
 
 /*
@@ -636,6 +638,8 @@ message MissionStatus {
   int32 distance_to_complete = 4; // Distance left of the mission in meters
   repeated int32 completed_instruction_ids = 5; // Ids of the completed instructions
   int32 total_number_of_instructions = 6; // Total number of instructions in the mission
+  repeated int32 completed_path_segment_ids = 7; // Ids of the completed path segments
+  int32 total_number_of_path_segments = 8; // Total number of path segments in the mission
 }
 
 /**

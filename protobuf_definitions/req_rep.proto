@@ -187,7 +187,6 @@ message GetMissionReq {
  */
 message GetMissionRep {
   Mission mission = 1; // active mission with waypoints
-  repeated PathSegment path_segments = 2; // calculated path segments from the reference generator
 }
 
 /*
