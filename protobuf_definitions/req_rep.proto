@@ -222,3 +222,18 @@ message SetAquaTrollConnectionStatusRep {
   bool success = 1; // True if connection status successfully updated.
   string message = 2; // Error message if success is false.
 }
+
+/**
+  * Request current connection status of the In-Situ Aqua Troll
+  */
+message GetAquaTrollConnectionStatusReq {
+}
+
+/**
+  * Response with current connection status of the In-Situ Aqua Troll
+  */
+message GetAquaTrollConnectionStatusRep {
+  bool connected = 1; // True if connected, false if disconnected
+  bool success = 2; // True if connection status successfully updated.
+  string message = 3; // Error message if success is false.
+}
