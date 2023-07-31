@@ -189,7 +189,7 @@ message GetTelemetryReq {
  * Response with latest telemetry
  */
 message GetTelemetryRep {
-  google.protobuf.Any payload = 1; // True if message name valid and frequency successfully updated.
+  google.protobuf.Any payload = 1; // The latest telemetry data, empty if no data available.
 }
 
 /**
