@@ -279,6 +279,7 @@ message BatteryBQ40Z50 {
     * Battery status from BQ40Z50 ref data sheet 0x16.
     */
   message BatteryStatus {
+    reserved 15, 16;
     bool overcharged_alarm = 1;
     bool terminate_charge_alarm = 2;
     bool over_temperature_alarm = 3;
@@ -312,13 +313,12 @@ message BatteryBQ40Z50 {
   float average_current = 7; // Average current (A)
   float relative_state_of_charge = 8; // Relative state of charge (0..1)
   float absolute_state_of_charge = 9; // Absolute state of charge (0..1)
+  float calculated_state_of_charge = 26; // Calculated state of charge (0..1)
   float remaining_capacity = 10; // Remaining capacity (Ah)
   float full_charge_capacity = 11; // Full charge capacity (Ah)
   uint32 runtime_to_empty = 12; // Runtime to empty (s)
   uint32 average_time_to_empty = 13; // Average time to empty (s)
   uint32 average_time_to_full = 14; // Average time to full (s)
-  uint32 time_to_full_at_current_rate = 15; // Time to fully charged at current rate (s)
-  uint32 time_to_empty_at_current_rate = 16; // Time to empty at current rate (s)
   float charging_current = 17; // Charging current (A)
   float charging_voltage = 18; // Charging voltage (V)
 
