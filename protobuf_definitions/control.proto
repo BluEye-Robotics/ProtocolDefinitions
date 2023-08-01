@@ -6,6 +6,7 @@
 syntax = "proto3";
 
 package blueye.protocol;
+import "aquatroll.proto";
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
@@ -207,4 +208,20 @@ message ActivateGuestPortsCtrl {
   */
 message RestartGuestPortsCtrl {
   GuestPortRestartInfo restart_info = 1; // Message with information about how long to keep the guest ports off.
+}
+
+/**
+  * Request to set an In-Situ Aqua Troll parameter unit
+  */
+message SetAquaTrollParameterUnitCtrl {
+  // Message with information about which parameter to set and the unit to set it to.
+  SetAquaTrollParameterUnit parameter_info = 1;
+}
+
+/**
+  * Request to change the In-Situ Aqua Troll connection status
+  */
+message SetAquaTrollConnectionStatusCtrl {
+  // Message with information about which parameter to set and the unit to set it to.
+  SetAquaTrollConnectionStatus connection_status = 1;
 }

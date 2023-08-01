@@ -10,19 +10,19 @@ import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 /**
-* Aqua Troll Type IDs
-*/
-enum AquaTrollType {
-  AQUA_TROLL_TYPE_UNSPECIFIED = 0;
-  AQUA_TROLL_TYPE_SHORT = 1;
-  AQUA_TROLL_TYPE_UNSIGNED_SHORT = 2;
-  AQUA_TROLL_TYPE_LONG = 3;
-  AQUA_TROLL_TYPE_UNSIGNED_LONG = 4;
-  AQUA_TROLL_TYPE_FLOAT = 5;
-  AQUA_TROLL_TYPE_DOUBLE = 6;
-  AQUA_TROLL_TYPE_CHARACTER = 7;
-  AQUA_TROLL_TYPE_STRING = 8;
-  AQUA_TROLL_TYPE_TIME = 9;
+  * Type IDs
+  */
+enum Type {
+  TYPE_UNSPECIFIED = 0;
+  TYPE_SHORT = 1;
+  TYPE_UNSIGNED_SHORT = 2;
+  TYPE_LONG = 3;
+  TYPE_UNSIGNED_LONG = 4;
+  TYPE_FLOAT = 5;
+  TYPE_DOUBLE = 6;
+  TYPE_CHARACTER = 7;
+  TYPE_STRING = 8;
+  TYPE_TIME = 9;
 }
 
 /**
@@ -403,4 +403,20 @@ message AquaTrollSensorParameters {
 message AquaTrollSensorParametersArray {
   google.protobuf.Timestamp timestamp = 1;
   repeated AquaTrollSensorParameters sensors = 2;
+}
+
+/**
+  * Request to set an In-Situ Aqua Troll parameter unit
+  */
+message SetAquaTrollParameterUnit {
+  AquaTrollSensor sensor_id = 1; // Sensor id, f. ex. "SENSOR_CONDUCTIVITY_SENSOR"
+  AquaTrollParameter parameter_id = 2; // Parameter name, f. ex. "PARAMETER_TEMPERATURE"
+  AquaTrollUnit unit_id = 3; // Unit, f. ex. "UNIT_TEMP_CELSIUS"
+}
+
+/**
+  * Request to change the In-Situ Aqua Troll connection status
+  */
+message SetAquaTrollConnectionStatus {
+  bool connected = 1; // True if connected, false if disconnected
 }
