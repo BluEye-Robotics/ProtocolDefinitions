@@ -799,6 +799,7 @@ enum NavigationSensorID {
   NAVIGATION_SENSOR_ID_UNSPECIFIED = 0; // Unspecified
   NAVIGATION_SENSOR_ID_WATERLINKED_DVL_A50 = 1; // Water Linked DVL A50
   NAVIGATION_SENSOR_ID_WATERLINKED_UGPS_G2 = 2; // Water Linked UGPS G2
+  NAVIGATION_SENSOR_ID_NMEA = 3; // NMEA stream from external positioning system
 }
 
 /**
