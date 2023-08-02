@@ -372,6 +372,7 @@ message AquaTrollSensorMetadataArray {
 
 message AquaTrollProbeMetadata {
   google.protobuf.Timestamp timestamp = 1;
+  bool status = 24;
   uint32 register_map_template_version = 2;
   AquaTrollDevice device_id = 3;
   uint32 device_serial_number = 4;
