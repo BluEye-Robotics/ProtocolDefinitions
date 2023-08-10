@@ -1,10 +1,6 @@
 name: dotnet CI build
 
-on:
-  push:
-    branches:
-      - master
-      - aqua-troll
+on: push
 
 jobs:
   donet-ci-build:
