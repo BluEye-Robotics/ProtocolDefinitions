@@ -324,6 +324,9 @@ enum AquaTrollDeviceStatus {
  * Up to NUMBER_OF_SENSOR_PARAMETERS blocks may be part of a sensor
  */
 message AquaTrollParameterBlock {
+  reserved 4;
+  reserved "data_quality_id";
+
   float measured_value = 1;
   AquaTrollParameter parameter_id = 2;
   AquaTrollUnit units_id = 3;
@@ -341,6 +344,9 @@ message AquaTrollParameterBlock {
  * Communication Protocol
  */
 message AquaTrollSensorMetadata {
+  reserved 4;
+  reserved "sensor_status";
+
   google.protobuf.Timestamp timestamp = 1;
   AquaTrollSensor sensor_id = 2;
   uint32 sensor_serial_number = 3;
@@ -371,6 +377,9 @@ message AquaTrollSensorMetadataArray {
 }
 
 message AquaTrollProbeMetadata {
+  reserved 19;
+  reserved "device_status";
+
   google.protobuf.Timestamp timestamp = 1;
   bool status = 24;
   uint32 register_map_template_version = 2;
@@ -419,5 +428,5 @@ message SetAquaTrollParameterUnit {
   * Request to change the In-Situ Aqua Troll connection status
   */
 message SetAquaTrollConnectionStatus {
-  bool connected = 1; // True if connected, false if disconnected
+  bool connected = 1; // True to connect, false to disconnect
 }
