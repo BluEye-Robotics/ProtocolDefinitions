@@ -10,19 +10,19 @@ import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 /**
-* Aqua Troll Type IDs
-*/
-enum AquaTrollType {
-  AQUA_TROLL_TYPE_UNSPECIFIED = 0;
-  AQUA_TROLL_TYPE_SHORT = 1;
-  AQUA_TROLL_TYPE_UNSIGNED_SHORT = 2;
-  AQUA_TROLL_TYPE_LONG = 3;
-  AQUA_TROLL_TYPE_UNSIGNED_LONG = 4;
-  AQUA_TROLL_TYPE_FLOAT = 5;
-  AQUA_TROLL_TYPE_DOUBLE = 6;
-  AQUA_TROLL_TYPE_CHARACTER = 7;
-  AQUA_TROLL_TYPE_STRING = 8;
-  AQUA_TROLL_TYPE_TIME = 9;
+  * Type IDs
+  */
+enum Type {
+  TYPE_UNSPECIFIED = 0;
+  TYPE_SHORT = 1;
+  TYPE_UNSIGNED_SHORT = 2;
+  TYPE_LONG = 3;
+  TYPE_UNSIGNED_LONG = 4;
+  TYPE_FLOAT = 5;
+  TYPE_DOUBLE = 6;
+  TYPE_CHARACTER = 7;
+  TYPE_STRING = 8;
+  TYPE_TIME = 9;
 }
 
 /**
@@ -54,9 +54,8 @@ enum AquaTrollDevice {
 /**
   * Aqua Troll Quality IDs
   */
-// protolint:disable ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
 enum AquaTrollQuality {
-  AQUA_TROLL_QUALITY_NORMAL = 0;
+  AQUA_TROLL_QUALITY_NORMAL = 0; // protolint:disable:this ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
   AQUA_TROLL_QUALITY_USER_CAL_EXPIRED = 1;
   AQUA_TROLL_QUALITY_FACTORY_CAL_EXPIRED = 2;
   AQUA_TROLL_QUALITY_ERROR = 3;
@@ -65,7 +64,6 @@ enum AquaTrollQuality {
   AQUA_TROLL_QUALITY_CALIBRATING = 6;
   AQUA_TROLL_QUALITY_OFF_LINE = 7;
 }
-// protolint:enable ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
 
 /**
   * Aqua Troll Parameter IDs
@@ -286,6 +284,39 @@ enum AquaTrollSensor {
   AQUA_TROLL_SENSOR_PROBE_PARAMETERS = 79;
 }
 
+/**
+  * Aqua Troll Sensor Status IDs
+  */
+enum AquaTrollSensorStatus {
+  AQUA_TROLL_SENSOR_STATUS_SENSOR_HIGH_ALARM = 0; // protolint:disable:this ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
+  AQUA_TROLL_SENSOR_STATUS_SENSOR_HIGH_WARNING = 1;
+  AQUA_TROLL_SENSOR_STATUS_SENSOR_LOW_WARNING = 2;
+  AQUA_TROLL_SENSOR_STATUS_SENSOR_LOW_ALARM = 3;
+  AQUA_TROLL_SENSOR_STATUS_SENSOR_CALIBRATION_WARNING = 4;
+  AQUA_TROLL_SENSOR_STATUS_SENSOR_MALFUNCTION = 5;
+  AQUA_TROLL_SENSOR_STATUS_SENSOR_MODE_BIT_1 = 8;
+  AQUA_TROLL_SENSOR_STATUS_SENSOR_MODE_BIT_2 = 9;
+}
+
+/**
+  * Aqua Troll Device Status IDs
+  */
+enum AquaTrollDeviceStatus {
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_HIGH_ALARM = 0; // protolint:disable:this ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_HIGH_WARNING = 1;
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_LOW_WARNING = 2;
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_LOW_ALARM = 3;
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_CALIBRATION_WARNING = 4;
+  AQUA_TROLL_DEVICE_STATUS_SENSOR_MALFUNCTION = 5;
+  AQUA_TROLL_DEVICE_STATUS_POWER_MANAGEMENT_DISABLED = 8;
+  AQUA_TROLL_DEVICE_STATUS_DEVICE_OFF_LINE = 9;
+  AQUA_TROLL_DEVICE_STATUS_DEVICE_HARDWARE_RESET_OCCURRED = 10;
+  AQUA_TROLL_DEVICE_STATUS_DEVICE_MALFUNCTION = 11;
+  AQUA_TROLL_DEVICE_STATUS_NO_EXTERNAL_POWER = 12;
+  AQUA_TROLL_DEVICE_STATUS_LOW_BATTERY = 13;
+  AQUA_TROLL_DEVICE_STATUS_LOW_MEMORY = 14;
+}
+
 
 /**
  * In-Situ Parameter Block
@@ -293,10 +324,13 @@ enum AquaTrollSensor {
  * Up to NUMBER_OF_SENSOR_PARAMETERS blocks may be part of a sensor
  */
 message AquaTrollParameterBlock {
+  reserved 4;
+  reserved "data_quality_id";
+
   float measured_value = 1;
   AquaTrollParameter parameter_id = 2;
   AquaTrollUnit units_id = 3;
-  AquaTrollQuality data_quality_id = 4;
+  repeated AquaTrollQuality data_quality_ids = 7;
   float off_line_sentinel_value = 5;
   repeated AquaTrollUnit available_units = 6;
 }
@@ -310,10 +344,13 @@ message AquaTrollParameterBlock {
  * Communication Protocol
  */
 message AquaTrollSensorMetadata {
+  reserved 4;
+  reserved "sensor_status";
+
   google.protobuf.Timestamp timestamp = 1;
   AquaTrollSensor sensor_id = 2;
   uint32 sensor_serial_number = 3;
-  uint32 sensor_status = 4;
+  repeated AquaTrollSensorStatus sensor_status_flags = 23;
   google.protobuf.Timestamp last_factory_calibration = 5;
   google.protobuf.Timestamp next_factory_calibration = 6;
   google.protobuf.Timestamp last_user_calibration = 7;
@@ -340,7 +377,11 @@ message AquaTrollSensorMetadataArray {
 }
 
 message AquaTrollProbeMetadata {
+  reserved 19;
+  reserved "device_status";
+
   google.protobuf.Timestamp timestamp = 1;
+  bool status = 24;
   uint32 register_map_template_version = 2;
   AquaTrollDevice device_id = 3;
   uint32 device_serial_number = 4;
@@ -358,7 +399,7 @@ message AquaTrollProbeMetadata {
   double longitude_coordinate = 16;
   double altitude_coordinate = 17;
   google.protobuf.Timestamp current_time_utc = 18;
-  uint32 device_status = 19;
+  repeated AquaTrollDeviceStatus device_status_flags = 23;
   uint32 used_battery_ticks = 20;
   uint32 used_data_log_memory = 21;
   repeated AquaTrollSensor sensors = 22;
@@ -372,4 +413,20 @@ message AquaTrollSensorParameters {
 message AquaTrollSensorParametersArray {
   google.protobuf.Timestamp timestamp = 1;
   repeated AquaTrollSensorParameters sensors = 2;
+}
+
+/**
+  * Request to set an In-Situ Aqua Troll parameter unit
+  */
+message SetAquaTrollParameterUnit {
+  AquaTrollSensor sensor_id = 1; // Sensor id, f. ex. "SENSOR_CONDUCTIVITY_SENSOR"
+  AquaTrollParameter parameter_id = 2; // Parameter name, f. ex. "PARAMETER_TEMPERATURE"
+  AquaTrollUnit unit_id = 3; // Unit, f. ex. "UNIT_TEMP_CELSIUS"
+}
+
+/**
+  * Request to change the In-Situ Aqua Troll connection status
+  */
+message SetAquaTrollConnectionStatus {
+  bool connected = 1; // True to connect, false to disconnect
 }

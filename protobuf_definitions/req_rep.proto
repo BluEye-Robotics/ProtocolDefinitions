@@ -93,10 +93,10 @@ message PingRep {
 }
 
 /**
- * Request to set parameters for ultrasonic thickness gauge.
- *
- * The sound velocity is used to calculate the thickness of the material being measured.
- */
+  * Request to set parameters for ultrasonic thickness gauge.
+  *
+  * The sound velocity is used to calculate the thickness of the material being measured.
+  */
 message SetThicknessGaugeParametersReq {
   uint32 sound_velocity = 1; // Sound velocity in m/s
 }
@@ -148,39 +148,39 @@ message DisconnectClientRep {
 }
 
 /**
- * Request essential battery information.
- *
- * Can be used to instantly get battery information,
- * instead of having to wait for the BatteryTel message to be received.
- */
+  * Request essential battery information.
+  *
+  * Can be used to instantly get battery information,
+  * instead of having to wait for the BatteryTel message to be received.
+  */
 message GetBatteryReq {
 }
 
 /**
- * Response with essential battery information.
- */
+  * Response with essential battery information.
+  */
 message GetBatteryRep {
   Battery battery = 1; // Essential battery information.
 }
 
 /**
- * Request to update the publish frequency
- */
+  * Request to update the publish frequency
+  */
 message SetPubFrequencyReq {
   string message_type = 1; // Message name, f. ex. "AttitudeTel"
   float frequency = 2; // Publish frequency (max 100 Hz).
 }
 
 /**
- * Response after updating publish frequency
- */
+  * Response after updating publish frequency
+  */
 message SetPubFrequencyRep {
   bool success = 1; // True if message name valid and frequency successfully updated.
 }
 
 /**
- * Request to get latest telemetry data
- */
+  * Request to get latest telemetry data
+  */
 message GetTelemetryReq {
   string message_type = 1; // Message name, f. ex. "AttitudeTel"
 }
@@ -190,20 +190,4 @@ message GetTelemetryReq {
  */
 message GetTelemetryRep {
   google.protobuf.Any payload = 1; // The latest telemetry data, empty if no data available.
-}
-
-/**
-  * Request to set an In-Situ Aqua Troll parameter unit
-  */
-message SetAquaTrollParameterUnitReq {
-  AquaTrollSensor sensor_id = 1; // Sensor id, f. ex. "SENSOR_CONDUCTIVITY_SENSOR"
-  AquaTrollParameter parameter_id = 2; // Parameter name, f. ex. "PARAMETER_TEMPERATURE"
-  AquaTrollUnit unit_id = 3; // Unit, f. ex. "UNIT_TEMP_CELSIUS"
-}
-
-/**
-  * Response after setting the In-Situ Aqua Troll parameter unit
-  */
-message SetAquaTrollParameterUnitRep {
-  bool success = 1; // True if sensor and parameter id valid and unit successfully updated.
 }
