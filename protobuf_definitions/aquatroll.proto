@@ -1,17 +1,13 @@
-/*
- * Aquatroll
- *
- * These messages are emitted by the In-Situ AquaTroll 500 probe.
- */
+// Aquatroll
+//
+// These messages are emitted by the In-Situ AquaTroll 500 probe.
 syntax = "proto3";
 
 package blueye.protocol;
 import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
-/**
-  * Type IDs
-  */
+// Type IDs
 enum Type {
   TYPE_UNSPECIFIED = 0;
   TYPE_SHORT = 1;
@@ -25,9 +21,7 @@ enum Type {
   TYPE_TIME = 9;
 }
 
-/**
-  * Aqua Troll Device IDs
-  */
+// Aqua Troll Device IDs
 enum AquaTrollDevice {
   AQUA_TROLL_DEVICE_UNSPECIFIED = 0;
   AQUA_TROLL_DEVICE_LEVEL_TROLL_500 = 1;
@@ -51,9 +45,7 @@ enum AquaTrollDevice {
   AQUA_TROLL_DEVICE_AQUA_TROLL_500_VENTED = 34;
 }
 
-/**
-  * Aqua Troll Quality IDs
-  */
+// Aqua Troll Quality IDs
 enum AquaTrollQuality {
   AQUA_TROLL_QUALITY_NORMAL = 0; // protolint:disable:this ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
   AQUA_TROLL_QUALITY_USER_CAL_EXPIRED = 1;
@@ -65,9 +57,7 @@ enum AquaTrollQuality {
   AQUA_TROLL_QUALITY_OFF_LINE = 7;
 }
 
-/**
-  * Aqua Troll Parameter IDs
-  */
+// Aqua Troll Parameter IDs
 enum AquaTrollParameter {
   AQUA_TROLL_PARAMETER_UNSPECIFIED = 0;
   AQUA_TROLL_PARAMETER_TEMPERATURE = 1;
@@ -129,9 +119,7 @@ enum AquaTrollParameter {
   AQUA_TROLL_PARAMETER_COLORED_DISSOLVED_ORGANIC_MATTER_CONCENTRATION = 87;
 }
 
-/**
-  * Aqua Troll Unit IDs
-  */
+// Aqua Troll Unit IDs
 enum AquaTrollUnit {
   AQUA_TROLL_UNIT_UNSPECIFIED = 0;
   AQUA_TROLL_UNIT_TEMP_CELSIUS = 1;
@@ -219,9 +207,7 @@ enum AquaTrollUnit {
   AQUA_TROLL_UNIT_METERS_PER_SECOND = 306;
 }
 
-/**
-  * Aqua Troll Sensor IDs
-  */
+// Aqua Troll Sensor IDs
 enum AquaTrollSensor {
   AQUA_TROLL_SENSOR_UNSPECIFIED = 0;
   AQUA_TROLL_SENSOR_TEMPERATURE = 1;
@@ -284,9 +270,7 @@ enum AquaTrollSensor {
   AQUA_TROLL_SENSOR_PROBE_PARAMETERS = 79;
 }
 
-/**
-  * Aqua Troll Sensor Status IDs
-  */
+// Aqua Troll Sensor Status IDs
 enum AquaTrollSensorStatus {
   AQUA_TROLL_SENSOR_STATUS_SENSOR_HIGH_ALARM = 0; // protolint:disable:this ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
   AQUA_TROLL_SENSOR_STATUS_SENSOR_HIGH_WARNING = 1;
@@ -298,9 +282,7 @@ enum AquaTrollSensorStatus {
   AQUA_TROLL_SENSOR_STATUS_SENSOR_MODE_BIT_2 = 9;
 }
 
-/**
-  * Aqua Troll Device Status IDs
-  */
+// Aqua Troll Device Status IDs
 enum AquaTrollDeviceStatus {
   AQUA_TROLL_DEVICE_STATUS_SENSOR_HIGH_ALARM = 0; // protolint:disable:this ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
   AQUA_TROLL_DEVICE_STATUS_SENSOR_HIGH_WARNING = 1;
@@ -318,11 +300,9 @@ enum AquaTrollDeviceStatus {
 }
 
 
-/**
- * In-Situ Parameter Block
- *
- * Up to NUMBER_OF_SENSOR_PARAMETERS blocks may be part of a sensor
- */
+// In-Situ Parameter Block
+//
+// Up to NUMBER_OF_SENSOR_PARAMETERS blocks may be part of a sensor
 message AquaTrollParameterBlock {
   reserved 4;
   reserved "data_quality_id";
@@ -335,14 +315,12 @@ message AquaTrollParameterBlock {
   repeated AquaTrollUnit available_units = 6;
 }
 
-/**
- * In-Situ AquaTroll 500 sensor metadata
- *
- * (Mostly) static information about a connected sensor.
- *
- * Refer to Section 7 Sensor Common Registers in the In-Situ Modbus
- * Communication Protocol
- */
+// In-Situ AquaTroll 500 sensor metadata
+//
+// (Mostly) static information about a connected sensor.
+//
+// Refer to Section 7 Sensor Common Registers in the In-Situ Modbus
+// Communication Protocol
 message AquaTrollSensorMetadata {
   reserved 4;
   reserved "sensor_status";
@@ -415,18 +393,14 @@ message AquaTrollSensorParametersArray {
   repeated AquaTrollSensorParameters sensors = 2;
 }
 
-/**
-  * Request to set an In-Situ Aqua Troll parameter unit
-  */
+// Request to set an In-Situ Aqua Troll parameter unit
 message SetAquaTrollParameterUnit {
   AquaTrollSensor sensor_id = 1; // Sensor id, f. ex. "SENSOR_CONDUCTIVITY_SENSOR"
   AquaTrollParameter parameter_id = 2; // Parameter name, f. ex. "PARAMETER_TEMPERATURE"
   AquaTrollUnit unit_id = 3; // Unit, f. ex. "UNIT_TEMP_CELSIUS"
 }
 
-/**
-  * Request to change the In-Situ Aqua Troll connection status
-  */
+// Request to change the In-Situ Aqua Troll connection status
 message SetAquaTrollConnectionStatus {
   bool connected = 1; // True to connect, false to disconnect
 }
