@@ -5,7 +5,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>8.0</LangVersion>
     <PackageId>Blueye.Protocol.Protobuf</PackageId>
-    <VersionPrefix>3.8.0</VersionPrefix>
+    <VersionPrefix>3.10.0</VersionPrefix>
     <Company>Blueye Robotics AS</Company>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <PackageDescription>Library with dotnet representation of the ProtocolDefinition protobuf files.</PackageDescription>
@@ -13,12 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.23.2" />
-    <PackageReference Include="Google.Protobuf.Tools" Version="3.23.2">
+    <PackageReference Include="Google.Protobuf" Version="3.24.1" />
+    <PackageReference Include="Google.Protobuf.Tools" Version="3.24.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Grpc.Tools" Version="2.54.0">
+    <PackageReference Include="Grpc.Tools" Version="2.57.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
