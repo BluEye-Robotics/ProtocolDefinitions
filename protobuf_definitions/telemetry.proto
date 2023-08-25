@@ -1,8 +1,6 @@
-/*
- * Telemetry
- *
- * These messages define telemetry messages from the Blueye drone.
- */
+// Telemetry
+//
+// These messages define telemetry messages from the Blueye drone.
 syntax = "proto3";
 
 package blueye.protocol;
@@ -10,16 +8,12 @@ import "aquatroll.proto";
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
-/**
-  * Receive the current attitude of the drone.
-  */
+// Receive the current attitude of the drone.
 message AttitudeTel {
   Attitude attitude = 1; // The attitude of the drone.
 }
 
-/**
-  * Receive the current altitude of the drone.
-  */
+// Receive the current altitude of the drone.
 message AltitudeTel {
   Altitude altitude = 1; // The altitude of the drone.
 }
@@ -48,23 +42,17 @@ message ControllerHealthTel {
   ControllerHealth controller_health = 1;
 }
 
-/**
-  * Receive the status of the main lights of the drone.
-  */
+// Receive the status of the main lights of the drone.
 message LightsTel {
   Lights lights = 1;
 }
 
-/**
-  * Receive the status of any guest port lights connected to the drone.
-  */
+// Receive the status of any guest port lights connected to the drone.
 message GuestPortLightsTel {
   Lights lights = 1;
 }
 
-/**
-  * Receive the status of any lasers connected to the drone.
-  */
+// Receive the status of any lasers connected to the drone.
 message LaserTel {
   Laser laser = 1;
 }
@@ -77,31 +65,23 @@ message RecordStateTel {
   RecordState record_state = 1;
 }
 
-/*
- * Receive essential information about the battery status.
- */
+// Receive essential information about the battery status.
 message BatteryTel {
   Battery battery = 1; // Essential battery information.
 }
 
-/*
- * Receive detailed information about a battery using the
- * BQ40Z50 battery management system.
- */
+// Receive detailed information about a battery using the
+// BQ40Z50 battery management system.
 message BatteryBQ40Z50Tel {
   BatteryBQ40Z50 battery = 1; // Detailed battery information.
 }
 
-/*
- * Receive the dive time of the drone.
- */
+// Receive the dive time of the drone.
 message DiveTimeTel {
   DiveTime dive_time = 1; // The current dive time of the drone.
 }
 
-/*
- * Receive time information from the drone.
- */
+// Receive time information from the drone.
 message DroneTimeTel {
   SystemTime real_time_clock = 1; // The real-time clock of the drone.
   SystemTime monotonic_clock = 2; // The monotonic clock of the drone (time since power on).
@@ -115,30 +95,22 @@ message CPUTemperatureTel {
   CPUTemperature temperature = 1;
 }
 
-/*
- * Receive temperature information from the top canister.
- */
+// Receive temperature information from the top canister.
 message CanisterTopTemperatureTel {
   CanisterTemperature temperature = 1; // Temperature information.
 }
 
-/*
- * Receive temperature information from the bottom canister.
- */
+// Receive temperature information from the bottom canister.
 message CanisterBottomTemperatureTel {
   CanisterTemperature temperature = 1; // Temperature information.
 }
 
-/*
- * Receive humidity information from the top canister.
- */
+// Receive humidity information from the top canister.
 message CanisterTopHumidityTel {
   CanisterHumidity humidity = 1; // Humidity information
 }
 
-/*
- * Receive humidity information from the bottom canister.
- */
+// Receive humidity information from the bottom canister.
 message CanisterBottomHumidityTel {
   CanisterHumidity humidity = 1; // Humidity information
 }
@@ -171,116 +143,84 @@ message TiltAngleTel {
   TiltAngle angle = 1;
 }
 
-/*
- * Receive metadata and information about the connected drone.
- */
+// Receive metadata and information about the connected drone.
 message DroneInfoTel {
   DroneInfo drone_info = 1; // Various metadata such as software versions and serial number.
 }
 
-/**
-  * Receive currently set error flags.
-  */
+// Receive currently set error flags.
 message ErrorFlagsTel {
   ErrorFlags error_flags = 1; // Currently set error flags on the drone.
 }
 
-/**
- * Receive the current state of the control system.
- */
+// Receive the current state of the control system.
 message ControlModeTel {
   ControlMode state = 1;  // State of the control system.
 }
 
-/**
-  * Thickness gauge measurement telemetry message.
-  */
+// Thickness gauge measurement telemetry message.
 message ThicknessGaugeTel {
   ThicknessGauge thickness_gauge = 1;  // Tickness measurement with a cygnus gauge.
 }
 
-/**
-  * Cathodic Protection Potential probe telemetry message
-  */
+// Cathodic Protection Potential probe telemetry message
 message CpProbeTel {
   CpProbe cp_probe = 1; // Reading from cp probe.
 }
 
 
-/**
-  * Metadata from the In-Situ Aqua Troll probe's common registers
-  */
+// Metadata from the In-Situ Aqua Troll probe's common registers
 message AquaTrollProbeMetadataTel {
   AquaTrollProbeMetadata probe = 1; // AquaTroll message containing sensor array.
 }
 
-/**
-  * Metadata from a single sensor from In-Situ Aqua Troll probe
-  */
+// Metadata from a single sensor from In-Situ Aqua Troll probe
 message AquaTrollSensorMetadataTel {
   AquaTrollSensorMetadataArray sensors = 1; // AquaTroll message containing sensor array.
 }
 
-/**
-  * Single sensor from In-Situ Aqua Troll probe
-  */
+// Single sensor from In-Situ Aqua Troll probe
 message AquaTrollSensorParametersTel {
   AquaTrollSensorParametersArray sensors = 1; // AquaTroll message containing parameter array.
 }
 
-/**
-  * List of connected clients telemetry message.
-  */
+// List of connected clients telemetry message.
 message ConnectedClientsTel {
   uint32 client_id_in_control = 1; // The client id of the client in control.
   repeated ConnectedClient connected_clients = 2; // List of connected clients.
 }
 
-/**
-  * State of a generic servo
-  */
+// State of a generic servo
 message GenericServoTel {
   GenericServo servo = 1; // Servo state
 }
 
-/**
-  * State of the servo installed in the multibeam
-  */
+// State of the servo installed in the multibeam
 message MultibeamServoTel {
   MultibeamServo servo = 1; // Multibeam servo state
 }
 
-/**
-  * GuestPort current readings
-  */
+// GuestPort current readings
 message GuestPortCurrentTel {
   GuestPortCurrent current = 1;
 }
 
-/**
-  * Calibrated IMU data
-  */
+// Calibrated IMU data
 message CalibratedImuTel {
   Imu imu = 1;
 }
 
-/**
-  * Raw IMU data from IMU 1
-  */
+// Raw IMU data from IMU 1
 message Imu1Tel {
   Imu imu = 1;
 }
 
-/**
-  * Raw IMU data from IMU 2
-  */
+// Raw IMU data from IMU 2
 message Imu2Tel {
   Imu imu = 1;
 }
 
-/**
-  * Medusa gamma ray sensor spectrometer data
-  */
+// Medusa gamma ray sensor spectrometer data
 message MedusaSpectrometerDataTel {
   MedusaSpectrometerData data = 1;
 }
