@@ -6,89 +6,66 @@
 syntax = "proto3";
 
 package blueye.protocol;
-import "aquatroll.proto";
 import "google/protobuf/any.proto";
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
-/**
-  * Request to set video overlay parameters.
-  */
+// Request to set video overlay parameters.
 message SetOverlayParametersReq {
   OverlayParameters overlay_parameters = 1; // The video overlay parameters to apply.
 }
 
-/**
-  * Response after setting video overlay parameters.
-  */
+// Response after setting video overlay parameters.
 message SetOverlayParametersRep {
 }
 
-/**
-  * Request to get currently set video overlay parameters.
-  */
+// Request to get currently set video overlay parameters.
 message GetOverlayParametersReq {
 }
 
-/**
-  * Response with the currently set video overlay parameters.
-  */
+// Response with the currently set video overlay parameters.
 message GetOverlayParametersRep {
   OverlayParameters overlay_parameters = 1; // The currently set overlay parameters.
 }
 
-/**
-  * Request to set camera parameters.
-  */
+// Request to set camera parameters.
 message SetCameraParametersReq {
   CameraParameters camera_parameters = 1; // The camera parameters to apply.
 }
 
-/**
-  * Response after setting the camera parameters.
-  */
+// Response after setting the camera parameters.
 message SetCameraParametersRep {
 }
 
-/**
-  * Request to get the currently set camera parameters.
-  */
+// Request to get the currently set camera parameters.
 message GetCameraParametersReq {
   Camera camera = 1; // Which camera to read camera parameters from.
 }
 
-/**
-  * Response with the currently set camera parameters.
-  */
+// Response with the currently set camera parameters.
 message GetCameraParametersRep {
   CameraParameters camera_parameters = 1; // The currently set camera parameters.
 }
 
-/**
-  * Request to set the system time on the drone.
-  */
+// Request to set the system time on the drone.
 message SyncTimeReq {
   SystemTime time = 1; // The time to set on the drone.
 }
 
-/**
-  * Response after setting the system time on the drone.
-  */
+// Response after setting the system time on the drone.
 message SyncTimeRep {
   bool success = 1; // If the time was set successfully.
 }
 
 /**
-  * The simplest message to use to test request/reply communication with the drone.
-  *
-  * The drone replies with a PingRep message immediately after receiving the PingReq.
-  */
+ * The simplest message to use to test request/reply communication with the drone.
+ *
+ * The drone replies with a PingRep message immediately after receiving the PingReq.
+ */
 message PingReq {
 }
 
-/**
-  * Response message from a PingReq request.
-  */
+// Response message from a PingReq request.
 message PingRep {
 }
 
@@ -101,25 +78,21 @@ message SetThicknessGaugeParametersReq {
   uint32 sound_velocity = 1; // Sound velocity in m/s
 }
 
-/**
-  * Response after setting thicknes gauge parameters.
-  */
+// Response after setting thicknes gauge parameters.
 message SetThicknessGaugeParametersRep {
 }
 
-/**
-  * Connect a new client to the drone.
-  */
+// Connect a new client to the drone.
 message ConnectClientReq {
   ClientInfo client_info = 1; // Information about the client connecting to the drone.
 }
 
 /**
-  * Response after connecting a client to the drone.
-  *
-  * Contains information about which client is in control, and a list of
-  * all connected clients.
-  */
+ * Response after connecting a client to the drone.
+ *
+ * Contains information about which client is in control, and a list of
+ * all connected clients.
+ */
 message ConnectClientRep {
   uint32 client_id = 1; // The assigned ID of this client.
   uint32 client_id_in_control = 2; // The ID of the client in control of the drone.
@@ -127,21 +100,21 @@ message ConnectClientRep {
 }
 
 /**
-  * Disconnect a client from the drone.
-  *
-  * This request will remove the client from the list of connected clients.
-  * It allows clients to disconnect instantly, without waiting for a watchdog to
-  * clear the client in control, or promote a new client to be in control.
-  */
+ * Disconnect a client from the drone.
+ *
+ * This request will remove the client from the list of connected clients.
+ * It allows clients to disconnect instantly, without waiting for a watchdog to
+ * clear the client in control, or promote a new client to be in control.
+ */
 message DisconnectClientReq {
   uint32 client_id = 1; // The assigned ID of the client to disconnect.
 }
 
 /**
-  * Response after disconnecting a client from the drone.
-  *
-  * Contains information about which clients are connected and in control.
-  */
+ * Response after disconnecting a client from the drone.
+ *
+ * Contains information about which clients are connected and in control.
+ */
 message DisconnectClientRep {
   uint32 client_id_in_control = 1; // The ID of the client in control of the drone.
   repeated ConnectedClient connected_clients = 2; // List of connected clients.
@@ -156,93 +129,56 @@ message DisconnectClientRep {
 message GetBatteryReq {
 }
 
-/**
- * Response with essential battery information.
- */
+// Response with essential battery information.
 message GetBatteryRep {
   Battery battery = 1; // Essential battery information.
 }
 
-/*
- * Issue a desired mission to the reference_generator.
- */
+// Issue a desired mission to the reference_generator.
 message SetMissionReq {
   Mission mission = 1; // requested mission isseued to the reference generator
 }
 
-/*
- * Response after setting a new mission.
- */
+
+// Response after setting a new mission.
 message SetMissionRep {
 }
 
-/*
- * Service request to the reference_generator to get the active mission.
- */
+// Service request to the reference_generator to get the active mission.
 message GetMissionReq {
 }
 
-/*
- * Get active mission response.
- */
+// Get active mission response.
 message GetMissionRep {
   Mission mission = 1; // active mission with waypoints
 }
 
-/*
- * Updates an instruction in current mission with a new instruction payload.
- */
+// Updates an instruction in current mission with a new instruction payload.
 message SetInstructionUpdateReq {
   Instruction instruction = 1; // instruction that will replace the desired instruction
 }
 
-/*
- * Response after updating an instruction in the current mission.
- */
+// Response after updating an instruction in the current mission.
 message SetInstructionUpdateRep {
 }
 
-/*
- * Request to update the publish frequency
- */
+// Request to update the publish frequency
 message SetPubFrequencyReq {
   string message_type = 1; // Message name, f. ex. "AttitudeTel"
   float frequency = 2; // Publish frequency (max 100 Hz).
 }
 
-/**
- * Response after updating publish frequency
- */
+// Response after updating publish frequency
 message SetPubFrequencyRep {
   bool success = 1; // True if message name valid and frequency successfully updated.
 }
 
-/**
- * Request to get latest telemetry data
- */
+// Request to get latest telemetry data
 message GetTelemetryReq {
   string message_type = 1; // Message name, f. ex. "AttitudeTel"
 }
 
-/**
- * Response with latest telemetry
- */
+// Response with latest telemetry
 message GetTelemetryRep {
   google.protobuf.Any payload = 1; // The latest telemetry data, empty if no data available.
-}
-
-/**
-  * Request to set an In-Situ Aqua Troll parameter unit
-  */
-message SetAquaTrollParameterUnitReq {
-  AquaTrollSensor sensor_id = 1; // Sensor id, f. ex. "SENSOR_CONDUCTIVITY_SENSOR"
-  AquaTrollParameter parameter_id = 2; // Parameter name, f. ex. "PARAMETER_TEMPERATURE"
-  AquaTrollUnit unit_id = 3; // Unit, f. ex. "UNIT_TEMP_CELSIUS"
-}
-
-/**
-  * Response after setting the In-Situ Aqua Troll parameter unit
-  */
-message SetAquaTrollParameterUnitRep {
-  bool success = 1; // True if sensor and parameter id valid and unit successfully updated.
 }
