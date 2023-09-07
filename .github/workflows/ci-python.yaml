@@ -2,6 +2,10 @@ name: Trigger update in blueye.protocol
 
 on:
   push:
+    paths:
+      - "protobuf_definitions/**"
+      - "tcp_protocol.json"
+      - "udp_protocol.json"
     branches:
       - "master"
 
