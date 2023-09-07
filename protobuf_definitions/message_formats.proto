@@ -536,8 +536,9 @@ enum Model {
   MODEL_UNSPECIFIED = 0; // ModelName not specified
   MODEL_PIONEER = 1; // Blueye Pioneer, the first model
   MODEL_PRO = 2; // Blueye Pro, features camera tilt
-  MODEL_PRO2 = 4; // Blueye Pro, features camera tilt and one guest port
+  MODEL_X1 = 4; // Blueye X1, features camera tilt and one guest port
   MODEL_X3 = 3; // Blueye X3, features support for peripherals
+  MODEL_NEXT = 5; // Blueye ?
 }
 
 /**
