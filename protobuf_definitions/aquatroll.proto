@@ -1,8 +1,6 @@
-/**
- * Aquatroll
- *
- * These messages are emitted by the In-Situ AquaTroll 500 probe.
- */
+// Aquatroll
+//
+// These messages are emitted by the In-Situ AquaTroll 500 probe.
 syntax = "proto3";
 
 package blueye.protocol;
@@ -301,11 +299,9 @@ enum AquaTrollDeviceStatus {
   AQUA_TROLL_DEVICE_STATUS_LOW_MEMORY = 14;
 }
 
-/**
- * In-Situ Parameter Block
- *
- * Up to NUMBER_OF_SENSOR_PARAMETERS blocks may be part of a sensor
- */
+// In-Situ Parameter Block
+//
+// Up to NUMBER_OF_SENSOR_PARAMETERS blocks may be part of a sensor
 message AquaTrollParameterBlock {
   reserved 4;
   reserved "data_quality_id";
@@ -318,14 +314,12 @@ message AquaTrollParameterBlock {
   repeated AquaTrollUnit available_units = 6;
 }
 
-/**
- * In-Situ AquaTroll 500 sensor metadata
- *
- * (Mostly) static information about a connected sensor.
- *
- * Refer to Section 7 Sensor Common Registers in the In-Situ Modbus
- * Communication Protocol
- */
+// In-Situ AquaTroll 500 sensor metadata
+//
+// (Mostly) static information about a connected sensor.
+//
+// Refer to Section 7 Sensor Common Registers in the In-Situ Modbus
+// Communication Protocol
 message AquaTrollSensorMetadata {
   reserved 4;
   reserved "sensor_status";

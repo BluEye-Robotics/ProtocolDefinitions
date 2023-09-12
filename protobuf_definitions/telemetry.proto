@@ -1,8 +1,6 @@
-/**
-  * Telemetry
-  *
-  * These messages define telemetry messages from the Blueye drone.
-  */
+// Telemetry
+//
+// These messages define telemetry messages from the Blueye drone.
 syntax = "proto3";
 
 package blueye.protocol;
@@ -20,7 +18,7 @@ message AltitudeTel {
   Altitude altitude = 1; // The altitude of the drone.
 }
 
-//Distance to an object infront of the drone when a 1D pinger is mounted forwards.
+// Distance to an object infront of the drone when a 1D pinger is mounted forwards.
 message ForwardDistanceTel {
   ForwardDistance forward_distance = 1;
 }
@@ -95,10 +93,8 @@ message BatteryTel {
   Battery battery = 1; // Essential battery information.
 }
 
-/**
-  * Receive detailed information about a battery using the
-  * BQ40Z50 battery management system.
-  */
+// Receive detailed information about a battery using the
+// BQ40Z50 battery management system.
 message BatteryBQ40Z50Tel {
   BatteryBQ40Z50 battery = 1; // Detailed battery information.
 }

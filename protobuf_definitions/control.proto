@@ -1,8 +1,6 @@
-/**
-  * Control
-  *
-  * These messages define control messages accepted by the Blueye drone.
-  */
+// Control
+//
+// These messages define control messages accepted by the Blueye drone.
 syntax = "proto3";
 
 package blueye.protocol;
@@ -40,12 +38,10 @@ message PilotGPSPositionCtrl {
   LatLongPosition position = 1; // The GPS position of the pilot.
 }
 
-/**
-  * Issue a watchdog message to indicate that the remote client is connected and working as expected.
-  *
-  * If a watchdog message is not received every second, the drone will turn off lights and other auto
-  * functions to indicate that connection with the client has been lost.
-  */
+// Issue a watchdog message to indicate that the remote client is connected and working as expected.
+//
+// If a watchdog message is not received every second, the drone will turn off lights and other auto
+// functions to indicate that connection with the client has been lost.
 message WatchdogCtrl {
   ConnectionDuration connection_duration = 1; // Message with the number of seconds the client has been connected.
   uint32 client_id = 2; // The ID of the client, received in the ConnectClientRep response.

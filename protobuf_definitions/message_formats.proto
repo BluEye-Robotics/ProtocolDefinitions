@@ -1,8 +1,6 @@
-/**
-  *Common messages
-  *
-  * These are used for logging as well as building requests and responses.
-  */
+// Common messages
+//
+// These are used for logging as well as building requests and responses.
 syntax = "proto3";
 
 package blueye.protocol;
@@ -10,27 +8,23 @@ import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
-/**
-  * Wrapper message for each entry in the drone telemetry logfile.
-  *
-  * Each entry contains the unix timestamp in UTC, the monotonic timestamp (time since boot),
-  * and an Any message wrapping the custom Blueye message.
-  *
-  * See separate documentation for the logfile format for more details.
-  */
+// Wrapper message for each entry in the drone telemetry logfile.
+//
+// Each entry contains the unix timestamp in UTC, the monotonic timestamp (time since boot),
+// and an Any message wrapping the custom Blueye message.
+//
+// See separate documentation for the logfile format for more details.
 message BinlogRecord {
   google.protobuf.Any payload = 1; // The log entry payload.
   google.protobuf.Timestamp unix_timestamp = 2; // Unix timestamp in UTC.
   google.protobuf.Timestamp clock_monotonic = 3; // Posix CLOCK_MONOTONIC timestamp.
 }
 
-/**
-  * Motion input from client.
-  *
-  * Used to indicate the desired motion in each direction.
-  * Typically these values map to the left and right joystick for motion,
-  * and the left and right trigger for the slow and boost modifiers.
-  */
+// Motion input from client.
+//
+// Used to indicate the desired motion in each direction.
+// Typically these values map to the left and right joystick for motion,
+// and the left and right trigger for the slow and boost modifiers.
 message MotionInput {
   float surge = 1; // Forward (positive) and backwards (negative) movement. (-1..1)
   float sway = 2; // Right (positive) and left (negative) lateral movement (-1..1)
@@ -45,13 +39,11 @@ message Lights {
   float value = 1; // Light intensity (0..1)
 }
 
-/**
-  * Laser message used to represent the intensity of connected laser.
-  *
-  * If the laser does not support dimming but only on and off,
-  * a value of 0 turns the laser off, and any value above 0
-  * turns the laser on.
-  */
+// Laser message used to represent the intensity of connected laser.
+//
+// If the laser does not support dimming but only on and off,
+// a value of 0 turns the laser off, and any value above 0
+// turns the laser on.
 message Laser {
   float value = 1; // Laser intensity, any value above 0 turns the laser on (0..1)
 }
@@ -113,12 +105,10 @@ message ControlMode {
   bool auto_pilot_heave = 7; // If auto pilot heave is enabled
 }
 
-/**
-  * Tilt stabilization state.
-  *
-  * Blueye drones with mechanical tilt has the ability to enable
-  * camera stabilization.
-  */
+// Tilt stabilization state.
+//
+// Blueye drones with mechanical tilt has the ability to enable
+// camera stabilization.
 message TiltStabilizationState {
   bool enabled = 1; // If tilt stabilization is enabled
 }
@@ -158,21 +148,17 @@ message RecordState {
   int32 guestport_seconds = 4; // Guestport record time (s)
 }
 
-/**
-  * Water density.
-  *
-  * Used to specify the water density the drone is operating in,
-  * to achieve more accruate depth measurements.
-  */
+// Water density.
+//
+// Used to specify the water density the drone is operating in,
+// to achieve more accurate depth measurements.
 message WaterDensity {
   float value = 1; // Salinity (kg/l)
 }
 
-/**
-  * Pinger configuration.
-  *
-  * Used to specify the configuration the BR 1D-Pinger.
-  */
+// Pinger configuration.
+//
+// Used to specify the configuration the BR 1D-Pinger.
 message PingerConfiguration {
   enum MountingDirection {
     MOUNTING_DIRECTION_UNSPECIFIED = 0; // Mounting direction is unspecified
@@ -193,21 +179,17 @@ message CPUTemperature {
   float value = 1; // CPU temperature (°C)
 }
 
-/**
-  * Canister temperature.
-  *
-  * Temperature measured in the top or bottom canister of the drone.
-  */
+// Canister temperature.
+//
+// Temperature measured in the top or bottom canister of the drone.
 message CanisterTemperature {
   reserved 1, 2;
   float temperature = 3; // Temperature (°C)
 }
 
-/**
-  * Canister humidity.
-  *
-  * Humidity measured in the top or bottom canister of the drone.
-  */
+// Canister humidity.
+//
+// Humidity measured in the top or bottom canister of the drone.
 message CanisterHumidity {
   reserved 1, 2;
   float humidity = 3; // Air humidity (%)
@@ -220,12 +202,10 @@ message Battery {
   float temperature = 3; // Battery temperature (°C)
 }
 
-/**
-  * Battery information message.
-  *
-  * Detailed information about all aspects of the connected Blueye Smart Battery,
-  * using the BQ40Z50 BMS.
-  */
+// Battery information message.
+//
+// Detailed information about all aspects of the connected Blueye Smart Battery,
+// using the BQ40Z50 BMS.
 message BatteryBQ40Z50 {
   reserved 3, 5;
 
@@ -314,7 +294,9 @@ message Altitude {
   bool is_valid = 2; // If altitude is valid or not
 }
 
-// Distance to an object infront of the drone, typically obtained from an 1D pinger.
+// Distance to an object infront of the drone
+//
+// Typically obtained from a 1D pinger.
 message ForwardDistance {
   float value = 1; // Distance in front of drone (m)
   bool is_valid = 2; // If distance reading is valid or not
@@ -419,7 +401,7 @@ message CameraCommand {
   float action_param = 2; // used for taking photos based on a time or distance interval
 }
 
-//List of available camera actions.
+// List of available camera actions.
 enum CameraAction {
   CAMERA_ACTION_UNSPECIFIED = 0; // Unspecified command
   CAMERA_ACTION_TAKE_PHOTO = 1; // Take one photo
@@ -474,10 +456,9 @@ message Depth {
   float value = 1; // Drone depth below surface (m)
 }
 
-/**
- * Reference for the control system. Note that the internal heading referece is not relative to North.
- * Use (ControlHealth.heading_error + pose.yaw) instead.
- */
+// Reference for the control system.
+// Note that the internal heading reference is not relative to North, use
+// (ControlHealth.heading_error + pose.yaw) instead.
 message Reference {
   float surge = 1; // Reference from joystick surge input (0..1)
   float sway = 2; // Reference from joystick sway input (0..1)
@@ -598,11 +579,9 @@ message ControllerHealth {
   float heading_health = 4; // Heading controller load (0..1)
 }
 
-/**
-  * Amount of time the drone has been submerged.
-  *
-  * The drone starts incrementing this value when the depth is above 250 mm.
-  */
+// Amount of time the drone has been submerged.
+//
+// The drone starts incrementing this value when the depth is above 250 mm.
 message DiveTime {
   int32 value = 1; // Number of seconds the drone has been submerged
 }
@@ -622,11 +601,9 @@ message StorageSpace {
 // Compass calibration state.
 message CalibrationState {
 
-  /**
-    * Status of the compass calibration procedure.
-    *
-    * When calibration is started, the status will indicate the active (upfacing) axis.
-    */
+  // Status of the compass calibration procedure.
+  //
+  // When calibration is started, the status will indicate the active (upfacing) axis.
   enum Status
   {
     STATUS_UNSPECIFIED = 0; // Unspecified status
@@ -692,13 +669,11 @@ enum PressureSensorType {
   PRESSURE_SENSOR_TYPE_MS5637_02BA03 = 4; // The internal pressure sensor using the MS5637 02BA03 pressure sensor
 }
 
-/**
-  * Information about the drone.
-  *
-  * This message contains serial numbers and version information for
-  * internal components in the drone. Primarily used for diagnostics, or to
-  * determine the origin of a logfile.
-  */
+// Information about the drone.
+//
+// This message contains serial numbers and version information for
+// internal components in the drone. Primarily used for diagnostics, or to
+// determine the origin of a logfile.
 message DroneInfo {
   string blunux_version = 1; // Blunux version string
   bytes serial_number = 2; // Drone serial number
@@ -843,11 +818,9 @@ enum FontSize {
   FONT_SIZE_PX40 = 6; // 40 px
 }
 
-/**
- * Overlay parameters.
- *
- * All available parameters that can be used to configure telemetry overlay on video recordings.
- */
+// Overlay parameters.
+//
+// All available parameters that can be used to configure telemetry overlay on video recordings.
 message OverlayParameters {
   bool temperature_enabled = 1; // If temperature should be included
   bool depth_enabled = 2; // If depth should be included
@@ -1020,13 +993,11 @@ message Vector3 {
   double z = 3; // z-component
 }
 
-/**
-  * Imu data in drone body frame
-  *
-  * x - forward
-  * y - right
-  * z - down
-  */
+// Imu data in drone body frame
+//
+// x - forward
+// y - right
+// z - down
 message Imu {
   Vector3 accelerometer = 1; // Acceleration (g)
   Vector3 gyroscope = 2; // Angular velocity (rad/s)

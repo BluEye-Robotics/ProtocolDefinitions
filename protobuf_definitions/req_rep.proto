@@ -1,8 +1,6 @@
-/**
- * Request reply
- *
- * These messages define request / reply messages for the Blueye drone.
- */
+// Request reply
+//
+// These messages define request / reply messages for the Blueye drone.
 syntax = "proto3";
 
 package blueye.protocol;
@@ -57,11 +55,9 @@ message SyncTimeRep {
   bool success = 1; // If the time was set successfully.
 }
 
-/**
- * The simplest message to use to test request/reply communication with the drone.
- *
- * The drone replies with a PingRep message immediately after receiving the PingReq.
- */
+// The simplest message to use to test request/reply communication with the drone.
+//
+// The drone replies with a PingRep message immediately after receiving the PingReq.
 message PingReq {
 }
 
@@ -69,11 +65,9 @@ message PingReq {
 message PingRep {
 }
 
-/**
- * Request to set parameters for ultrasonic thickness gauge.
- *
- * The sound velocity is used to calculate the thickness of the material being measured.
- */
+// Request to set parameters for ultrasonic thickness gauge.
+//
+// The sound velocity is used to calculate the thickness of the material being measured.
 message SetThicknessGaugeParametersReq {
   uint32 sound_velocity = 1; // Sound velocity in m/s
 }
@@ -87,45 +81,37 @@ message ConnectClientReq {
   ClientInfo client_info = 1; // Information about the client connecting to the drone.
 }
 
-/**
- * Response after connecting a client to the drone.
- *
- * Contains information about which client is in control, and a list of
- * all connected clients.
- */
+// Response after connecting a client to the drone.
+//
+// Contains information about which client is in control, and a list of
+// all connected clients.
 message ConnectClientRep {
   uint32 client_id = 1; // The assigned ID of this client.
   uint32 client_id_in_control = 2; // The ID of the client in control of the drone.
   repeated ConnectedClient connected_clients = 3; // List of connected clients.
 }
 
-/**
- * Disconnect a client from the drone.
- *
- * This request will remove the client from the list of connected clients.
- * It allows clients to disconnect instantly, without waiting for a watchdog to
- * clear the client in control, or promote a new client to be in control.
- */
+// Disconnect a client from the drone.
+//
+// This request will remove the client from the list of connected clients.
+// It allows clients to disconnect instantly, without waiting for a watchdog to
+// clear the client in control, or promote a new client to be in control.
 message DisconnectClientReq {
   uint32 client_id = 1; // The assigned ID of the client to disconnect.
 }
 
-/**
- * Response after disconnecting a client from the drone.
- *
- * Contains information about which clients are connected and in control.
- */
+// Response after disconnecting a client from the drone.
+//
+// Contains information about which clients are connected and in control.
 message DisconnectClientRep {
   uint32 client_id_in_control = 1; // The ID of the client in control of the drone.
   repeated ConnectedClient connected_clients = 2; // List of connected clients.
 }
 
-/**
- * Request essential battery information.
- *
- * Can be used to instantly get battery information,
- * instead of having to wait for the BatteryTel message to be received.
- */
+// Request essential battery information.
+//
+// Can be used to instantly get battery information,
+// instead of having to wait for the BatteryTel message to be received.
 message GetBatteryReq {
 }
 
