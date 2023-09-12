@@ -788,17 +788,12 @@ message MedusaSpectrometerData {
   uint32 cosmics = 5; // Detected counts above the last channel
 }
 
-/**
-  * Oculus sonar ping data
-  *
-  * Mapping for the https://github.com/ENSTABretagneRobotics/oculus_ros/blob/master/msg/Ping.msg ROS package.
-  */
+// Oculus sonar ping data
+//
+// Mapping for the https://github.com/ENSTABretagneRobotics/oculus_ros/blob/master/msg/Ping.msg ROS package.
 message OculusPing {
   uint32 ping_id = 1; // Incrementing counter inside the sonar
-  /**
-   * Ping firing date (sonar internal clock, microseconds)
-   */
-  uint32 ping_firing_date = 2;
+  uint32 ping_firing_date = 2; // Ping firing date (sonar internal clock, microseconds)
   double range = 3; // Maximum range value in this ping
   double gain_percent = 4; // Percentage of gain (not documented)
   double frequency = 5; // Ping acoustic frequency (Hz)
@@ -807,33 +802,27 @@ message OculusPing {
   double temperature = 8; // External temperature (Celcius)
   double pressure = 9; // External pressure (bar)
   uint32 master_mode = 10; // 1 is "low frequency" (1.2 MHz), 2 is high frequency (2.1 Mhz)
-  /**
-    * Each row in the image data comes with a gain  
-    * to be compensated for consistent acoustic readings.
-    * See documentation for more details.
-    */
+  // Each row in the image data comes with a gain
+  // to be compensated for consistent acoustic readings.
+  // See documentation for more details.
   bool has_gains = 11;
   uint32 number_of_ranges = 12; // Height of the ping image data.
   uint32 number_of_beams = 13; // Width  of the ping image data.
   uint32 step = 14; // Size in bytes of each row in the ping data image.
   uint32 sample_size = 15; // Size in bytes of each "pixel" in the ping data.
-  /**
-    * Bearing angle of each column of the sonar data
-    * (in 100th of a degree, multiply by 0.01 to get a value in degrees).
-    * The sonar image is not sampled uniformly in the bearing direction.
-    */
+  // Bearing angle of each column of the sonar data
+  // (in 100th of a degree, multiply by 0.01 to get a value in degrees).
+  // The sonar image is not sampled uniformly in the bearing direction.
   repeated int32 bearings = 16 [packed=true];
 
-  /**
-    * Ping data (is a row major image in little-endian). 
-    * Size in bytes of each pixel is given in the 
-    * sample_size field. The size in bytes of each line
-    * is given in the step field.  If the has_gains
-    * field is true, each row starts with 4 bytes
-    * containing gain of the row (encoded as a little
-    * endian uint32. Divide the whole row by the square
-    * root of this gain to have consistent value across
-    * the image data).
-    */
+  // Ping data (is a row major image in little-endian).
+  // Size in bytes of each pixel is given in the
+  // sample_size field. The size in bytes of each line
+  // is given in the step field.  If the has_gains
+  // field is true, each row starts with 4 bytes
+  // containing gain of the row (encoded as a little
+  // endian uint32. Divide the whole row by the square
+  // root of this gain to have consistent value across
+  // the image data).
   bytes ping_data = 17;
 }

@@ -225,9 +225,7 @@ message MedusaSpectrometerDataTel {
   MedusaSpectrometerData data = 1;
 }
 
-/**
-  * Oculus sonar ping data
-  */
+// Oculus sonar ping data
 message OculusPingTel {
   OculusPing ping = 1; // Ping data from an Oculus sonar
 }
