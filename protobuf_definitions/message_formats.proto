@@ -20,6 +20,17 @@ message BinlogRecord {
   google.protobuf.Timestamp clock_monotonic = 3; // Posix CLOCK_MONOTONIC timestamp.
 }
 
+message CompressedRecord {
+  enum Compression {
+    COMPRESSION_UNSPECIFIED = 0; // Unspecified compression
+    COMPRESSION_NONE = 1; // No compression
+    COMPRESSION_ZSTD = 2; // zstd compression
+  }
+  Compression compression = 1; // Compression used for the payload.
+  string type_url = 2; // The type url of the payload.
+  bytes payload = 3; // The log entry payload.
+}
+
 // Motion input from client.
 //
 // Used to indicate the desired motion in each direction.
