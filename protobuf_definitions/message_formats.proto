@@ -840,12 +840,12 @@ message OculusPingConfig {
     MASTER_MODE_LOW_FREQUENCY = 2; // Low frequency mode (wide aperture, navigation)
     MASTER_MODE_HIGH_FREQUENCY = 3; // High frequency mode (narrow aperture, target identification)
   }
-  MasterMode masterMode = 1;
+  MasterMode master_mode = 1;
 
-  uint32 pingRate = 2;     // Sets the maximum ping rate. was PingRateType
-  uint32 networkSpeed = 3; // Used to reduce the network comms speed (useful for
+  uint32 ping_rate = 2;     // Sets the maximum ping rate. was PingRateType
+  uint32 network_speed = 3; // Used to reduce the network comms speed (useful for
                            // high latency shared links)
-  uint32 gammaCorrection = 4; // 0 and 0xff = gamma correction = 1.0
+  uint32 gamma_correction = 4; // 0 and 0xff = gamma correction = 1.0
                               // Set to 127 for gamma correction = 0.5
 
   bool range_meters_or_percent = 5;  // 0 = range in meters, 1 = range in
@@ -857,8 +857,8 @@ message OculusPingConfig {
   bool enable_512_beams = 10;        // Enable 512 beams
 
   double range = 11; // The range demand in percent or m depending on flags
-  double gainPercent = 12;  // The gain demand
-  double speedOfSound = 13; // ms-1, if set to zero then internal calc will
+  double gain_percent = 12;  // The gain demand
+  double speed_of_sound = 13; // ms-1, if set to zero then internal calc will
                             // apply using salinity
   double salinity = 14;     // ppt, set to zero if we are in fresh water
 }

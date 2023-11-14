@@ -161,3 +161,7 @@ message SetAquaTrollConnectionStatusCtrl {
   // Message with information about which parameter to set and the unit to set it to.
   SetAquaTrollConnectionStatus connection_status = 1;
 }
+
+message SetOculusPingConfigCtrl {
+  OculusPingConfig config = 1; // Message with the Oculus ping configuration to set.
+}

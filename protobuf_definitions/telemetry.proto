@@ -229,3 +229,8 @@ message MedusaSpectrometerDataTel {
 message OculusPingTel {
   OculusPing ping = 1; // Ping data from an Oculus sonar
 }
+
+// Oculus sonar ping data
+message OculusPingConfigTel {
+  OculusPingConfig config = 1; // Config data from an Oculus sonar
+}
