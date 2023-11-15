@@ -842,23 +842,19 @@ message OculusPingConfig {
   }
   MasterMode master_mode = 1;
 
-  uint32 ping_rate = 2;     // Sets the maximum ping rate. was PingRateType
-  uint32 network_speed = 3; // Used to reduce the network comms speed (useful for
-                           // high latency shared links)
-  uint32 gamma_correction = 4; // 0 and 0xff = gamma correction = 1.0
-                              // Set to 127 for gamma correction = 0.5
+  uint32 ping_rate = 2; // Sets the maximum ping rate. was PingRateType
+  uint32 network_speed = 3; // Used to reduce the network comms speed (useful for high latency shared links)
+  uint32 gamma_correction = 4; // 0 and 0xff = gamma correction = 1.0. Set to 127 for gamma correction = 0.5
 
-  bool range_meters_or_percent = 5;  // 0 = range in meters, 1 = range in
-                                     // percent of maximum range
-  bool use_16_bit_samples = 6;       // 0 = 8 bit samples, 1 = 16 bit samples
-  bool send_gain = 7;                // Send gain with each ping
+  bool range_meters_or_percent = 5; // 0 = range in meters, 1 = range in percent of maximum range
+  bool use_16_bit_samples = 6; // 0 = 8 bit samples, 1 = 16 bit samples
+  bool send_gain = 7; // Send gain with each ping
   bool send_full_return_message = 8; // Send full return message with each ping
-  bool gain_assist = 9;              // Enable gain assist
-  bool enable_512_beams = 10;        // Enable 512 beams
+  bool gain_assist = 9; // Enable gain assist
+  bool enable_512_beams = 10; // Enable 512 beams
 
   double range = 11; // The range demand in percent or m depending on flags
-  double gain_percent = 12;  // The gain demand
-  double speed_of_sound = 13; // ms-1, if set to zero then internal calc will
-                            // apply using salinity
-  double salinity = 14;     // ppt, set to zero if we are in fresh water
+  double gain_percent = 12; // The gain demand
+  double speed_of_sound = 13; // ms-1, if set to zero then internal calc will apply using salinity
+  double salinity = 14; // ppt, set to zero if we are in fresh water
 }
