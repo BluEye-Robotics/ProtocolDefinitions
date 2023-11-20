@@ -436,6 +436,7 @@ enum Model {
   MODEL_PRO = 2; // Blueye Pro, features camera tilt
   MODEL_X1 = 4; // Blueye X1, features camera tilt and one guest port
   MODEL_X3 = 3; // Blueye X3, features support for peripherals
+  MODEL_X3_ULTRA = 6; // Blueye X3 Ultra
   MODEL_NEXT = 5; // Blueye ?
 }
 
