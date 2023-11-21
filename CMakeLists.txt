@@ -12,8 +12,9 @@ PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${ProtoFiles})
 protobuf_generate_python(PROTO_PY ${ProtoFiles})
 
 add_library(blueyeprotocol SHARED ${ProtoSources} ${ProtoHeaders})
+find_package(absl REQUIRED CONFIG)
 
-target_link_libraries(blueyeprotocol PUBLIC ${PROTOBUF_LIBRARIES})
+target_link_libraries(blueyeprotocol PUBLIC ${PROTOBUF_LIBRARIES} absl::log_internal_message absl::log_internal_check_op)
 target_include_directories(blueyeprotocol PUBLIC ${PROTOBUF_INCLUDE_DIRS})
 
 install(TARGETS blueyeprotocol
