@@ -1,40 +1,32 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.14)
 project(blueyeprotocol VERSION 3.0.0)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 include(GNUInstallDirs)
-find_package(protobuf CONFIG REQUIRED)
+
+find_package(Protobuf REQUIRED)
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
 
 file(GLOB ProtoFiles "protobuf_definitions/*.proto")
+PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${ProtoFiles})
+protobuf_generate_python(PROTO_PY ${ProtoFiles})
 
-add_library(blueyeprotocol SHARED "${ProtoFiles}")
+add_library(blueyeprotocol SHARED ${ProtoSources} ${ProtoHeaders})
 
-target_link_libraries(blueyeprotocol PUBLIC protobuf::libprotobuf)
-
-target_include_directories(blueyeprotocol PUBLIC PROTOBUF_INCLUDE_DIRS)
-
-protobuf_generate(
-  LANGUAGE cpp
-  TARGET blueyeprotocol
-  IMPORT_DIRS "${CMAKE_CURRENT_LIST_DIR}/protobuf_definitions"
-  PROTOC_OUT_DIR "${PROTO_BINARY_DIR}"
-  OUT_VAR "ProtoSources"
-)
-
-protobuf_generate(
-  LANGUAGE Python
-  TARGET blueyeprotocol
-  IMPORT_DIRS "${CMAKE_CURRENT_LIST_DIR}/protobuf_definitions"
-  PROTOC_OUT_DIR "${PROTO_BINARY_DIR}")
+target_link_libraries(blueyeprotocol PUBLIC ${PROTOBUF_LIBRARIES})
+target_include_directories(blueyeprotocol PUBLIC ${PROTOBUF_INCLUDE_DIRS})
 
 install(TARGETS blueyeprotocol
   EXPORT blueyeprotocol
   LIBRARY DESTINATION lib)
+install(FILES ${ProtoHeaders} DESTINATION include/blueyeprotocol)
 
-# Filter only header files
-list(FILTER ProtoSources INCLUDE REGEX "\\.h$")
+add_custom_target(pyblueyeprotocol
+  DEPENDS ${PROTO_PY})
 
-install(FILES ${ProtoSources} DESTINATION include/blueyeprotocol)
+install(FILES ${PROTO_PY} DESTINATION ${Python3_SITELIB} OPTIONAL)
+add_custom_target(python_bindings)
+add_dependencies(python_bindings pyblueyeprotocol)
 
 # ---------------------------------------------------------------------------------------
 # Install cmake config
@@ -54,31 +46,3 @@ write_basic_package_version_file(
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/blueyeprotocolConfig.cmake
   ${CMAKE_CURRENT_BINARY_DIR}/blueyeprotocolConfigVersion.cmake
   DESTINATION ${LIB_INSTALL_DIR}/cmake/blueyeprotocol)
-
-# debug
-function(dump_cmake_variables)
-  get_cmake_property(_variableNames VARIABLES)
-  list(SORT _variableNames)
-
-  foreach(_variableName ${_variableNames})
-    if(ARGV0)
-      unset(MATCHED)
-
-      # case sensitive match
-      # string(REGEX MATCH ${ARGV0} MATCHED ${_variableName})
-      #
-      # case insenstitive match
-      string(TOLOWER "${ARGV0}" ARGV0_lower)
-      string(TOLOWER "${_variableName}" _variableName_lower)
-      string(REGEX MATCH ${ARGV0_lower} MATCHED ${_variableName_lower})
-
-      if(NOT MATCHED)
-        continue()
-      endif()
-    endif()
-
-    message(STATUS "${_variableName}=${${_variableName}}")
-  endforeach()
-endfunction()
-
-dump_cmake_variables("ProtoSources")
