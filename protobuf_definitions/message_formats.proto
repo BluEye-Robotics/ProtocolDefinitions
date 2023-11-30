@@ -680,6 +680,13 @@ message NavigationSensorStatus {
   bool is_valid = 2; // Sensor validity
 }
 
+// GuestPort detach status.
+enum GuestPortDetachStatus {
+  GUEST_PORT_DETACH_STATUS_UNSPECIFIED = 0; // Unspecified (Default for non-detachable devices)
+  GUEST_PORT_DETACH_STATUS_ATTACHED = 1; // Detachable device attached
+  GUEST_PORT_DETACH_STATUS_DETACHED = 2; // Detachable device detached
+}
+
 // GuestPort device.
 message GuestPortDevice {
   GuestPortDeviceID device_id = 1; // Blueye device identifier
@@ -688,6 +695,7 @@ message GuestPortDevice {
   string serial_number = 4; // Serial number
   float depth_rating = 5; // Depth rating (m)
   string required_blunux_version = 6; // Required Blunux version (x.y.z)
+  GuestPortDetachStatus detach_status = 7; // Detach status based on detection pin
 }
 
 // List of guest port devices.
@@ -695,7 +703,7 @@ message GuestPortDeviceList {
   repeated GuestPortDevice devices = 1; // List of guest port devices
 }
 
-// GuestPort error.
+// GuestPort error. Only indicated errors on the guest port connector itself.
 enum GuestPortError {
   GUEST_PORT_ERROR_UNSPECIFIED = 0; // Unspecified value
   GUEST_PORT_ERROR_NOT_CONNECTED = 1; // Device not connected
@@ -709,7 +717,7 @@ enum GuestPortError {
 message GuestPortConnectorInfo {
   oneof connected_device {
     GuestPortDeviceList device_list = 1; // List of devices on this connector
-    GuestPortError error = 2; // Guest port error
+    GuestPortError error = 2; // Guest port connector error
   }
   GuestPortNumber guest_port_number = 3; // Guest port the connector is connected to
 }
