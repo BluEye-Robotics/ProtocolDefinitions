@@ -257,8 +257,8 @@ message BatteryBQ40Z50 {
   uint32 runtime_to_empty = 12; // Runtime to empty (s)
   uint32 average_time_to_empty = 13; // Average time to empty (s)
   uint32 average_time_to_full = 14; // Average time to full (s)
-  float charging_current = 17; // Charging current (A)
-  float charging_voltage = 18; // Charging voltage (V)
+  float charging_current = 17; // Desired charging current (A)
+  float charging_voltage = 18; // Desired charging voltage (V)
 
   uint32 cycle_count = 19; // Number of charging cycles
   float design_capacity = 20; // Design capacity (Ah)
