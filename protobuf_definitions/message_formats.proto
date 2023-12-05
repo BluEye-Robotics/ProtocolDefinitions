@@ -205,7 +205,7 @@ message BatteryBQ40Z50 {
     float cell_3 = 4; // Cell 3 voltage level (V)
     float cell_4 = 5; // Cell 4 voltage level (V)
   }
-  Voltage voltage = 1; // Sum of the measured cell voltages
+  Voltage voltage = 1; // Voltage of the battery cells
 
   // Battery temperature.
   message Temperature {
