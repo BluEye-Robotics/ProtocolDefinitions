@@ -133,14 +133,6 @@ message SetMissionRep {
 message GetMissionReq {
 }
 
-// Service to clear the active mission.
-message ClearMissionReq {
-}
-
-// Response to clear request of the active mission.
-message ClearMissionRep {
-}
-
 // Get active mission response.
 message GetMissionRep {
   Mission mission = 1; // active mission with waypoints
