@@ -125,13 +125,20 @@ message SetMissionReq {
   Mission mission = 1; // requested mission isseued to the reference generator
 }
 
-
 // Response after setting a new mission.
 message SetMissionRep {
 }
 
 // Service request to the reference_generator to get the active mission.
 message GetMissionReq {
+}
+
+// Service to clear the active mission.
+message ClearMissionReq {
+}
+
+// Response to clear request of the active mission.
+message ClearMissionRep {
 }
 
 // Get active mission response.
