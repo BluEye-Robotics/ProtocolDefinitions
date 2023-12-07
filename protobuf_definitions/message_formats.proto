@@ -404,6 +404,21 @@ message CameraCommand {
   float action_param = 2; // used for taking photos based on a time or distance interval
 }
 
+// GoToSurfaceCommand is used to go to the surface.
+message GoToSurfaceCommand {
+  optional float desired_speed = 1; // desired speed to surface (m/s)
+}
+
+// GoToSeaBottomCommand is used to go to the sea bottom.
+message GoToSeaBottomCommand {
+  optional float desired_speed = 1; // desired speed to seabed (m/s)
+}
+
+// GoToHomeCommand is used to go to the home position.
+message GoToHomeCommand {
+  optional float desired_speed = 1; // desired speed to home (m/s)
+}
+
 // List of available camera actions.
 enum CameraAction {
   CAMERA_ACTION_UNSPECIFIED = 0; // Unspecified command
