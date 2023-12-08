@@ -549,6 +549,7 @@ message Notification {
   NotificationType type = 1; // Notification to be displayed to the user
   NotificationLevel level = 2; // Level of the notification, info, warning or error
   optional google.protobuf.Any value = 3; // Optional value to be displayed in the message
+  google.protobuf.Timestamp timestamp = 4; // Timestamp of the notification
 }
 
 // Notification is used for displaying info, warnings, and errors to the user.
