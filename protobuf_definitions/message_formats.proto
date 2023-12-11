@@ -575,8 +575,10 @@ enum NotificationType {
   NOTIFICATION_TYPE_GO_TO_WAYPOINT = 18; // Go to waypoint
   NOTIFICATION_TYPE_GO_TO_DEPTH_SET_POINT = 19; // Go to depth set point
   NOTIFICATION_TYPE_GO_TO_WAYPOINT_WITH_DEPTH_SET_POINT = 20; // Go to waypoint with depth set point
-  NOTIFICATION_TYPE_MISSION_ABORTED = 21; // Mission is aborted
+  NOTIFICATION_TYPE_MISSION_STARTED = 21; // Mission is started
   NOTIFICATION_TYPE_MISSION_PAUSED = 22; // Mission is paused
+  NOTIFICATION_TYPE_MISSION_RESUMED = 23; // Mission is resumed
+  NOTIFICATION_TYPE_MISSION_ABORTED = 24; // Mission is aborted
 }
 
 // List of available notification levels.
