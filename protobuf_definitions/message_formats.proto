@@ -259,18 +259,18 @@ message BatteryBQ40Z50 {
   }
   BatteryStatus status = 4; // Battery status flags
 
-  float current = 6; // Current (A)
+  float current = 6; // Measured current from the coulomb counter (A)
   float average_current = 7; // Average current (A)
-  float relative_state_of_charge = 8; // Relative state of charge (0..1)
-  float absolute_state_of_charge = 9; // Absolute state of charge (0..1)
+  float relative_state_of_charge = 8; // Predicted remaining battery capacity as a factor of full_charge_capacity (0..1)
+  float absolute_state_of_charge = 9; // Predicted remaining battery capacity (0..1)
   float calculated_state_of_charge = 26; // Calculated state of charge (0..1)
-  float remaining_capacity = 10; // Remaining capacity (Ah)
-  float full_charge_capacity = 11; // Full charge capacity (Ah)
-  uint32 runtime_to_empty = 12; // Runtime to empty (s)
-  uint32 average_time_to_empty = 13; // Average time to empty (s)
-  uint32 average_time_to_full = 14; // Average time to full (s)
-  float charging_current = 17; // Charging current (A)
-  float charging_voltage = 18; // Charging voltage (V)
+  float remaining_capacity = 10; // Predicted remaining battery capacity (Ah)
+  float full_charge_capacity = 11; // Predicted battery capacity when fully charged (Ah)
+  uint32 runtime_to_empty = 12; // Predicted remaining battery capacity based on the present rate of discharge (s)
+  uint32 average_time_to_empty = 13; // Predicted remaining battery capacity based on average_current (s)
+  uint32 average_time_to_full = 14; // Predicted time-to-full charge based on average_current (s)
+  float charging_current = 17; // Desired charging current (A)
+  float charging_voltage = 18; // Desired charging voltage (V)
 
   uint32 cycle_count = 19; // Number of charging cycles
   float design_capacity = 20; // Design capacity (Ah)
