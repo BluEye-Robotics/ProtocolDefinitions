@@ -270,25 +270,25 @@ message BatteryBQ40Z50 {
 
   message BatteryLifetimes {
     message CellVoltages {
-      uint32 cell_1 = 1; // Voltage for cell number 1, [0, 32767], mV
-      uint32 cell_2 = 2; // Voltage for cell number 2, [0, 32767], mV
-      uint32 cell_3 = 3; // Voltage for cell number 3, [0, 32767], mV
-      uint32 cell_4 = 4; // Voltage for cell number 4, [0, 32767], mV
+      float cell_1 = 1; // Voltage for cell number 1, [0, 32767], mV
+      float cell_2 = 2; // Voltage for cell number 2, [0, 32767], mV
+      float cell_3 = 3; // Voltage for cell number 3, [0, 32767], mV
+      float cell_4 = 4; // Voltage for cell number 4, [0, 32767], mV
     }
     CellVoltages max_cell_voltages = 1; // Maximum reported cell voltages
     CellVoltages min_cell_voltages = 2; // Minimum reported cell voltages
-    int32 max_delta_cell_voltage = 3; // Max delta between cells, [0, 32767], mV
-    int32 max_charge_current = 4; // Max reported current in the charge direction, [0, 32767], mA
-    int32 max_discharge_current = 5; // Max reported current in the discharge direction, [-32768, 0], mA
-    int32 max_avg_discharge_current = 6; // Max reported average current in the discharge direction, [-32768, 0], mA
-    int32 max_avg_discharge_power = 7; // Max reported power in discharge direction, [-32768, 0], cW
-    int32 max_cell_temperature = 8; // Max reported cell temperature, [-128, 127], °C
-    int32 min_cell_temperature = 9; // Min reported cell temperature, [-128, 127], °C
+    float max_delta_cell_voltage = 3; // Max delta between cells, [0, 32767], mV
+    float max_charge_current = 4; // Max reported current in the charge direction, [0, 32767], mA
+    float max_discharge_current = 5; // Max reported current in the discharge direction, [-32768, 0], mA
+    float max_avg_discharge_current = 6; // Max reported average current in the discharge direction, [-32768, 0], mA
+    float max_avg_discharge_power = 7; // Max reported power in discharge direction, [-32768, 0], cW
+    float max_cell_temperature = 8; // Max reported cell temperature, [-128, 127], °C
+    float min_cell_temperature = 9; // Min reported cell temperature, [-128, 127], °C
     // Max reported temperature delta for TSx inputs configured as cell temperature, [-128, 127], °C
-    int32 max_delta_cell_temperature = 10;
-    int32 max_temperature_internal_sensor = 11; // Max reported internal temperature sensor temperature, [-128, 127], °C
-    int32 min_temperature_internal_sensor = 12; // Min reported internal temperature sensor temperature, [-128, 127], °C
-    int32 max_temperature_fet = 13; // Max reported FET temperature, [-128, 127], °C
+    float max_delta_cell_temperature = 10;
+    float max_temperature_internal_sensor = 11; // Max reported internal temperature sensor temperature, [-128, 127], °C
+    float min_temperature_internal_sensor = 12; // Min reported internal temperature sensor temperature, [-128, 127], °C
+    float max_temperature_fet = 13; // Max reported FET temperature, [-128, 127], °C
   }
   BatteryLifetimes lifetimes = 27; // Battery lifetimes
 
