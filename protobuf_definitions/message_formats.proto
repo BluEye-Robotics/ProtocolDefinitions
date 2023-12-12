@@ -313,6 +313,12 @@ message BatteryBQ40Z50 {
     uint32 otf_last_event = 24; // Last OTF event in cycle count cycles, [0, 32767], cycles
   }
   BatterySafetyEvents safety_events = 28; // Battery safety events
+
+  message BatteryChargingEvents {
+    uint32 charge_termination_events_count = 1; // Total number of valid charge termination events, [0, 32767], events
+    uint32 charge_termination_last_event = 2; // Last valid charge termination in cycle count cycles, [0, 32767], cycles
+  }
+  BatteryChargingEvents charging_events = 29; // Battery charging events
 }
 
 // The attitude of the drone.
