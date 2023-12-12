@@ -285,6 +285,34 @@ message BatteryBQ40Z50 {
     int32 max_temperature_fet = 13; // Max reported FET temperature, [-128, 127], °C
   }
   BatteryLifetimes lifetimes = 27; // Battery lifetimes
+
+  message BatterySafetyEvents {
+    uint32 cov_events_count = 1; // Number of cell overvoltage (COV) events, [0, 32767], events
+    uint32 cov_last_event = 2; // Last COV event in cycle count cycles, [0, 32767], cycles
+    uint32 cuv_events_count = 3; // Number of cell undervoltage (CUV) events, [0, 32767], events
+    uint32 cuv_last_event = 4; // Last CUV event in cycle count cycles, [0, 32767], cycles
+    uint32 ocd1_events_count = 5; // Number of Overcurrent in Discharge 1 (OCD1) events, [0, 32767], events
+    uint32 ocd1_last_event = 6; // Last OCD1 event in cycle count cycles, [0, 32767], cycles
+    uint32 ocd2_events_count = 7; // Number of Overcurrent in Discharge 2 (OCD2) events, [0, 32767], events
+    uint32 ocd2_last_event = 8; // Last OCD2 event in cycle count cycles, [0, 32767], cycles
+    uint32 occ1_events_count = 9; // Number of Overcurrent in Charge 1 (OCC1) events, [0, 32767], events
+    uint32 occ1_last_event = 10; // Last OCC1 event in cycle count cycles, [0, 32767], cycles
+    uint32 occ2_events_count = 11; // Number of Overcurrent in Charge 2 (OCC2) events, [0, 32767], events
+    uint32 occ2_last_event = 12; // Last OCC2 event in cycle count cycles, [0, 32767], cycles
+    uint32 aold_events_count = 13; // Number of Overload in discharge (AOLD) events, [0, 32767], events
+    uint32 aold_last_event = 14; // Last AOLD event in cycle count cycles, [0, 32767], cycles
+    uint32 ascd_events_count = 15; // Number of Short Circuit in Discharge (ASCD) events, [0, 32767], events
+    uint32 ascd_last_event = 16; // Last ASCD event in cycle count cycles, [0, 32767], cycles
+    uint32 ascc_events_count = 17; // Number of Short Circuit in Charge (ASCC) events, [0, 32767], events
+    uint32 ascc_last_event = 18; // Last ASCC event in cycle count cycles, [0, 32767], cycles
+    uint32 otc_events_count = 19; // Number of Overtemperature in Charge (OTC) events, [0, 32767], events
+    uint32 otc_last_event = 20; // Last OTC event in cycle count cycles, [0, 32767], cycles
+    uint32 otd_events_count = 21; // Number of Overtemperature in Discharge (OTD) events, [0, 32767], events
+    uint32 otd_last_event = 22; // Last OTD event in cycle count cycles, [0, 32767], cycles
+    uint32 otf_events_count = 23; // Number of Overtemperature in FET (OTF) events, [0, 32767], events
+    uint32 otf_last_event = 24; // Last OTF event in cycle count cycles, [0, 32767], cycles
+  }
+  BatterySafetyEvents safety_events = 28; // Battery safety events
 }
 
 // The attitude of the drone.
