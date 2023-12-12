@@ -269,8 +269,14 @@ message BatteryBQ40Z50 {
   string device_chemistry = 25; // Battery chemistry
 
   message BatteryLifetimes {
-    repeated int32 cell_max_voltages = 1; // Max reported cell voltage, [0, 32767], mV
-    repeated int32 cell_min_voltages = 2; // Min reported cell voltage, [0, 32767], mV
+    message CellVoltages {
+      uint32 cell_1 = 1; // Voltage for cell number 1, [0, 32767], mV
+      uint32 cell_2 = 2; // Voltage for cell number 2, [0, 32767], mV
+      uint32 cell_3 = 3; // Voltage for cell number 3, [0, 32767], mV
+      uint32 cell_4 = 4; // Voltage for cell number 4, [0, 32767], mV
+    }
+    CellVoltages max_cell_voltages = 1; // Maximum reported cell voltages
+    CellVoltages min_cell_voltages = 2; // Minimum reported cell voltages
     int32 max_delta_cell_voltage = 3; // Max delta between cells, [0, 32767], mV
     int32 max_charge_current = 4; // Max reported current in the charge direction, [0, 32767], mA
     int32 max_discharge_current = 5; // Max reported current in the discharge direction, [-32768, 0], mA
