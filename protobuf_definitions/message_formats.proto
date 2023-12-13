@@ -270,10 +270,10 @@ message BatteryBQ40Z50 {
 
   message BatteryLifetimes {
     message CellVoltages {
-      float cell_1 = 1; // Voltage for cell number 1, [0, 32767], mV
-      float cell_2 = 2; // Voltage for cell number 2, [0, 32767], mV
-      float cell_3 = 3; // Voltage for cell number 3, [0, 32767], mV
-      float cell_4 = 4; // Voltage for cell number 4, [0, 32767], mV
+      float cell_1 = 1; // Voltage for cell number 1, V
+      float cell_2 = 2; // Voltage for cell number 2, V
+      float cell_3 = 3; // Voltage for cell number 3, V
+      float cell_4 = 4; // Voltage for cell number 4, V
     }
     CellVoltages max_cell_voltages = 1; // Maximum reported cell voltages
     CellVoltages min_cell_voltages = 2; // Minimum reported cell voltages
