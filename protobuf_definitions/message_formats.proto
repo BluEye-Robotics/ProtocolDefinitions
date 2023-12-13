@@ -277,11 +277,11 @@ message BatteryBQ40Z50 {
     }
     CellVoltages max_cell_voltages = 1; // Maximum reported cell voltages
     CellVoltages min_cell_voltages = 2; // Minimum reported cell voltages
-    float max_delta_cell_voltage = 3; // Max delta between cells, [0, 32767], mV
-    float max_charge_current = 4; // Max reported current in the charge direction, [0, 32767], mA
-    float max_discharge_current = 5; // Max reported current in the discharge direction, [-32768, 0], mA
-    float max_avg_discharge_current = 6; // Max reported average current in the discharge direction, [-32768, 0], mA
-    float max_avg_discharge_power = 7; // Max reported power in discharge direction, [-32768, 0], cW
+    float max_delta_cell_voltage = 3; // Max delta between cells, V
+    float max_charge_current = 4; // Max reported current in the charge direction, A
+    float max_discharge_current = 5; // Max reported current in the discharge direction, A
+    float max_avg_discharge_current = 6; // Max reported average current in the discharge direction, A
+    float max_avg_discharge_power = 7; // Max reported power in discharge direction, W
     float max_cell_temperature = 8; // Max reported cell temperature, [-128, 127], °C
     float min_cell_temperature = 9; // Min reported cell temperature, [-128, 127], °C
     // Max reported temperature delta for TSx inputs configured as cell temperature, [-128, 127], °C
