@@ -6,6 +6,7 @@ syntax = "proto3";
 package blueye.protocol;
 import "aquatroll.proto";
 import "message_formats.proto";
+import "mission_planning.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 // Receive the current attitude of the drone.
