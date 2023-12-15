@@ -106,7 +106,10 @@ message AutoPilotHeaveCtrl {
 
 // Issue a command to start and pause the loaded mission.
 message RunMissionCtrl {
-  RunMissionState state = 1; // State of the loaded mission
+}
+
+// Issue a command to pause the loaded mission.
+message PauseMissionCtrl {
 }
 
 // Clear the loaded mission.

@@ -196,8 +196,3 @@ message MissionStatus {
   repeated uint32 completed_path_segment_ids = 7; // Ids of the completed path segments
   uint32 total_number_of_path_segments = 8; // Total number of path segments in the mission
 }
-
-// Run Mission state
-message RunMissionState {
-  bool enabled = 1; // If the mission is running
-}
