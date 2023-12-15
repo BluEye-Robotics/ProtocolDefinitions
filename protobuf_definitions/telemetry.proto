@@ -19,7 +19,7 @@ message AltitudeTel {
   Altitude altitude = 1; // The altitude of the drone.
 }
 
-// Distance to an object infront of the drone when a 1D pinger is mounted forwards.
+// Distance to an object in front of the drone when a 1D pinger is mounted forwards.
 message ForwardDistanceTel {
   ForwardDistance forward_distance = 1;
 }
@@ -54,7 +54,7 @@ message NotificationTel {
   Notification notification = 1;
 }
 
-// Control force in all directions in (N).
+// Control force in all directions.
 message ControlForceTel {
   ControlForce control_force = 1;
 }
@@ -116,7 +116,7 @@ message WaterTemperatureTel {
   WaterTemperature temperature = 1;
 }
 
-// Drone CPU temperature (C)
+// Drone CPU temperature
 message CPUTemperatureTel {
   CPUTemperature temperature = 1;
 }
