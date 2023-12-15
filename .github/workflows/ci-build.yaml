@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
       - name: Run protolint
         uses: plexsystems/protolint-action@v0.4.0
         with:

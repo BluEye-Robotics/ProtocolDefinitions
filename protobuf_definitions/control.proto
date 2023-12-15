@@ -93,6 +93,28 @@ message WeatherVaningCtrl {
   WeatherVaningState state = 1; // State of the weather vaning controller
 }
 
+// Issue a command to set Auto Pilot for cruising and turning to a desired state.
+message AutoPilotSurgeYawCtrl {
+  AutoPilotSurgeYawState state = 1; // State of the auto pilot surge yaw controller
+}
+
+// Issue a command to set Auto Pilot for vertiacl movement to a desired state.
+message AutoPilotHeaveCtrl {
+  AutoPilotHeaveState state = 1; // State of the auto pilot heave controller
+}
+
+// Issue a command to start and pause the loaded mission.
+message RunMissionCtrl {
+}
+
+// Issue a command to pause the loaded mission.
+message PauseMissionCtrl {
+}
+
+// Clear the loaded mission.
+message ClearMissionCtrl {
+}
+
 // Issue a command to reset the position estimate.
 message ResetPositionCtrl {
   ResetPositionSettings settings = 1; // Reset settings.

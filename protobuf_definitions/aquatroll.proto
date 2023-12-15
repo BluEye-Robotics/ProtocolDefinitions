@@ -299,7 +299,6 @@ enum AquaTrollDeviceStatus {
   AQUA_TROLL_DEVICE_STATUS_LOW_MEMORY = 14;
 }
 
-
 // In-Situ Parameter Block
 //
 // Up to NUMBER_OF_SENSOR_PARAMETERS blocks may be part of a sensor

@@ -84,6 +84,16 @@ message WeatherVaningState {
   bool enabled = 1; // If weather vaning is enabled
 }
 
+// Auto pilot surge yaw state.
+message AutoPilotSurgeYawState {
+  bool enabled = 1; // If auto pilot surge yaw is enabled
+}
+
+// Auto pilot heave state.
+message AutoPilotHeaveState {
+  bool enabled = 1; // If auto pilot heave is enabled
+}
+
 // Control mode from drone supervisor
 message ControlMode {
   bool auto_depth = 1; // If auto depth is enabled
@@ -91,6 +101,8 @@ message ControlMode {
   bool auto_altitude = 3; // If auto altitude is enabled
   bool station_keeping = 4; // If station keeping is enabled
   bool weather_vaning = 5; // If weather vaning is enabled
+  bool auto_pilot_surge_yaw = 6; // If auto pilot surge yaw is enabled
+  bool auto_pilot_heave = 7; // If auto pilot heave is enabled
 }
 
 // Tilt stabilization state.
@@ -139,7 +151,7 @@ message RecordState {
 // Water density.
 //
 // Used to specify the water density the drone is operating in,
-// to achieve more accruate depth measurements.
+// to achieve more accurate depth measurements.
 message WaterDensity {
   float value = 1; // Salinity (kg/l)
 }
@@ -340,8 +352,9 @@ message Altitude {
   bool is_valid = 2; // If altitude is valid or not
 }
 
-// Distance to an object infront of the drone, typically obtained from an 1D
-// pinger.
+// Distance to an object infront of the drone
+//
+// Typically obtained from a 1D pinger.
 message ForwardDistance {
   float value = 1; // Distance in front of drone (m)
   bool is_valid = 2; // If distance reading is valid or not
@@ -388,8 +401,9 @@ message Depth {
   float value = 1; // Drone depth below surface (m)
 }
 
-// Reference for the control system. Note that the internal heading referece is not relative to North.
-// Use (ControlHealth.heading_error + pose.yaw) instead.
+// Reference for the control system.
+// Note that the internal heading reference is not relative to North, use
+// (ControlHealth.heading_error + pose.yaw) instead.
 message Reference {
   float surge = 1; // Reference from joystick surge input (0..1)
   float sway = 2; // Reference from joystick sway input (0..1)
@@ -398,6 +412,52 @@ message Reference {
   float depth = 5; // Reference drone depth below surface (m)
   float heading = 6; // Reference used in auto heading mode, gyro based (°)
   float altitude = 7; // Reference used in auto altitude mode (m)
+}
+
+
+// Notification is used for displaying info, warnings, and errors to the user.
+message Notification {
+  NotificationType type = 1; // Notification to be displayed to the user
+  NotificationLevel level = 2; // Level of the notification, info, warning or error
+  optional google.protobuf.Any value = 3; // Optional value to be displayed in the message
+  google.protobuf.Timestamp timestamp = 4; // Timestamp of the notification
+}
+
+// Notification is used for displaying info, warnings, and errors to the user.
+enum NotificationType {
+  NOTIFICATION_TYPE_UNSPECIFIED = 0; // Unspecified
+  NOTIFICATION_TYPE_POSITION_ESTIMATE_IS_INACCURATE = 1; // Position estimate is inaccurate
+  NOTIFICATION_TYPE_DRONE_POSITION_IS_UNKNOWN = 2; // Drone position is unknown
+  NOTIFICATION_TYPE_USER_POSITION_IS_UNKNOWN = 3; // User position is unknown
+  NOTIFICATION_TYPE_NO_MISSION_LOADED = 4; // No mission is loaded
+  NOTIFICATION_TYPE_MISSION_LOADED = 5; // Mission is loaded
+  NOTIFICATION_TYPE_FAILED_TO_LOAD_MISSION = 6; // Failed to load mission
+  NOTIFICATION_TYPE_MISSION_COMPLETE = 7; // Mission is complete
+  NOTIFICATION_TYPE_INSTRUCTION_COMPLETE = 8; // Instruction is complete
+  NOTIFICATION_TYPE_WAYPOINT_REACHED = 9; // Waypoint reached
+  NOTIFICATION_TYPE_DEPTH_TARGET_REACHED = 10; // Depth set point is reached
+  NOTIFICATION_TYPE_ALTITUDE_TARGET_REACHED = 11; // Altitude set point is reached
+  NOTIFICATION_TYPE_WAYPOINT_IS_TO_FAR_AWAY = 12; // The waypoint is to far away
+  NOTIFICATION_TYPE_DEPTH_SET_POINT_IS_TO_FAR_AWAY = 13; // The depth set point is to far away
+  NOTIFICATION_TYPE_TIME_TO_COMPLETE_IS_TOO_LONG = 14; // The time to complete the mission is too long
+  NOTIFICATION_TYPE_RETURNING_TO_HOME = 15; // Returning to home
+  NOTIFICATION_TYPE_GO_TO_SURFACE = 16; // Go to surface
+  NOTIFICATION_TYPE_GO_TO_SEA_BOTTOM = 17; // Go to sea bottom with an altimeter
+  NOTIFICATION_TYPE_GO_TO_WAYPOINT = 18; // Go to waypoint
+  NOTIFICATION_TYPE_GO_TO_DEPTH_SET_POINT = 19; // Go to depth set point
+  NOTIFICATION_TYPE_GO_TO_WAYPOINT_WITH_DEPTH_SET_POINT = 20; // Go to waypoint with depth set point
+  NOTIFICATION_TYPE_MISSION_STARTED = 21; // Mission is started
+  NOTIFICATION_TYPE_MISSION_PAUSED = 22; // Mission is paused
+  NOTIFICATION_TYPE_MISSION_RESUMED = 23; // Mission is resumed
+  NOTIFICATION_TYPE_MISSION_ABORTED = 24; // Mission is aborted
+}
+
+// List of available notification levels.
+enum NotificationLevel {
+  NOTIFICATION_LEVEL_UNSPECIFIED = 0; // Unspecified
+  NOTIFICATION_LEVEL_INFO = 1; // Info
+  NOTIFICATION_LEVEL_WARNING = 2; // Warning
+  NOTIFICATION_LEVEL_ERROR = 3; // Error
 }
 
 // Control Force is used for showing the requested control force in each direction in Newtons.
