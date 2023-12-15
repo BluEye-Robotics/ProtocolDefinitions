@@ -6,6 +6,8 @@ syntax = "proto3";
 package blueye.protocol;
 import "google/protobuf/any.proto";
 import "message_formats.proto";
+import "mission_planning.proto";
+
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 // Request to set video overlay parameters.
@@ -118,6 +120,33 @@ message GetBatteryReq {
 // Response with essential battery information.
 message GetBatteryRep {
   Battery battery = 1; // Essential battery information.
+}
+
+// Issue a desired mission to the reference_generator.
+message SetMissionReq {
+  Mission mission = 1; // requested mission isseued to the reference generator
+}
+
+// Response after setting a new mission.
+message SetMissionRep {
+}
+
+// Service request to the reference_generator to get the active mission.
+message GetMissionReq {
+}
+
+// Get active mission response.
+message GetMissionRep {
+  Mission mission = 1; // active mission with waypoints
+}
+
+// Updates an instruction in current mission with a new instruction payload.
+message SetInstructionUpdateReq {
+  Instruction instruction = 1; // instruction that will replace the desired instruction
+}
+
+// Response after updating an instruction in the current mission.
+message SetInstructionUpdateRep {
 }
 
 // Request to update the publish frequency

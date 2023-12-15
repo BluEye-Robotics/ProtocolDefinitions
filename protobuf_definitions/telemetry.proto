@@ -6,6 +6,7 @@ syntax = "proto3";
 package blueye.protocol;
 import "aquatroll.proto";
 import "message_formats.proto";
+import "mission_planning.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 // Receive the current attitude of the drone.
@@ -18,26 +19,47 @@ message AltitudeTel {
   Altitude altitude = 1; // The altitude of the drone.
 }
 
+// Distance to an object in front of the drone when a 1D pinger is mounted forwards.
 message ForwardDistanceTel {
   ForwardDistance forward_distance = 1;
 }
 
+// Position estimate of the drone if a DVL or a positioning system is available.
 message PositionEstimateTel {
   PositionEstimate position_estimate = 1;
 }
 
+// Measurement of the drones position relative to the sea surface.
 message DepthTel {
   Depth depth = 1;
 }
 
+// Reference signals indicating desired states.
 message ReferenceTel {
   Reference reference = 1;
 }
 
+// Reference for the auto pilot when a mission is active.
+message ReferenceAutoPilotTel {
+  ReferenceAutoPilot reference_auto_pilot = 1;
+}
+
+// Mission status from the mission supervisor.
+message MissionStatusTel {
+  MissionStatus mission_status = 1;
+}
+
+// Notification from the control system.
+message NotificationTel {
+  Notification notification = 1;
+}
+
+// Control force in all directions.
 message ControlForceTel {
   ControlForce control_force = 1;
 }
 
+// Controller health indicating the load of the controller, used to set a color in the heading and depth bar.
 message ControllerHealthTel {
   ControllerHealth controller_health = 1;
 }
@@ -57,10 +79,12 @@ message LaserTel {
   Laser laser = 1;
 }
 
+// Pilot position (originating from device GPS) for logging.
 message PilotGPSPositionTel {
   LatLongPosition position = 1;
 }
 
+// Record state from the drone.
 message RecordStateTel {
   RecordState record_state = 1;
 }
@@ -87,10 +111,12 @@ message DroneTimeTel {
   SystemTime monotonic_clock = 2; // The monotonic clock of the drone (time since power on).
 }
 
+// Water temerature from the depth sensor.
 message WaterTemperatureTel {
   WaterTemperature temperature = 1;
 }
 
+// Drone CPU temperature
 message CPUTemperatureTel {
   CPUTemperature temperature = 1;
 }
@@ -115,30 +141,37 @@ message CanisterBottomHumidityTel {
   CanisterHumidity humidity = 1; // Humidity information
 }
 
+// Video storage info.
 message VideoStorageSpaceTel {
   StorageSpace storage_space = 1;
 }
 
+// Data storage info.
 message DataStorageSpaceTel {
   StorageSpace storage_space = 1;
 }
 
+// Calibration state used for calibration rotine.
 message CalibrationStateTel {
   CalibrationState calibration_state = 1;
 }
 
+// Tilt stabilization state.
 message TiltStabilizationTel {
   TiltStabilizationState state = 1;
 }
 
+// Iperf indicates the available bandwidth on the tether from drone to surface unit.
 message IperfTel {
   IperfStatus status = 1;
 }
 
+// Number of connected clients streaming video.
 message NStreamersTel {
   NStreamers n_streamers = 1;
 }
 
+// Tilt angle state on main camera.
 message TiltAngleTel {
   TiltAngle angle = 1;
 }
@@ -167,7 +200,6 @@ message ThicknessGaugeTel {
 message CpProbeTel {
   CpProbe cp_probe = 1; // Reading from cp probe.
 }
-
 
 // Metadata from the In-Situ Aqua Troll probe's common registers
 message AquaTrollProbeMetadataTel {
