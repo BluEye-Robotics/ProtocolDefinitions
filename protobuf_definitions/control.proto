@@ -6,7 +6,6 @@ syntax = "proto3";
 package blueye.protocol;
 import "aquatroll.proto";
 import "message_formats.proto";
-import "mission_planning.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 // Issue a command to move the drone in the surge, sway, heave, or yaw direction.
