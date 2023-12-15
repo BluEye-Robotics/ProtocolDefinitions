@@ -60,7 +60,7 @@ message Waypoint {
   LatLongPosition global_position = 3; // position if the waypoint (decimal degrees)
   float circle_of_acceptance = 4; // radius of the accepance circle around the waypoint (m)
   float speed_to_target = 5; // desired speed over ground to waypoint (m/s)
-  optional DepthSetPoint depth_set_point = 6; // depth set point (optional)
+  DepthSetPoint depth_set_point = 6; // depth set point (optional)
   // auto_pilot_mode: Path fallowing, Trajectory tracking, Constant heading
   // float fixed_heading
 }
@@ -103,17 +103,17 @@ message CameraCommand {
 
 // GoToSurfaceCommand is used to go to the surface.
 message GoToSurfaceCommand {
-  optional float desired_speed = 1; // desired speed to surface (m/s)
+  float desired_speed = 1; // desired speed to surface (m/s)
 }
 
 // GoToSeaBottomCommand is used to go to the sea bottom.
 message GoToSeaBottomCommand {
-  optional float desired_speed = 1; // desired speed to seabed (m/s)
+  float desired_speed = 1; // desired speed to seabed (m/s)
 }
 
 // GoToHomeCommand is used to go to the home position.
 message GoToHomeCommand {
-  optional float desired_speed = 1; // desired speed to home (m/s)
+  float desired_speed = 1; // desired speed to home (m/s)
 }
 
 // List of available camera actions.
@@ -159,8 +159,8 @@ enum InstructionType {
 // Reference for the auto pilot when a mission is active.
 message ReferenceAutoPilot {
   InstructionType instruction_type = 1; // Instruction type
-  optional uint32 active_instruction_id = 2; // Id of the active instruction
-  optional uint32 active_path_segment_id = 3; // Id of the active path segment
+  uint32 active_instruction_id = 2; // Id of the active instruction
+  uint32 active_path_segment_id = 3; // Id of the active path segment
   float course_to_target = 4; // Course to the next waypoint from north (rad) [-pi, pi]
   float speed_over_ground = 5; // Desired speed over ground (m/s)
   float horizontal_distance_to_target = 6; // Horizontal distance to the next waypoint (m)
