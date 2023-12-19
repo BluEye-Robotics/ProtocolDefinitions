@@ -414,7 +414,6 @@ message Reference {
   float altitude = 7; // Reference used in auto altitude mode (m)
 }
 
-
 // Notification is used for displaying info, warnings, and errors to the user.
 message Notification {
   NotificationType type = 1; // Notification to be displayed to the user
@@ -450,6 +449,7 @@ enum NotificationType {
   NOTIFICATION_TYPE_MISSION_PAUSED = 22; // Mission is paused
   NOTIFICATION_TYPE_MISSION_RESUMED = 23; // Mission is resumed
   NOTIFICATION_TYPE_MISSION_ABORTED = 24; // Mission is aborted
+  NOTIFICATION_TYPE_DRONE_IS_STUCK = 25; // Drone is stuck during a mission
 }
 
 // List of available notification levels.
