@@ -441,7 +441,7 @@ enum NotificationType {
   NOTIFICATION_TYPE_TIME_TO_COMPLETE_IS_TOO_LONG = 14; // The time to complete the mission is too long
   NOTIFICATION_TYPE_RETURNING_TO_HOME = 15; // Returning to home
   NOTIFICATION_TYPE_GO_TO_SURFACE = 16; // Go to surface
-  NOTIFICATION_TYPE_GO_TO_SEA_BOTTOM = 17; // Go to sea bottom with an altimeter
+  NOTIFICATION_TYPE_GO_TO_SEABED = 17; // Go to seabed with an altimeter
   NOTIFICATION_TYPE_GO_TO_WAYPOINT = 18; // Go to waypoint
   NOTIFICATION_TYPE_GO_TO_DEPTH_SET_POINT = 19; // Go to depth set point
   NOTIFICATION_TYPE_GO_TO_WAYPOINT_WITH_DEPTH_SET_POINT = 20; // Go to waypoint with depth set point
