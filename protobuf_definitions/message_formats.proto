@@ -420,7 +420,6 @@ message Reference {
   float altitude = 7; // Reference used in auto altitude mode (m)
 }
 
-
 // Notification is used for displaying info, warnings, and errors to the user.
 message Notification {
   NotificationType type = 1; // Notification to be displayed to the user
@@ -448,7 +447,7 @@ enum NotificationType {
   NOTIFICATION_TYPE_TIME_TO_COMPLETE_IS_TOO_LONG = 14; // The time to complete the mission is too long
   NOTIFICATION_TYPE_RETURNING_TO_HOME = 15; // Returning to home
   NOTIFICATION_TYPE_GO_TO_SURFACE = 16; // Go to surface
-  NOTIFICATION_TYPE_GO_TO_SEA_BOTTOM = 17; // Go to sea bottom with an altimeter
+  NOTIFICATION_TYPE_GO_TO_SEABED = 17; // Go to seabed with an altimeter
   NOTIFICATION_TYPE_GO_TO_WAYPOINT = 18; // Go to waypoint
   NOTIFICATION_TYPE_GO_TO_DEPTH_SET_POINT = 19; // Go to depth set point
   NOTIFICATION_TYPE_GO_TO_WAYPOINT_WITH_DEPTH_SET_POINT = 20; // Go to waypoint with depth set point
@@ -456,6 +455,7 @@ enum NotificationType {
   NOTIFICATION_TYPE_MISSION_PAUSED = 22; // Mission is paused
   NOTIFICATION_TYPE_MISSION_RESUMED = 23; // Mission is resumed
   NOTIFICATION_TYPE_MISSION_ABORTED = 24; // Mission is aborted
+  NOTIFICATION_TYPE_DRONE_IS_STUCK = 25; // Drone is stuck during a mission
 }
 
 // List of available notification levels.
