@@ -148,6 +148,20 @@ message RecordState {
   int32 guestport_seconds = 4; // Guestport record time (s)
 }
 
+// Interval type for time-lapse photos.
+enum IntervalType {
+  INTERVAL_TYPE_UNSPECIFIED = 0; // Unspecified
+  INTERVAL_TYPE_TIME = 1; // Time interval
+  INTERVAL_TYPE_DISTANCE = 2; // Distance interval
+}
+
+// Time-lapse state published if time-lapse mission is running.
+message TimeLapseState {
+  float interval = 1; // Interval between photos
+  int32 photos_taken = 2; // Number of photos taken
+  IntervalType interval_type = 3; // Interval type for photos, distance or time
+}
+
 // Water density.
 //
 // Used to specify the water density the drone is operating in,

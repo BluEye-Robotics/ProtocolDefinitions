@@ -89,6 +89,11 @@ message RecordStateTel {
   RecordState record_state = 1;
 }
 
+// Time-lapse state from the drone.
+message TimeLapseStateTel {
+  TimeLapseState time_lapse_state = 1;
+}
+
 // Receive essential information about the battery status.
 message BatteryTel {
   Battery battery = 1; // Essential battery information.
