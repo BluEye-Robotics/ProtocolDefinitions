@@ -450,6 +450,8 @@ enum NotificationType {
   NOTIFICATION_TYPE_MISSION_RESUMED = 23; // Mission is resumed
   NOTIFICATION_TYPE_MISSION_ABORTED = 24; // Mission is aborted
   NOTIFICATION_TYPE_DRONE_IS_STUCK = 25; // Drone is stuck during a mission
+  NOTIFICATION_TYPE_WAIT_FOR = 26; // Wait for instruction running
+  NOTIFICATION_TYPE_CAMERA_ACTION = 27; // Camera action initiated
 }
 
 // List of available notification levels.
