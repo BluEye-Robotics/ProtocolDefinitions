@@ -87,7 +87,7 @@ message TiltMainCameraCommand {
 
 // The TiltServoCommand is used to set the tilt angle of the servo.
 message TiltServoCommand {
-  MultibeamServo tilt_angle = 1; // Tilt angle for the servo, i.e. multibeam
+  MultibeamServo multibeam_servo = 1; // Tilt angle for the multibeam servo
 }
 
 // WaitForCommand is used to wait duringing a mission.
