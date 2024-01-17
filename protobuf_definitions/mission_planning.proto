@@ -31,7 +31,7 @@ message Instruction {
     CameraCommand camera_command = 6; // Camera commands
     ControlModeCommand control_mode_command = 7; // Set control modes
     TiltMainCameraCommand tilt_main_camera_command = 8; // Set camera to angle x
-    TiltServoCommand tilt_servo_command = 9; // Set tilt angle
+    TiltMultibeamCommand tilt_multibeam_command = 9; // Set multibeam tilt angle
     WaitForCommand wait_for_command = 10; // Wait for x seconds
     GoToSurfaceCommand go_to_surface_command = 11; // Go to surface
     GoToSeabedCommand go_to_seabed_command = 12; // Go to seabed
@@ -85,8 +85,8 @@ message TiltMainCameraCommand {
   TiltAngle tilt_angle = 1; // Tilt angle of the camera (-30..30)
 }
 
-// The TiltServoCommand is used to set the tilt angle of the servo.
-message TiltServoCommand {
+// The TiltMultibeamCommand is used to set the tilt angle of the servo.
+message TiltMultibeamCommand {
   MultibeamServo multibeam_servo = 1; // Tilt angle for the multibeam servo
 }
 
