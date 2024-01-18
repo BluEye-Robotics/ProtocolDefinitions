@@ -65,9 +65,24 @@ message Waypoint {
   // float fixed_heading
 }
 
-// A ControlModeCommand is used to enable a controlmode during a mission.
+enum ControlModeVertical {
+  CONTROL_MODE_VERTICAL_UNSPECIFIED = 0; // Unspecified
+  CONTROL_MODE_VERTICAL_MANUAL = 1; // Manual control mode
+  CONTROL_MODE_VERTICAL_AUTO_DEPTH = 2; // Auto depth control mode
+  CONTROL_MODE_VERTICAL_AUTO_ALTITUDE = 3; // Auto altitude control mode
+}
+
+enum ControlModeHorizontal {
+  CONTROL_MODE_HORIZONTAL_UNSPECIFIED = 0; // Unspecified
+  CONTROL_MODE_HORIZONTAL_MANUAL = 1; // Manual control mode
+  CONTROL_MODE_HORIZONTAL_AUTO_HEADING = 2; // Auto heading control mode
+  CONTROL_MODE_HORIZONTAL_STATION_KEEPING = 3; // Station keeping control mode
+}
+
+// A ControlModeCommand is used to set vertical and horizontal control mode during a mission.
 message ControlModeCommand {
-  ControlMode control_mode = 1; // Requested control mode
+  ControlModeVertical control_mode_vertical = 5; // Desired control mode in heave
+  ControlModeHorizontal control_mode_horizontal = 6; // Desired control mode in surge and yaw
 }
 
 // A WaypointCommand will request the drone to drive to a point automatically.
