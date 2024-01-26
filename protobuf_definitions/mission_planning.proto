@@ -31,7 +31,7 @@ message Instruction {
     CameraCommand camera_command = 6; // Camera commands
     ControlModeCommand control_mode_command = 7; // Set control modes
     TiltMainCameraCommand tilt_main_camera_command = 8; // Set camera to angle x
-    TiltServoCommand tilt_servo_command = 9; // Set tilt angle
+    TiltMultibeamCommand tilt_multibeam_command = 9; // Set multibeam tilt angle
     WaitForCommand wait_for_command = 10; // Wait for x seconds
     GoToSurfaceCommand go_to_surface_command = 11; // Go to surface
     GoToSeabedCommand go_to_seabed_command = 12; // Go to seabed
@@ -65,9 +65,24 @@ message Waypoint {
   // float fixed_heading
 }
 
-// A ControlModeCommand is used to enable a controlmode during a mission.
+enum ControlModeVertical {
+  CONTROL_MODE_VERTICAL_UNSPECIFIED = 0; // Unspecified
+  CONTROL_MODE_VERTICAL_MANUAL = 1; // Manual control mode
+  CONTROL_MODE_VERTICAL_AUTO_DEPTH = 2; // Auto depth control mode
+  CONTROL_MODE_VERTICAL_AUTO_ALTITUDE = 3; // Auto altitude control mode
+}
+
+enum ControlModeHorizontal {
+  CONTROL_MODE_HORIZONTAL_UNSPECIFIED = 0; // Unspecified
+  CONTROL_MODE_HORIZONTAL_MANUAL = 1; // Manual control mode
+  CONTROL_MODE_HORIZONTAL_AUTO_HEADING = 2; // Auto heading control mode
+  CONTROL_MODE_HORIZONTAL_STATION_KEEPING = 3; // Station keeping control mode
+}
+
+// A ControlModeCommand is used to set vertical and horizontal control mode during a mission.
 message ControlModeCommand {
-  ControlMode control_mode = 1; // Requested control mode
+  ControlModeVertical control_mode_vertical = 5; // Desired control mode in heave
+  ControlModeHorizontal control_mode_horizontal = 6; // Desired control mode in surge and yaw
 }
 
 // A WaypointCommand will request the drone to drive to a point automatically.
@@ -85,9 +100,9 @@ message TiltMainCameraCommand {
   TiltAngle tilt_angle = 1; // Tilt angle of the camera (-30..30)
 }
 
-// The TiltServoCommand is used to set the tilt angle of the servo.
-message TiltServoCommand {
-  MultibeamServo tilt_angle = 1; // Tilt angle for the servo, i.e. multibeam
+// The TiltMultibeamCommand is used to set the tilt angle of the servo.
+message TiltMultibeamCommand {
+  MultibeamServo multibeam_servo = 1; // Tilt angle for the multibeam servo
 }
 
 // WaitForCommand is used to wait duringing a mission.
