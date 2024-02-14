@@ -165,9 +165,9 @@ message TimeLapseState {
 // Water density.
 //
 // Used to specify the water density the drone is operating in,
-// to achieve more accurate depth measurements.
+// to achieve more accurate depth measurements, f. ex. influenced by salinity.
 message WaterDensity {
-  float value = 1; // Salinity (kg/l)
+  float value = 1; // Water density (g/l)
 }
 
 // Pinger configuration.
