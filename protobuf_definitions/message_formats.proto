@@ -476,6 +476,7 @@ enum NotificationType {
   NOTIFICATION_TYPE_CAMERA_ACTION = 27; // Camera action initiated
   NOTIFICATION_TYPE_SET_TILT_MAIN_CAMERA = 28; // Set tilt for main camera
   NOTIFICATION_TYPE_SET_TILT_MULTIBEAM = 29; // Set tilt for multibeam
+  NOTIFICATION_TYPE_INSTRUCTION_SKIPPED = 30; // When an instruction is not available in the ROV
 }
 
 // List of available notification levels.
