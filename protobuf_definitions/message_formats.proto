@@ -134,6 +134,7 @@ message ClientInfo {
   string platform = 4; // Platform, such as iOS, Android, Linux, etc
   string platform_version = 5; // Platform software version string
   string name = 6; // Name of the client
+  bool is_observer = 7; // If the client should be connected as an observer or not
 }
 
 // Information about a connected client with an id assigned by the drone.
