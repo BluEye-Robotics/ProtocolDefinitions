@@ -124,8 +124,8 @@ message ResetPositionCtrl {
 message ResetOdometerCtrl {
 }
 
-// Issue a command to reset the DVL gyro.
-message ResetDvlGyroCtrl {
+// Issue a command to calibrate the DVL gyro.
+message CalibrateDvlGyroCtrl {
 }
 
 // Issue a command to enable or disable tilt stabilization.
