@@ -15,9 +15,15 @@ option csharp_namespace = "Blueye.Protocol.Protobuf";
 //
 // See separate documentation for the logfile format for more details.
 message BinlogRecord {
+  enum Compression {
+    COMPRESSION_UNSPECIFIED = 0; // Unspecified compression
+    COMPRESSION_NONE = 1; // No compression
+    COMPRESSION_ZSTD = 2; // zstd compression
+  }
   google.protobuf.Any payload = 1; // The log entry payload.
   google.protobuf.Timestamp unix_timestamp = 2; // Unix timestamp in UTC.
   google.protobuf.Timestamp clock_monotonic = 3; // Posix CLOCK_MONOTONIC timestamp.
+  Compression compression = 4; // Compression used for the payload.
 }
 
 // Motion input from client.
@@ -937,4 +943,69 @@ message MedusaSpectrometerData {
   uint32 total = 3; // Total counts inside the spectrum
   uint32 countrate = 4; // Counts per second inside the spectrum (rounded)
   uint32 cosmics = 5; // Detected counts above the last channel
+}
+
+// Oculus sonar ping data
+//
+// Mapping for the https://github.com/ENSTABretagneRobotics/oculus_ros/blob/master/msg/Ping.msg ROS package.
+message OculusPing {
+  uint32 ping_id = 1; // Incrementing counter inside the sonar
+  uint32 ping_firing_date = 2; // Ping firing date (sonar internal clock, microseconds)
+  double range = 3; // Maximum range value in this ping
+  double gain_percent = 4; // Percentage of gain (not documented)
+  double frequency = 5; // Ping acoustic frequency (Hz)
+  double speed_of_sound_used = 6; // Speed of sound used by the sonar for range calculations (m/s)
+  double range_resolution = 7; // Distance between 2 rows in the ping image data.
+  double temperature = 8; // External temperature (Celcius)
+  double pressure = 9; // External pressure (bar)
+  uint32 master_mode = 10; // 1 is "low frequency" (1.2 MHz), 2 is high frequency (2.1 Mhz)
+  // Each row in the image data comes with a gain
+  // to be compensated for consistent acoustic readings.
+  // See documentation for more details.
+  bool has_gains = 11;
+  uint32 number_of_ranges = 12; // Height of the ping image data.
+  uint32 number_of_beams = 13; // Width  of the ping image data.
+  uint32 step = 14; // Size in bytes of each row in the ping data image.
+  uint32 sample_size = 15; // Size in bytes of each "pixel" in the ping data.
+  // Bearing angle of each column of the sonar data
+  // (in 100th of a degree, multiply by 0.01 to get a value in degrees).
+  // The sonar image is not sampled uniformly in the bearing direction.
+  repeated int32 bearings = 16 [packed=true];
+
+  // Ping data (is a row major image in little-endian).
+  // Size in bytes of each pixel is given in the
+  // sample_size field. The size in bytes of each line
+  // is given in the step field.  If the has_gains
+  // field is true, each row starts with 4 bytes
+  // containing gain of the row (encoded as a little
+  // endian uint32. Divide the whole row by the square
+  // root of this gain to have consistent value across
+  // the image data).
+  bytes ping_data = 17;
+}
+
+message OculusPingConfig {
+  enum MasterMode {
+    MASTER_MODE_UNSPECIFIED = 0;
+    MASTER_MODE_FLEXI = 1; // Not available for third party developers
+    MASTER_MODE_LOW_FREQUENCY = 2; // Low frequency mode (wide aperture, navigation)
+    MASTER_MODE_HIGH_FREQUENCY = 3; // High frequency mode (narrow aperture, target identification)
+  }
+  MasterMode master_mode = 1;
+
+  uint32 ping_rate = 2; // Sets the maximum ping rate. was PingRateType
+  uint32 network_speed = 3; // Used to reduce the network comms speed (useful for high latency shared links)
+  uint32 gamma_correction = 4; // 0 and 0xff = gamma correction = 1.0. Set to 127 for gamma correction = 0.5
+
+  bool range_meters_or_percent = 5; // 0 = range in meters, 1 = range in percent of maximum range
+  bool use_16_bit_samples = 6; // 0 = 8 bit samples, 1 = 16 bit samples
+  bool send_gain = 7; // Send gain with each ping
+  bool send_full_return_message = 8; // Send full return message with each ping
+  bool gain_assist = 9; // Enable gain assist
+  bool enable_512_beams = 10; // Enable 512 beams
+
+  double range = 11; // The range demand in percent or m depending on flags
+  double gain_percent = 12; // The gain demand
+  double speed_of_sound = 13; // ms-1, if set to zero then internal calc will apply using salinity
+  double salinity = 14; // ppt, set to zero if we are in fresh water
 }
