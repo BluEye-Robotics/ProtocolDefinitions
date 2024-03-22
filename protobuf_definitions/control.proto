@@ -124,6 +124,10 @@ message ResetPositionCtrl {
 message ResetOdometerCtrl {
 }
 
+// Issue a command to reset the DVL gyro.
+message ResetDvlGyroCtrl {
+}
+
 // Issue a command to enable or disable tilt stabilization.
 message TiltStabilizationCtrl {
   TiltStabilizationState state = 1; // Message with the tilt stabilization state to set.
