@@ -188,6 +188,15 @@ message SetAquaTrollConnectionStatusCtrl {
   SetAquaTrollConnectionStatus connection_status = 1;
 }
 
-message SetOculusPingConfigCtrl {
-  OculusPingConfig config = 1; // Message with the Oculus ping configuration to set.
+// Update multibeam settings
+message SetOculusConfigCtrl {
+  OculusConfig config = 1; // Message with the Oculus ping configuration to set.
+}
+
+// Activate multibeam
+message ActivateMultibeamCtrl {
+}
+
+// Deactivate multibeam
+message DeactivateMultibeamCtrl {
 }

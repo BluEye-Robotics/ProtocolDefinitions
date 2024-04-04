@@ -268,6 +268,6 @@ message OculusPingTel {
 }
 
 // Oculus sonar ping data
-message OculusPingConfigTel {
-  OculusPingConfig config = 1; // Config data from an Oculus sonar
+message OculusConfigTel {
+  OculusConfig config = 1; // Config data from an Oculus sonar
 }

@@ -984,7 +984,7 @@ message OculusPing {
   bytes ping_data = 17;
 }
 
-message OculusPingConfig {
+message OculusConfig {
   enum MasterMode {
     MASTER_MODE_UNSPECIFIED = 0;
     MASTER_MODE_FLEXI = 1; // Not available for third party developers
