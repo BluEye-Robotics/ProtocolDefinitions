@@ -517,6 +517,7 @@ message DiveTime {
 message RecordOn {
   bool main = 1; // Record the main camera
   bool guestport = 2; // Record external camera
+  bool multibeam = 3; // Record multibeam
 }
 
 // Storage space.
