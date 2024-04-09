@@ -1012,3 +1012,13 @@ message OculusConfig {
   double speed_of_sound = 13; // ms-1, if set to zero then internal calc will apply using salinity
   double salinity = 14; // ppt, set to zero if we are in fresh water
 }
+
+message OculusDiscovery {
+  bool enabled = 1;
+  string ip = 2;
+  string mask = 3;
+  uint32 device_id = 4;
+  uint32 device_type = 5;
+  uint32 part_number = 6;
+  uint32 status = 7;
+}

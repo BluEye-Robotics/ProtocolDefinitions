@@ -271,3 +271,7 @@ message OculusPingTel {
 message OculusConfigTel {
   OculusConfig config = 1; // Config data from an Oculus sonar
 }
+
+message OculusDiscoveryTel {
+  OculusDiscovery discovery = 1; // Discovery data from an Oculus sonar
+}
