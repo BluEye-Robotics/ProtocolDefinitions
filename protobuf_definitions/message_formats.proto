@@ -957,7 +957,7 @@ message OculusPing {
   uint32 ping_id = 1; // Incrementing counter inside the sonar
   uint32 ping_firing_date = 2; // Ping firing date (sonar internal clock, microseconds)
   double range = 3; // Maximum range value in this ping
-  double gain_percent = 4; // Percentage of gain (not documented)
+  double gain = 4; // Percentage of gain (not documented)
   double frequency = 5; // Ping acoustic frequency (Hz)
   double speed_of_sound_used = 6; // Speed of sound used by the sonar for range calculations (m/s)
   double range_resolution = 7; // Distance between 2 rows in the ping image data.
