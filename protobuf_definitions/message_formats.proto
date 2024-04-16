@@ -15,15 +15,9 @@ option csharp_namespace = "Blueye.Protocol.Protobuf";
 //
 // See separate documentation for the logfile format for more details.
 message BinlogRecord {
-  enum Compression {
-    COMPRESSION_UNSPECIFIED = 0; // Unspecified compression
-    COMPRESSION_NONE = 1; // No compression
-    COMPRESSION_ZSTD = 2; // zstd compression
-  }
   google.protobuf.Any payload = 1; // The log entry payload.
   google.protobuf.Timestamp unix_timestamp = 2; // Unix timestamp in UTC.
   google.protobuf.Timestamp clock_monotonic = 3; // Posix CLOCK_MONOTONIC timestamp.
-  Compression compression = 4; // Compression used for the payload.
 }
 
 // Motion input from client.
