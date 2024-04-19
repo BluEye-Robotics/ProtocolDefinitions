@@ -1016,11 +1016,11 @@ message OculusConfig {
 }
 
 message OculusDiscovery {
-  bool enabled = 1;
-  string ip = 2;
-  string mask = 3;
-  uint32 device_id = 4;
-  uint32 device_type = 5;
-  uint32 part_number = 6;
-  uint32 status = 7;
+  reserved 5, 6, 7;
+  bool enabled = 1; // If the sonar driver is enabled
+  string ip = 2; // IP address of the sonar
+  string mask = 3; // Subnet mask of the sonar
+  uint32 device_id = 4; // Serial number of the sonar
+  uint32 fw_version = 8; // Firmware version of the sonar
+  string connected_ip = 9; // IP address of the connected device
 }
