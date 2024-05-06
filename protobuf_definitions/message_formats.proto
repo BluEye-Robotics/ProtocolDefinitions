@@ -1013,6 +1013,8 @@ message OculusConfig {
   double gain = 8; // The gain demand
   double speed_of_sound = 9; // ms-1, if set to zero then internal calc will apply using salinity
   double salinity = 10; // ppt, set to zero if we are in fresh water
+
+  bool gain_boost = 11; // Enable gain boost
 }
 
 message OculusDiscovery {

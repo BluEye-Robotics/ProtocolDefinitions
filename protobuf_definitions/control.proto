@@ -195,6 +195,7 @@ message SetOculusConfigCtrl {
 
 // Activate multibeam
 message ActivateMultibeamCtrl {
+  OculusConfig config = 1; // Message with the Oculus ping configuration to set on connect
 }
 
 // Deactivate multibeam
