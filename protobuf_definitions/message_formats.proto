@@ -944,11 +944,11 @@ message MedusaSpectrometerData {
   uint32 cosmics = 5; // Detected counts above the last channel
 }
 
-enum FrequencyMode {
-  FREQUENCY_MODE_UNSPECIFIED = 0;
-  FREQUENCY_MODE_FLEXI = 1; // Not available for third party developers
-  FREQUENCY_MODE_LOW_FREQUENCY = 2; // Low frequency mode (wide aperture, navigation)
-  FREQUENCY_MODE_HIGH_FREQUENCY = 3; // High frequency mode (narrow aperture, target identification)
+enum MultibeamFrequencyMode {
+  MULTIBEAM_FREQUENCY_MODE_UNSPECIFIED = 0;
+  MULTIBEAM_FREQUENCY_MODE_AUTO = 1; // Auto switching mode (if available)
+  MULTIBEAM_FREQUENCY_MODE_LOW_FREQUENCY = 2; // Low frequency mode (wide aperture, navigation)
+  MULTIBEAM_FREQUENCY_MODE_HIGH_FREQUENCY = 3; // High frequency mode (narrow aperture, target identification)
 }
 
 // Multibeam sonar ping
@@ -959,7 +959,7 @@ message MultibeamPing {
   double gain = 2; // Percentage of gain (0 to 1)
   double frequency = 3; // Ping acoustic frequency (Hz)
   double speed_of_sound_used = 4; // Speed of sound used by the sonar for range calculations (m/s)
-  FrequencyMode frequency_mode = 5; // Frequency mode used by the sonar for this frame
+  MultibeamFrequencyMode frequency_mode = 5; // Frequency mode used by the sonar for this frame
   uint32 number_of_ranges = 6; // Height of the ping image data.
   uint32 number_of_beams = 7; // Width  of the ping image data.
   uint32 step = 8; // Size in bytes of each row in the ping data image.
@@ -976,7 +976,7 @@ message MultibeamPing {
 
 // Configuration message for FLS device
 message MultibeamConfig {
-  FrequencyMode frequency_mode = 1; // Frequency mode used by the sonar if supported
+  MultibeamFrequencyMode frequency_mode = 1; // Frequency mode used by the sonar if supported
 
   enum PingRate {
     PING_RATE_UNSPECIFIED = 0;
