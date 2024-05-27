@@ -262,16 +262,17 @@ message MedusaSpectrometerDataTel {
   MedusaSpectrometerData data = 1;
 }
 
-// Oculus sonar ping data
-message OculusPingTel {
-  OculusPing ping = 1; // Ping data from an Oculus sonar
+// Multibeam sonar ping data
+message MultibeamPingTel {
+  MultibeamPing ping = 1; // Ping data from a multibeam sonar
 }
 
-// Oculus sonar ping data
-message OculusConfigTel {
-  OculusConfig config = 1; // Config data from an Oculus sonar
+// Multibeam sonar config
+message MultibeamConfigTel {
+  MultibeamConfig config = 1; // Config data from a multibeam sonar
 }
 
-message OculusDiscoveryTel {
-  OculusDiscovery discovery = 1; // Discovery data from an Oculus sonar
+// Multibeam sonar status message
+message MultibeamDiscoveryTel {
+  MultibeamDiscovery discovery = 1; // Discovery data from a multibeam sonar
 }
