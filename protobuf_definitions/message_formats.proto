@@ -995,10 +995,10 @@ message MultibeamConfig {
 
   enum MaximumNumberOfBeams {
     MAXIMUM_NUMBER_OF_BEAMS_UNSPECIFIED = 0;
-    MAXIMUM_NUMBER_OF_BEAMS_128 = 1; // 128 beams
-    MAXIMUM_NUMBER_OF_BEAMS_256 = 2; // 256 beams
-    MAXIMUM_NUMBER_OF_BEAMS_512 = 3; // 512 beams
-    MAXIMUM_NUMBER_OF_BEAMS_1024 = 4; // 1024 beams
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_128 = 1; // 128 beams
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_256 = 2; // 256 beams
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_512 = 3; // 512 beams
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_1024 = 4; // 1024 beams
   }
 
   MaximumNumberOfBeams maximum_number_of_beams = 6; // Maximum number of beams. Used to throttle bandwidth.
