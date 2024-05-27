@@ -991,7 +991,6 @@ message MultibeamConfig {
   PingRate ping_rate = 2; // Sets the maximum ping rate.
   double gamma_correction = 3; // Gamma correction (0..1.0)
   bool gain_assist = 4; // Enable gain assist
-  bool gain_boost = 5; // Enable gain boost
 
   enum MaximumNumberOfBeams {
     MAXIMUM_NUMBER_OF_BEAMS_UNSPECIFIED = 0;
@@ -1001,12 +1000,12 @@ message MultibeamConfig {
     MAXIMUM_NUMBER_OF_BEAMS_MAX_1024 = 4; // 1024 beams
   }
 
-  MaximumNumberOfBeams maximum_number_of_beams = 6; // Maximum number of beams. Used to throttle bandwidth.
+  MaximumNumberOfBeams maximum_number_of_beams = 5; // Maximum number of beams. Used to throttle bandwidth.
 
-  double range = 7; // The range demand (m)
-  double gain = 8; // The gain demand (0..1)
-  double salinity = 9; // Set water salinity (ppt). Default to zero if we are in fresh water
-  GuestPortDeviceID device_id = 10; // Device ID of the sonar
+  double range = 6; // The range demand (m)
+  double gain = 7; // The gain demand (0..1)
+  double salinity = 8; // Set water salinity (ppt). Default to zero if we are in fresh water
+  GuestPortDeviceID device_id = 9; // Device ID of the sonar
 }
 
 message MultibeamDiscovery {
