@@ -261,3 +261,18 @@ message Imu2Tel {
 message MedusaSpectrometerDataTel {
   MedusaSpectrometerData data = 1;
 }
+
+// Multibeam sonar ping data
+message MultibeamPingTel {
+  MultibeamPing ping = 1; // Ping data from a multibeam sonar
+}
+
+// Multibeam sonar config
+message MultibeamConfigTel {
+  MultibeamConfig config = 1; // Config data from a multibeam sonar
+}
+
+// Multibeam sonar status message
+message MultibeamDiscoveryTel {
+  MultibeamDiscovery discovery = 1; // Discovery data from a multibeam sonar
+}

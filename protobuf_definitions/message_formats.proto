@@ -149,6 +149,8 @@ message RecordState {
   int32 main_seconds = 2; // Main record time (s)
   bool guestport_is_recording = 3; // If the guestport camera is recording
   int32 guestport_seconds = 4; // Guestport record time (s)
+  bool multibeam_is_recording = 5; // If the multibeam is recording
+  int32 multibeam_seconds = 6; // Multibeam record time (s)
 }
 
 // Interval type for time-lapse photos.
@@ -509,6 +511,7 @@ message DiveTime {
 message RecordOn {
   bool main = 1; // Record the main camera
   bool guestport = 2; // Record external camera
+  bool multibeam = 3; // Record multibeam
 }
 
 // Storage space.
@@ -939,4 +942,79 @@ message MedusaSpectrometerData {
   uint32 total = 3; // Total counts inside the spectrum
   uint32 countrate = 4; // Counts per second inside the spectrum (rounded)
   uint32 cosmics = 5; // Detected counts above the last channel
+}
+
+enum MultibeamFrequencyMode {
+  MULTIBEAM_FREQUENCY_MODE_UNSPECIFIED = 0;
+  MULTIBEAM_FREQUENCY_MODE_AUTO = 1; // Auto switching mode (if available)
+  MULTIBEAM_FREQUENCY_MODE_LOW_FREQUENCY = 2; // Low frequency mode (wide aperture, navigation)
+  MULTIBEAM_FREQUENCY_MODE_HIGH_FREQUENCY = 3; // High frequency mode (narrow aperture, target identification)
+}
+
+// Multibeam sonar ping
+//
+// Contains all the information for rendering a multibeam sonar frame
+message MultibeamPing {
+  double range = 1; // Maximum range value (m)
+  double gain = 2; // Percentage of gain (0 to 1)
+  double frequency = 3; // Ping acoustic frequency (Hz)
+  double speed_of_sound_used = 4; // Speed of sound used by the sonar for range calculations (m/s)
+  MultibeamFrequencyMode frequency_mode = 5; // Frequency mode used by the sonar for this frame
+  uint32 number_of_ranges = 6; // Height of the ping image data.
+  uint32 number_of_beams = 7; // Width of the ping image data.
+  uint32 step = 8; // Size in bytes of each row in the ping data image.
+
+  // Bearing angle of each column of the sonar data
+  // (in 100th of a degree, multiply by 0.01 to get a value in degrees).
+  // The sonar image is not sampled uniformly in the bearing direction.
+  repeated float bearings = 9;
+
+  bytes ping_data = 10; // Ping data (row major, 2D, grayscale image)
+  GuestPortDeviceID device_id = 11; // Device ID of the sonar
+}
+
+
+// Configuration message for sonar devices
+message MultibeamConfig {
+  MultibeamFrequencyMode frequency_mode = 1; // Frequency mode used by the sonar if supported
+
+  enum PingRate {
+    PING_RATE_UNSPECIFIED = 0;
+    PING_RATE_NORMAL = 1; // 10Hz max ping rate
+    PING_RATE_HIGH = 2; // 15Hz max ping rate
+    PING_RATE_HIGHEST = 3; // 40Hz max ping rate
+    PING_RATE_LOW = 4; // 5Hz max ping rate
+    PING_RATE_LOWEST = 5; // 2Hz max ping rate
+    PING_RATE_STANDBY = 6; // Disable ping
+  }
+
+  PingRate ping_rate = 2; // Sets the maximum ping rate.
+  double gamma_correction = 3; // Gamma correction (0..1.0)
+  bool gain_assist = 4; // Enable gain assist
+
+  enum MaximumNumberOfBeams {
+    MAXIMUM_NUMBER_OF_BEAMS_UNSPECIFIED = 0;
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_128 = 1; // 128 beams
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_256 = 2; // 256 beams
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_512 = 3; // 512 beams
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_1024 = 4; // 1024 beams
+  }
+
+  MaximumNumberOfBeams maximum_number_of_beams = 5; // Maximum number of beams. Used to throttle bandwidth.
+
+  double range = 6; // The range demand (m)
+  double gain = 7; // The gain demand (0..1)
+  double salinity = 8; // Set water salinity (ppt). Defaults to zero in fresh water
+  GuestPortDeviceID device_id = 9; // Device ID of the sonar
+}
+
+// Discovery message for sonar devices
+message MultibeamDiscovery {
+  bool enabled = 1; // If the sonar driver is enabled
+  string ip = 2; // IP address of the sonar
+  string mask = 3; // Subnet mask of the sonar
+  string serial_number = 4; // Serial number of the sonar
+  string fw_version = 5; // Firmware version of the sonar
+  string connected_ip = 6; // IP address of the connected device
+  GuestPortDeviceID device_id = 7; // Device ID of the sonar
 }

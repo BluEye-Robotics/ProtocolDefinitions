@@ -187,3 +187,17 @@ message SetAquaTrollConnectionStatusCtrl {
   // Message with information about which parameter to set and the unit to set it to.
   SetAquaTrollConnectionStatus connection_status = 1;
 }
+
+// Update multibeam settings
+message SetMultibeamConfigCtrl {
+  MultibeamConfig config = 1; // Message with the multibeam ping configuration to set.
+}
+
+// Activate multibeam
+message ActivateMultibeamCtrl {
+  MultibeamConfig config = 1; // Message with the multibeam ping configuration to set on connect
+}
+
+// Deactivate multibeam
+message DeactivateMultibeamCtrl {
+}
