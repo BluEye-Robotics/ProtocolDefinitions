@@ -74,7 +74,7 @@ message SetThicknessGaugeParametersReq {
   uint32 sound_velocity = 1; // Sound velocity in m/s
 }
 
-// Response after setting thicknes gauge parameters.
+// Response after setting thickness gauge parameters.
 message SetThicknessGaugeParametersRep {
 }
 
@@ -124,7 +124,7 @@ message GetBatteryRep {
 
 // Issue a desired mission to the reference_generator.
 message SetMissionReq {
-  Mission mission = 1; // requested mission isseued to the reference generator
+  Mission mission = 1; // requested mission issued to the reference generator
 }
 
 // Response after setting a new mission.
