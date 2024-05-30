@@ -116,7 +116,7 @@ message DroneTimeTel {
   SystemTime monotonic_clock = 2; // The monotonic clock of the drone (time since power on).
 }
 
-// Water temerature from the depth sensor.
+// Water temperature from the depth sensor.
 message WaterTemperatureTel {
   WaterTemperature temperature = 1;
 }
@@ -156,7 +156,7 @@ message DataStorageSpaceTel {
   StorageSpace storage_space = 1;
 }
 
-// Calibration state used for calibration rotine.
+// Calibration state used for calibration routine.
 message CalibrationStateTel {
   CalibrationState calibration_state = 1;
 }
@@ -198,7 +198,7 @@ message ControlModeTel {
 
 // Thickness gauge measurement telemetry message.
 message ThicknessGaugeTel {
-  ThicknessGauge thickness_gauge = 1;  // Tickness measurement with a cygnus gauge.
+  ThicknessGauge thickness_gauge = 1;  // Thickness measurement with a cygnus gauge.
 }
 
 // Cathodic Protection Potential probe telemetry message

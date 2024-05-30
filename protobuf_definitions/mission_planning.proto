@@ -12,18 +12,18 @@ message Mission {
   uint32 id = 1; // Mission id
   string name = 2; // Mission name provided from the app
   repeated Instruction instructions = 3; // List of instructions in the mission
-  repeated PathSegment path_segments = 4; // Calculated path segments from the reference generator (optinal)
-  uint32 total_distance = 5; // Total distance of the mission (m) (optinal)
-  uint32 total_duration_time = 6; // Total duration time of the mission (s) (optinal)
-  float default_surge_speed = 7; // Default cruise speed of the mission (m/s) (optinal)
-  float default_heave_speed = 8; // Default heave speed of the mission (m/s) (optinal)
-  float default_circle_of_acceptance = 9; // Default circle of acceptance for waypoints (m) (optinal)
+  repeated PathSegment path_segments = 4; // Calculated path segments from the reference generator (optional)
+  uint32 total_distance = 5; // Total distance of the mission (m) (optional)
+  uint32 total_duration_time = 6; // Total duration time of the mission (s) (optional)
+  float default_surge_speed = 7; // Default cruise speed of the mission (m/s) (optional)
+  float default_heave_speed = 8; // Default heave speed of the mission (m/s) (optional)
+  float default_circle_of_acceptance = 9; // Default circle of acceptance for waypoints (m) (optional)
 }
 
-// A mission consitst of one or multiple instructions. One instruction can be of different types.
+// A mission consists of one or multiple instructions. One instruction can be of different types.
 message Instruction {
   uint32 id = 1;
-  uint32 group_id = 2; // Group id used for polygoons
+  uint32 group_id = 2; // Group id used for polygons
   bool auto_continue = 3; // False will pause the mission after this instruction
   oneof command {
     WaypointCommand waypoint_command = 4; // Go to waypoint
@@ -39,11 +39,11 @@ message Instruction {
   }
 }
 
-// Depth set point is used to describe a depth setpoint relative to the surface or the seabed.
+// Depth set point is used to describe a depth set-point relative to the surface or the seabed.
 message DepthSetPoint {
   float depth = 1; // Desired depth at the wp (m)
   float speed_to_depth = 2; // Desired speed to desired depth set point (m/s)
-  DepthZeroReference depth_zero_reference = 3; // Used to destinguish desired altitude or depth
+  DepthZeroReference depth_zero_reference = 3; // Used to distinguish desired altitude or depth
 }
 
 // Depth zero reference from surface for depth, and seabed for altitude.
@@ -58,7 +58,7 @@ message Waypoint {
   uint32 id = 1; // Waypoint id
   string name = 2; // Waypoint name provided from the app
   LatLongPosition global_position = 3; // Position if the waypoint (decimal degrees)
-  float circle_of_acceptance = 4; // Radius of the accepance circle around the waypoint (m)
+  float circle_of_acceptance = 4; // Radius of the acceptance circle around the waypoint (m)
   float speed_to_target = 5; // Desired speed over ground to waypoint (m/s)
   DepthSetPoint depth_set_point = 6; // Depth set point (optional)
   // auto_pilot_mode: Path fallowing, Trajectory tracking, Constant heading
@@ -105,7 +105,7 @@ message TiltMultibeamCommand {
   MultibeamServo multibeam_servo = 1; // Tilt angle for the multibeam servo
 }
 
-// WaitForCommand is used to wait duringing a mission.
+// WaitForCommand is used to wait during a mission.
 message WaitForCommand {
   float wait_for_seconds = 1; // Wait for x seconds
 }
@@ -149,10 +149,10 @@ message PathSegment {
   float course_to_target = 3; // Course to target relative to north (rad) [-pi, pi]
   float depth_speed = 4; // Desired speed in heave (m/s)
   float horizontal_length = 5; // Horizontal length of the path segment (m)
-  float vertical_length = 6; // Vertical legth of the path segment (m)
+  float vertical_length = 6; // Vertical length of the path segment (m)
   uint32 from_wp_id = 7; // Id of the starting waypoint
   uint32 to_wp_id = 8; // Id of the ending waypoint
-  float duration_time = 9; // Estmated time it takes to complete given legth and desired speed (s)
+  float duration_time = 9; // Estimated time it takes to complete given length and desired speed (s)
 }
 
 // List of available instruction types.
