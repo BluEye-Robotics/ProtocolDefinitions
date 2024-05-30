@@ -31,3 +31,6 @@ out
 build
 build_imx
 build_*
+
+# Rider directories
+.idea
