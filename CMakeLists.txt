@@ -8,24 +8,19 @@ find_package(Protobuf REQUIRED)
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 
 file(GLOB ProtoFiles "protobuf_definitions/*.proto")
+
+foreach(ProtoFile ${ProtoFiles})
+  message(STATUS ${ProtoFile})
+endforeach()
+
+# If cmake complains "target pattern contains no '%'", install protoc (protobuf-compiler)
 PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${ProtoFiles})
 protobuf_generate_python(PROTO_PY ${ProtoFiles})
-
 add_library(blueyeprotocol SHARED ${ProtoSources} ${ProtoHeaders})
 
 set(EXT_LIBS
   ${PROTOBUF_LIBRARIES}
 )
-
-# For protobuf linking. Should rather user find_package(protobuf CONFIG REQUIRED) but that fails in yocto
-find_package(absl QUIET)
-
-if(absl_FOUND)
-  list(APPEND EXT_LIBS
-    absl::log_internal_message
-    absl::log_internal_check_op
-  )
-endif()
 
 target_link_libraries(blueyeprotocol PUBLIC ${EXT_LIBS})
 target_include_directories(blueyeprotocol PUBLIC ${PROTOBUF_INCLUDE_DIRS})
