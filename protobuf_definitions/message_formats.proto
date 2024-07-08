@@ -803,7 +803,7 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_BLUEYE_MULTIBEAM_HEAD_SERVO = 35; // Blueye Multibeam Head Servo
   GUEST_PORT_DEVICE_ID_CERULEAN_OMNISCAN_450FS = 36; // Cerulean Omniscan 450 FS
   GUEST_PORT_DEVICE_ID_CERULEAN_OMNISCAN_450SS = 37; // Cerulean Omniscan 450 SS
-  GUEST_PORT_DEVICE_ID_BLUEYE_GNSS_DEVICE = 38; // Blueye Gnss device
+  GUEST_PORT_DEVICE_ID_BLUEYE_GNSS_DEVICE = 38; // Blueye GNSS device
 }
 
 // GuestPort number.
