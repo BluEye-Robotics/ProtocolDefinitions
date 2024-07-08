@@ -201,3 +201,17 @@ message ActivateMultibeamCtrl {
 // Deactivate multibeam
 message DeactivateMultibeamCtrl {
 }
+
+// Message sent when the user hits the start dive button in the app.
+//
+// The message does not do anything, but is included in the log files so we can see
+// at which point the user entered the dive view.
+message StartDiveCtrl {
+}
+
+// Message sent when the user hits the end dive button in the app.
+//
+// The message does not do anything, but is included in the log files so we can see
+// at which point the user exited the dive view.
+message EndDiveCtrl {
+}
