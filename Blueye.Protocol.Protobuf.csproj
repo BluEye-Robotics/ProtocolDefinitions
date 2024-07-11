@@ -5,7 +5,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>8.0</LangVersion>
     <PackageId>Blueye.Protocol.Protobuf</PackageId>
-    <VersionPrefix>4.3.0</VersionPrefix>
+    <VersionPrefix>4.4.0</VersionPrefix>
     <Company>Blueye Robotics AS</Company>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <PackageDescription>Library with dotnet representation of the ProtocolDefinition protobuf files.</PackageDescription>
