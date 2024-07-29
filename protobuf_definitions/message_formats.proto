@@ -1020,15 +1020,15 @@ message MultibeamDiscovery {
   GuestPortDeviceID device_id = 7; // Device ID of the sonar
 }
 
-// DataWriteSettings defines the settings for writing various types of data in the persistent storage on the drone.
-message DataWriteSettings {
-  bool videos = 1; // Indicates if videos should be written.
-  bool images = 2; // Indicates if images should be written.
-  bool binlog = 3; // Indicates if binary logs should be written.
-  bool multibeam = 4; // Indicates if multibeam data should be written.
-  bool django_log = 5; // Indicates if Django logs should be written.
-  bool ros_log = 6; // Indicates if ROS logs should be written.
-  bool gyro_calibration = 7; // Indicates if gyro calibration data should be written.
-  bool compass_calibration = 8; // Indicates if compass calibration data should be written.
-  bool acc_calibration = 9; // Indicates if accelerometer calibration data should be written.
+// PersistantStorageSettings defines the settings for writing various types of data in the persistent storage on the drone.
+message PersistantStorageSettings {
+  bool videos = 1; // Indicates if videos should be written to the video partition.
+  bool images = 2; // Indicates if images should be written to the video partition.
+  bool binlog = 3; // Indicates if binary logs with telemetry data and drone info should be written to the data partition.
+  bool multibeam = 4; // Indicates if multibeam data should be written to the video partition.
+  bool webserver_log = 5; // Indicates if webserver logs should be written to the data partition.
+  bool control_system_log = 6; // Indicates if control system logs should be written to the data partition.
+  bool gyro_calibration = 7; // Indicates if gyro calibration data should be written to the data partition.
+  bool compass_calibration = 8; // Indicates if compass calibration data should be written to the data partition.
+  bool acc_calibration = 9; // Indicates if accelerometer calibration data should be written to the data partition.
 }
