@@ -1020,11 +1020,11 @@ message MultibeamDiscovery {
   GuestPortDeviceID device_id = 7; // Device ID of the sonar
 }
 
-// PersistantStorageSettings defines settings for writing various types of data in the persistent storage on the drone
+// PersistentStorageSettings defines settings for writing various types of data in the persistent storage on the drone
 //
 // Some of the data is written during factory calibration (acc calibration), while other data is written during user
 // calubration or during normal operation.
-message PersistantStorageSettings {
+message PersistentStorageSettings {
   bool videos = 1; // Indicates if videos should be written to the video partition.
   bool images = 2; // Indicates if images should be written to the video partition.
   bool binlog = 3; // Indicates if binary logs with telemetry data should be written to the data partition.
