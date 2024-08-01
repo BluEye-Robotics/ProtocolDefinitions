@@ -169,3 +169,21 @@ message GetTelemetryReq {
 message GetTelemetryRep {
   google.protobuf.Any payload = 1; // The latest telemetry data, empty if no data available.
 }
+
+// Request to set persistent storage settings.
+message SetPersistentStorageSettingsReq {
+  PersistentStorageSettings persistent_storage_settings = 1; // The persistent storage settings to apply.
+}
+
+// Response after setting persistent storage settings.
+message SetPersistentStorageSettingsRep {
+}
+
+// Request to get currently set persistent storage settings.
+message GetPersistentStorageSettingsReq {
+}
+
+// Response with the currently set persistent storage settings.
+message GetPersistentStorageSettingsRep {
+  PersistentStorageSettings persistent_storage_settings = 1; // The currently set persistent storage settings.
+}
