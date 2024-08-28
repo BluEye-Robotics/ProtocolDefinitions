@@ -972,6 +972,8 @@ message MultibeamPing {
 
   bytes ping_data = 10; // Ping data (row major, 2D, grayscale image)
   GuestPortDeviceID device_id = 11; // Device ID of the sonar
+
+  google.protobuf.Timestamp frame_generation_timestamp = 12; // Timestamp when the frame was generated
 }
 
 
