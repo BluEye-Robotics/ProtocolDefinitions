@@ -1025,7 +1025,7 @@ message MultibeamDiscovery {
 // Frame offset for multibeam recordings index cache
 message MultibeamFrameOffset {
   google.protobuf.Duration duration = 1; // Duration from the start of the recording
-  uint64 offset = 2; // Offset in bytes from the start of the file
+  int64 offset = 2; // Offset in bytes from the start of the file
 }
 
 // Multibeam recording index cache
