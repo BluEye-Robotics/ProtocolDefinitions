@@ -5,6 +5,7 @@ syntax = "proto3";
 
 package blueye.protocol;
 import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
@@ -1020,6 +1021,15 @@ message MultibeamDiscovery {
   string fw_version = 5; // Firmware version of the sonar
   string connected_ip = 6; // IP address of the connected device
   GuestPortDeviceID device_id = 7; // Device ID of the sonar
+}
+
+message MultibeamFrameOffset {
+  google.protobuf.Duration duration = 1; // Duration from the start of the recording
+  uint32 offset = 2; // Offset in bytes from the start of the file
+}
+
+message MutltibeamRecordingIndex {
+  repeated MultibeamFrameOffset frame_offsets = 1; // List of frame offsets
 }
 
 // PersistentStorageSettings defines settings for writing various types of data in the persistent storage on the drone
