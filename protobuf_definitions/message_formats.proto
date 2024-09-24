@@ -148,10 +148,13 @@ message ConnectedClient {
 message RecordState {
   bool main_is_recording = 1; // If the main camera is recording
   int32 main_seconds = 2; // Main record time (s)
+  float main_fps = 7; // Main record fps
   bool guestport_is_recording = 3; // If the guestport camera is recording
   int32 guestport_seconds = 4; // Guestport record time (s)
+  float guestport_fps = 8; // Guestport record fps
   bool multibeam_is_recording = 5; // If the multibeam is recording
   int32 multibeam_seconds = 6; // Multibeam record time (s)
+  float multibeam_fps = 9; // Multibeam record fps
 }
 
 // Interval type for time-lapse photos.
