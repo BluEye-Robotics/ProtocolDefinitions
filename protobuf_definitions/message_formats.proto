@@ -660,7 +660,7 @@ message ErrorFlags {
   bool gp3_bat_current = 41;  // Max battery current exceeded on GP3
   bool gp_20v_current = 42;  // Max 20V current exceeded on GP
   bool dvl_thermal_protection_mode = 43;  // DVL is in thermal protection mode
-  bool dvl_no_power_since_boot = 44;  // GP protection has been triggered at boot or faulty DVL
+  bool dvl_no_power = 44;  // GP protection has been triggered at boot or faulty DVL
 }
 
 // Available camera resolutions.
