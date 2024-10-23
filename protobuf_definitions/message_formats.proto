@@ -478,6 +478,8 @@ enum NotificationType {
   NOTIFICATION_TYPE_SET_TILT_MAIN_CAMERA = 28; // Set tilt for main camera
   NOTIFICATION_TYPE_SET_TILT_MULTIBEAM = 29; // Set tilt for multibeam
   NOTIFICATION_TYPE_INSTRUCTION_SKIPPED = 30; // When an instruction is not available in the ROV
+  NOTIFICATION_TYPE_DVL_HIGH_TEMPERATURE_DETECTED = 31; // DVL high temperature detected
+  NOTIFICATION_TYPE_DVL_THERMAL_PROTECTION_MODE_DETECTED = 32; // DVL thermal protection mode detected
 }
 
 // List of available notification levels.
@@ -660,6 +662,8 @@ message ErrorFlags {
   bool gp2_bat_current = 40;  // Max battery current exceeded on GP2
   bool gp3_bat_current = 41;  // Max battery current exceeded on GP3
   bool gp_20v_current = 42;  // Max 20V current exceeded on GP
+  bool dvl_thermal_protection_mode = 43;  // DVL is in thermal protection mode
+  bool dvl_no_power = 44;  // GP protection has been triggered at boot or faulty DVL
 }
 
 // Available camera resolutions.
