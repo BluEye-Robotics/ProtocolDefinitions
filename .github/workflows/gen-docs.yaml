@@ -9,10 +9,10 @@ jobs:
   generate-documentation:
     runs-on: ubuntu-latest
     container:
-      image: pseudomuto/protoc-gen-doc:1.4.1
+      image: pseudomuto/protoc-gen-doc:1.5.1
     steps:
       - name: Checkout source
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
       - name: Print path
         run: echo "${{ github.workspace }}/protobuf_definitions"
       - name: Create output configDirectory
