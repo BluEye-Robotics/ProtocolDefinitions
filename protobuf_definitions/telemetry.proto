@@ -276,3 +276,7 @@ message MultibeamConfigTel {
 message MultibeamDiscoveryTel {
   MultibeamDiscovery discovery = 1; // Discovery data from a multibeam sonar
 }
+
+message CPUInfoTel {
+  CPUInfo cpu_info = 1;
+}
