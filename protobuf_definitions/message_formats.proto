@@ -1056,3 +1056,11 @@ message PersistentStorageSettings {
   bool compass_calibration = 8; // Indicates if compass calibration data should be written to the data partition.
   bool acc_calibration = 9; // Indicates if accelerometer calibration data should be written to the data partition.
 }
+
+// CPU information
+//
+// Contains information about the CPU load and memory usage of the drone.
+message CPUInfo {
+  float cpu_load = 1; // CPU load in percent (0..100)
+  float memory_bus_load = 2; // Memory bus load in percent (0..100)
+}
