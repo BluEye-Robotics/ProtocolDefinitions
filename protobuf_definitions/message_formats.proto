@@ -664,6 +664,8 @@ message ErrorFlags {
   bool gp_20v_current = 42;  // Max 20V current exceeded on GP
   bool dvl_thermal_protection_mode = 43;  // DVL is in thermal protection mode
   bool dvl_no_power = 44;  // GP protection has been triggered at boot or faulty DVL
+  bool usb_disconnect = 45; // USB disconnect
+  bool video_urb_error = 46;  // Video URB error
 }
 
 // Available camera resolutions.
