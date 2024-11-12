@@ -387,7 +387,7 @@ message ForwardDistance {
 message PositionEstimate {
   float northing = 1; // Position from reset point (m)
   float easting = 2; // Position from reset point (m)
-  float heading = 3; // Gyro based heading estimate (continous radians)
+  float heading = 3; // Heading estimate (continous radians)
   float surge_rate = 4; // Velocity in surge (m/s)
   float sway_rate = 5; // Velocity in sway (m/s)
   float yaw_rate = 6; // Rotaion rate in yaw (rad/s)
