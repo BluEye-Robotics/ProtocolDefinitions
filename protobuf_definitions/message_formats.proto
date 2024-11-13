@@ -1065,4 +1065,6 @@ message PersistentStorageSettings {
 message CPUInfo {
   float cpu_load = 1; // CPU load (0..1)
   float memory_bus_load = 2; // Memory bus load (0..1)
+  float main_queue_load = 3; // Main queue load (0..1)
+  float guestport_queue_load = 4 ; // Guestport queue load (0..1)
 }
