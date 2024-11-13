@@ -1019,6 +1019,7 @@ message MultibeamConfig {
   double gain = 7; // The gain demand (0..1)
   double salinity = 8; // Set water salinity (ppt). Defaults to zero in fresh water
   GuestPortDeviceID device_id = 9; // Device ID of the sonar
+  uint32 bandwidth_limit = 10; // Network bandwidth limit (Mbit/s). Applies only to Oculus devices.
 }
 
 // Discovery message for sonar devices
