@@ -844,7 +844,7 @@ message NavigationSensorStatus {
   bool is_valid = 2; // Sensor validity
   float northing = 3; // Position from reset point (m)
   float easting = 4; // Position from reset point (m)
-  float heading = 5; // Heading from sensor (continous radians)
+  float heading = 5; // Heading from sensor (-pi..pi)
   float fom = 6; // Figure of merit
   float std = 7; // Standard deviation
   LatLongPosition global_position = 8; // Global position from sensor
