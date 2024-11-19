@@ -387,7 +387,7 @@ message ForwardDistance {
 message PositionEstimate {
   float northing = 1; // Position from reset point (m)
   float easting = 2; // Position from reset point (m)
-  float heading = 3; // Gyro based heading estimate (continous radians)
+  float heading = 3; // Continuous heading estimate (rad)
   float surge_rate = 4; // Velocity in surge (m/s)
   float sway_rate = 5; // Velocity in sway (m/s)
   float yaw_rate = 6; // Rotaion rate in yaw (rad/s)
@@ -396,6 +396,9 @@ message PositionEstimate {
   bool is_valid = 9; // If the estimate can be trusted
   LatLongPosition global_position = 10; // Best estimate of the global position in decimal degrees
   repeated NavigationSensorStatus navigation_sensors = 11; // List of available sensors with status
+  float speed_over_ground = 12; // Speed over ground (m/s)
+  float course_over_ground = 13; // Course over ground (°)
+  int32 time_since_reset_sec = 14; // Time since reset (s)
 }
 
 // Heading source used during reset of the position estimate.
@@ -831,12 +834,20 @@ enum NavigationSensorID {
   NAVIGATION_SENSOR_ID_WATERLINKED_DVL_A50 = 1; // Water Linked DVL A50
   NAVIGATION_SENSOR_ID_WATERLINKED_UGPS_G2 = 2; // Water Linked UGPS G2
   NAVIGATION_SENSOR_ID_NMEA = 3; // NMEA stream from external positioning system
+  NAVIGATION_SENSOR_ID_BLUEYE_GNSS = 4; // Blueye GNSS device on the ROV
+  NAVIGATION_SENSOR_ID_NORTEK_DVL_NUCLEUS = 5; // Nortek DVL Nucleus 1000
 }
 
 // Navigation sensor used in the position observer with validity state
 message NavigationSensorStatus {
   NavigationSensorID sensor_id = 1; // Sensor id
   bool is_valid = 2; // Sensor validity
+  float northing = 3; // Position from reset point (m)
+  float easting = 4; // Position from reset point (m)
+  float heading = 5; // Heading from sensor (-pi..pi)
+  float fom = 6; // Figure of merit
+  float std = 7; // Standard deviation
+  LatLongPosition global_position = 8; // Global position from sensor
 }
 
 // GuestPort detach status.
