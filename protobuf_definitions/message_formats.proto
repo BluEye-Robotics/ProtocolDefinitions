@@ -398,7 +398,7 @@ message PositionEstimate {
   repeated NavigationSensorStatus navigation_sensors = 11; // List of available sensors with status
   float speed_over_ground = 12; // Speed over ground (m/s)
   float course_over_ground = 13; // Course over ground (°)
-  int32 time_since_reset_sec = 14; // Time since reset in seconds
+  int32 time_since_reset_sec = 14; // Time since reset (s)
 }
 
 // Heading source used during reset of the position estimate.
