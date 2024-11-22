@@ -422,6 +422,27 @@ enum ResetCoordinateSource {
   RESET_COORDINATE_SOURCE_MANUAL = 2; // Uses a coordinate in decimal degrees to set the reset point
 }
 
+// DVL raw transducer data.
+message DvlTransducer {
+  int32 id = 1; // Transducer ID, 3 beams for Nucleus DVL, 4 beams for DVL A50
+  float velocity = 2; // Velocity (m/s)
+  float distance = 3; // Distance (m)
+  float beam_valid = 4; // Beam validity
+  float rssi = 5; // Received signal strength indicator: strength of the signal received by this transducer (dBm)
+  float nsd = 6; // Noise spectral density: strength of the background noise received by this transducer (dBm)
+}
+
+// DVL raw velocity data.
+message DvlVelocity {
+  NavigationSensorID sensor_id = 1; // Sensor id
+  int32 status = 2; // Status of the DVL. See bit mask in maunal for Nucleus DVL
+  float delta_time = 3; // Time since last velocity measurement (ms)
+  float fom = 4; // Figure of merit, a measure of the accuracy of the velocities (m/s)
+  Vector3 velocity = 5; // Velocity in m/s (x forward, y left, z down)
+  bool is_water_tracking = 6; // Water tracking status
+  repeated DvlTransducer transducers = 7; // List of transducers
+}
+
 // Water depth of the drone.
 message Depth {
   float value = 1; // Drone depth below surface (m)

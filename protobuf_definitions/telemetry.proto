@@ -24,6 +24,11 @@ message ForwardDistanceTel {
   ForwardDistance forward_distance = 1;
 }
 
+// Dvl raw sensor data.
+message DvlVelocityTel {
+  DvlVelocity dvl_velocity = 1; // Dvl velocity data.
+}
+
 // Position estimate of the drone if a DVL or a positioning system is available.
 message PositionEstimateTel {
   PositionEstimate position_estimate = 1;
