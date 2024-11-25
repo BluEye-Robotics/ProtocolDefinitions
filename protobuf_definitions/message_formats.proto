@@ -427,7 +427,7 @@ message DvlTransducer {
   int32 id = 1; // Transducer ID, 3 beams for Nucleus DVL, 4 beams for DVL A50
   float velocity = 2; // Velocity (m/s)
   float distance = 3; // Distance (m)
-  float beam_valid = 4; // Beam validity
+  bool beam_valid = 4; // Beam validity
   float rssi = 5; // Received signal strength indicator: strength of the signal received by this transducer (dBm)
   float nsd = 6; // Noise spectral density: strength of the background noise received by this transducer (dBm)
 }
