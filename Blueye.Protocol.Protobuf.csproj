@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <LangVersion>12.0</LangVersion>
+    <LangVersion>13.0</LangVersion>
     <PackageId>Blueye.Protocol.Protobuf</PackageId>
     <VersionPrefix>4.6.0</VersionPrefix>
     <Company>Blueye Robotics AS</Company>
@@ -13,8 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.28.3" />
-    <PackageReference Include="Google.Protobuf.Tools" Version="3.28.3">
+    <PackageReference Include="Google.Protobuf" Version="3.29.0" />
+    <PackageReference Include="Google.Protobuf.Tools" Version="3.29.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
