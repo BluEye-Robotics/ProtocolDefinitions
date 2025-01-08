@@ -839,6 +839,7 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_CERULEAN_OMNISCAN_450SS = 37; // Cerulean Omniscan 450 SS
   GUEST_PORT_DEVICE_ID_BLUEYE_GNSS_DEVICE = 38; // Blueye GNSS device
   GUEST_PORT_DEVICE_ID_WATERLINKED_DVL_A50_600 = 39; // Waterlinked DVL A50 600m
+  GUEST_PORT_DEVICE_ID_IMAGENEX_831L = 40; // Imagenex 831L Pipe Profiling Sonar
 }
 
 // GuestPort number.
