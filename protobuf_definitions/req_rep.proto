@@ -177,6 +177,7 @@ message SetPersistentStorageSettingsReq {
 
 // Response after setting persistent storage settings.
 message SetPersistentStorageSettingsRep {
+  bool success = 1; // If the persistent storage settings were set successfully.
 }
 
 // Request to get currently set persistent storage settings.
