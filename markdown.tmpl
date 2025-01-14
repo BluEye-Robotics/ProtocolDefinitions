@@ -1,0 +1,49 @@
+# Protocol Documentation
+{{range .Files}}
+{{$file_name := .Name}}
+<a name="{{.Name | anchor}}"></a>
+
+## {{.Name}}
+{{.Description}}
+
+{{range .Messages}}
+<a name="{{.FullName | anchor}}"></a>
+
+### {{.LongName}}
+{{.Description}}
+
+{{ if .HasFields}}
+| Field | Type | Description |
+| ------| ---- | ----------- |
+{{range .Fields -}}
+| {{if .IsOneof -}}<small>{{if eq .OneofDecl (printf "_%s" .Name)}}<strong>optional</strong>{{else}}<strong>oneof</strong> <code>{{.OneofDecl}}</code>{{end}}</small><br>{{end}}{{.Name}} {{/* noline */ -}}
+| [{{if .IsMap}}map{{else}}{{.Label}} {{end}}{{.LongType}}](#{{.FullType | anchor}}) {{/* noline */ -}}
+| {{if (index .Options "deprecated" | default false)}}**deprecated**<br>{{end}}{{if .Description}}{{.Description | replace "\n" "<br>"}}{{end}} {{/* noline */ -}}
+|
+{{end}}{{/* range .Fields */}}
+{{- end}}{{/* if .HasFields */}}
+{{- end}}{{/* range .Messages */}}
+
+{{range .Enums}}
+<a name="{{.FullName | anchor}}"></a>
+
+### {{.LongName}}
+{{.Description}}
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+{{range .Values -}}
+  | {{.Name}} | {{.Number}} | {{nobr .Description}} |
+{{end}}
+
+{{end}}
+
+{{- end}}{{/* range .Files */}}
+
+## Scalar Value Types
+
+| .proto Type | Notes | C++ | Java | Python | Go | C# | PHP | Ruby |
+| ----------- | ----- | --- | ---- | ------ | -- | -- | --- | ---- |
+{{range .Scalars -}}
+  | <a name="{{.ProtoType | anchor}}" /> {{.ProtoType}} | {{.Notes}} | {{.CppType}} | {{.JavaType}} | {{.PythonType}} | {{.GoType}} | {{.CSharp}} | {{.PhpType}} | {{.RubyType}} |
+{{end}}
