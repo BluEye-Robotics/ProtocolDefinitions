@@ -26,6 +26,11 @@ message BinlogRecord {
 // Used to indicate the desired motion in each direction.
 // Typically these values map to the left and right joystick for motion,
 // and the left and right trigger for the slow and boost modifiers.
+//
+// You can use the slow and boost modifiers to increase or decrease the speed
+// of the motion, from the default baseline.
+
+// If you use both values at the same time they cancel each other out.
 message MotionInput {
   float surge = 1; // Forward (positive) and backwards (negative) movement. (-1..1)
   float sway = 2; // Right (positive) and left (negative) lateral movement (-1..1)
@@ -33,8 +38,8 @@ message MotionInput {
   float roll = 7; // Roll left (negative) or right (positive). (-1..1)
   float pitch = 8; // Pitch down (negative) or up (positive). (-1..1)
   float yaw = 4; // Left (positive) and right (negative) movement (-1..1)
-  float slow = 5; // Multiplier used to reduce the speed of the motion (0..1)
-  float boost = 6; // Multiplier used to increase the speed of the motion (0..1)
+  float slow = 5; // Modifier used to reduce the speed of the motion (0..1)
+  float boost = 6; // Modifier used to increase the speed of the motion (0..1)
 }
 
 // Lights message used to represent the intensity of the main light or external lights.
