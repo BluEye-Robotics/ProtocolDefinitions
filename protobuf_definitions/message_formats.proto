@@ -996,6 +996,7 @@ message MedusaSpectrometerData {
   uint32 cosmics = 5; // Detected counts above the last channel
 }
 
+// The frequency mode to use for multibeam devices with dual frequency.
 enum MultibeamFrequencyMode {
   MULTIBEAM_FREQUENCY_MODE_UNSPECIFIED = 0;
   MULTIBEAM_FREQUENCY_MODE_AUTO = 1; // Auto switching mode (if available)
@@ -1071,6 +1072,18 @@ message MultibeamDiscovery {
   string fw_version = 5; // Firmware version of the sonar
   string connected_ip = 6; // IP address of the connected device
   GuestPortDeviceID device_id = 7; // Device ID of the sonar
+  MultibeamErrorFlags error_flags = 8; // Error flags specific for the connceted multibeam device.
+}
+
+// Error flags for multibeam sonar devices.
+message MultibeamErrorFlags {
+  /*
+  If the sonar is captured by another client than the drone.
+  The connected client IP is reported in connected_ip property.
+  */
+  bool connected_to_another_client = 1;
+  bool device_overheating = 2; // If the multibeam is reporting to overheat.
+  bool out_of_water = 3; // If a TriTech multibeam is reporting to be out of water.
 }
 
 // Frame offset for multibeam recordings index cache
