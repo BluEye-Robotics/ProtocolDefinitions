@@ -291,7 +291,7 @@ message BatteryBQ40Z50 {
 
   float current = 6; // Measured current from the coulomb counter (A).
   float average_current = 7; // Average current (A).
-  float relative_state_of_charge = 8; // Predicted remaining battery capacity as a factor of full_charge_capacity (0..1).
+  float relative_state_of_charge = 8; // Predicted remaining battery capacity as a factor of full capacity (0..1).
   float absolute_state_of_charge = 9; // Predicted remaining battery capacity (0..1).
   float calculated_state_of_charge = 26; // Calculated state of charge (0..1).
   float remaining_capacity = 10; // Predicted remaining battery capacity (Ah).
@@ -417,7 +417,8 @@ enum HeadingSource {
 
 // Settings used when resetting the position estimate.
 message ResetPositionSettings {
-  HeadingSource heading_source_during_reset = 1; // Option to use the drone compass or due North as heading during reset.
+  // Option to use the drone compass or due North as heading during reset.
+  HeadingSource heading_source_during_reset = 1;
   float manual_heading = 2; // Heading in degrees (0-359).
   ResetCoordinateSource reset_coordinate_source = 3; // Option to use the device GPS or a manual coordinate.
   LatLongPosition reset_coordinate = 4; // Reset coordinate in decimal degrees.
