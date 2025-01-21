@@ -1045,6 +1045,7 @@ message MultibeamConfig {
   PingRate ping_rate = 2; // Sets the maximum ping rate.
   double gamma_correction = 3; // Gamma correction (0..1.0)
   bool gain_assist = 4; // Enable gain assist
+  bool gain_boost = 11; // Enable gain boost (only available on Blueprint devices).
 
   enum MaximumNumberOfBeams {
     MAXIMUM_NUMBER_OF_BEAMS_UNSPECIFIED = 0;
