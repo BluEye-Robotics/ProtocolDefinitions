@@ -931,7 +931,7 @@ message GuestPortConnectorInfo {
 message GuestPortInfo {
   GuestPortConnectorInfo gp1 = 1; // Information about guest port 1.
   GuestPortConnectorInfo gp2 = 2; // Information about guest port 2.
-  GuestPortConnectorInfo gp3 = 3; // GuestPortConnectorInfo 3.
+  GuestPortConnectorInfo gp3 = 3; // Information about guest port 3.
 }
 
 // GuestPort restart information.
@@ -979,7 +979,7 @@ message Vector3 {
   double z = 3; // Z-component.
 }
 
-// Imu data in drone body frame:
+// Imu data in drone body frame.
 //
 // x - forward
 // y - right
@@ -1025,7 +1025,7 @@ message MultibeamPing {
 
   // Bearing angle of each column of the sonar data
   // (in 100th of a degree, multiply by 0.01 to get a value in degrees).
-  // The sonar image is not sampled uniformly in the bearing direction..
+  // The sonar image is not sampled uniformly in the bearing direction.
   repeated float bearings = 9;
 
   bytes ping_data = 10; // Ping data (row major, 2D, grayscale image).
@@ -1081,7 +1081,7 @@ message MultibeamDiscovery {
   string fw_version = 5; // Firmware version of the sonar.
   string connected_ip = 6; // IP address of the connected device.
   GuestPortDeviceID device_id = 7; // Device ID of the sonar.
-  MultibeamErrorFlags error_flags = 8; // Error flags specific for the connceted multibeam device.
+  MultibeamErrorFlags error_flags = 8; // Error flags specific for the connected multibeam device.
 }
 
 // Error flags for multibeam sonar devices.
