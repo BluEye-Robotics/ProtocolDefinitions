@@ -124,7 +124,7 @@ message GetBatteryRep {
 
 // Issue a desired mission to the reference_generator.
 message SetMissionReq {
-  Mission mission = 1; // requested mission issued to the reference generator
+  Mission mission = 1; // Requested mission issued to the reference generator.
 }
 
 // Response after setting a new mission.
@@ -137,12 +137,12 @@ message GetMissionReq {
 
 // Get active mission response.
 message GetMissionRep {
-  Mission mission = 1; // active mission with waypoints
+  Mission mission = 1; // Active mission with waypoints.
 }
 
 // Updates an instruction in current mission with a new instruction payload.
 message SetInstructionUpdateReq {
-  Instruction instruction = 1; // instruction that will replace the desired instruction
+  Instruction instruction = 1; // instruction that will replace the desired instruction.
 }
 
 // Response after updating an instruction in the current mission.
@@ -162,7 +162,7 @@ message SetPubFrequencyRep {
 
 // Request to get latest telemetry data
 message GetTelemetryReq {
-  string message_type = 1; // Message name, f. ex. "AttitudeTel"
+  string message_type = 1; // Message name, f. ex. "AttitudeTel".
 }
 
 // Response with latest telemetry

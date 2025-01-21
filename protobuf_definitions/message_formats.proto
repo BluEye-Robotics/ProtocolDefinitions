@@ -32,19 +32,19 @@ message BinlogRecord {
 
 // If you use both values at the same time they cancel each other out.
 message MotionInput {
-  float surge = 1; // Forward (positive) and backwards (negative) movement. (-1..1)
-  float sway = 2; // Right (positive) and left (negative) lateral movement (-1..1)
-  float heave = 3; // Descend (positive) and ascend (negative) movement (-1..1)
-  float roll = 7; // Roll left (negative) or right (positive). (-1..1)
-  float pitch = 8; // Pitch down (negative) or up (positive). (-1..1)
-  float yaw = 4; // Left (positive) and right (negative) movement (-1..1)
-  float slow = 5; // Modifier used to reduce the speed of the motion (0..1)
-  float boost = 6; // Modifier used to increase the speed of the motion (0..1)
+  float surge = 1; // Forward (positive) and backwards (negative) movement. (-1..1).
+  float sway = 2; // Right (positive) and left (negative) lateral movement (-1..1).
+  float heave = 3; // Descend (positive) and ascend (negative) movement (-1..1).
+  float roll = 7; // Roll left (negative) or right (positive). (-1..1).
+  float pitch = 8; // Pitch down (negative) or up (positive). (-1..1).
+  float yaw = 4; // Left (positive) and right (negative) movement (-1..1).
+  float slow = 5; // Modifier used to reduce the speed of the motion (0..1).
+  float boost = 6; // Modifier used to increase the speed of the motion (0..1).
 }
 
 // Lights message used to represent the intensity of the main light or external lights.
 message Lights {
-  float value = 1; // Light intensity (0..1)
+  float value = 1; // Light intensity (0..1).
 }
 
 // Laser message used to represent the intensity of connected laser.
@@ -53,64 +53,64 @@ message Lights {
 // a value of 0 turns the laser off, and any value above 0
 // turns the laser on.
 message Laser {
-  float value = 1; // Laser intensity, any value above 0 turns the laser on (0..1)
+  float value = 1; // Laser intensity, any value above 0 turns the laser on (0..1).
 }
 
 // Latitude and longitude position in WGS 84 decimal degrees format.
 message LatLongPosition {
-  double latitude = 1; // Latitude (°)
-  double longitude = 2; // Longitude (°)
+  double latitude = 1; // Latitude (°).
+  double longitude = 2; // Longitude (°).
 }
 
 // Connection duration of a remote client.
 message ConnectionDuration {
-  int32 value = 1; // time since connected to drone (s)
+  int32 value = 1; // Time since connected to drone (s).
 }
 
 // Auto heading state.
 message AutoHeadingState {
-  bool enabled = 1; // If auto heading is enabled
+  bool enabled = 1; // If auto heading is enabled.
 }
 
 // Auto depth state.
 message AutoDepthState {
-  bool enabled = 1; // If auto depth is enabled
+  bool enabled = 1; // If auto depth is enabled.
 }
 
 // Auto altitude state.
 message AutoAltitudeState {
-  bool enabled = 1; // If auto altitude is enabled
+  bool enabled = 1; // If auto altitude is enabled.
 }
 
 // Station keeping state.
 message StationKeepingState {
-  bool enabled = 1; // If station keeping is enabled
+  bool enabled = 1; // If station keeping is enabled.
 }
 
 // Weather vaning state.
 message WeatherVaningState {
-  bool enabled = 1; // If weather vaning is enabled
+  bool enabled = 1; // If weather vaning is enabled.
 }
 
 // Auto pilot surge yaw state.
 message AutoPilotSurgeYawState {
-  bool enabled = 1; // If auto pilot surge yaw is enabled
+  bool enabled = 1; // If auto pilot surge yaw is enabled.
 }
 
 // Auto pilot heave state.
 message AutoPilotHeaveState {
-  bool enabled = 1; // If auto pilot heave is enabled
+  bool enabled = 1; // If auto pilot heave is enabled.
 }
 
 // Control mode from drone supervisor
 message ControlMode {
-  bool auto_depth = 1; // If auto depth is enabled
-  bool auto_heading = 2; // If auto heading is enabled
-  bool auto_altitude = 3; // If auto altitude is enabled
-  bool station_keeping = 4; // If station keeping is enabled
-  bool weather_vaning = 5; // If weather vaning is enabled
-  bool auto_pilot_surge_yaw = 6; // If auto pilot surge yaw is enabled
-  bool auto_pilot_heave = 7; // If auto pilot heave is enabled
+  bool auto_depth = 1; // If auto depth is enabled.
+  bool auto_heading = 2; // If auto heading is enabled.
+  bool auto_altitude = 3; // If auto altitude is enabled.
+  bool station_keeping = 4; // If station keeping is enabled.
+  bool weather_vaning = 5; // If weather vaning is enabled.
+  bool auto_pilot_surge_yaw = 6; // If auto pilot surge yaw is enabled.
+  bool auto_pilot_heave = 7; // If auto pilot heave is enabled.
 }
 
 // Tilt stabilization state.
@@ -118,62 +118,64 @@ message ControlMode {
 // Blueye drones with mechanical tilt has the ability to enable
 // camera stabilization.
 message TiltStabilizationState {
-  bool enabled = 1; // If tilt stabilization is enabled
+  bool enabled = 1; // If tilt stabilization is enabled.
 }
 
 // System time.
 message SystemTime {
-  google.protobuf.Timestamp unix_timestamp = 1; // Unix timestamp
+  google.protobuf.Timestamp unix_timestamp = 1; // Unix timestamp.
 }
 
 // Gripper velocity values.
+//
+// Rotating velocity is only used if the gripper supports rotation.
 message GripperVelocities {
-  float grip_velocity = 1; // The gripping velocity (-1.0..1.0)
-  float rotate_velocity = 2; // The rotating velocity (-1.0..1.0)
+  float grip_velocity = 1; // The gripping velocity (-1.0..1.0).
+  float rotate_velocity = 2; // The rotating velocity (-1.0..1.0).
 }
 
 // Information about a remote client.
 message ClientInfo {
-  string type = 1; // The type of client (such as Blueye App, Observer App, SDK, etc)
-  string version = 2; // Client software version string
-  string device_type = 3; // Device type, such as mobile, tablet, or computer
-  string platform = 4; // Platform, such as iOS, Android, Linux, etc
-  string platform_version = 5; // Platform software version string
-  string name = 6; // Name of the client
-  bool is_observer = 7; // If the client should be connected as an observer or not
+  string type = 1; // The type of client (such as Blueye App, Observer App, SDK, etc).
+  string version = 2; // Client software version string.
+  string device_type = 3; // Device type, such as mobile, tablet, or computer.
+  string platform = 4; // Platform, such as iOS, Android, Linux, etc.
+  string platform_version = 5; // Platform software version string.
+  string name = 6; // Name of the client.
+  bool is_observer = 7; // If the client should be connected as an observer or not.
 }
 
 // Information about a connected client with an id assigned by the drone.
 message ConnectedClient {
-  uint32 client_id = 1; // The assigned client id
+  uint32 client_id = 1; // The assigned client id.
   ClientInfo client_info = 2; // Client information.
 }
 
 // Camera recording state.
 message RecordState {
-  bool main_is_recording = 1; // If the main camera is recording
-  int32 main_seconds = 2; // Main record time (s)
-  float main_fps = 7; // Main record fps
-  bool guestport_is_recording = 3; // If the guestport camera is recording
-  int32 guestport_seconds = 4; // Guestport record time (s)
-  float guestport_fps = 8; // Guestport record fps
-  bool multibeam_is_recording = 5; // If the multibeam is recording
-  int32 multibeam_seconds = 6; // Multibeam record time (s)
-  float multibeam_fps = 9; // Multibeam record fps
+  bool main_is_recording = 1; // If the main camera is recording.
+  int32 main_seconds = 2; // Main record time (s).
+  float main_fps = 7; // Main record fps.
+  bool guestport_is_recording = 3; // If the guestport camera is recording.
+  int32 guestport_seconds = 4; // Guestport record time (s).
+  float guestport_fps = 8; // Guestport record fps.
+  bool multibeam_is_recording = 5; // If the multibeam is recording.
+  int32 multibeam_seconds = 6; // Multibeam record time (s).
+  float multibeam_fps = 9; // Multibeam record fps.
 }
 
 // Interval type for time-lapse photos.
 enum IntervalType {
-  INTERVAL_TYPE_UNSPECIFIED = 0; // Unspecified
-  INTERVAL_TYPE_TIME = 1; // Time interval
-  INTERVAL_TYPE_DISTANCE = 2; // Distance interval
+  INTERVAL_TYPE_UNSPECIFIED = 0; // Unspecified.
+  INTERVAL_TYPE_TIME = 1; // Time interval.
+  INTERVAL_TYPE_DISTANCE = 2; // Distance interval.
 }
 
 // Time-lapse state published if time-lapse mission is running.
 message TimeLapseState {
-  float interval = 1; // Interval between photos
-  int32 photos_taken = 2; // Number of photos taken
-  IntervalType interval_type = 3; // Interval type for photos, distance or time
+  float interval = 1; // Interval between photos.
+  int32 photos_taken = 2; // Number of photos taken.
+  IntervalType interval_type = 3; // Interval type for photos, distance or time.
 }
 
 // Water density.
@@ -181,7 +183,7 @@ message TimeLapseState {
 // Used to specify the water density the drone is operating in,
 // to achieve more accurate depth measurements, f. ex. influenced by salinity.
 message WaterDensity {
-  float value = 1; // Water density (g/l)
+  float value = 1; // Water density (g/l).
 }
 
 // Pinger configuration.
@@ -189,22 +191,22 @@ message WaterDensity {
 // Used to specify the configuration the BR 1D-Pinger.
 message PingerConfiguration {
   enum MountingDirection {
-    MOUNTING_DIRECTION_UNSPECIFIED = 0; // Mounting direction is unspecified
-    MOUNTING_DIRECTION_FORWARDS = 1; // Pointing forwards from the drones perspective
-    MOUNTING_DIRECTION_DOWNWARDS = 2; // Pointing downwards from the drones perspective
+    MOUNTING_DIRECTION_UNSPECIFIED = 0; // Mounting direction is unspecified.
+    MOUNTING_DIRECTION_FORWARDS = 1; // Pointing forwards from the drones perspective.
+    MOUNTING_DIRECTION_DOWNWARDS = 2; // Pointing downwards from the drones perspective.
   }
 
-  MountingDirection mounting_direction = 1; // Mounting direction of the pinger
+  MountingDirection mounting_direction = 1; // Mounting direction of the pinger.
 }
 
 // Water temperature measured by the drone's combined depth and temperature sensor.
 message WaterTemperature {
-  float value = 1; // Water temperature (°C)
+  float value = 1; // Water temperature (°C).
 }
 
 // CPU temperature.
 message CPUTemperature {
-  float value = 1; // CPU temperature (°C)
+  float value = 1; // CPU temperature (°C).
 }
 
 // Canister temperature.
@@ -212,7 +214,7 @@ message CPUTemperature {
 // Temperature measured in the top or bottom canister of the drone.
 message CanisterTemperature {
   reserved 1, 2;
-  float temperature = 3; // Temperature (°C)
+  float temperature = 3; // Temperature (°C).
 }
 
 // Canister humidity.
@@ -220,14 +222,14 @@ message CanisterTemperature {
 // Humidity measured in the top or bottom canister of the drone.
 message CanisterHumidity {
   reserved 1, 2;
-  float humidity = 3; // Air humidity (%)
+  float humidity = 3; // Air humidity (%).
 }
 
 // Essential battery information.
 message Battery {
-  float voltage = 1; // Battery voltage (V)
-  float level = 2; // Battery level (0..1)
-  float temperature = 3; // Battery temperature (°C)
+  float voltage = 1; // Battery voltage (V).
+  float level = 2; // Battery level (0..1).
+  float temperature = 3; // Battery temperature (°C).
 }
 
 // Battery information message.
@@ -239,23 +241,23 @@ message BatteryBQ40Z50 {
 
   // Battery voltage levels.
   message Voltage {
-    float total = 1; // Battery pack voltage level (V)
-    float cell_1 = 2; // Cell 1 voltage level (V)
-    float cell_2 = 3; // Vell 2 voltage level (V)
-    float cell_3 = 4; // Cell 3 voltage level (V)
-    float cell_4 = 5; // Cell 4 voltage level (V)
+    float total = 1; // Battery pack voltage level (V).
+    float cell_1 = 2; // Cell 1 voltage level (V).
+    float cell_2 = 3; // Vell 2 voltage level (V).
+    float cell_3 = 4; // Cell 3 voltage level (V).
+    float cell_4 = 5; // Cell 4 voltage level (V).
   }
-  Voltage voltage = 1; // Voltage of the battery cells
+  Voltage voltage = 1; // Voltage of the battery cells.
 
   // Battery temperature.
   message Temperature {
-    float average = 1; // Average temperature accross cells (°C)
-    float cell_1 = 2; // Cell 1 temperature (°C)
-    float cell_2 = 3; // Cell 2 temperature (°C)
-    float cell_3 = 4; // Cell 3 temperature (°C)
-    float cell_4 = 5; // Cell 4 temperature (°C)
+    float average = 1; // Average temperature accross cells (°C).
+    float cell_1 = 2; // Cell 1 temperature (°C).
+    float cell_2 = 3; // Cell 2 temperature (°C).
+    float cell_3 = 4; // Cell 3 temperature (°C).
+    float cell_4 = 5; // Cell 4 temperature (°C).
   }
-  Temperature temperature = 2; // Temperature of the battery cells
+  Temperature temperature = 2; // Temperature of the battery cells.
 
   // Battery status from BQ40Z50 ref data sheet 0x16.
   message BatteryStatus {
@@ -283,144 +285,146 @@ message BatteryBQ40Z50 {
       BATTERY_ERROR_BAD_SIZE = 7;
       BATTERY_ERROR_UNKNOWN_ERROR = 8;
     }
-    BatteryError error = 11; // Battery error codes
+    BatteryError error = 11; // Battery error codes.
   }
-  BatteryStatus status = 4; // Battery status flags
+  BatteryStatus status = 4; // Battery status flags.
 
-  float current = 6; // Measured current from the coulomb counter (A)
-  float average_current = 7; // Average current (A)
-  float relative_state_of_charge = 8; // Predicted remaining battery capacity as a factor of full_charge_capacity (0..1)
-  float absolute_state_of_charge = 9; // Predicted remaining battery capacity (0..1)
-  float calculated_state_of_charge = 26; // Calculated state of charge (0..1)
-  float remaining_capacity = 10; // Predicted remaining battery capacity (Ah)
-  float full_charge_capacity = 11; // Predicted battery capacity when fully charged (Ah)
-  uint32 runtime_to_empty = 12; // Predicted remaining battery capacity based on the present rate of discharge (s)
-  uint32 average_time_to_empty = 13; // Predicted remaining battery capacity based on average_current (s)
-  uint32 average_time_to_full = 14; // Predicted time-to-full charge based on average_current (s)
-  float charging_current = 17; // Desired charging current (A)
-  float charging_voltage = 18; // Desired charging voltage (V)
+  float current = 6; // Measured current from the coulomb counter (A).
+  float average_current = 7; // Average current (A).
+  float relative_state_of_charge = 8; // Predicted remaining battery capacity as a factor of full capacity (0..1).
+  float absolute_state_of_charge = 9; // Predicted remaining battery capacity (0..1).
+  float calculated_state_of_charge = 26; // Calculated state of charge (0..1).
+  float remaining_capacity = 10; // Predicted remaining battery capacity (Ah).
+  float full_charge_capacity = 11; // Predicted battery capacity when fully charged (Ah).
+  uint32 runtime_to_empty = 12; // Predicted remaining battery capacity based on the present rate of discharge (s).
+  uint32 average_time_to_empty = 13; // Predicted remaining battery capacity based on average_current (s).
+  uint32 average_time_to_full = 14; // Predicted time-to-full charge based on average_current (s).
+  float charging_current = 17; // Desired charging current (A).
+  float charging_voltage = 18; // Desired charging voltage (V).
 
-  uint32 cycle_count = 19; // Number of charging cycles
-  float design_capacity = 20; // Design capacity (Ah)
-  google.protobuf.Timestamp manufacture_date = 21; // Manufacture date
-  uint32 serial_number = 22; // Serial number
-  string manufacturer_name = 23; // Manufacturer name
-  string device_name = 24; // Device name
-  string device_chemistry = 25; // Battery chemistry
+  uint32 cycle_count = 19; // Number of charging cycles.
+  float design_capacity = 20; // Design capacity (Ah).
+  google.protobuf.Timestamp manufacture_date = 21; // Manufacture date.
+  uint32 serial_number = 22; // Serial number.
+  string manufacturer_name = 23; // Manufacturer name.
+  string device_name = 24; // Device name.
+  string device_chemistry = 25; // Battery chemistry.
 
   message BatteryLifetimes {
     message CellVoltages {
-      float cell_1 = 1; // Voltage for cell number 1 (V)
-      float cell_2 = 2; // Voltage for cell number 2 (V)
-      float cell_3 = 3; // Voltage for cell number 3 (V)
-      float cell_4 = 4; // Voltage for cell number 4 (V)
+      float cell_1 = 1; // Voltage for cell number 1 (V).
+      float cell_2 = 2; // Voltage for cell number 2 (V).
+      float cell_3 = 3; // Voltage for cell number 3 (V).
+      float cell_4 = 4; // Voltage for cell number 4 (V).
     }
-    CellVoltages max_cell_voltages = 1; // Maximum reported cell voltages
-    CellVoltages min_cell_voltages = 2; // Minimum reported cell voltages
-    float max_delta_cell_voltage = 3; // Max delta between cells (V)
-    float max_charge_current = 4; // Max reported current in the charge direction (A)
-    float max_discharge_current = 5; // Max reported current in the discharge direction (A)
-    float max_avg_discharge_current = 6; // Max reported average current in the discharge direction (A)
-    float max_avg_discharge_power = 7; // Max reported power in discharge direction (W)
-    float max_cell_temperature = 8; // Max reported cell temperature (°C)
-    float min_cell_temperature = 9; // Min reported cell temperature (°C)
-    // Max reported temperature delta for TSx inputs configured as cell temperature (°C)
+    CellVoltages max_cell_voltages = 1; // Maximum reported cell voltages.
+    CellVoltages min_cell_voltages = 2; // Minimum reported cell voltages.
+    float max_delta_cell_voltage = 3; // Max delta between cells (V).
+    float max_charge_current = 4; // Max reported current in the charge direction (A).
+    float max_discharge_current = 5; // Max reported current in the discharge direction (A).
+    float max_avg_discharge_current = 6; // Max reported average current in the discharge direction (A).
+    float max_avg_discharge_power = 7; // Max reported power in discharge direction (W).
+    float max_cell_temperature = 8; // Max reported cell temperature (°C).
+    float min_cell_temperature = 9; // Min reported cell temperature (°C).
+    // Max reported temperature delta for TSx inputs configured as cell temperature (°C).
     float max_delta_cell_temperature = 10;
-    float max_temperature_internal_sensor = 11; // Max reported internal temperature sensor temperature (°C)
-    float min_temperature_internal_sensor = 12; // Min reported internal temperature sensor temperature (°C)
-    float max_temperature_fet = 13; // Max reported FET temperature (°C)
+    float max_temperature_internal_sensor = 11; // Max reported internal temperature sensor temperature (°C).
+    float min_temperature_internal_sensor = 12; // Min reported internal temperature sensor temperature (°C).
+    float max_temperature_fet = 13; // Max reported FET temperature (°C).
   }
-  BatteryLifetimes lifetimes = 27; // Battery lifetimes
+  BatteryLifetimes lifetimes = 27; // Battery lifetimes.
 
   message BatterySafetyEvents {
-    uint32 cov_events_count = 1; // Number of cell over voltage (COV) events (events)
-    uint32 cov_last_event = 2; // Last COV event in cycle count cycles (cycles)
-    uint32 cuv_events_count = 3; // Number of cell under voltage (CUV) events (events)
-    uint32 cuv_last_event = 4; // Last CUV event in cycle count cycles (cycles)
-    uint32 ocd1_events_count = 5; // Number of over current in Discharge 1 (OCD1) events (events)
-    uint32 ocd1_last_event = 6; // Last OCD1 event in cycle count cycles (cycles)
-    uint32 ocd2_events_count = 7; // Number of over current in Discharge 2 (OCD2) events (events)
-    uint32 ocd2_last_event = 8; // Last OCD2 event in cycle count cycles (cycles)
-    uint32 occ1_events_count = 9; // Number of over current in Charge 1 (OCC1) events (events)
-    uint32 occ1_last_event = 10; // Last OCC1 event in cycle count cycles (cycles)
-    uint32 occ2_events_count = 11; // Number of over current in Charge 2 (OCC2) events (events)
-    uint32 occ2_last_event = 12; // Last OCC2 event in cycle count cycles (cycles)
-    uint32 aold_events_count = 13; // Number of Overload in discharge (AOLD) events (events)
-    uint32 aold_last_event = 14; // Last AOLD event in cycle count cycles (cycles)
-    uint32 ascd_events_count = 15; // Number of Short Circuit in Discharge (ASCD) events (events)
-    uint32 ascd_last_event = 16; // Last ASCD event in cycle count cycles (cycles)
-    uint32 ascc_events_count = 17; // Number of Short Circuit in Charge (ASCC) events (events)
-    uint32 ascc_last_event = 18; // Last ASCC event in cycle count cycles (cycles)
-    uint32 otc_events_count = 19; // Number of over temperature in Charge (OTC) events (events)
-    uint32 otc_last_event = 20; // Last OTC event in cycle count cycles (cycles)
-    uint32 otd_events_count = 21; // Number of over temperature in Discharge (OTD) events (events)
-    uint32 otd_last_event = 22; // Last OTD event in cycle count cycles (cycles)
-    uint32 otf_events_count = 23; // Number of over temperature in FET (OTF) events (events)
-    uint32 otf_last_event = 24; // Last OTF event in cycle count cycles (cycles)
+    uint32 cov_events_count = 1; // Number of cell over voltage (COV) events (events).
+    uint32 cov_last_event = 2; // Last COV event in cycle count cycles (cycles).
+    uint32 cuv_events_count = 3; // Number of cell under voltage (CUV) events (events).
+    uint32 cuv_last_event = 4; // Last CUV event in cycle count cycles (cycles).
+    uint32 ocd1_events_count = 5; // Number of over current in Discharge 1 (OCD1) events (events).
+    uint32 ocd1_last_event = 6; // Last OCD1 event in cycle count cycles (cycles).
+    uint32 ocd2_events_count = 7; // Number of over current in Discharge 2 (OCD2) events (events).
+    uint32 ocd2_last_event = 8; // Last OCD2 event in cycle count cycles (cycles).
+    uint32 occ1_events_count = 9; // Number of over current in Charge 1 (OCC1) events (events).
+    uint32 occ1_last_event = 10; // Last OCC1 event in cycle count cycles (cycles).
+    uint32 occ2_events_count = 11; // Number of over current in Charge 2 (OCC2) events (events).
+    uint32 occ2_last_event = 12; // Last OCC2 event in cycle count cycles (cycles).
+    uint32 aold_events_count = 13; // Number of Overload in discharge (AOLD) events (events).
+    uint32 aold_last_event = 14; // Last AOLD event in cycle count cycles (cycles).
+    uint32 ascd_events_count = 15; // Number of Short Circuit in Discharge (ASCD) events (events).
+    uint32 ascd_last_event = 16; // Last ASCD event in cycle count cycles (cycles).
+    uint32 ascc_events_count = 17; // Number of Short Circuit in Charge (ASCC) events (events).
+    uint32 ascc_last_event = 18; // Last ASCC event in cycle count cycles (cycles).
+    uint32 otc_events_count = 19; // Number of over temperature in Charge (OTC) events (events).
+    uint32 otc_last_event = 20; // Last OTC event in cycle count cycles (cycles).
+    uint32 otd_events_count = 21; // Number of over temperature in Discharge (OTD) events (events).
+    uint32 otd_last_event = 22; // Last OTD event in cycle count cycles (cycles).
+    uint32 otf_events_count = 23; // Number of over temperature in FET (OTF) events (events).
+    uint32 otf_last_event = 24; // Last OTF event in cycle count cycles (cycles).
   }
-  BatterySafetyEvents safety_events = 28; // Battery safety events
+  BatterySafetyEvents safety_events = 28; // Battery safety events.
 
   message BatteryChargingEvents {
-    uint32 charge_termination_events_count = 1; // Total number of valid charge termination events (events)
-    uint32 charge_termination_last_event = 2; // Last valid charge termination in cycle count cycles (cycles)
+    uint32 charge_termination_events_count = 1; // Total number of valid charge termination events (events).
+    uint32 charge_termination_last_event = 2; // Last valid charge termination in cycle count cycles (cycles).
   }
-  BatteryChargingEvents charging_events = 29; // Battery charging events
+  BatteryChargingEvents charging_events = 29; // Battery charging events.
 }
 
 // The attitude of the drone.
 message Attitude {
-  float roll = 1; // Roll angle (-180°..180°)
-  float pitch = 2; // Pitch angle (-180°..180°)
-  float yaw = 3; // Yaw angle (-180°..180°)
+  float roll = 1; // Roll angle (-180°..180°).
+  float pitch = 2; // Pitch angle (-180°..180°).
+  float yaw = 3; // Yaw angle (-180°..180°).
 }
 
 // Drone altitude over seabed, typically obtained from a DVL.
 message Altitude {
-  float value = 1; // Drone altitude over seabed (m)
-  bool is_valid = 2; // If altitude is valid or not
+  float value = 1; // Drone altitude over seabed (m).
+  bool is_valid = 2; // If altitude is valid or not.
 }
 
-// Distance to an object in front of the drone
+// Distance to an object in front of the drone.
 //
 // Typically obtained from a 1D pinger.
 message ForwardDistance {
-  float value = 1; // Distance in front of drone (m)
-  bool is_valid = 2; // If distance reading is valid or not
+  float value = 1; // Distance in front of drone (m).
+  bool is_valid = 2; // If distance reading is valid or not.
 }
 
 // Position estimate from the Extended Kalman filter based observer if a DVL is connected.
 message PositionEstimate {
-  float northing = 1; // Position from reset point (m)
-  float easting = 2; // Position from reset point (m)
-  float heading = 3; // Continuous heading estimate (rad)
-  float surge_rate = 4; // Velocity in surge (m/s)
-  float sway_rate = 5; // Velocity in sway (m/s)
-  float yaw_rate = 6; // Rotaion rate in yaw (rad/s)
-  float ocean_current = 7; // Estimated ocean current (m/s)
-  float odometer = 8; // Travelled distance since reset (m)
-  bool is_valid = 9; // If the estimate can be trusted
-  LatLongPosition global_position = 10; // Best estimate of the global position in decimal degrees
-  repeated NavigationSensorStatus navigation_sensors = 11; // List of available sensors with status
-  float speed_over_ground = 12; // Speed over ground (m/s)
-  float course_over_ground = 13; // Course over ground (°)
-  int32 time_since_reset_sec = 14; // Time since reset (s)
+  float northing = 1; // Position from reset point (m).
+  float easting = 2; // Position from reset point (m).
+  float heading = 3; // Continuous heading estimate (rad).
+  float surge_rate = 4; // Velocity in surge (m/s).
+  float sway_rate = 5; // Velocity in sway (m/s).
+  float yaw_rate = 6; // Rotaion rate in yaw (rad/s).
+  float ocean_current = 7; // Estimated ocean current (m/s).
+  float odometer = 8; // Travelled distance since reset (m).
+  bool is_valid = 9; // If the estimate can be trusted.
+  LatLongPosition global_position = 10; // Best estimate of the global position in decimal degrees.
+  repeated NavigationSensorStatus navigation_sensors = 11; // List of available sensors with status.
+  float speed_over_ground = 12; // Speed over ground (m/s).
+  float course_over_ground = 13; // Course over ground (°).
+  int32 time_since_reset_sec = 14; // Time since reset (s).
 }
 
 // Heading source used during reset of the position estimate.
 enum HeadingSource {
-  HEADING_SOURCE_UNSPECIFIED = 0; // Unspecified
-  HEADING_SOURCE_DRONE_COMPASS = 1; // Uses the drone compass to set the heading
-  HEADING_SOURCE_MANUAL_INPUT = 2; // Used when the user sets the heading manually
+  HEADING_SOURCE_UNSPECIFIED = 0; // Unspecified.
+  HEADING_SOURCE_DRONE_COMPASS = 1; // Uses the drone compass to set the heading.
+  HEADING_SOURCE_MANUAL_INPUT = 2; // Used when the user sets the heading manually.
 }
 
-// ResetPositionSettings used during reset of the position estimate.
+// Settings used when resetting the position estimate.
 message ResetPositionSettings {
-  HeadingSource heading_source_during_reset = 1; // Option to use the drone compass or due North as heading during reset
-  float manual_heading = 2; // Heading in degrees (0-359)
+  // Option to use the drone compass or due North as heading during reset.
+  HeadingSource heading_source_during_reset = 1;
+  float manual_heading = 2; // Heading in degrees (0-359).
   ResetCoordinateSource reset_coordinate_source = 3; // Option to use the device GPS or a manual coordinate.
-  LatLongPosition reset_coordinate = 4; // Reset coordinate in decimal degrees
+  LatLongPosition reset_coordinate = 4; // Reset coordinate in decimal degrees.
 }
 
+// The coordinate source to use when resetting the position estimate.
 enum ResetCoordinateSource {
   RESET_COORDINATE_SOURCE_UNSPECIFIED = 0; // Unspecified, fallback to device GPS
   RESET_COORDINATE_SOURCE_DEVICE_GPS = 1; // Uses the device GPS to set the reset point
@@ -429,130 +433,130 @@ enum ResetCoordinateSource {
 
 // DVL raw transducer data.
 message DvlTransducer {
-  int32 id = 1; // Transducer ID, 3 beams for Nucleus DVL, 4 beams for DVL A50
-  float velocity = 2; // Velocity (m/s)
-  float distance = 3; // Distance (m)
-  bool beam_valid = 4; // Beam validity
-  float rssi = 5; // Received signal strength indicator: strength of the signal received by this transducer (dBm)
-  float nsd = 6; // Noise spectral density: strength of the background noise received by this transducer (dBm)
+  int32 id = 1; // Transducer ID, 3 beams for Nucleus DVL, 4 beams for DVL A50.
+  float velocity = 2; // Velocity (m/s).
+  float distance = 3; // Distance (m).
+  bool beam_valid = 4; // Beam validity.
+  float rssi = 5; // Received signal strength indicator: strength of the signal received by this transducer (dBm).
+  float nsd = 6; // Noise spectral density: strength of the background noise received by this transducer (dBm).
 }
 
 // DVL raw velocity data.
 message DvlVelocity {
-  NavigationSensorID sensor_id = 1; // Sensor id
-  int32 status = 2; // Vendor-specific status of the DVL
-  float delta_time = 3; // Time since last velocity measurement (ms)
-  float fom = 4; // Figure of merit, a measure of the accuracy of the velocities (m/s)
-  Vector3 velocity = 5; // Velocity, x forward, y left, z down (m/s)
-  bool is_water_tracking = 6; // Water tracking status
-  repeated DvlTransducer transducers = 7; // List of transducers
+  NavigationSensorID sensor_id = 1; // Sensor id.
+  int32 status = 2; // Vendor-specific status of the DVL.
+  float delta_time = 3; // Time since last velocity measurement (ms).
+  float fom = 4; // Figure of merit, a measure of the accuracy of the velocities (m/s).
+  Vector3 velocity = 5; // Velocity, x forward, y left, z down (m/s).
+  bool is_water_tracking = 6; // Water tracking status.
+  repeated DvlTransducer transducers = 7; // List of transducers.
 }
 
 // Water depth of the drone.
 message Depth {
-  float value = 1; // Drone depth below surface (m)
+  float value = 1; // Drone depth below surface (m).
 }
 
 // Reference for the control system.
 // Note that the internal heading reference is not relative to North, use
 // (ControlHealth.heading_error + pose.yaw) instead.
 message Reference {
-  float surge = 1; // Reference from joystick surge input (0..1)
-  float sway = 2; // Reference from joystick sway input (0..1)
-  float heave = 3; // Reference from joystick heave input (0..1)
-  float yaw = 4; // Reference from joystick yaw input (0..1)
-  float depth = 5; // Reference drone depth below surface (m)
-  float heading = 6; // Reference used in auto heading mode, gyro based (°)
-  float altitude = 7; // Reference used in auto altitude mode (m)
+  float surge = 1; // Reference from joystick surge input (0..1).
+  float sway = 2; // Reference from joystick sway input (0..1).
+  float heave = 3; // Reference from joystick heave input (0..1).
+  float yaw = 4; // Reference from joystick yaw input (0..1).
+  float depth = 5; // Reference drone depth below surface (m).
+  float heading = 6; // Reference used in auto heading mode, gyro based (°).
+  float altitude = 7; // Reference used in auto altitude mode (m).
 }
 
 // Notification is used for displaying info, warnings, and errors to the user.
 message Notification {
-  NotificationType type = 1; // Notification to be displayed to the user
-  NotificationLevel level = 2; // Level of the notification, info, warning or error
-  google.protobuf.Any value = 3; // Optional value to be displayed in the message
-  google.protobuf.Timestamp timestamp = 4; // Timestamp of the notification
+  NotificationType type = 1; // Notification to be displayed to the user.
+  NotificationLevel level = 2; // Level of the notification, info, warning or error.
+  google.protobuf.Any value = 3; // Optional value to be displayed in the message.
+  google.protobuf.Timestamp timestamp = 4; // Timestamp of the notification.
 }
 
 // Notification is used for displaying info, warnings, and errors to the user.
 enum NotificationType {
-  NOTIFICATION_TYPE_UNSPECIFIED = 0; // Unspecified
-  NOTIFICATION_TYPE_POSITION_ESTIMATE_IS_INACCURATE = 1; // Position estimate is inaccurate
-  NOTIFICATION_TYPE_DRONE_POSITION_IS_UNKNOWN = 2; // Drone position is unknown
-  NOTIFICATION_TYPE_USER_POSITION_IS_UNKNOWN = 3; // User position is unknown
-  NOTIFICATION_TYPE_NO_MISSION_LOADED = 4; // No mission is loaded
-  NOTIFICATION_TYPE_MISSION_LOADED = 5; // Mission is loaded
-  NOTIFICATION_TYPE_FAILED_TO_LOAD_MISSION = 6; // Failed to load mission
-  NOTIFICATION_TYPE_MISSION_COMPLETE = 7; // Mission is complete
-  NOTIFICATION_TYPE_INSTRUCTION_COMPLETE = 8; // Instruction is complete
-  NOTIFICATION_TYPE_WAYPOINT_REACHED = 9; // Waypoint reached
-  NOTIFICATION_TYPE_DEPTH_TARGET_REACHED = 10; // Depth set point is reached
-  NOTIFICATION_TYPE_ALTITUDE_TARGET_REACHED = 11; // Altitude set point is reached
-  NOTIFICATION_TYPE_WAYPOINT_IS_TOO_FAR_AWAY = 12; // The waypoint is too far away
-  NOTIFICATION_TYPE_DEPTH_SET_POINT_IS_TOO_FAR_AWAY = 13; // The depth set point is too far away
-  NOTIFICATION_TYPE_TIME_TO_COMPLETE_IS_TOO_LONG = 14; // The time to complete the mission is too long
-  NOTIFICATION_TYPE_RETURNING_TO_HOME = 15; // Returning to home
-  NOTIFICATION_TYPE_GO_TO_SURFACE = 16; // Go to surface
-  NOTIFICATION_TYPE_GO_TO_SEABED = 17; // Go to seabed with an altimeter
-  NOTIFICATION_TYPE_GO_TO_WAYPOINT = 18; // Go to waypoint
-  NOTIFICATION_TYPE_GO_TO_DEPTH_SET_POINT = 19; // Go to depth set point
-  NOTIFICATION_TYPE_GO_TO_WAYPOINT_WITH_DEPTH_SET_POINT = 20; // Go to waypoint with depth set point
-  NOTIFICATION_TYPE_MISSION_STARTED = 21; // Mission is started
-  NOTIFICATION_TYPE_MISSION_PAUSED = 22; // Mission is paused
-  NOTIFICATION_TYPE_MISSION_RESUMED = 23; // Mission is resumed
-  NOTIFICATION_TYPE_MISSION_ABORTED = 24; // Mission is aborted
-  NOTIFICATION_TYPE_DRONE_IS_STUCK = 25; // Drone is stuck during a mission
-  NOTIFICATION_TYPE_WAIT_FOR = 26; // Wait for instruction running
-  NOTIFICATION_TYPE_CAMERA_ACTION = 27; // Camera action initiated
-  NOTIFICATION_TYPE_SET_TILT_MAIN_CAMERA = 28; // Set tilt for main camera
-  NOTIFICATION_TYPE_SET_TILT_MULTIBEAM = 29; // Set tilt for multibeam
-  NOTIFICATION_TYPE_INSTRUCTION_SKIPPED = 30; // When an instruction is not available in the ROV
-  NOTIFICATION_TYPE_DVL_HIGH_TEMPERATURE_DETECTED = 31; // DVL high temperature detected
-  NOTIFICATION_TYPE_DVL_THERMAL_PROTECTION_MODE_DETECTED = 32; // DVL thermal protection mode detected
+  NOTIFICATION_TYPE_UNSPECIFIED = 0; // Unspecified.
+  NOTIFICATION_TYPE_POSITION_ESTIMATE_IS_INACCURATE = 1; // Position estimate is inaccurate.
+  NOTIFICATION_TYPE_DRONE_POSITION_IS_UNKNOWN = 2; // Drone position is unknown.
+  NOTIFICATION_TYPE_USER_POSITION_IS_UNKNOWN = 3; // User position is unknown.
+  NOTIFICATION_TYPE_NO_MISSION_LOADED = 4; // No mission is loaded.
+  NOTIFICATION_TYPE_MISSION_LOADED = 5; // Mission is loaded.
+  NOTIFICATION_TYPE_FAILED_TO_LOAD_MISSION = 6; // Failed to load mission.
+  NOTIFICATION_TYPE_MISSION_COMPLETE = 7; // Mission is complete.
+  NOTIFICATION_TYPE_INSTRUCTION_COMPLETE = 8; // Instruction is complete.
+  NOTIFICATION_TYPE_WAYPOINT_REACHED = 9; // Waypoint reached.
+  NOTIFICATION_TYPE_DEPTH_TARGET_REACHED = 10; // Depth set point is reached.
+  NOTIFICATION_TYPE_ALTITUDE_TARGET_REACHED = 11; // Altitude set point is reached.
+  NOTIFICATION_TYPE_WAYPOINT_IS_TOO_FAR_AWAY = 12; // The waypoint is too far away.
+  NOTIFICATION_TYPE_DEPTH_SET_POINT_IS_TOO_FAR_AWAY = 13; // The depth set point is too far away.
+  NOTIFICATION_TYPE_TIME_TO_COMPLETE_IS_TOO_LONG = 14; // The time to complete the mission is too long.
+  NOTIFICATION_TYPE_RETURNING_TO_HOME = 15; // Returning to home.
+  NOTIFICATION_TYPE_GO_TO_SURFACE = 16; // Go to surface.
+  NOTIFICATION_TYPE_GO_TO_SEABED = 17; // Go to seabed with an altimeter.
+  NOTIFICATION_TYPE_GO_TO_WAYPOINT = 18; // Go to waypoint.
+  NOTIFICATION_TYPE_GO_TO_DEPTH_SET_POINT = 19; // Go to depth set point.
+  NOTIFICATION_TYPE_GO_TO_WAYPOINT_WITH_DEPTH_SET_POINT = 20; // Go to waypoint with depth set point.
+  NOTIFICATION_TYPE_MISSION_STARTED = 21; // Mission is started.
+  NOTIFICATION_TYPE_MISSION_PAUSED = 22; // Mission is paused.
+  NOTIFICATION_TYPE_MISSION_RESUMED = 23; // Mission is resumed.
+  NOTIFICATION_TYPE_MISSION_ABORTED = 24; // Mission is aborted.
+  NOTIFICATION_TYPE_DRONE_IS_STUCK = 25; // Drone is stuck during a mission.
+  NOTIFICATION_TYPE_WAIT_FOR = 26; // Wait for instruction running.
+  NOTIFICATION_TYPE_CAMERA_ACTION = 27; // Camera action initiated.
+  NOTIFICATION_TYPE_SET_TILT_MAIN_CAMERA = 28; // Set tilt for main camera.
+  NOTIFICATION_TYPE_SET_TILT_MULTIBEAM = 29; // Set tilt for multibeam.
+  NOTIFICATION_TYPE_INSTRUCTION_SKIPPED = 30; // When an instruction is not available in the ROV.
+  NOTIFICATION_TYPE_DVL_HIGH_TEMPERATURE_DETECTED = 31; // DVL high temperature detected.
+  NOTIFICATION_TYPE_DVL_THERMAL_PROTECTION_MODE_DETECTED = 32; // DVL thermal protection mode detected.
 }
 
 // List of available notification levels.
 enum NotificationLevel {
-  NOTIFICATION_LEVEL_UNSPECIFIED = 0; // Unspecified
-  NOTIFICATION_LEVEL_INFO = 1; // Info
-  NOTIFICATION_LEVEL_WARNING = 2; // Warning
-  NOTIFICATION_LEVEL_ERROR = 3; // Error
+  NOTIFICATION_LEVEL_UNSPECIFIED = 0; // Unspecified.
+  NOTIFICATION_LEVEL_INFO = 1; // Information.
+  NOTIFICATION_LEVEL_WARNING = 2; // Warning.
+  NOTIFICATION_LEVEL_ERROR = 3; // Error.
 }
 
 // Control Force is used for showing the requested control force in each direction in Newtons.
 message ControlForce {
-  float surge = 1; // Force in surge (N)
-  float sway = 2; // Force in sway (N)
-  float heave = 3; // Force in heave (N)
-  float yaw = 4; // Moment in yaw (Nm)
+  float surge = 1; // Force in surge (N).
+  float sway = 2; // Force in sway (N).
+  float heave = 3; // Force in heave (N).
+  float yaw = 4; // Moment in yaw (Nm).
 }
 
 // Controller health is used for showing the state of the controller with an relative error and load from 0 to 1.
 message ControllerHealth {
-  float depth_error = 1; // Depth error in meters (m)
-  float depth_health = 2; // Depth controller load (0..1)
-  float heading_error = 3; // Heading error in degrees (°)
-  float heading_health = 4; // Heading controller load (0..1)
+  float depth_error = 1; // Depth error in meters (m).
+  float depth_health = 2; // Depth controller load (0..1).
+  float heading_error = 3; // Heading error in degrees (°).
+  float heading_health = 4; // Heading controller load (0..1).
 }
 
 // Amount of time the drone has been submerged.
 //
 // The drone starts incrementing this value when the depth is above 250 mm.
 message DiveTime {
-  int32 value = 1; // Number of seconds the drone has been submerged
+  int32 value = 1; // Number of seconds the drone has been submerged.
 }
 
-// Which cameras are supposed to be recording
+// Which cameras are supposed to be recording.
 message RecordOn {
-  bool main = 1; // Record the main camera
-  bool guestport = 2; // Record external camera
-  bool multibeam = 3; // Record multibeam
+  bool main = 1; // Record the main camera.
+  bool guestport = 2; // Record external camera.
+  bool multibeam = 3; // Record multibeam.
 }
 
 // Storage space.
 message StorageSpace {
-  int64 total_space = 1; // Total bytes of storage space (B)
-  int64 free_space = 2; // Available bytes of storage space (B)
+  int64 total_space = 1; // Total bytes of storage space (B).
+  int64 free_space = 2; // Available bytes of storage space (B).
 }
 
 // Compass calibration state.
@@ -563,68 +567,68 @@ message CalibrationState {
   // When calibration is started, the status will indicate the active (upfacing) axis.
   enum Status
   {
-    STATUS_UNSPECIFIED = 0; // Unspecified status
-    STATUS_NOT_CALIBRATING = 1; // Compass is not currently calibrating
-    STATUS_CALIBRATING_NO_AXIS = 2; // Compass is calibrating but active calibration axis cannot be determined
-    STATUS_CALIBRATING_X_POSITIVE = 3; // Compass is calibrating and the positive X axis is active
-    STATUS_CALIBRATING_X_NEGATIVE = 4; // Compass is calibrating and the negative X axis is active
-    STATUS_CALIBRATING_Y_POSITIVE = 5; // Compass is calibrating and the positive Y axis is active
-    STATUS_CALIBRATING_Y_NEGATIVE = 6; // Compass is calibrating and the negative Y axis is active
-    STATUS_CALIBRATING_Z_POSITIVE = 7; // Compass is calibrating and the positive Z axis is active
-    STATUS_CALIBRATING_Z_NEGATIVE = 8; // Compass is calibrating and the negative Z axis is active
-    STATUS_CALIBRATING_THRUSTER = 9; // Compass is calibrating for thruster interferance
+    STATUS_UNSPECIFIED = 0; // Unspecified status.
+    STATUS_NOT_CALIBRATING = 1; // Compass is not currently calibrating.
+    STATUS_CALIBRATING_NO_AXIS = 2; // Compass is calibrating but active calibration axis cannot be determined.
+    STATUS_CALIBRATING_X_POSITIVE = 3; // Compass is calibrating and the positive X axis is active.
+    STATUS_CALIBRATING_X_NEGATIVE = 4; // Compass is calibrating and the negative X axis is active.
+    STATUS_CALIBRATING_Y_POSITIVE = 5; // Compass is calibrating and the positive Y axis is active.
+    STATUS_CALIBRATING_Y_NEGATIVE = 6; // Compass is calibrating and the negative Y axis is active.
+    STATUS_CALIBRATING_Z_POSITIVE = 7; // Compass is calibrating and the positive Z axis is active.
+    STATUS_CALIBRATING_Z_NEGATIVE = 8; // Compass is calibrating and the negative Z axis is active.
+    STATUS_CALIBRATING_THRUSTER = 9; // Compass is calibrating for thruster interferance.
   }
 
-  Status status = 1; // Current calibration status
-  float progress_x_positive = 2; // Progress for the positive X axis (0..1)
-  float progress_x_negative = 3; // Progress for the negative X axis (0..1)
-  float progress_y_positive = 4; // Progress for the positive Y axis (0..1)
-  float progress_y_negative = 5; // Progress for the negative X axis (0..1)
-  float progress_z_positive = 6; // Progress for the positive Z axis (0..1)
-  float progress_z_negative = 7; // Progress for the negative Z axis (0..1)
-  float progress_thruster = 8; // Progress for the thruster calibration (0..1)
+  Status status = 1; // Current calibration status.
+  float progress_x_positive = 2; // Progress for the positive X axis (0..1).
+  float progress_x_negative = 3; // Progress for the negative X axis (0..1).
+  float progress_y_positive = 4; // Progress for the positive Y axis (0..1).
+  float progress_y_negative = 5; // Progress for the negative X axis (0..1).
+  float progress_z_positive = 6; // Progress for the positive Z axis (0..1).
+  float progress_z_negative = 7; // Progress for the negative Z axis (0..1).
+  float progress_thruster = 8; // Progress for the thruster calibration (0..1).
 }
 
 // Connection speed between drone and Surface Unit.
 message IperfStatus {
-  float sent = 1; // Transfer rate from drone to Surface Unit (Mbit/s)
-  float received = 2; // Transfer rate from Surface Unit to drone (Mbit/s)
+  float sent = 1; // Transfer rate from drone to Surface Unit (Mbit/s).
+  float received = 2; // Transfer rate from Surface Unit to drone (Mbit/s).
 }
 
 // Number of spectators connected to video stream.
 message NStreamers {
-  int32 main = 1; // The number of clients to the main camera stream
-  int32 guestport = 2; // The number of clients to the guestport camera stream
+  int32 main = 1; // The number of clients to the main camera stream.
+  int32 guestport = 2; // The number of clients to the guestport camera stream.
 }
 
 // Angle of tilt camera in degrees.
 message TiltAngle {
-  float value = 1; // Tilt angle (°)
+  float value = 1; // Tilt angle (°).
 }
 
-// Relative velocity of tilt
+// Relative velocity of tilt.
 message TiltVelocity {
-  float value = 1; // Relative angular velocity of tilt (-1..1), negative means down and positive means up
+  float value = 1; // Relative angular velocity of tilt (-1..1), negative means down and positive means up.
 }
 
-// Drone models produced by Blueye
+// Drone models produced by Blueye.
 enum Model {
-  MODEL_UNSPECIFIED = 0; // ModelName not specified
-  MODEL_PIONEER = 1; // Blueye Pioneer, the first model
-  MODEL_PRO = 2; // Blueye Pro, features camera tilt
-  MODEL_X1 = 4; // Blueye X1, features camera tilt and one guest port
-  MODEL_X3 = 3; // Blueye X3, features support for peripherals
-  MODEL_X3_ULTRA = 6; // Blueye X3 Ultra
+  MODEL_UNSPECIFIED = 0; // ModelName not specified.
+  MODEL_PIONEER = 1; // Blueye Pioneer, the first model.
+  MODEL_PRO = 2; // Blueye Pro, features camera tilt.
+  MODEL_X1 = 4; // Blueye X1, features camera tilt and one guest port.
+  MODEL_X3 = 3; // Blueye X3, features support for peripherals.
+  MODEL_X3_ULTRA = 6; // Blueye X3 Ultra.
   MODEL_NEXT = 5; // Blueye ?
 }
 
 // Depth sensors used by the drone.
 enum PressureSensorType {
-  PRESSURE_SENSOR_TYPE_UNSPECIFIED = 0; // Depth sensor type not specified
-  PRESSURE_SENSOR_TYPE_NOT_CONNECTED = 1; // No se
-  PRESSURE_SENSOR_TYPE_MS5837_30BA26 = 2; // Thh MS5837 30BA26 pressure sensor
-  PRESSURE_SENSOR_TYPE_KELLER_PA7LD = 3; // The extended depth sensor using the Keller PA7LD pressure sensor
-  PRESSURE_SENSOR_TYPE_MS5637_02BA03 = 4; // The internal pressure sensor using the MS5637 02BA03 pressure sensor
+  PRESSURE_SENSOR_TYPE_UNSPECIFIED = 0; // Depth sensor type not specified.
+  PRESSURE_SENSOR_TYPE_NOT_CONNECTED = 1; // No sensor connected.
+  PRESSURE_SENSOR_TYPE_MS5837_30BA26 = 2; // Thh MS5837 30BA26 pressure sensor.
+  PRESSURE_SENSOR_TYPE_KELLER_PA7LD = 3; // The extended depth sensor using the Keller PA7LD pressure sensor.
+  PRESSURE_SENSOR_TYPE_MS5637_02BA03 = 4; // The internal pressure sensor using the MS5637 02BA03 pressure sensor.
 }
 
 // Information about the drone.
@@ -633,458 +637,476 @@ enum PressureSensorType {
 // internal components in the drone. Primarily used for diagnostics, or to
 // determine the origin of a logfile.
 message DroneInfo {
-  string blunux_version = 1; // Blunux version string
-  bytes serial_number = 2; // Drone serial number
-  bytes hardware_id = 3; // Main computer unique identifier
-  Model model = 4; // Drone model
-  bytes mb_serial = 5; // Motherboard serial number
-  bytes bb_serial = 6; // Backbone serial number
-  bytes ds_serial = 10; // Drone stack serial number
-  bytes mb_uid = 7; // Motherboard unique identifier
-  bytes bb_uid = 8; // Backbone unique identifier
-  GuestPortInfo gp = 9; // GuestPortInfo
-  PressureSensorType depth_sensor = 11; // Type of depth sensor that is connected to the drone
+  string blunux_version = 1; // Blunux version string.
+  bytes serial_number = 2; // Drone serial number.
+  bytes hardware_id = 3; // Main computer unique identifier.
+  Model model = 4; // Drone model.
+  bytes mb_serial = 5; // Motherboard serial number.
+  bytes bb_serial = 6; // Backbone serial number.
+  bytes ds_serial = 10; // Drone stack serial number.
+  bytes mb_uid = 7; // Motherboard unique identifier.
+  bytes bb_uid = 8; // Backbone unique identifier.
+  GuestPortInfo gp = 9; // Guest port information.
+  PressureSensorType depth_sensor = 11; // Type of depth sensor that is connected to the drone.
 }
 
 // Known error states for the drone.
 message ErrorFlags {
-  // Acknowledge message not received for a message published to internal micro controller
+  // Acknowledge message not received for a message published to internal micro controller.
   bool pmu_comm_ack = 1;
-  bool pmu_comm_stream = 2; // Error in communication with internal micro controller
-  bool depth_read = 3; // Error reading depth sensor value
-  bool depth_spike = 4; // Sudden spike in value read from depth sensor
-  bool inner_pressure_read = 5; // Error reading inner pressure of the drone
-  bool inner_pressure_spike = 6; // Sudden spike in inner preassure
-  bool compass_calibration = 7; // Compass needs calibration
-  bool tilt_calibration = 8; // Error during calibration of tilt endpoints
-  bool gp1_read = 9;  // Guest port 1 read error
-  bool gp2_read = 10;  // Guest port 2 read error
-  bool gp3_read = 11;  // Guest port 3 read error
-  bool gp1_not_flashed = 12;  // Guest port 1 not flashed
-  bool gp2_not_flashed = 13;  // Guest port 2 not flashed
-  bool gp3_not_flashed = 14;  // Guest port 3 not flashed
-  bool gp1_unknown_device = 15;  // Unknown device on guest port 1
-  bool gp2_unknown_device = 16;  // Unknown device on guest port 2
-  bool gp3_unknown_device = 17;  // Unknown device on guest port 3
-  bool gp1_device_connection = 18;  // Guest port 1 connection error
-  bool gp2_device_connection = 19;  // Guest port 2 connection error
-  bool gp3_device_connection = 20;  // Guest port 3 connection error
-  bool gp1_device = 21;  // Guest port 1 device error
-  bool gp2_device = 22;  // Guest port 2 device error
-  bool gp3_device = 23;  // Guest port 3 device error
-  bool drone_serial_not_set = 24;  // Drone serial number not set
-  bool drone_serial = 25;  // Drone serial number error
-  bool mb_eeprom_read = 26;  // MB eeprom read error
-  bool bb_eeprom_read = 27;  // BB eeprom read error
-  bool mb_eeprom_not_flashed = 28;  // MB eeprom not flashed
-  bool bb_eeprom_not_flashed = 29;  // BB eeprom not flashed
-  bool main_camera_connection = 30;  // We don't get buffers from the main camera
-  bool main_camera_firmware = 31;  // The main camera firmware is wrong
-  bool guestport_camera_connection = 32;  // We don't get buffers from the guestport camera
-  bool guestport_camera_firmware = 33;  // The guestport camera firmware is wrong
-  bool mb_serial = 34;  // MB serial number error
-  bool bb_serial = 35;  // BB serial number error
-  bool ds_serial = 36;  // DS serial number error
-  bool gp_current_read = 37;  // Error reading GP current
-  bool gp_current = 38;  // Max GP current exceeded
-  bool gp1_bat_current = 39;  // Max battery current exceeded on GP1
-  bool gp2_bat_current = 40;  // Max battery current exceeded on GP2
-  bool gp3_bat_current = 41;  // Max battery current exceeded on GP3
-  bool gp_20v_current = 42;  // Max 20V current exceeded on GP
-  bool dvl_thermal_protection_mode = 43;  // DVL is in thermal protection mode
-  bool dvl_no_power = 44;  // GP protection has been triggered at boot or faulty DVL
-  bool usb_disconnect = 45; // USB disconnect
-  bool video_urb_error = 46;  // Video URB error
+  bool pmu_comm_stream = 2; // Error in communication with internal micro controller.
+  bool depth_read = 3; // Error reading depth sensor value.
+  bool depth_spike = 4; // Sudden spike in value read from depth sensor.
+  bool inner_pressure_read = 5; // Error reading inner pressure of the drone.
+  bool inner_pressure_spike = 6; // Sudden spike in inner preassure.
+  bool compass_calibration = 7; // Compass needs calibration.
+  bool tilt_calibration = 8; // Error during calibration of tilt endpoints.
+  bool gp1_read = 9;  // Guest port 1 read error.
+  bool gp2_read = 10;  // Guest port 2 read error.
+  bool gp3_read = 11;  // Guest port 3 read error.
+  bool gp1_not_flashed = 12;  // Guest port 1 not flashed.
+  bool gp2_not_flashed = 13;  // Guest port 2 not flashed.
+  bool gp3_not_flashed = 14;  // Guest port 3 not flashed.
+  bool gp1_unknown_device = 15;  // Unknown device on guest port 1.
+  bool gp2_unknown_device = 16;  // Unknown device on guest port 2.
+  bool gp3_unknown_device = 17;  // Unknown device on guest port 3.
+  bool gp1_device_connection = 18;  // Guest port 1 connection error.
+  bool gp2_device_connection = 19;  // Guest port 2 connection error.
+  bool gp3_device_connection = 20;  // Guest port 3 connection error.
+  bool gp1_device = 21;  // Guest port 1 device error.
+  bool gp2_device = 22;  // Guest port 2 device error.
+  bool gp3_device = 23;  // Guest port 3 device error.
+  bool drone_serial_not_set = 24;  // Drone serial number not set.
+  bool drone_serial = 25;  // Drone serial number error.
+  bool mb_eeprom_read = 26;  // MB eeprom read error.
+  bool bb_eeprom_read = 27;  // BB eeprom read error.
+  bool mb_eeprom_not_flashed = 28;  // MB eeprom not flashed.
+  bool bb_eeprom_not_flashed = 29;  // BB eeprom not flashed.
+  bool main_camera_connection = 30;  // We don't get buffers from the main camera.
+  bool main_camera_firmware = 31;  // The main camera firmware is wrong.
+  bool guestport_camera_connection = 32;  // We don't get buffers from the guestport camera.
+  bool guestport_camera_firmware = 33;  // The guestport camera firmware is wrong.
+  bool mb_serial = 34;  // MB serial number error.
+  bool bb_serial = 35;  // BB serial number error.
+  bool ds_serial = 36;  // DS serial number error.
+  bool gp_current_read = 37;  // Error reading GP current.
+  bool gp_current = 38;  // Max GP current exceeded.
+  bool gp1_bat_current = 39;  // Max battery current exceeded on GP1.
+  bool gp2_bat_current = 40;  // Max battery current exceeded on GP2.
+  bool gp3_bat_current = 41;  // Max battery current exceeded on GP3.
+  bool gp_20v_current = 42;  // Max 20V current exceeded on GP.
+  bool dvl_thermal_protection_mode = 43;  // DVL is in thermal protection mode.
+  bool dvl_no_power = 44;  // GP protection has been triggered at boot or faulty DVL.
+  bool usb_disconnect = 45; // USB disconnect.
+  bool video_urb_error = 46;  // Video URB error.
 }
 
 // Available camera resolutions.
 enum Resolution {
-  RESOLUTION_UNSPECIFIED = 0; // Resolution not specified
-  RESOLUTION_FULLHD_1080P = 1; // 1080p Full HD resolution
-  RESOLUTION_HD_720P = 2; // 720p HD resolution
+  RESOLUTION_UNSPECIFIED = 0; // Resolution not specified.
+  RESOLUTION_FULLHD_1080P = 1; // 1080p Full HD resolution.
+  RESOLUTION_HD_720P = 2; // 720p HD resolution.
 }
 
 // Available camera frame rates.
 enum Framerate {
-  FRAMERATE_UNSPECIFIED = 0; // Framerate not specified
-  FRAMERATE_FPS_30 = 1; // 30 frames per second
-  FRAMERATE_FPS_25 = 2; // 25 frames per second
+  FRAMERATE_UNSPECIFIED = 0; // Framerate not specified.
+  FRAMERATE_FPS_30 = 1; // 30 frames per second.
+  FRAMERATE_FPS_25 = 2; // 25 frames per second.
 }
 
 // Which camera to control.
 enum Camera {
-  CAMERA_UNSPECIFIED = 0; // Camera not specified
-  CAMERA_MAIN = 1; // Main camera
-  CAMERA_GUESTPORT = 2; // Guestport camera
+  CAMERA_UNSPECIFIED = 0; // Camera not specified.
+  CAMERA_MAIN = 1; // Main camera.
+  CAMERA_GUESTPORT = 2; // Guest port camera.
 }
 
 // Camera parameters.
 message CameraParameters {
-  int32 h264_bitrate = 1; // Bitrate of the h264 stream (bit/sec)
-  int32 mjpg_bitrate = 2; // Bitrate of the MJPG stream used for still pictures (bit/sec)
-  int32 exposure = 3; // Shutter speed  (1/10000 * s), -1 for automatic exposure
-  int32 white_balance = 4; // White balance temperature (2800..9300), -1 for automatic white balance
-  int32 hue = 5; // Hue (-40..40), 0 as default
+  int32 h264_bitrate = 1; // Bitrate of the h264 stream (bit/sec).
+  int32 mjpg_bitrate = 2; // Bitrate of the MJPG stream used for still pictures (bit/sec).
+  int32 exposure = 3; // Shutter speed  (1/10000 * s), -1 for automatic exposure.
+  int32 white_balance = 4; // White balance temperature (2800..9300), -1 for automatic white balance.
+  int32 hue = 5; // Hue (-40..40), 0 as default.
 
-  float gain = 9; // Iso gain (0..1)
+  float gain = 9; // Iso gain (0..1).
 
-  Resolution resolution = 6; // Stream, recording and image resolution
-  Framerate framerate = 7; // Stream and recording framerate
+  Resolution resolution = 6; // Stream, recording and image resolution.
+  Framerate framerate = 7; // Stream and recording framerate.
   Camera camera = 8; // Which camera the parameters belong to.
 }
 
 // Available temperature units.
 enum TemperatureUnit {
-  TEMPERATURE_UNIT_UNSPECIFIED = 0; // Temperature unit not specified
-  TEMPERATURE_UNIT_CELSIUS = 1; // Temperature should be displayed as Celsius
-  TEMPERATURE_UNIT_FAHRENHEIT = 2; // Temperature should be displayed as Fahrenheit
+  TEMPERATURE_UNIT_UNSPECIFIED = 0; // Temperature unit not specified.
+  TEMPERATURE_UNIT_CELSIUS = 1; // Temperature should be displayed as Celsius.
+  TEMPERATURE_UNIT_FAHRENHEIT = 2; // Temperature should be displayed as Fahrenheit.
 }
 
 // Available logo types.
 enum LogoType {
   LOGO_TYPE_UNSPECIFIED = 0; // Logo type not specified
-  LOGO_TYPE_NONE = 1; // Do not add any logo
-  LOGO_TYPE_DEFAULT = 2; // Add default logo
-  LOGO_TYPE_CUSTOM = 3; // Add user defined logo
+  LOGO_TYPE_NONE = 1; // Do not add any logo.
+  LOGO_TYPE_DEFAULT = 2; // Add default logo.
+  LOGO_TYPE_CUSTOM = 3; // Add user defined logo.
 }
 
 // Available depth units.
 enum DepthUnit {
-  DEPTH_UNIT_UNSPECIFIED = 0; // Depth unit not specified
-  DEPTH_UNIT_METERS = 1; // Depth should be displayed as meters
-  DEPTH_UNIT_FEET = 2; // Depth should be displayed as feet
+  DEPTH_UNIT_UNSPECIFIED = 0; // Depth unit not specified.
+  DEPTH_UNIT_METERS = 1; // Depth should be displayed as meters.
+  DEPTH_UNIT_FEET = 2; // Depth should be displayed as feet.
 }
 
 // Available thickness units.
 enum ThicknessUnit {
-  THICKNESS_UNIT_UNSPECIFIED = 0; // Thickness unit not specified
-  THICKNESS_UNIT_MILLIMETERS = 1; // Thickness should be displayed as millimeters
-  THICKNESS_UNIT_INCHES = 2; // Thickness should be displayed as inches
+  THICKNESS_UNIT_UNSPECIFIED = 0; // Thickness unit not specified.
+  THICKNESS_UNIT_MILLIMETERS = 1; // Thickness should be displayed as millimeters.
+  THICKNESS_UNIT_INCHES = 2; // Thickness should be displayed as inches.
 }
 
 // Available font sizes for overlay text elements.
 enum FontSize {
-  FONT_SIZE_UNSPECIFIED = 0; // Font size not specified
-  FONT_SIZE_PX15 = 1; // 15 px
-  FONT_SIZE_PX20 = 2; // 20 px
-  FONT_SIZE_PX25 = 3; // 25 px
-  FONT_SIZE_PX30 = 4; // 30 px
-  FONT_SIZE_PX35 = 5; // 35 px
-  FONT_SIZE_PX40 = 6; // 40 px
+  FONT_SIZE_UNSPECIFIED = 0; // Font size not specified.
+  FONT_SIZE_PX15 = 1; // 15 px.
+  FONT_SIZE_PX20 = 2; // 20 px.
+  FONT_SIZE_PX25 = 3; // 25 px.
+  FONT_SIZE_PX30 = 4; // 30 px.
+  FONT_SIZE_PX35 = 5; // 35 px.
+  FONT_SIZE_PX40 = 6; // 40 px.
 }
 
 // Overlay parameters.
 //
 // All available parameters that can be used to configure telemetry overlay on video recordings.
 message OverlayParameters {
-  bool temperature_enabled = 1; // If temperature should be included
-  bool depth_enabled = 2; // If depth should be included
-  bool heading_enabled = 3; // If heading should be included
-  bool tilt_enabled = 4; // If camera tilt angle should be included
-  bool thickness_enabled = 18;// If camera tilt angle should be included
-  bool date_enabled = 5; // If date should be included
-  bool distance_enabled = 20; // If distance should be included
-  bool altitude_enabled = 21; // If altitude should be included
-  bool cp_probe_enabled = 22; // If cp-probe should be included
-  bool medusa_enabled = 24; // If medusa measurement should be included
-  bool drone_location_enabled = 23; // If the drone location coordinates should be included
-  LogoType logo_type = 6; // Which logo should be used
-  DepthUnit depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None
-  TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celsius or Fahrenheit
-  ThicknessUnit thickness_unit = 19; // Which unit should be used for thickness: Millimeters or Inches
-  int32 timezone_offset = 9; // Timezone offset from UTC (min)
-  int32 margin_width = 10; // Horizontal margins of text elements (px)
-  int32 margin_height = 11; // Vertical margins of text elements (px)
-  FontSize font_size = 12; // Font size of text elements
-  string title = 13; // Optional title
-  string subtitle = 14; // Optional subtitle
-  string date_format = 16; // Posix strftime format string for time stamp
-  float shading = 17; // Pixel intensity to subtract from text background (0..1), 0: transparent, 1: black
+  bool temperature_enabled = 1; // If temperature should be included.
+  bool depth_enabled = 2; // If depth should be included.
+  bool heading_enabled = 3; // If heading should be included.
+  bool tilt_enabled = 4; // If camera tilt angle should be included.
+  bool thickness_enabled = 18;// If camera tilt angle should be included.
+  bool date_enabled = 5; // If date should be included.
+  bool distance_enabled = 20; // If distance should be included.
+  bool altitude_enabled = 21; // If altitude should be included.
+  bool cp_probe_enabled = 22; // If cp-probe should be included.
+  bool medusa_enabled = 24; // If medusa measurement should be included.
+  bool drone_location_enabled = 23; // If the drone location coordinates should be included.
+  LogoType logo_type = 6; // Which logo should be used.
+  DepthUnit depth_unit = 7; // Which unit should be used for depth: Meter, Feet or None.
+  TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celsius or Fahrenheit.
+  ThicknessUnit thickness_unit = 19; // Which unit should be used for thickness: Millimeters or Inches.
+  int32 timezone_offset = 9; // Timezone offset from UTC (min).
+  int32 margin_width = 10; // Horizontal margins of text elements (px).
+  int32 margin_height = 11; // Vertical margins of text elements (px).
+  FontSize font_size = 12; // Font size of text elements.
+  string title = 13; // Optional title.
+  string subtitle = 14; // Optional subtitle.
+  string date_format = 16; // Posix strftime format string for time stamp.
+  float shading = 17; // Pixel intensity to subtract from text background (0..1), 0: transparent, 1: black.
 }
 
-// GuestPort device ID.
+// Complete set of supported guest port devices.
 enum GuestPortDeviceID {
-  GUEST_PORT_DEVICE_ID_UNSPECIFIED = 0; // Unspecified
-  GUEST_PORT_DEVICE_ID_BLIND_PLUG = 1; // Blueye blind plug
-  GUEST_PORT_DEVICE_ID_TEST_STATION = 2; // Blueye test station
-  GUEST_PORT_DEVICE_ID_DEBUG_SERIAL = 3; // Blueye debug serial
-  GUEST_PORT_DEVICE_ID_BLUEYE_LIGHT = 4; // Blueye Light
-  GUEST_PORT_DEVICE_ID_BLUEYE_CAM = 5; // Blueye Cam
-  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_LUMEN = 6; // Blue Robotics Lumen
-  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_NEWTON = 7; // Blue Robotics Newton
-  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_PING_SONAR = 8; // Blue Robotics Ping Sonar
-  GUEST_PORT_DEVICE_ID_BLUEPRINT_LAB_REACH_ALPHA = 9; // Blueprint Lab Reach Alpha
-  GUEST_PORT_DEVICE_ID_WATERLINKED_DVL_A50 = 10; // Waterlinked DVL A50
-  GUEST_PORT_DEVICE_ID_IMPACT_SUBSEA_ISS360 = 11; // Impact Subsea ISS360 Sonar
-  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_SEATRAC_X010 = 12; // Blueprint Subsea Seatrac X110
-  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M750D = 13; // Blueprint Subsea Oculus M750d
-  GUEST_PORT_DEVICE_ID_CYGNUS_MINI_ROV_THICKNESS_GAUGE = 14; // Cygnus Mini ROV Thickness Gauge
-  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_PING360_SONAR = 15; // Blue Robotics Ping360 Scanning Imaging Sonar
-  GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_720IM = 16; // Tritech Gemini 720im Multibeam Sonar
-  GUEST_PORT_DEVICE_ID_BLUEYE_LIGHT_PAIR = 17; // Blueye Light Pair
-  GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_MICRON = 18; // Tritech Micron Gemini
-  GUEST_PORT_DEVICE_ID_OCEAN_TOOLS_DIGICP = 19; // Ocean Tools DigiCP
-  GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_720IK = 20; // Tritech Gemini 720ik Multibeam Sonar
-  GUEST_PORT_DEVICE_ID_NORTEK_NUCLEUS_1000 = 21; // Nortek Nucleus 1000 DVL
-  GUEST_PORT_DEVICE_ID_BLUEYE_GENERIC_SERVO = 22; // Blueye Generic Servo
-  GUEST_PORT_DEVICE_ID_BLUEYE_MULTIBEAM_SERVO = 23; // Blueye Multibeam Skid Servo
-  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_DETACHABLE_NEWTON = 24; // Detachable Blue Robotics Newton
-  GUEST_PORT_DEVICE_ID_INSITU_AQUA_TROLL_500 = 25; // In-Situ Aqua TROLL 500
-  GUEST_PORT_DEVICE_ID_MEDUSA_RADIOMETRICS_MS100 = 26; // Medusa Radiometrics Gamma Ray Sensor
-  GUEST_PORT_DEVICE_ID_LASER_TOOLS_SEA_BEAM = 27; // Laser Tools Sea Beam Underwater Laser
-  GUEST_PORT_DEVICE_ID_SPOT_X_LASER_SCALERS = 28; // Spot X Laser Scalers
-  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M1200D = 29; // Blueprint Subsea Oculus M1200d
-  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M3000D = 30; // Blueprint Subsea Oculus M3000d
-  GUEST_PORT_DEVICE_ID_INSITU_AQUA_TROLL_100 = 31; // In-Situ Aqua TROLL 100
-  GUEST_PORT_DEVICE_ID_INSITU_RDO_PRO_X = 32; // In-Situ RDO PRO-X
-  GUEST_PORT_DEVICE_ID_INSITU_RDO_BLUE = 33; // In-Situ RDO Blue
-  GUEST_PORT_DEVICE_ID_BLUEYE_CAMERA_SERVO = 34; // Blueye Camera Servo
-  GUEST_PORT_DEVICE_ID_BLUEYE_MULTIBEAM_HEAD_SERVO = 35; // Blueye Multibeam Head Servo
-  GUEST_PORT_DEVICE_ID_CERULEAN_OMNISCAN_450FS = 36; // Cerulean Omniscan 450 FS
-  GUEST_PORT_DEVICE_ID_CERULEAN_OMNISCAN_450SS = 37; // Cerulean Omniscan 450 SS
-  GUEST_PORT_DEVICE_ID_BLUEYE_GNSS_DEVICE = 38; // Blueye GNSS device
-  GUEST_PORT_DEVICE_ID_WATERLINKED_DVL_A50_600 = 39; // Waterlinked DVL A50 600m
-  GUEST_PORT_DEVICE_ID_IMAGENEX_831L = 40; // Imagenex 831L Pipe Profiling Sonar
-  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_C550D = 41; // Blueprint Subsea Oculus C550d
-  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M370S = 42; // Blueprint Subsea Oculus M370s
+  GUEST_PORT_DEVICE_ID_UNSPECIFIED = 0; // Unspecified.
+  GUEST_PORT_DEVICE_ID_BLIND_PLUG = 1; // Blueye Blind Plug.
+  GUEST_PORT_DEVICE_ID_TEST_STATION = 2; // Blueye Test Station.
+  GUEST_PORT_DEVICE_ID_DEBUG_SERIAL = 3; // Blueye Debug Serial.
+  GUEST_PORT_DEVICE_ID_BLUEYE_LIGHT = 4; // Blueye Light.
+  GUEST_PORT_DEVICE_ID_BLUEYE_CAM = 5; // Blueye Camera.
+  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_LUMEN = 6; // Blue Robotics Lumen.
+  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_NEWTON = 7; // Blue Robotics Newton.
+  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_PING_SONAR = 8; // Blue Robotics Ping Sonar.
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_LAB_REACH_ALPHA = 9; // Blueprint Lab Reach Alpha.
+  GUEST_PORT_DEVICE_ID_WATERLINKED_DVL_A50 = 10; // Waterlinked DVL A50.
+  GUEST_PORT_DEVICE_ID_IMPACT_SUBSEA_ISS360 = 11; // Impact Subsea ISS360 Sonar.
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_SEATRAC_X010 = 12; // Blueprint Subsea Seatrac X110.
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M750D = 13; // Blueprint Subsea Oculus M750d.
+  GUEST_PORT_DEVICE_ID_CYGNUS_MINI_ROV_THICKNESS_GAUGE = 14; // Cygnus Mini ROV Thickness Gauge.
+  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_PING360_SONAR = 15; // Blue Robotics Ping360 Scanning Imaging Sonar.
+  GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_720IM = 16; // Tritech Gemini 720im Multibeam Sonar.
+  GUEST_PORT_DEVICE_ID_BLUEYE_LIGHT_PAIR = 17; // Blueye Light Pair.
+  GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_MICRON = 18; // Tritech Micron Gemini.
+  GUEST_PORT_DEVICE_ID_OCEAN_TOOLS_DIGICP = 19; // Ocean Tools DigiCP.
+  GUEST_PORT_DEVICE_ID_TRITECH_GEMINI_720IK = 20; // Tritech Gemini 720ik Multibeam Sonar.
+  GUEST_PORT_DEVICE_ID_NORTEK_NUCLEUS_1000 = 21; // Nortek Nucleus 1000 DVL.
+  GUEST_PORT_DEVICE_ID_BLUEYE_GENERIC_SERVO = 22; // Blueye Generic Servo.
+  GUEST_PORT_DEVICE_ID_BLUEYE_MULTIBEAM_SERVO = 23; // Blueye Multibeam Skid Servo.
+  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_DETACHABLE_NEWTON = 24; // Detachable Blue Robotics Newton.
+  GUEST_PORT_DEVICE_ID_INSITU_AQUA_TROLL_500 = 25; // In-Situ Aqua TROLL 500.
+  GUEST_PORT_DEVICE_ID_MEDUSA_RADIOMETRICS_MS100 = 26; // Medusa Radiometrics Gamma Ray Sensor.
+  GUEST_PORT_DEVICE_ID_LASER_TOOLS_SEA_BEAM = 27; // Laser Tools Sea Beam Underwater Laser.
+  GUEST_PORT_DEVICE_ID_SPOT_X_LASER_SCALERS = 28; // Spot X Laser Scalers.
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M1200D = 29; // Blueprint Subsea Oculus M1200d.
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M3000D = 30; // Blueprint Subsea Oculus M3000d.
+  GUEST_PORT_DEVICE_ID_INSITU_AQUA_TROLL_100 = 31; // In-Situ Aqua TROLL 100.
+  GUEST_PORT_DEVICE_ID_INSITU_RDO_PRO_X = 32; // In-Situ RDO PRO-X.
+  GUEST_PORT_DEVICE_ID_INSITU_RDO_BLUE = 33; // In-Situ RDO Blue.
+  GUEST_PORT_DEVICE_ID_BLUEYE_CAMERA_SERVO = 34; // Blueye Camera Servo.
+  GUEST_PORT_DEVICE_ID_BLUEYE_MULTIBEAM_HEAD_SERVO = 35; // Blueye Multibeam Head Servo.
+  GUEST_PORT_DEVICE_ID_CERULEAN_OMNISCAN_450FS = 36; // Cerulean Omniscan 450 FS.
+  GUEST_PORT_DEVICE_ID_CERULEAN_OMNISCAN_450SS = 37; // Cerulean Omniscan 450 SS.
+  GUEST_PORT_DEVICE_ID_BLUEYE_GNSS_DEVICE = 38; // Blueye GNSS device.
+  GUEST_PORT_DEVICE_ID_WATERLINKED_DVL_A50_600 = 39; // Waterlinked DVL A50 600m.
+  GUEST_PORT_DEVICE_ID_IMAGENEX_831L = 40; // Imagenex 831L Pipe Profiling Sonar.
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_C550D = 41; // Blueprint Subsea Oculus C550d.
+  GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M370S = 42; // Blueprint Subsea Oculus M370s.
 }
 
-// GuestPort number.
+// Guest port number.
 enum GuestPortNumber {
-  GUEST_PORT_NUMBER_UNSPECIFIED = 0; // Unspecified
-  GUEST_PORT_NUMBER_PORT_1 = 1; // Guest port 1
-  GUEST_PORT_NUMBER_PORT_2 = 2; // Guest port 2
-  GUEST_PORT_NUMBER_PORT_3 = 3; // Guest port 3
+  GUEST_PORT_NUMBER_UNSPECIFIED = 0; // Unspecified.
+  GUEST_PORT_NUMBER_PORT_1 = 1; // Guest port 1.
+  GUEST_PORT_NUMBER_PORT_2 = 2; // Guest port 2.
+  GUEST_PORT_NUMBER_PORT_3 = 3; // Guest port 3.
 }
 
-// List of navigation sensors that can be used by the position observer
+// List of navigation sensors that can be used by the position observer.
 enum NavigationSensorID {
-  NAVIGATION_SENSOR_ID_UNSPECIFIED = 0; // Unspecified
-  NAVIGATION_SENSOR_ID_WATERLINKED_DVL_A50 = 1; // Water Linked DVL A50
-  NAVIGATION_SENSOR_ID_WATERLINKED_UGPS_G2 = 2; // Water Linked UGPS G2
-  NAVIGATION_SENSOR_ID_NMEA = 3; // NMEA stream from external positioning system
-  NAVIGATION_SENSOR_ID_BLUEYE_GNSS = 4; // Blueye GNSS device on the ROV
-  NAVIGATION_SENSOR_ID_NORTEK_DVL_NUCLEUS = 5; // Nortek DVL Nucleus 1000
+  NAVIGATION_SENSOR_ID_UNSPECIFIED = 0; // Unspecified.
+  NAVIGATION_SENSOR_ID_WATERLINKED_DVL_A50 = 1; // Water Linked DVL A50.
+  NAVIGATION_SENSOR_ID_WATERLINKED_UGPS_G2 = 2; // Water Linked UGPS G2.
+  NAVIGATION_SENSOR_ID_NMEA = 3; // NMEA stream from external positioning system.
+  NAVIGATION_SENSOR_ID_BLUEYE_GNSS = 4; // Blueye GNSS device on the ROV.
+  NAVIGATION_SENSOR_ID_NORTEK_DVL_NUCLEUS = 5; // Nortek DVL Nucleus 1000.
 }
 
-// Navigation sensor used in the position observer with validity state
+// Navigation sensor used in the position observer with validity state.
 message NavigationSensorStatus {
-  NavigationSensorID sensor_id = 1; // Sensor id
-  bool is_valid = 2; // Sensor validity
-  float northing = 3; // Position from reset point (m)
-  float easting = 4; // Position from reset point (m)
-  float heading = 5; // Heading from sensor (-pi..pi)
-  float fom = 6; // Figure of merit
-  float std = 7; // Standard deviation
-  LatLongPosition global_position = 8; // Global position from sensor
+  NavigationSensorID sensor_id = 1; // Sensor id.
+  bool is_valid = 2; // Sensor validity.
+  float northing = 3; // Position from reset point (m).
+  float easting = 4; // Position from reset point (m).
+  float heading = 5; // Heading from sensor (-pi..pi).
+  float fom = 6; // Figure of merit.
+  float std = 7; // Standard deviation.
+  LatLongPosition global_position = 8; // Global position from sensor.
 }
 
-// GuestPort detach status.
+// Status for guest port devices that can be attached and detached.
 enum GuestPortDetachStatus {
-  GUEST_PORT_DETACH_STATUS_UNSPECIFIED = 0; // Unspecified (Default for non-detachable devices)
-  GUEST_PORT_DETACH_STATUS_ATTACHED = 1; // Detachable device attached
-  GUEST_PORT_DETACH_STATUS_DETACHED = 2; // Detachable device detached
+  GUEST_PORT_DETACH_STATUS_UNSPECIFIED = 0; // Unspecified (Default for non-detachable devices).
+  GUEST_PORT_DETACH_STATUS_ATTACHED = 1; // Detachable device attached.
+  GUEST_PORT_DETACH_STATUS_DETACHED = 2; // Detachable device detached.
 }
 
-// GuestPort device.
+// Information about a device connected to one of the guest ports.
 message GuestPortDevice {
-  GuestPortDeviceID device_id = 1; // Blueye device identifier
-  string manufacturer = 2; // Manufacturer name
-  string name = 3; // Device name
-  string serial_number = 4; // Serial number
-  float depth_rating = 5; // Depth rating (m)
-  string required_blunux_version = 6; // Required Blunux version (x.y.z)
-  GuestPortDetachStatus detach_status = 7; // Detach status based on detection pin
+  GuestPortDeviceID device_id = 1; // Blueye device identifier.
+  string manufacturer = 2; // Manufacturer name.
+  string name = 3; // Device name.
+  string serial_number = 4; // Serial number.
+  float depth_rating = 5; // Depth rating (m).
+  string required_blunux_version = 6; // Required Blunux version (x.y.z).
+  GuestPortDetachStatus detach_status = 7; // Detach status based on detection pin.
 }
 
 // List of guest port devices.
 message GuestPortDeviceList {
-  repeated GuestPortDevice devices = 1; // List of guest port devices
+  repeated GuestPortDevice devices = 1; // List of guest port devices.
 }
 
-// GuestPort error. Only indicated errors on the guest port connector itself.
+// GuestPort error types.
+//
+// Only indicated errors on the guest port connector itself.
 enum GuestPortError {
-  GUEST_PORT_ERROR_UNSPECIFIED = 0; // Unspecified value
-  GUEST_PORT_ERROR_NOT_CONNECTED = 1; // Device not connected
-  GUEST_PORT_ERROR_READ_ERROR = 2; // EEPROM read error
-  GUEST_PORT_ERROR_NOT_FLASHED = 3; // Connector not flashed
-  GUEST_PORT_ERROR_CRC_ERROR = 4; // Wrong CRC for protobuf message
-  GUEST_PORT_ERROR_PARSE_ERROR = 5; // Protobuf message cannot be parsed
+  GUEST_PORT_ERROR_UNSPECIFIED = 0; // Unspecified value.
+  GUEST_PORT_ERROR_NOT_CONNECTED = 1; // Device not connected.
+  GUEST_PORT_ERROR_READ_ERROR = 2; // EEPROM read error.
+  GUEST_PORT_ERROR_NOT_FLASHED = 3; // Connector not flashed.
+  GUEST_PORT_ERROR_CRC_ERROR = 4; // Wrong CRC for protobuf message.
+  GUEST_PORT_ERROR_PARSE_ERROR = 5; // Protobuf message cannot be parsed.
 }
 
 // GuestPort connector information.
 message GuestPortConnectorInfo {
   oneof connected_device {
-    GuestPortDeviceList device_list = 1; // List of devices on this connector
-    GuestPortError error = 2; // Guest port connector error
+    GuestPortDeviceList device_list = 1; // List of devices on this connector.
+    GuestPortError error = 2; // Guest port connector error.
   }
-  GuestPortNumber guest_port_number = 3; // Guest port the connector is connected to
+  GuestPortNumber guest_port_number = 3; // Guest port the connector is connected to.
 }
 
 // GuestPort information.
 message GuestPortInfo {
-  GuestPortConnectorInfo gp1 = 1; // GuestPortConnectorInfo 1
-  GuestPortConnectorInfo gp2 = 2; // GuestPortConnectorInfo 2
-  GuestPortConnectorInfo gp3 = 3; // GuestPortConnectorInfo 3
+  GuestPortConnectorInfo gp1 = 1; // Information about guest port 1.
+  GuestPortConnectorInfo gp2 = 2; // Information about guest port 2.
+  GuestPortConnectorInfo gp3 = 3; // GuestPortConnectorInfo 3.
 }
 
 // GuestPort restart information.
 message GuestPortRestartInfo {
-  double power_off_duration = 1; // Duration to keep the guest ports off (s)
+  double power_off_duration = 1; // Duration to keep the guest ports off (s).
 }
 
 // Thickness measurement data from a Cygnus Thickness Gauge.
 message ThicknessGauge {
-  float thickness_measurement = 1; // Thickness measurement of a steel plate
-  uint32 echo_count = 2; // Indicating the quality of the reading when invalid (0-3)
-  uint32 sound_velocity = 3; // Speed of sound in the steel member (m/s)
-  bool is_measurement_valid = 4; // Indicating if the measurement is valid
+  float thickness_measurement = 1; // Thickness measurement of a steel plate.
+  uint32 echo_count = 2; // Indicating the quality of the reading when invalid (0-3).
+  uint32 sound_velocity = 3; // Speed of sound in the steel member (m/s).
+  bool is_measurement_valid = 4; // Indicating if the measurement is valid.
 }
 
 // Reading from a Cathodic Protection Potential probe.
 message CpProbe {
-  float measurement = 1; // Potential measurement (V)
-  bool is_measurement_valid = 2; // Indicating if the measurement is valid
+  float measurement = 1; // Potential measurement (V).
+  bool is_measurement_valid = 2; // Indicating if the measurement is valid.
 }
 
 // Servo message used to represent the angle of the servo.
 message GenericServo {
-  float value = 1; // Servo value (0..1)
-  GuestPortNumber guest_port_number = 2; // Guest port the servo is on
+  float value = 1; // Servo value (0..1).
+  GuestPortNumber guest_port_number = 2; // Guest port the servo is on.
 }
 
 // Servo message used to represent the angle of the servo.
 message MultibeamServo {
-  float angle = 1; // Servo degrees (-30..30)
+  float angle = 1; // Servo degrees (-30..30).
 }
 
 // GuestPort current readings.
 message GuestPortCurrent {
-  double gp1_bat = 1; // Current on GP1 battery voltage (A)
-  double gp2_bat = 2; // Current on GP2 battery voltage (A)
-  double gp3_bat = 3; // Current on GP3 battery voltage (A)
-  double gp_20v = 4; // Current on common 20V supply (A)
+  double gp1_bat = 1; // Current on GP1 battery voltage (A).
+  double gp2_bat = 2; // Current on GP2 battery voltage (A).
+  double gp3_bat = 3; // Current on GP3 battery voltage (A).
+  double gp_20v = 4; // Current on common 20V supply (A).
 }
 
-// Vector with 3 elements
+// Vector with 3 elements.
 message Vector3 {
-  double x = 1; // x-component
-  double y = 2; // y-component
-  double z = 3; // z-component
+  double x = 1; // X-component.
+  double y = 2; // Y-component.
+  double z = 3; // Z-component.
 }
 
-// Imu data in drone body frame
+// Imu data in drone body frame:
 //
 // x - forward
 // y - right
 // z - down
 message Imu {
-  Vector3 accelerometer = 1; // Acceleration (g)
-  Vector3 gyroscope = 2; // Angular velocity (rad/s)
-  Vector3 magnetometer = 3; // Magnetic field (μT)
-  float temperature = 4; // Temperature (°C)
+  Vector3 accelerometer = 1; // Acceleration (g).
+  Vector3 gyroscope = 2; // Angular velocity (rad/s).
+  Vector3 magnetometer = 3; // Magnetic field (μT).
+  float temperature = 4; // Temperature (°C).
 }
 
-// Medusa gamma ray sensor spectrometer data
+// Medusa gamma ray sensor spectrometer data.
 message MedusaSpectrometerData {
-  google.protobuf.Timestamp drone_time = 6; // Time stamp when the data is received
-  google.protobuf.Timestamp sensor_time = 7; // Time stamp the sensor reports
-  float realtime = 1; // Time the sensor actually measured (s)
-  float livetime = 2; // Time the measurement took (s)
-  uint32 total = 3; // Total counts inside the spectrum
-  uint32 countrate = 4; // Counts per second inside the spectrum (rounded)
-  uint32 cosmics = 5; // Detected counts above the last channel
+  google.protobuf.Timestamp drone_time = 6; // Time stamp when the data is received.
+  google.protobuf.Timestamp sensor_time = 7; // Time stamp the sensor reports.
+  float realtime = 1; // Time the sensor actually measured (s).
+  float livetime = 2; // Time the measurement took (s).
+  uint32 total = 3; // Total counts inside the spectrum.
+  uint32 countrate = 4; // Counts per second inside the spectrum (rounded).
+  uint32 cosmics = 5; // Detected counts above the last channel.
 }
 
+// The frequency mode to use for multibeam devices with dual frequency.
 enum MultibeamFrequencyMode {
   MULTIBEAM_FREQUENCY_MODE_UNSPECIFIED = 0;
-  MULTIBEAM_FREQUENCY_MODE_AUTO = 1; // Auto switching mode (if available)
-  MULTIBEAM_FREQUENCY_MODE_LOW_FREQUENCY = 2; // Low frequency mode (wide aperture, navigation)
-  MULTIBEAM_FREQUENCY_MODE_HIGH_FREQUENCY = 3; // High frequency mode (narrow aperture, target identification)
+  MULTIBEAM_FREQUENCY_MODE_AUTO = 1; // Auto switching mode (if available).
+  MULTIBEAM_FREQUENCY_MODE_LOW_FREQUENCY = 2; // Low frequency mode (wide aperture, navigation).
+  MULTIBEAM_FREQUENCY_MODE_HIGH_FREQUENCY = 3; // High frequency mode (narrow aperture, target identification).
 }
 
-// Multibeam sonar ping
+// Multibeam sonar ping.
 //
-// Contains all the information for rendering a multibeam sonar frame
+// Contains all the information for rendering a multibeam sonar frame.
 message MultibeamPing {
-  double range = 1; // Maximum range value (m)
-  double gain = 2; // Percentage of gain (0 to 1)
-  double frequency = 3; // Ping acoustic frequency (Hz)
-  double speed_of_sound_used = 4; // Speed of sound used by the sonar for range calculations (m/s)
-  MultibeamFrequencyMode frequency_mode = 5; // Frequency mode used by the sonar for this frame
+  double range = 1; // Maximum range value (m).
+  double gain = 2; // Percentage of gain (0 to 1).
+  double frequency = 3; // Ping acoustic frequency (Hz).
+  double speed_of_sound_used = 4; // Speed of sound used by the sonar for range calculations (m/s).
+  MultibeamFrequencyMode frequency_mode = 5; // Frequency mode used by the sonar for this frame.
   uint32 number_of_ranges = 6; // Height of the ping image data.
   uint32 number_of_beams = 7; // Width of the ping image data.
   uint32 step = 8; // Size in bytes of each row in the ping data image.
 
   // Bearing angle of each column of the sonar data
   // (in 100th of a degree, multiply by 0.01 to get a value in degrees).
-  // The sonar image is not sampled uniformly in the bearing direction.
+  // The sonar image is not sampled uniformly in the bearing direction..
   repeated float bearings = 9;
 
-  bytes ping_data = 10; // Ping data (row major, 2D, grayscale image)
-  GuestPortDeviceID device_id = 11; // Device ID of the sonar
-  google.protobuf.Timestamp frame_generation_timestamp = 12; // Timestamp when the frame was generated
+  bytes ping_data = 10; // Ping data (row major, 2D, grayscale image).
+  GuestPortDeviceID device_id = 11; // Device ID of the sonar.
+  google.protobuf.Timestamp frame_generation_timestamp = 12; // Timestamp when the frame was generated.
 }
 
 
-// Configuration message for sonar devices
+// Configuration message for sonar devices.
 message MultibeamConfig {
-  MultibeamFrequencyMode frequency_mode = 1; // Frequency mode used by the sonar if supported
+  MultibeamFrequencyMode frequency_mode = 1; // Frequency mode used by the sonar if supported.
 
+  // Defines the desired ping rate to use when capturing sonar data.
   enum PingRate {
     PING_RATE_UNSPECIFIED = 0;
-    PING_RATE_NORMAL = 1; // 10Hz max ping rate
-    PING_RATE_HIGH = 2; // 15Hz max ping rate
-    PING_RATE_HIGHEST = 3; // 40Hz max ping rate
-    PING_RATE_LOW = 4; // 5Hz max ping rate
-    PING_RATE_LOWEST = 5; // 2Hz max ping rate
-    PING_RATE_STANDBY = 6; // Disable ping
+    PING_RATE_NORMAL = 1; // 10Hz max ping rate.
+    PING_RATE_HIGH = 2; // 15Hz max ping rate.
+    PING_RATE_HIGHEST = 3; // 40Hz max ping rate.
+    PING_RATE_LOW = 4; // 5Hz max ping rate.
+    PING_RATE_LOWEST = 5; // 2Hz max ping rate.
+    PING_RATE_STANDBY = 6; // Disable ping.
   }
 
   PingRate ping_rate = 2; // Sets the maximum ping rate.
-  double gamma_correction = 3; // Gamma correction (0..1.0)
-  bool gain_assist = 4; // Enable gain assist
+  double gamma_correction = 3; // Gamma correction (0..1.0).
+  bool gain_assist = 4; // Enable gain assist.
+  bool gain_boost = 11; // Enable gain boost (only available on Blueprint devices).
 
+  // The maximum number of beams to use by the multibeam sonar.
   enum MaximumNumberOfBeams {
     MAXIMUM_NUMBER_OF_BEAMS_UNSPECIFIED = 0;
-    MAXIMUM_NUMBER_OF_BEAMS_MAX_128 = 1; // 128 beams
-    MAXIMUM_NUMBER_OF_BEAMS_MAX_256 = 2; // 256 beams
-    MAXIMUM_NUMBER_OF_BEAMS_MAX_512 = 3; // 512 beams
-    MAXIMUM_NUMBER_OF_BEAMS_MAX_1024 = 4; // 1024 beams
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_128 = 1; // 128 beams.
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_256 = 2; // 256 beams.
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_512 = 3; // 512 beams.
+    MAXIMUM_NUMBER_OF_BEAMS_MAX_1024 = 4; // 1024 beams.
   }
 
   MaximumNumberOfBeams maximum_number_of_beams = 5; // Maximum number of beams. Used to throttle bandwidth.
 
-  double range = 6; // The range demand (m)
-  double gain = 7; // The gain demand (0..1)
-  double salinity = 8; // Set water salinity (ppt). Defaults to zero in fresh water
-  GuestPortDeviceID device_id = 9; // Device ID of the sonar
-  uint32 bandwidth_limit = 10; // Network bandwidth limit (Mbit/s). Applies only to Oculus devices.
+  double range = 6; // The range demand (m).
+  double gain = 7; // The gain demand (0..1).
+  double salinity = 8; // Set water salinity (ppt). Defaults to zero in fresh water.
+  GuestPortDeviceID device_id = 9; // Device ID of the sonar.
+  uint32 bandwidth_limit = 10; // Network bandwidth limit (Mbit/s), applies only to Oculus devices.
 }
 
-// Discovery message for sonar devices
+// Discovery message for multibeam sonar devices.
 message MultibeamDiscovery {
-  bool enabled = 1; // If the sonar driver is enabled
-  string ip = 2; // IP address of the sonar
-  string mask = 3; // Subnet mask of the sonar
-  string serial_number = 4; // Serial number of the sonar
-  string fw_version = 5; // Firmware version of the sonar
-  string connected_ip = 6; // IP address of the connected device
-  GuestPortDeviceID device_id = 7; // Device ID of the sonar
+  bool enabled = 1; // If the sonar driver is enabled.
+  string ip = 2; // IP address of the sonar.
+  string mask = 3; // Subnet mask of the sonar.
+  string serial_number = 4; // Serial number of the sonar.
+  string fw_version = 5; // Firmware version of the sonar.
+  string connected_ip = 6; // IP address of the connected device.
+  GuestPortDeviceID device_id = 7; // Device ID of the sonar.
+  MultibeamErrorFlags error_flags = 8; // Error flags specific for the connceted multibeam device.
 }
 
-// Frame offset for multibeam recordings index cache
+// Error flags for multibeam sonar devices.
+message MultibeamErrorFlags {
+  /*
+  If the sonar is captured by another client than the drone.
+  The connected client IP is reported in connected_ip property.
+  */
+  bool connected_to_another_client = 1;
+  bool device_overheating = 2; // If the multibeam is reporting to overheat.
+  bool out_of_water = 3; // If a TriTech multibeam is reporting to be out of water.
+}
+
+// Frame offset for multibeam recordings index cache.
 message MultibeamFrameOffset {
-  google.protobuf.Duration duration = 1; // Duration from the start of the recording
-  int64 offset = 2; // Offset in bytes from the start of the file
+  google.protobuf.Duration duration = 1; // Duration from the start of the recording.
+  int64 offset = 2; // Offset in bytes from the start of the file.
 }
 
-// Multibeam recording index cache
+// Multibeam recording index cache.
 message MutltibeamRecordingIndex {
-  repeated MultibeamFrameOffset frame_offsets = 1; // List of frame offsets
+  repeated MultibeamFrameOffset frame_offsets = 1; // List of frame offsets.
 }
 
-// PersistentStorageSettings defines settings for writing various types of data in the persistent storage on the drone
+// PersistentStorageSettings defines settings for writing various types of data in the persistent storage on the drone.
 //
 // Some of the data is written during factory calibration (acc calibration), while other data is written during user
 // calubration or during normal operation.
@@ -1100,12 +1122,12 @@ message PersistentStorageSettings {
   bool acc_calibration = 9; // Indicates if accelerometer calibration data should be written to the data partition.
 }
 
-// CPU information
+// CPU information.
 //
 // Contains information about the CPU load and memory usage of the drone.
 message CPUInfo {
-  float cpu_load = 1; // CPU load (0..1)
-  float memory_bus_load = 2; // Memory bus load (0..1)
-  float main_queue_load = 3; // Main queue load (0..1)
-  float guestport_queue_load = 4 ; // Guestport queue load (0..1)
+  float cpu_load = 1; // CPU load (0..1).
+  float memory_bus_load = 2; // Memory bus load (0..1).
+  float main_queue_load = 3; // Main queue load (0..1).
+  float guestport_queue_load = 4 ; // Guestport queue load (0..1).
 }

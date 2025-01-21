@@ -1,4 +1,4 @@
-// Mission Planning Protocol
+// Mission Planning Protocol.
 //
 // These messages are used to start a mission and to monitor the status of the mission.
 syntax = "proto3";
@@ -9,41 +9,41 @@ option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 // A list of waypoints describes a mission that the auto pilot can execute.
 message Mission {
-  uint32 id = 1; // Mission id
-  string name = 2; // Mission name provided from the app
-  repeated Instruction instructions = 3; // List of instructions in the mission
-  repeated PathSegment path_segments = 4; // Calculated path segments from the reference generator (optional)
-  uint32 total_distance = 5; // Total distance of the mission (m) (optional)
-  uint32 total_duration_time = 6; // Total duration time of the mission (s) (optional)
-  float default_surge_speed = 7; // Default cruise speed of the mission (m/s) (optional)
-  float default_heave_speed = 8; // Default heave speed of the mission (m/s) (optional)
-  float default_circle_of_acceptance = 9; // Default circle of acceptance for waypoints (m) (optional)
+  uint32 id = 1; // Mission id, defined by the client.
+  string name = 2; // Mission name provided from the app.
+  repeated Instruction instructions = 3; // List of instructions in the mission.
+  repeated PathSegment path_segments = 4; // Calculated path segments from the reference generator (optional).
+  uint32 total_distance = 5; // Total distance of the mission (m) (optional).
+  uint32 total_duration_time = 6; // Total duration time of the mission (s) (optional).
+  float default_surge_speed = 7; // Default cruise speed of the mission (m/s) (optional).
+  float default_heave_speed = 8; // Default heave speed of the mission (m/s) (optional).
+  float default_circle_of_acceptance = 9; // Default circle of acceptance for waypoints (m) (optional).
 }
 
 // A mission consists of one or multiple instructions. One instruction can be of different types.
 message Instruction {
   uint32 id = 1;
-  uint32 group_id = 2; // Group id used for polygons
-  bool auto_continue = 3; // False will pause the mission after this instruction
+  uint32 group_id = 2; // Group id used for polygons.
+  bool auto_continue = 3; // False will pause the mission after this instruction.
   oneof command {
-    WaypointCommand waypoint_command = 4; // Go to waypoint
-    DepthSetPointCommand depth_set_point_command = 5; // Go to depth
-    CameraCommand camera_command = 6; // Camera commands
-    ControlModeCommand control_mode_command = 7; // Set control modes
-    TiltMainCameraCommand tilt_main_camera_command = 8; // Set camera to angle x
-    TiltMultibeamCommand tilt_multibeam_command = 9; // Set multibeam tilt angle
-    WaitForCommand wait_for_command = 10; // Wait for x seconds
-    GoToSurfaceCommand go_to_surface_command = 11; // Go to surface
-    GoToSeabedCommand go_to_seabed_command = 12; // Go to seabed
-    GoToHomeCommand go_to_home_command = 13; // Go to home position
+    WaypointCommand waypoint_command = 4; // Go to waypoint.
+    DepthSetPointCommand depth_set_point_command = 5; // Go to depth.
+    CameraCommand camera_command = 6; // Camera commands.
+    ControlModeCommand control_mode_command = 7; // Set control modes.
+    TiltMainCameraCommand tilt_main_camera_command = 8; // Set camera to angle x.
+    TiltMultibeamCommand tilt_multibeam_command = 9; // Set multibeam tilt angle.
+    WaitForCommand wait_for_command = 10; // Wait for x seconds.
+    GoToSurfaceCommand go_to_surface_command = 11; // Go to surface.
+    GoToSeabedCommand go_to_seabed_command = 12; // Go to seabed.
+    GoToHomeCommand go_to_home_command = 13; // Go to home position.
   }
 }
 
 // Depth set point is used to describe a depth set-point relative to the surface or the seabed.
 message DepthSetPoint {
-  float depth = 1; // Desired depth at the wp (m)
-  float speed_to_depth = 2; // Desired speed to desired depth set point (m/s)
-  DepthZeroReference depth_zero_reference = 3; // Used to distinguish desired altitude or depth
+  float depth = 1; // Desired depth at the wp (m).
+  float speed_to_depth = 2; // Desired speed to desired depth set point (m/s).
+  DepthZeroReference depth_zero_reference = 3; // Used to distinguish desired altitude or depth.
 }
 
 // Depth zero reference from surface for depth, and seabed for altitude.
@@ -55,161 +55,161 @@ enum DepthZeroReference {
 
 // Waypoints used to describe a path for the auto pilot.
 message Waypoint {
-  uint32 id = 1; // Waypoint id
-  string name = 2; // Waypoint name provided from the app
-  LatLongPosition global_position = 3; // Position if the waypoint (decimal degrees)
-  float circle_of_acceptance = 4; // Radius of the acceptance circle around the waypoint (m)
-  float speed_to_target = 5; // Desired speed over ground to waypoint (m/s)
-  DepthSetPoint depth_set_point = 6; // Depth set point (optional)
-  // auto_pilot_mode: Path fallowing, Trajectory tracking, Constant heading
-  // float fixed_heading
+  uint32 id = 1; // Waypoint id.
+  string name = 2; // Waypoint name provided from the app.
+  LatLongPosition global_position = 3; // Position if the waypoint (decimal degrees).
+  float circle_of_acceptance = 4; // Radius of the acceptance circle around the waypoint (m).
+  float speed_to_target = 5; // Desired speed over ground to waypoint (m/s).
+  DepthSetPoint depth_set_point = 6; // Depth set point (optional).
 }
 
+// Control mode for the vertical axis of the drone.
 enum ControlModeVertical {
-  CONTROL_MODE_VERTICAL_UNSPECIFIED = 0; // Unspecified
-  CONTROL_MODE_VERTICAL_MANUAL = 1; // Manual control mode
-  CONTROL_MODE_VERTICAL_AUTO_DEPTH = 2; // Auto depth control mode
-  CONTROL_MODE_VERTICAL_AUTO_ALTITUDE = 3; // Auto altitude control mode
+  CONTROL_MODE_VERTICAL_UNSPECIFIED = 0; // Unspecified.
+  CONTROL_MODE_VERTICAL_MANUAL = 1; // Manual control mode.
+  CONTROL_MODE_VERTICAL_AUTO_DEPTH = 2; // Auto depth control mode.
+  CONTROL_MODE_VERTICAL_AUTO_ALTITUDE = 3; // Auto altitude control mode.
 }
 
+// Control mode for the horizontal axis of the drone.
 enum ControlModeHorizontal {
-  CONTROL_MODE_HORIZONTAL_UNSPECIFIED = 0; // Unspecified
-  CONTROL_MODE_HORIZONTAL_MANUAL = 1; // Manual control mode
-  CONTROL_MODE_HORIZONTAL_AUTO_HEADING = 2; // Auto heading control mode
-  CONTROL_MODE_HORIZONTAL_STATION_KEEPING = 3; // Station keeping control mode
+  CONTROL_MODE_HORIZONTAL_UNSPECIFIED = 0; // Unspecified.
+  CONTROL_MODE_HORIZONTAL_MANUAL = 1; // Manual control mode.
+  CONTROL_MODE_HORIZONTAL_AUTO_HEADING = 2; // Auto heading control mode.
+  CONTROL_MODE_HORIZONTAL_STATION_KEEPING = 3; // Station keeping control mode.
 }
 
 // A ControlModeCommand is used to set vertical and horizontal control mode during a mission.
 message ControlModeCommand {
-  ControlModeVertical control_mode_vertical = 5; // Desired control mode in heave
-  ControlModeHorizontal control_mode_horizontal = 6; // Desired control mode in surge and yaw
+  ControlModeVertical control_mode_vertical = 5; // Desired control mode in heave.
+  ControlModeHorizontal control_mode_horizontal = 6; // Desired control mode in surge and yaw.
 }
 
 // A WaypointCommand will request the drone to drive to a point automatically.
 message WaypointCommand {
-  Waypoint waypoint = 1; // Waypoint to go to
+  Waypoint waypoint = 1; // Waypoint to go to.
 }
 
 // A DepthSetPointCommand is used to go to a desired depth or altitude.
 message DepthSetPointCommand {
-  DepthSetPoint depth_set_point = 1; // Depth set point to go to
+  DepthSetPoint depth_set_point = 1; // Depth set point to go to.
 }
 
 // The TiltMainCameraCommand can set the desired camera tilt angle.
 message TiltMainCameraCommand {
-  TiltAngle tilt_angle = 1; // Tilt angle of the camera (-30..30)
+  TiltAngle tilt_angle = 1; // Tilt angle of the camera (-30..30).
 }
 
 // The TiltMultibeamCommand is used to set the tilt angle of the servo.
 message TiltMultibeamCommand {
-  MultibeamServo multibeam_servo = 1; // Tilt angle for the multibeam servo
+  MultibeamServo multibeam_servo = 1; // Tilt angle for the multibeam servo.
 }
 
 // WaitForCommand is used to wait during a mission.
 message WaitForCommand {
-  float wait_for_seconds = 1; // Wait for x seconds
+  float wait_for_seconds = 1; // Wait for x seconds.
 }
 
 // CameraCommands are used to control the camera from a mission.
 message CameraCommand {
-  CameraAction camera_action = 1; // Camera command
-  float action_param = 2; // Used for taking photos based on a time or distance interval
+  CameraAction camera_action = 1; // Camera command.
+  float action_param = 2; // Used for taking photos based on a time or distance interval.
 }
 
 // GoToSurfaceCommand is used to go to the surface.
 message GoToSurfaceCommand {
-  float desired_speed = 1; // Desired speed to surface (m/s)
+  float desired_speed = 1; // Desired speed to surface (m/s).
 }
 
 // GoToSeabedCommand is used to go to the seabed.
 message GoToSeabedCommand {
-  float desired_speed = 1; // Desired speed to seabed (m/s)
+  float desired_speed = 1; // Desired speed to seabed (m/s).
 }
 
 // GoToHomeCommand is used to go to the home position.
 message GoToHomeCommand {
-  float desired_speed = 1; // Desired speed to home (m/s)
+  float desired_speed = 1; // Desired speed to home (m/s).
 }
 
 // List of available camera actions.
 enum CameraAction {
-  CAMERA_ACTION_UNSPECIFIED = 0; // Unspecified command
-  CAMERA_ACTION_TAKE_PHOTO = 1; // Take one photo
-  CAMERA_ACTION_TAKE_PHOTOS_TIME = 2; // Take a photo every x second
-  CAMERA_ACTION_TAKE_PHOTOS_DISTANCE = 3; // Take a photo every x meter
-  CAMERA_ACTION_STOP_TAKING_PHOTOS = 4; // Stop taking photos
-  CAMERA_ACTION_START_RECORDING = 5; // Start recording
-  CAMERA_ACTION_STOP_RECORDING = 6; // Stop recording
+  CAMERA_ACTION_UNSPECIFIED = 0; // Unspecified command.
+  CAMERA_ACTION_TAKE_PHOTO = 1; // Take one photo.
+  CAMERA_ACTION_TAKE_PHOTOS_TIME = 2; // Take a photo every x second.
+  CAMERA_ACTION_TAKE_PHOTOS_DISTANCE = 3; // Take a photo every x meter.
+  CAMERA_ACTION_STOP_TAKING_PHOTOS = 4; // Stop taking photos.
+  CAMERA_ACTION_START_RECORDING = 5; // Start recording.
+  CAMERA_ACTION_STOP_RECORDING = 6; // Stop recording.
 }
 
 // Path segment used to describe segments of a mission as a line between to waypoints.
 message PathSegment {
-  uint32 id = 1; // Path segment id starting at 0, -1 for inactive
-  float speed_to_target = 2; // Desired speed over ground in (m/s)
-  float course_to_target = 3; // Course to target relative to north (rad) [-pi, pi]
-  float depth_speed = 4; // Desired speed in heave (m/s)
-  float horizontal_length = 5; // Horizontal length of the path segment (m)
-  float vertical_length = 6; // Vertical length of the path segment (m)
-  uint32 from_wp_id = 7; // Id of the starting waypoint
-  uint32 to_wp_id = 8; // Id of the ending waypoint
-  float duration_time = 9; // Estimated time it takes to complete given length and desired speed (s)
+  uint32 id = 1; // Path segment id starting at 0, -1 for inactive.
+  float speed_to_target = 2; // Desired speed over ground in (m/s).
+  float course_to_target = 3; // Course to target relative to north (rad) [-pi, pi].
+  float depth_speed = 4; // Desired speed in heave (m/s).
+  float horizontal_length = 5; // Horizontal length of the path segment (m).
+  float vertical_length = 6; // Vertical length of the path segment (m).
+  uint32 from_wp_id = 7; // Id of the starting waypoint.
+  uint32 to_wp_id = 8; // Id of the ending waypoint.
+  float duration_time = 9; // Estimated time it takes to complete given length and desired speed (s).
 }
 
 // List of available instruction types.
 enum InstructionType {
-  INSTRUCTION_TYPE_UNSPECIFIED = 0; // Unspecified
-  INSTRUCTION_TYPE_NONE = 1; // None
-  INSTRUCTION_TYPE_GO_TO_WAYPOINT = 2; // Go to waypoint
-  INSTRUCTION_TYPE_GO_TO_WAYPOINT_WITH_DEPTH_SET_POINT = 3; // Go to waypoint with depth set point
-  INSTRUCTION_TYPE_GO_TO_DEPTH_SET_POINT = 4; // Go to depth set point
-  INSTRUCTION_TYPE_SET_CAMERA_ACTION = 5; // Command used to take photo repeatedly or start, stop recording
-  INSTRUCTION_TYPE_SET_CONTROL_MODE = 6; // Sets a new control mode
-  INSTRUCTION_TYPE_SET_TILT_MAIN_CAMERA = 7; // Sets a new angle for the tilt servo
-  INSTRUCTION_TYPE_SET_TILT_SERVO = 8; // Sets a new angle for the tilt servo
-  INSTRUCTION_TYPE_WAIT_FOR_SEC = 9; // Waiting for requested time in seconds
-  INSTRUCTION_TYPE_GO_TO_SURFACE = 10; // Go to the surface
-  INSTRUCTION_TYPE_GO_TO_SEABED = 11; // Go to the seabed
-  INSTRUCTION_TYPE_GO_TO_HOME = 12; // Returning to home
+  INSTRUCTION_TYPE_UNSPECIFIED = 0; // Unspecified.
+  INSTRUCTION_TYPE_NONE = 1; // None.
+  INSTRUCTION_TYPE_GO_TO_WAYPOINT = 2; // Go to waypoint.
+  INSTRUCTION_TYPE_GO_TO_WAYPOINT_WITH_DEPTH_SET_POINT = 3; // Go to waypoint with depth set point.
+  INSTRUCTION_TYPE_GO_TO_DEPTH_SET_POINT = 4; // Go to depth set point.
+  INSTRUCTION_TYPE_SET_CAMERA_ACTION = 5; // Command used to take photo repeatedly or start, stop recording.
+  INSTRUCTION_TYPE_SET_CONTROL_MODE = 6; // Sets a new control mode.
+  INSTRUCTION_TYPE_SET_TILT_MAIN_CAMERA = 7; // Sets a new angle for the tilt servo.
+  INSTRUCTION_TYPE_SET_TILT_SERVO = 8; // Sets a new angle for the tilt servo.
+  INSTRUCTION_TYPE_WAIT_FOR_SEC = 9; // Waiting for requested time in seconds.
+  INSTRUCTION_TYPE_GO_TO_SURFACE = 10; // Go to the surface.
+  INSTRUCTION_TYPE_GO_TO_SEABED = 11; // Go to the seabed.
+  INSTRUCTION_TYPE_GO_TO_HOME = 12; // Returning to home.
 }
 
 // Reference for the auto pilot when a mission is active.
 message ReferenceAutoPilot {
-  InstructionType instruction_type = 1; // Instruction type
-  uint32 active_instruction_id = 2; // Id of the active instruction
-  uint32 active_path_segment_id = 3; // Id of the active path segment
-  float course_to_target = 4; // Course to the next waypoint from north (rad) [-pi, pi]
-  float speed_over_ground = 5; // Desired speed over ground (m/s)
-  float horizontal_distance_to_target = 6; // Horizontal distance to the next waypoint (m)
-  float circle_of_acceptance = 7; // Circle of acceptance to mark waypoint as visited (m)
-  float depth_set_point = 8; // Desired depth set point (m)
-  float heave_velocity = 9; // Desired heave velocity (m/s)
-  float vertical_distance_to_target = 10; // Vertical distance to the next waypoint (m)
-  DepthZeroReference depth_zero_reference = 11; // Indicates if depth is measured from the surface or seabed
-  float time_to_complete = 12; // Estimated time to complete the instruction (s)
+  InstructionType instruction_type = 1; // Instruction type.
+  uint32 active_instruction_id = 2; // Id of the active instruction.
+  uint32 active_path_segment_id = 3; // Id of the active path segment.
+  float course_to_target = 4; // Course to the next waypoint from north (rad) [-pi, pi].
+  float speed_over_ground = 5; // Desired speed over ground (m/s).
+  float horizontal_distance_to_target = 6; // Horizontal distance to the next waypoint (m).
+  float circle_of_acceptance = 7; // Circle of acceptance to mark waypoint as visited (m).
+  float depth_set_point = 8; // Desired depth set point (m).
+  float heave_velocity = 9; // Desired heave velocity (m/s).
+  float vertical_distance_to_target = 10; // Vertical distance to the next waypoint (m).
+  DepthZeroReference depth_zero_reference = 11; // Indicates if depth is measured from the surface or seabed.
+  float time_to_complete = 12; // Estimated time to complete the instruction (s).
 }
 
 // List of mission supervisor states.
 enum MissionState {
-  MISSION_STATE_UNSPECIFIED = 0; // Unspecified
-  MISSION_STATE_INACTIVE = 1; // Mission supervisor is inactive
-  MISSION_STATE_READY = 2; // Ready to start mission
-  MISSION_STATE_RUNNING = 3; // Mission is running
-  MISSION_STATE_PAUSED = 4; // Mission is paused
-  MISSION_STATE_COMPLETED = 5; // Mission is completed
-  MISSION_STATE_ABORTED = 6; // Mission is aborted by the mission supervisor
-  MISSION_STATE_FAILED_TO_LOAD_MISSION = 7; // Mission has failed to load
-  MISSION_STATE_FAILED_TO_START_MISSION = 8; // Mission has failed to start
+  MISSION_STATE_UNSPECIFIED = 0; // Unspecified.
+  MISSION_STATE_INACTIVE = 1; // Mission supervisor is inactive.
+  MISSION_STATE_READY = 2; // Ready to start mission.
+  MISSION_STATE_RUNNING = 3; // Mission is running.
+  MISSION_STATE_PAUSED = 4; // Mission is paused.
+  MISSION_STATE_COMPLETED = 5; // Mission is completed.
+  MISSION_STATE_ABORTED = 6; // Mission is aborted by the mission supervisor.
+  MISSION_STATE_FAILED_TO_LOAD_MISSION = 7; // Mission has failed to load.
+  MISSION_STATE_FAILED_TO_START_MISSION = 8; // Mission has failed to start.
 }
 
 // Mission Status is used for showing the status of the mission.
 message MissionStatus {
-  MissionState state = 1; // State of the mission supervisor
-  uint32 time_elapsed = 2; // Time elapsed since mission started (s)
-  uint32 estimated_time_to_complete = 3; // Estimated time to complete the mission (s)
-  uint32 distance_to_complete = 4; // Distance left of the mission (m)
-  repeated uint32 completed_instruction_ids = 5; // Ids of the completed instructions
-  uint32 total_number_of_instructions = 6; // Total number of instructions in the mission
-  repeated uint32 completed_path_segment_ids = 7; // Ids of the completed path segments
-  uint32 total_number_of_path_segments = 8; // Total number of path segments in the mission
-  uint32 id = 9; // Mission id of the active mission
+  MissionState state = 1; // State of the mission supervisor.
+  uint32 time_elapsed = 2; // Time elapsed since mission started (s).
+  uint32 estimated_time_to_complete = 3; // Estimated time to complete the mission (s).
+  uint32 distance_to_complete = 4; // Distance left of the mission (m).
+  repeated uint32 completed_instruction_ids = 5; // Ids of the completed instructions.
+  uint32 total_number_of_instructions = 6; // Total number of instructions in the mission.
+  repeated uint32 completed_path_segment_ids = 7; // Ids of the completed path segments.
+  uint32 total_number_of_path_segments = 8; // Total number of path segments in the mission.
+  uint32 id = 9; // Mission id of the active mission.
 }
