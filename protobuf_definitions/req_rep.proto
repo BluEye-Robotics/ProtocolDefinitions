@@ -191,7 +191,7 @@ message GetPersistentStorageSettingsRep {
 
 // Request to flash ESC settings.
 message FlashEscSettingsReq {
-  bool startup_sounds = 1; // If startup sounds should be enabled.
+  bool silent = 1; // If startup sounds should be disabled.
 }
 
 // Response after flashing ESC settings.
