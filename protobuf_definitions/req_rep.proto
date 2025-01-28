@@ -188,3 +188,13 @@ message GetPersistentStorageSettingsReq {
 message GetPersistentStorageSettingsRep {
   PersistentStorageSettings persistent_storage_settings = 1; // The currently set persistent storage settings.
 }
+
+// Request to flash ESC settings.
+message FlashEscSettingsReq {
+  bool silent = 1; // If startup sounds should be disabled.
+}
+
+// Response after flashing ESC settings.
+message FlashEscSettingsRep {
+  bool success = 1; // If the ESC settings were flashed successfully.
+}
