@@ -699,6 +699,7 @@ message ErrorFlags {
   bool dvl_no_power = 44;  // GP protection has been triggered at boot or faulty DVL.
   bool usb_disconnect = 45; // USB disconnect.
   bool video_urb_error = 46;  // Video URB error.
+  bool hardware_supported = 47;  // Hardware supported on current blunux version.
 }
 
 // Available camera resolutions.
