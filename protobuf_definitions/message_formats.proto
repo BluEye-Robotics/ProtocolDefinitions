@@ -411,7 +411,7 @@ message PositionEstimate {
 // Heading source used during reset of the position estimate.
 enum HeadingSource {
   HEADING_SOURCE_UNSPECIFIED = 0; // Unspecified.
-  HEADING_SOURCE_DRONE_COMPASS = 1; // Uses the drone compass to set the heading.
+  HEADING_SOURCE_DRONE_COMPASS = 1; // Uses the drone magnetic compass to set the heading.
   HEADING_SOURCE_MANUAL_INPUT = 2; // Used when the user sets the heading manually.
 }
 
