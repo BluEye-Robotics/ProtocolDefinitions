@@ -411,8 +411,15 @@ message PositionEstimate {
 // Heading source used during reset of the position estimate.
 enum HeadingSource {
   HEADING_SOURCE_UNSPECIFIED = 0; // Unspecified.
-  HEADING_SOURCE_DRONE_COMPASS = 1; // Uses the drone compass to set the heading.
+  HEADING_SOURCE_DRONE_COMPASS = 1; // Uses the drone magnetic compass to set the heading.
   HEADING_SOURCE_MANUAL_INPUT = 2; // Used when the user sets the heading manually.
+}
+
+// Heading mode used during dead reckoning with a DVL.
+enum HeadingMode {
+  HEADING_MODE_UNSPECIFIED = 0; // Unspecified.
+  HEADING_MODE_MAGNETIC_COMPASS = 1; // Uses the best available magnetic compass heading.
+  HEADING_MODE_GYRO_ONLY = 2; // Uses the best available gyro based heading.
 }
 
 // Settings used when resetting the position estimate.
@@ -422,6 +429,7 @@ message ResetPositionSettings {
   float manual_heading = 2; // Heading in degrees (0-359).
   ResetCoordinateSource reset_coordinate_source = 3; // Option to use the device GPS or a manual coordinate.
   LatLongPosition reset_coordinate = 4; // Reset coordinate in decimal degrees.
+  HeadingMode heading_mode = 5; // Heading mode used in dead reckoning.
 }
 
 // The coordinate source to use when resetting the position estimate.
@@ -429,6 +437,7 @@ enum ResetCoordinateSource {
   RESET_COORDINATE_SOURCE_UNSPECIFIED = 0; // Unspecified, fallback to device GPS
   RESET_COORDINATE_SOURCE_DEVICE_GPS = 1; // Uses the device GPS to set the reset point
   RESET_COORDINATE_SOURCE_MANUAL = 2; // Uses a coordinate in decimal degrees to set the reset point
+  RESET_COORDINATE_SOURCE_BLUEYE_GNSS = 3; // Uses the Blueye GNSS to set the reset point
 }
 
 // DVL raw transducer data.
