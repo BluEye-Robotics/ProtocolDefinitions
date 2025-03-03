@@ -154,6 +154,10 @@ message SetHeadingModeReq {
   HeadingMode heading_mode = 1; // The heading mode to set.
 }
 
+// Response after setting the heading mode.
+message SetHeadingModeRep {
+}
+
 // Request to update the publish frequency
 message SetPubFrequencyReq {
   string message_type = 1; // Message name, f. ex. "AttitudeTel"
