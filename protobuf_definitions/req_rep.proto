@@ -149,6 +149,11 @@ message SetInstructionUpdateReq {
 message SetInstructionUpdateRep {
 }
 
+// Set the heading mode used in dead reckoning.
+message SetHeadingModeReq {
+  HeadingMode heading_mode = 1; // The heading mode to set.
+}
+
 // Request to update the publish frequency
 message SetPubFrequencyReq {
   string message_type = 1; // Message name, f. ex. "AttitudeTel"
