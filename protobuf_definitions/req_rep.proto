@@ -149,7 +149,7 @@ message SetInstructionUpdateReq {
 message SetInstructionUpdateRep {
 }
 
-// Set heading mode used in dead reckoning.
+// Set the heading mode used in dead reckoning.
 message SetHeadingModeReq {
   HeadingMode heading_mode = 1; // The heading mode to set.
 }
