@@ -254,7 +254,7 @@ message Imu2Tel {
 
 // Raw IMU data from high precision IMU
 message ImuHpTel {
-  Imu imu = 1;
+  Imu imu = 1; // Raw IMU data.
 }
 
 // Medusa gamma ray sensor spectrometer data.
