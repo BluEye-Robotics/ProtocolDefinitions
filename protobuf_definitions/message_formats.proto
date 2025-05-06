@@ -736,10 +736,8 @@ enum Camera {
 
 // Camera parameters.
 message CameraParameters {
-  reserved 2;
-  reserved "mjpg_bitrate";
-
   int32 h264_bitrate = 1; // Bitrate of the h264 stream (bit/sec).
+  int32 mjpg_bitrate = 2; // Bitrate of the MJPG stream used for still pictures (bit/sec).
 
   int32 exposure = 3; // Shutter speed  (1/10000 * s), -1 for automatic exposure.
   int32 white_balance = 4; // White balance temperature (2800..9300), -1 for automatic white balance.
