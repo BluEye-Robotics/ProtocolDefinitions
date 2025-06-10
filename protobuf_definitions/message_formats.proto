@@ -376,6 +376,20 @@ message Attitude {
   float yaw = 3; // Yaw angle (-180°..180°).
 }
 
+// Location source used in magnetic declination look-up.
+enum LocationSource {
+  LOCATION_SOURCE_UNSPECIFIED = 0; // The position is not set.
+  LOCATION_SOURCE_USER = 1; // Typically pilot device GPS.
+  LOCATION_SOURCE_DRONE = 2; // Blueye GPS, DVL, or a USBL system.
+}
+
+// The Magnetic Declination status used to get true North compass readings based on location.
+message MagneticDeclination {
+  LocationSource location_source = 1; // Location source used for the magnetic declination look-up in geographiclib.
+  float declination = 2; // The declination which is applied to the yaw field in the Attitude msg.
+  LatLongPosition location = 3; // The location used for the magnetic declination look-up.
+}
+
 // Drone altitude over seabed, typically obtained from a DVL.
 message Altitude {
   float value = 1; // Drone altitude over seabed (m).

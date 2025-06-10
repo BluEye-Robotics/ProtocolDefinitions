@@ -14,6 +14,11 @@ message AttitudeTel {
   Attitude attitude = 1; // The attitude of the drone.
 }
 
+// Current Magnetic Declination status. Used to get true North compass readings based on location.
+message MagneticDeclinationTel {
+  MagneticDeclination magnetic_declination = 1; // The current magnetic declination status of the drone.
+}
+
 // Receive the current altitude of the drone.
 message AltitudeTel {
   Altitude altitude = 1; // The altitude of the drone.
