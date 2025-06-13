@@ -1,4 +1,4 @@
-name: ProtocDock
+name: Compile TypeScript Protobuf Definitions
 
 on: [push]
 
@@ -10,13 +10,27 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: ProtocDock Compile
-        uses: valentin-kaiser/protocdock@master
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          command: 'cd protobuf_definitions && mkdir -p ./gen/ && protoc *.proto --plugin=ts-protoc-gen=$PROTOC_GEN_TS_PATH --grpc-web_out="import_style=typescript,mode=grpcweb:./gen/" --proto_path=./ --ts_out=service=grpc-web:./gen/ --ts_opt=esModuleInterop=true --ts_opt=useOptionals=true --ts_opt=addGrpcMetadata=true --ts_opt=addGrpcWebImports=true'
-          commit_message: '[GEN] Updated compiled proto definitions'
+          node-version: 'latest'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+          cd protobuf_definitions
+          npm init -y
+          npm install -D ts-proto
+
+      - name: Compile
+        run: |
+          cd protobuf_definitions
+          mkdir -p ./out/ &&
+          protoc *.proto --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./out
 
       - name: Publish compiled proto definitions
         uses: actions/upload-artifact@v4
         with:
-          path: protobuf_definitions/gen
+          path: protobuf_definitions/out
