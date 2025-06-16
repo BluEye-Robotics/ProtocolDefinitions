@@ -80,7 +80,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish compiled proto definitions
-        uses: actions/upload-artifact@v4
-        with:
-          path: protobuf_definitions
+      - name: Check npm pack contents
+        run: |
+          cd protobuf_definitions
+          npm pack
+          tar -tzf *.tgz
