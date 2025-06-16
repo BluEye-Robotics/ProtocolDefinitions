@@ -71,6 +71,13 @@ jobs:
           cd protobuf_definitions
           npm run build
 
+      - name: Publish to GitHub Packages
+        run: |
+          cd protobuf_definitions
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Publish compiled proto definitions
         uses: actions/upload-artifact@v4
         with:
