@@ -27,7 +27,8 @@ jobs:
         run: |
           cd protobuf_definitions
           mkdir -p ./out/ &&
-          protoc *.proto --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./out --ts_proto_opt=outputIndex=true
+          protoc *.proto --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./out \
+            --ts_proto_opt=outputIndex=true --ts_proto_opt=enumsAsLiterals=true
 
       - name: Publish compiled proto definitions
         uses: actions/upload-artifact@v4
