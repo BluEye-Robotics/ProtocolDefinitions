@@ -49,7 +49,7 @@ jobs:
               "build": "tsc"
             },
             "dependencies": {
-              "@bufbuild/protobuf": "^2.5.2",
+              "@bufbuild/protobuf": "^2.5.2"
             },
             "devDependencies": {
               "ts-proto": "^2.7.5",
