@@ -20,14 +20,14 @@ jobs:
           cd protobuf_definitions
           echo '{
             "compilerOptions": {
-            "target": "ES2020",
-            "module": "CommonJS",
-            "declaration": true,
-            "outDir": "dist",
-            "strict": true,
-            "esModuleInterop": true
-          },
-          "include": ["./**/*.ts"]
+              "target": "ES2020",
+              "module": "CommonJS",
+              "declaration": true,
+              "outDir": "dist",
+              "strict": true,
+              "esModuleInterop": true
+            },
+            "include": ["./**/*.ts"]
           }' > tsconfig.json
 
       - name: Create package
