@@ -39,9 +39,9 @@ jobs:
           echo '{
             "name": "@blueye-robotics/protocol-definitions",
             "version": "0.0.0-test.'${SHORT_SHA}'",
-            "main": "out/dist/index.js",
-            "types": "out/dist/index.d.ts",
-            "files": ["out/dist"],
+            "main": "dist/index.js",
+            "types": "dist/index.d.ts",
+            "files": ["dist"],
             "publishConfig": {
               "registry": "https://npm.pkg.github.com/"
             },
