@@ -14,8 +14,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "latest"
-          registry-url: https://npm.pkg.github.com/
-          scope: "@blueye-robotics"
 
       - name: Create tsconfig
         run: |
@@ -42,9 +40,6 @@ jobs:
             "main": "dist/index.js",
             "types": "dist/index.d.ts",
             "files": ["dist"],
-            "publishConfig": {
-              "registry": "https://npm.pkg.github.com/"
-            },
             "scripts": {
               "build": "tsc"
             },
@@ -76,12 +71,12 @@ jobs:
           cd protobuf_definitions
           npm run build
 
-      - name: Publish to GitHub Packages
+      - name: Publish to npm
         run: |
           cd protobuf_definitions
-          npm publish --tag test
+          npm publish --access public --tag test
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Check npm pack contents
         run: |
