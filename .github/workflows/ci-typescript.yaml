@@ -36,7 +36,7 @@ jobs:
           SHORT_SHA=${GITHUB_SHA::8}
           echo '{
             "name": "@blueye-robotics/protocol-definitions",
-            "version": "0.0.0-test.'${SHORT_SHA}'",
+            "version": "3.0.0-'${SHORT_SHA}'",
             "main": "dist/index.js",
             "types": "dist/index.d.ts",
             "files": ["dist"],
