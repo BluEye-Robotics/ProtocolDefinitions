@@ -39,6 +39,8 @@ jobs:
           echo '{
             "name": "@blueyerobotics/protocol-definitions",
             "version": "3.2.0-'${SHORT_SHA}'",
+            "license": "LGPL-3.0-only",
+            "description": "TypeScript definitions for Blueye Robotics protocols",
             "repository": {
               "type": "git",
               "url": "https://github.com/BluEye-Robotics/ProtocolDefinitions.git"
