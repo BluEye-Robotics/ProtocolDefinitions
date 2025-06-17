@@ -81,6 +81,7 @@ jobs:
 
       - name: Publish to npm
         run: |
+          cp README.npm.md protobuf_definitions/README.md
           cd protobuf_definitions
           npm publish --access public --tag latest
         env:
