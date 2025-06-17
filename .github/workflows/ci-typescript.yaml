@@ -39,6 +39,10 @@ jobs:
           echo '{
             "name": "@blueyerobotics/protocol-definitions",
             "version": "3.2.0-'${SHORT_SHA}'",
+            "repository": {
+              "type": "git",
+              "url": "https://github.com/BluEye-Robotics/ProtocolDefinitions.git"
+            },
             "main": "dist/index.js",
             "types": "dist/index.d.ts",
             "files": ["dist"],
