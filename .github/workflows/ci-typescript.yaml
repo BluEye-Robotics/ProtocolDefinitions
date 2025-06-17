@@ -35,7 +35,7 @@ jobs:
           cd protobuf_definitions
           SHORT_SHA=${GITHUB_SHA::8}
           echo '{
-            "name": "@blueye-robotics/protocol-definitions",
+            "name": "@blueyerobotics/protocol-definitions",
             "version": "3.0.0-'${SHORT_SHA}'",
             "main": "dist/index.js",
             "types": "dist/index.d.ts",
