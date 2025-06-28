@@ -148,7 +148,13 @@ message CanisterBottomHumidityTel {
 
 // Video storage info.
 message VideoStorageSpaceTel {
-  StorageSpace storage_space = 1; // Video storage information.
+  StorageSpace storage_space = 1; // Internal Video storage information.
+  StorageSpace removable_space = 2; // Removable Video storage information. Can be empty.
+}
+
+// Information about removable storage device.
+message RemovableStorageTel {
+  RemovableStorageDevice storage_device = 1; // Information about the storage device (such as partitions)
 }
 
 // Data storage info.

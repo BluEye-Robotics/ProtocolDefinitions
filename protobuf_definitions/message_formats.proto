@@ -583,6 +583,8 @@ message StorageSpace {
   int64 free_space = 2; // Available bytes of storage space (B).
 }
 
+  bool wrong_file_system_found = 4; // The wrong file system is found.
+  bool device_is_read_only = 5; // The device is in read-only mode.
 // Compass calibration state.
 message CalibrationState {
 
