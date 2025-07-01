@@ -38,8 +38,8 @@ message LogEntry {
   string process_name = 2; // Name of the process that generated the log entry.
   uint64 process_id = 3; // Process ID of the log entry.
   uint64 thread_id = 4; // Thread ID of the log entry.
-  string source = 5; // Source of the log entry, such as "Blueye App", "Drone Supervisor", etc.
-  LogLevel level = 6; // Log level, info, warning, or error.
+  string source = 5; // Source of the log entry (specific class or named logger).
+  LogLevel level = 6; // Log level, info, warning, error, etc.
   string message = 7; // Log message.
 }
 
