@@ -21,6 +21,28 @@ message BinlogRecord {
   google.protobuf.Timestamp clock_monotonic = 3; // Posix CLOCK_MONOTONIC timestamp.
 }
 
+// Log entry
+//
+// Used to store ROS log entries in the bez file
+message LogEntry {
+  enum LogLevel {
+    LOG_LEVEL_UNSPECIFIED = 0; // Unspecified log level.
+    LOG_LEVEL_TRACE = 1; // Trace log level.
+    LOG_LEVEL_DEBUG = 2; // Debug log level.
+    LOG_LEVEL_INFO = 3; // Info log level.
+    LOG_LEVEL_WARNING = 4; // Warning log level.
+    LOG_LEVEL_ERROR = 5; // Error log level.
+    LOG_LEVEL_CRITICAL = 6; // Critical log level.
+  }
+  google.protobuf.Timestamp timestamp = 1; // Timestamp of the log entry.
+  string process_name = 2; // Name of the process that generated the log entry.
+  uint64 process_id = 3; // Process ID of the log entry.
+  uint64 thread_id = 4; // Thread ID of the log entry.
+  string source = 5; // Source of the log entry, such as "Blueye App", "Drone Supervisor", etc.
+  LogLevel level = 6; // Log level, info, warning, or error.
+  string message = 7; // Log message.
+}
+
 // Motion input from client.
 //
 // Used to indicate the desired motion in each direction.
