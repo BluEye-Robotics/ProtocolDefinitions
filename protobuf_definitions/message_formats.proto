@@ -583,12 +583,48 @@ message StorageSpace {
   int64 free_space = 2; // Available bytes of storage space (B).
 }
 
+// Storage partition.
+message StoragePartition {
+  StorageSpace storage_space = 1; // The amount of storage space on the device.
+  string file_system_type = 2; // File system type of the removable storage device.
+  string device_path = 3; // Partition device path
+  string mount_path = 4; // Mount path of the partition.
+}
+
+// Removable storage device.
+message RemovableStorageDevice {
+  // Overall status of the storage device.
+  enum Status {
+    STATUS_UNSPECIFIED = 0; // Unspecified.
+    STATUS_READY = 1; // The storage device is valid and ready for use.
+    STATUS_FORMATTING = 2; // The storage device is being formatted
+    STATUS_ERROR = 3; // The storage device is in an error state.
+  }
+  string vendor_name = 1; // USB vendor name.
+  string model_name = 2; // Model name of the USB storage device.
+  string device_path = 3; // Mount path of the storage device.
+  Status status = 4; // Status of the storage device.
+  RemovableStorageErrorFlags error_flags = 5; // Any active error flags for the storage device.
+  repeated StoragePartition partitions = 6; // List of partitions on the storage device.
+}
+
+// Error flags related to a removable storage device.
+message RemovableStorageErrorFlags {
+  // Optional error message to give additional information from the drone to a client about active error flags.
+  string error_message = 1;
+  bool no_partitions_found = 2; // Device is attached but no partitions are found.
+  bool multiple_partitions_found = 3; // Multiple partitions are found.
+  bool wrong_file_system_found = 4; // The wrong file system is found.
+  bool device_is_read_only = 5; // The device is in read-only mode.
+  bool formatting_failed = 6; // Formatting of the device failed.
+}
+
 // Compass calibration state.
 message CalibrationState {
 
   // Status of the compass calibration procedure.
   //
-  // When calibration is started, the status will indicate the active (upfacing) axis.
+  // When calibration is started, the status will indicate the active (up facing) axis.
   enum Status
   {
     STATUS_UNSPECIFIED = 0; // Unspecified status.
@@ -600,7 +636,7 @@ message CalibrationState {
     STATUS_CALIBRATING_Y_NEGATIVE = 6; // Compass is calibrating and the negative Y axis is active.
     STATUS_CALIBRATING_Z_POSITIVE = 7; // Compass is calibrating and the positive Z axis is active.
     STATUS_CALIBRATING_Z_NEGATIVE = 8; // Compass is calibrating and the negative Z axis is active.
-    STATUS_CALIBRATING_THRUSTER = 9; // Compass is calibrating for thruster interferance.
+    STATUS_CALIBRATING_THRUSTER = 9; // Compass is calibrating for thruster interference.
   }
 
   Status status = 1; // Current calibration status.
