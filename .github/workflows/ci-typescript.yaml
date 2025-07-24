@@ -1,6 +1,9 @@
 name: Compile TypeScript Protobuf Definitions
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   compile:
