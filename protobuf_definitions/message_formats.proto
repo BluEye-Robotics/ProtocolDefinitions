@@ -21,6 +21,28 @@ message BinlogRecord {
   google.protobuf.Timestamp clock_monotonic = 3; // Posix CLOCK_MONOTONIC timestamp.
 }
 
+// Log entry
+//
+// Used to store ROS log entries in the bez file
+message LogEntry {
+  enum LogLevel {
+    LOG_LEVEL_UNSPECIFIED = 0; // Unspecified log level.
+    LOG_LEVEL_TRACE = 1; // Trace log level.
+    LOG_LEVEL_DEBUG = 2; // Debug log level.
+    LOG_LEVEL_INFO = 3; // Info log level.
+    LOG_LEVEL_WARNING = 4; // Warning log level.
+    LOG_LEVEL_ERROR = 5; // Error log level.
+    LOG_LEVEL_CRITICAL = 6; // Critical log level.
+  }
+  google.protobuf.Timestamp timestamp = 1; // Timestamp of the log entry.
+  string process_name = 2; // Name of the process that generated the log entry.
+  uint64 process_id = 3; // Process ID of the log entry.
+  uint64 thread_id = 4; // Thread ID of the log entry.
+  string source = 5; // Source of the log entry (specific class or named logger).
+  LogLevel level = 6; // Log level, info, warning, error, etc.
+  string message = 7; // Log message.
+}
+
 // Motion input from client.
 //
 // Used to indicate the desired motion in each direction.
@@ -376,6 +398,20 @@ message Attitude {
   float yaw = 3; // Yaw angle (-180°..180°).
 }
 
+// Location source used in magnetic declination look-up.
+enum LocationSource {
+  LOCATION_SOURCE_UNSPECIFIED = 0; // The position is not set.
+  LOCATION_SOURCE_USER = 1; // Typically pilot device GPS.
+  LOCATION_SOURCE_DRONE = 2; // Blueye GPS, DVL, or a USBL system.
+}
+
+// The Magnetic Declination status used to get true North compass readings based on location.
+message MagneticDeclination {
+  LocationSource location_source = 1; // Location source used for the magnetic declination look-up in geographiclib.
+  float declination = 2; // The declination which is applied to the yaw field in the Attitude msg.
+  LatLongPosition location = 3; // The location used for the magnetic declination look-up.
+}
+
 // Drone altitude over seabed, typically obtained from a DVL.
 message Altitude {
   float value = 1; // Drone altitude over seabed (m).
@@ -569,12 +605,48 @@ message StorageSpace {
   int64 free_space = 2; // Available bytes of storage space (B).
 }
 
+// Storage partition.
+message StoragePartition {
+  StorageSpace storage_space = 1; // The amount of storage space on the device.
+  string file_system_type = 2; // File system type of the removable storage device.
+  string device_path = 3; // Partition device path
+  string mount_path = 4; // Mount path of the partition.
+}
+
+// Removable storage device.
+message RemovableStorageDevice {
+  // Overall status of the storage device.
+  enum Status {
+    STATUS_UNSPECIFIED = 0; // Unspecified.
+    STATUS_READY = 1; // The storage device is valid and ready for use.
+    STATUS_FORMATTING = 2; // The storage device is being formatted
+    STATUS_ERROR = 3; // The storage device is in an error state.
+  }
+  string vendor_name = 1; // USB vendor name.
+  string model_name = 2; // Model name of the USB storage device.
+  string device_path = 3; // Mount path of the storage device.
+  Status status = 4; // Status of the storage device.
+  RemovableStorageErrorFlags error_flags = 5; // Any active error flags for the storage device.
+  repeated StoragePartition partitions = 6; // List of partitions on the storage device.
+}
+
+// Error flags related to a removable storage device.
+message RemovableStorageErrorFlags {
+  // Optional error message to give additional information from the drone to a client about active error flags.
+  string error_message = 1;
+  bool no_partitions_found = 2; // Device is attached but no partitions are found.
+  bool multiple_partitions_found = 3; // Multiple partitions are found.
+  bool wrong_file_system_found = 4; // The wrong file system is found.
+  bool device_is_read_only = 5; // The device is in read-only mode.
+  bool formatting_failed = 6; // Formatting of the device failed.
+}
+
 // Compass calibration state.
 message CalibrationState {
 
   // Status of the compass calibration procedure.
   //
-  // When calibration is started, the status will indicate the active (upfacing) axis.
+  // When calibration is started, the status will indicate the active (up facing) axis.
   enum Status
   {
     STATUS_UNSPECIFIED = 0; // Unspecified status.
@@ -586,7 +658,7 @@ message CalibrationState {
     STATUS_CALIBRATING_Y_NEGATIVE = 6; // Compass is calibrating and the negative Y axis is active.
     STATUS_CALIBRATING_Z_POSITIVE = 7; // Compass is calibrating and the positive Z axis is active.
     STATUS_CALIBRATING_Z_NEGATIVE = 8; // Compass is calibrating and the negative Z axis is active.
-    STATUS_CALIBRATING_THRUSTER = 9; // Compass is calibrating for thruster interferance.
+    STATUS_CALIBRATING_THRUSTER = 9; // Compass is calibrating for thruster interference.
   }
 
   Status status = 1; // Current calibration status.
@@ -717,6 +789,7 @@ enum Resolution {
   RESOLUTION_UNSPECIFIED = 0; // Resolution not specified.
   RESOLUTION_FULLHD_1080P = 1; // 1080p Full HD resolution.
   RESOLUTION_HD_720P = 2; // 720p HD resolution.
+  RESOLUTION_UHD_4K = 3; // 4K Ultra HD resolution.
 }
 
 // Available camera frame rates.
@@ -737,13 +810,16 @@ enum Camera {
 message CameraParameters {
   int32 h264_bitrate = 1; // Bitrate of the h264 stream (bit/sec).
   int32 mjpg_bitrate = 2; // Bitrate of the MJPG stream used for still pictures (bit/sec).
+
   int32 exposure = 3; // Shutter speed  (1/10000 * s), -1 for automatic exposure.
   int32 white_balance = 4; // White balance temperature (2800..9300), -1 for automatic white balance.
   int32 hue = 5; // Hue (-40..40), 0 as default.
 
   float gain = 9; // Iso gain (0..1).
 
-  Resolution resolution = 6; // Stream, recording and image resolution.
+  Resolution resolution = 6; // Stream, recording and image resolution (deprecated).
+  Resolution stream_resolution = 10; // Stream resolution.
+  Resolution recording_resolution = 11; // Recording and image resolution.
   Framerate framerate = 7; // Stream and recording framerate.
   Camera camera = 8; // Which camera the parameters belong to.
 }
@@ -863,6 +939,8 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_C550D = 41; // Blueprint Subsea Oculus C550d.
   GUEST_PORT_DEVICE_ID_BLUEPRINT_SUBSEA_OCULUS_M370S = 42; // Blueprint Subsea Oculus M370s.
   GUEST_PORT_DEVICE_ID_WATERLINKED_SONAR_3D15 = 43; // Waterlinked Sonar 3D-15.
+  GUEST_PORT_DEVICE_ID_CERULEAN_TRACKER_650 = 44; // Cerulean Tracker 650.
+  GUEST_PORT_DEVICE_ID_BLUEYE_EXTERNAL_USB_STORAGE = 45; // Blueye External USB Storage
 }
 
 // Guest port number.
@@ -881,6 +959,7 @@ enum NavigationSensorID {
   NAVIGATION_SENSOR_ID_NMEA = 3; // NMEA stream from external positioning system.
   NAVIGATION_SENSOR_ID_BLUEYE_GNSS = 4; // Blueye GNSS device on the ROV.
   NAVIGATION_SENSOR_ID_NORTEK_DVL_NUCLEUS = 5; // Nortek DVL Nucleus 1000.
+  NAVIGATION_SENSOR_ID_CERULEAN_TRACKER_650 = 6; // Cerulean Tracker 650.
 }
 
 // Navigation sensor used in the position observer with validity state.
@@ -1142,4 +1221,5 @@ message CPUInfo {
   float memory_bus_load = 2; // Memory bus load (0..1).
   float main_queue_load = 3; // Main queue load (0..1).
   float guestport_queue_load = 4 ; // Guestport queue load (0..1).
+  float comm_queue_load = 5; // Communication queue load (0..1).
 }

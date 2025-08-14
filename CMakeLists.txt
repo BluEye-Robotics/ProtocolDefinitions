@@ -29,6 +29,7 @@ install(TARGETS blueyeprotocol
   EXPORT blueyeprotocol
   LIBRARY DESTINATION lib)
 install(FILES ${ProtoHeaders} DESTINATION include/blueyeprotocol)
+install(FILES ${ProtoFiles} DESTINATION include/blueyeprotocol/protobuf)
 
 add_custom_target(pyblueyeprotocol
   DEPENDS ${PROTO_PY})
