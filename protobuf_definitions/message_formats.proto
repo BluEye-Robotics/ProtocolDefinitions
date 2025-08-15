@@ -1223,3 +1223,26 @@ message CPUInfo {
   float guestport_queue_load = 4 ; // Guestport queue load (0..1).
   float comm_queue_load = 5; // Communication queue load (0..1).
 }
+
+// Surface Unit battery information.
+//
+// This message is published by the Surface Unit, and re-published by
+// the drone over the communication protocol.
+message SurfaceUnitBatteryInfo {
+  enum ChargeStatus {
+    CHARGE_STATUS_UNSPECIFIED = 0;
+    CHARGE_STATUS_DISCHARGE = 1;
+    CHARGE_STATUS_CHARGE = 2;
+    CHARGE_STATUS_CHARGE_ERROR = 3;
+  }
+  ChargeStatus status = 1; // Battery charge status.
+  float level = 2; // Battery level (0..1). 
+}
+
+// Surface Unit version information.
+//
+// This message is published by the Surface Unit, and re-published by
+// the drone over the communication protocol.
+message SurfaceUnitVersionInfo {
+  string version = 1; // Surface Unit firmware version (x.y.z).
+}
