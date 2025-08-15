@@ -1228,7 +1228,7 @@ message CPUInfo {
 //
 // This message is published by the Surface Unit, and re-published by
 // the drone over the communication protocol.
-message SurfaceUnitBattery {
+message SurfaceUnitBatteryInfo {
   enum ChargeStatus {
     CHARGE_STATUS_UNSPECIFIED = 0;
     CHARGE_STATUS_DISCHARGE = 1;
