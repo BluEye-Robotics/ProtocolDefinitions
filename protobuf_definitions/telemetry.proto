@@ -290,6 +290,6 @@ message CPUInfoTel {
 
 // Surface Unit telemetry message.
 message SurfaceUnitTel {
-  SurfaceUnitBatteryTel battery_info = 1; // Battery information.
+  SurfaceUnitBatteryInfo battery_info = 1; // Battery information.
   SurfaceUnitVersionInfo version_info = 2; // Version information.
 }
