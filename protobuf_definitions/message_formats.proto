@@ -1244,5 +1244,5 @@ message SurfaceUnitBattery {
 // This message is published by the Surface Unit, and re-published by
 // the drone over the communication protocol.
 message SurfaceUnitVersionInfo {
-  string required_blunux_version = 1; // Surface Unit firmware version (x.y.z).
+  string firmware_version = 1; // Surface Unit firmware version (x.y.z).
 }
