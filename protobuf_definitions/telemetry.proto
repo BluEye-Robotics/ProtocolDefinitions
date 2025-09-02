@@ -292,3 +292,9 @@ message MultibeamDiscoveryTel {
 message CPUInfoTel {
   CPUInfo cpu_info = 1; // CPU information.
 }
+
+// Surface Unit telemetry message.
+message SurfaceUnitTel {
+  SurfaceUnitBatteryInfo battery_info = 1; // Battery information.
+  SurfaceUnitVersionInfo version_info = 2; // Version information.
+}
