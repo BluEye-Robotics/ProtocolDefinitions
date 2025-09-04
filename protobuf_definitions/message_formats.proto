@@ -806,13 +806,20 @@ enum Camera {
   CAMERA_GUESTPORT = 2; // Guest port camera.
 }
 
+enum StreamingProtocol {
+  STREAMING_PROTOCOL_UNSPECIFIED = 0; // Streaming protocol not specified.
+  STREAMING_PROTOCOL_RTSP_H264 = 1; // RTSP streaming protocol using H264 codec.
+  STREAMING_PROTOCOL_RTSP_MJPEG = 2; // RTSP streaming protocol using MJPEG codec.
+}
+
+
 // Camera parameters.
 message CameraParameters {
   int32 h264_bitrate = 1; // Bitrate of the h264 stream (bit/sec).
   int32 mjpg_bitrate = 2; // Bitrate of the MJPG stream used for still pictures (bit/sec).
 
   int32 exposure = 3; // Shutter speed  (1/10000 * s), -1 for automatic exposure.
-  int32 white_balance = 4; // White balance temperature (Pioneer/Pro/X1/X3: 2800..9300, Ultra: 2300..15000), -1 for auto.
+  int32 white_balance = 4; // White balance temp (Pioneer/Pro/X1/X3: 2800..9300, Ultra: 2300..15000), -1 for auto.
   int32 hue = 5; // Hue (-40..40), 0 as default. Only available on Pioneer/Pro/X1/X3.
   float gain = 9; // Iso gain (0..1). Only available on Pioneer/Pro/X1/X3.
 
@@ -827,6 +834,7 @@ message CameraParameters {
   Resolution resolution = 6; // Stream, recording and image resolution (deprecated).
   Resolution stream_resolution = 10; // Stream resolution.
   Resolution recording_resolution = 11; // Recording and image resolution.
+  StreamingProtocol streaming_protocol = 20; // Streaming protocol.
   Framerate framerate = 7; // Stream and recording framerate.
   Camera camera = 8; // Which camera the parameters belong to.
   bool fixed_framerate = 19; // Prioritize fixed frame rate over quality on Ultra.
