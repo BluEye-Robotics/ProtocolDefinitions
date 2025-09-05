@@ -827,7 +827,7 @@ message CameraParameters {
 
   int32 brightness = 12; // Brightness (-10..10), 0 as default. Only available on Ultra
   int32 contrast = 13; // Contrast (-50..50), 0 as default. Only available on Ultra.
-  int32 saturation = 14; // Saturation (-0..50), 8 as default. Only available on Ultra.
+  int32 saturation = 14; // Saturation (-50..50), 8 as default. Only available on Ultra.
   int32 gamma = 15; // Gamma (4..79), 22 as default. Only available on Ultra.
   int32 sharpness = 16; // Sharpness (-20..20), -20 as default. Only available on Ultra.
   int32 backlight_compensation = 17; // Backlight compensation (-150..150), 10 as default. Only available on Ultra.
