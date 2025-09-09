@@ -592,11 +592,20 @@ message DiveTime {
   int32 value = 1; // Number of seconds the drone has been submerged.
 }
 
-// Which cameras are supposed to be recording.
+// Which cameras or multibeam are supposed to be recording.
 message RecordOn {
   bool main = 1; // Record the main camera.
   bool guestport = 2; // Record external camera.
   bool multibeam = 3; // Record multibeam.
+}
+
+// Storage location.
+//
+// Used to specify which storage location to use for recording photos and videos.
+enum StorageLocation {
+  STORAGE_LOCATION_UNSPECIFIED = 0; // Unspecified.
+  STORAGE_LOCATION_INTERNAL = 1; // Internal storage of the drone.
+  STORAGE_LOCATION_REMOVABLE = 2; // Removable storage device.
 }
 
 // Storage space.
@@ -813,7 +822,6 @@ enum StreamingProtocol {
   STREAMING_PROTOCOL_RTSP_H264 = 1; // RTSP streaming protocol using H264 codec.
   STREAMING_PROTOCOL_RTSP_MJPEG = 2; // RTSP streaming protocol using MJPEG codec.
 }
-
 
 // Camera parameters.
 message CameraParameters {
