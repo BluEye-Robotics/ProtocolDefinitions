@@ -840,7 +840,7 @@ message CameraParameters {
   int32 sharpness = 16; // Sharpness (-20..20), -20 as default. Only available on Ultra.
   int32 backlight_compensation = 17; // Backlight compensation (-150..150), 10 as default. Only available on Ultra.
   int32 denoise = 18; // Noise reduction (-20..20), -20 as default. Only available on Ultra.
-  bool ehdr_enabled = 21; // Enable eHDR mode. Only available on Ultra.
+  bool ehdr_enabled = 21; // Enable eHDR mode. Default true. Only available on Ultra.
   int32 ehdr_exposure_min_number = 22; // Minimum number of eHDR frames. (1..4), default 1. Only available on Ultra.
   // Maximum number of eHDR frames. (1..4), default 2. Only available on Ultra. Setting larger than 2 can reduce the framerate.
   int32 ehdr_exposure_max_number = 23;
