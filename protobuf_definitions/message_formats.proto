@@ -592,7 +592,7 @@ message DiveTime {
   int32 value = 1; // Number of seconds the drone has been submerged.
 }
 
-// Which cameras are supposed to be recording.
+// Which cameras or multibeam are supposed to be recording.
 message RecordOn {
   bool main = 1; // Record the main camera.
   bool guestport = 2; // Record external camera.
