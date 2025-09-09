@@ -599,6 +599,15 @@ message RecordOn {
   bool multibeam = 3; // Record multibeam.
 }
 
+// Storage location.
+//
+// Used to specify which storage location to use for recording photos and videos.
+enum StorageLocation {
+  STORAGE_LOCATION_UNSPECIFIED = 0; // Unspecified.
+  STORAGE_LOCATION_INTERNAL = 1; // Internal storage of the drone.
+  STORAGE_LOCATION_REMOVABLE = 2; // Removable storage device.
+}
+
 // Storage space.
 message StorageSpace {
   int64 total_space = 1; // Total bytes of storage space (B).
@@ -813,7 +822,6 @@ enum StreamingProtocol {
   STREAMING_PROTOCOL_RTSP_H264 = 1; // RTSP streaming protocol using H264 codec.
   STREAMING_PROTOCOL_RTSP_MJPEG = 2; // RTSP streaming protocol using MJPEG codec.
 }
-
 
 // Camera parameters.
 message CameraParameters {
