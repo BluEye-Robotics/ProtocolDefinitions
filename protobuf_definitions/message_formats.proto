@@ -842,7 +842,7 @@ message CameraParameters {
   int32 denoise = 18; // Noise reduction (-20..20), -20 as default. Only available on Ultra.
   bool ehdr_enabled = 21; // Enable eHDR mode. Default true. Only available on Ultra.
   int32 ehdr_exposure_min_number = 22; // Minimum number of eHDR frames. (1..4), default 1. Only available on Ultra.
-  // Maximum number of eHDR frames. (1..4), default 2. Only available on Ultra. Setting larger than 2 can reduce the framerate.
+  // Maximum number of eHDR frames. (1..4), default 2. Only on Ultra. Setting larger than 2 can reduce the framerate.
   int32 ehdr_exposure_max_number = 23;
 
   Resolution resolution = 6; // Stream, recording and image resolution (deprecated).
