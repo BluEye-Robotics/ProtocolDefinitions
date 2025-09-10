@@ -184,6 +184,7 @@ message RecordState {
   bool multibeam_is_recording = 5; // If the multibeam is recording.
   int32 multibeam_seconds = 6; // Multibeam record time (s).
   float multibeam_fps = 9; // Multibeam record fps.
+  StorageLocation storage_location = 10; // Storage location used for recording.
 }
 
 // Interval type for time-lapse photos.
