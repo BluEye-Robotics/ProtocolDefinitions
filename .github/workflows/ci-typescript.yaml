@@ -53,11 +53,6 @@ jobs:
           VERSION=$(pnpm pkg get version | tr -d '"')
           SHORT_SHA=${GITHUB_SHA::8}
           pnpm version --no-git-tag-version "${VERSION}-${SHORT_SHA}"
-          pnpm publish --no-git-checks --access public --tag latest
+          pnpm publish --no-git-checks s--access public --tag latest
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Check npm pack contents
-        run: |
-          pnpm pack
-          tar -tzf *.tgz
