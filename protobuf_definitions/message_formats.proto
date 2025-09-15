@@ -43,6 +43,33 @@ message LogEntry {
   string message = 7; // Log message.
 }
 
+message KernelLogEntry {
+  // Kernel log level.
+  enum KernelLogLevel {
+    KERNEL_LOG_LEVEL_UNSPECIFIED = 0; // Unspecified log level.
+    KERNEL_LOG_LEVEL_EMERG = 1; // Emergency log level.
+    KERNEL_LOG_LEVEL_ALERT = 2; // Alert log level.
+    KERNEL_LOG_LEVEL_CRIT = 3; // Critical log level.
+    KERNEL_LOG_LEVEL_ERR = 4; // Error log level.
+    KERNEL_LOG_LEVEL_WARNING = 5; // Warning log level.
+    KERNEL_LOG_LEVEL_NOTICE = 6; // Notice log level.
+    KERNEL_LOG_LEVEL_INFO = 7; // Informational log level.
+    KERNEL_LOG_LEVEL_DEBUG = 8; // Debug log level.
+  }
+
+  // Key-value pair used for structured logging.
+  message KeyValuePair {
+    string key = 1; // Key of the key-value pair.
+    string value = 2; // Value of the key-value pair.
+  }
+
+  KernelLogLevel level = 1; // Log level, info, warning, error, etc.
+  uint32 seqnum = 2; // Sequence number of the log entry.
+  google.protobuf.Timestamp timestamp = 3; // Timestamp of the log entry.
+  repeated string message = 4; // Log messages.
+  repeated KeyValuePair fields = 5; // List of key-value pairs.
+}
+
 // Motion input from client.
 //
 // Used to indicate the desired motion in each direction.
@@ -1266,7 +1293,7 @@ message SurfaceUnitBatteryInfo {
     CHARGE_STATUS_CHARGE_ERROR = 3;
   }
   ChargeStatus status = 1; // Battery charge status.
-  float level = 2; // Battery level (0..1). 
+  float level = 2; // Battery level (0..1).
 }
 
 // Surface Unit version information.

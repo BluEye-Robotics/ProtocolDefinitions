@@ -296,5 +296,8 @@ message SurfaceUnitTel {
 
 // Log entry telemetry message.
 message LogEntryTel {
-  LogEntry log_entry = 1; // Log entry information. (i.e. source, level, message, ...)
+  oneof log_entry {
+    LogEntry blunux = 1; // Blunux log entry.
+    KernelLogEntry kernel = 2; // Kernel log entry.
+  }
 }
