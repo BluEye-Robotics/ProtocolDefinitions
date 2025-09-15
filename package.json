@@ -1,0 +1,25 @@
+{
+  "name": "@blueyerobotics/protocol-definitions",
+  "version": "3.2.0",
+  "license": "LGPL-3.0-only",
+  "description": "TypeScript definitions for Blueye Robotics protocols",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BluEye-Robotics/ProtocolDefinitions.git"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.5.2"
+  },
+  "devDependencies": {
+    "ts-proto": "^2.7.5",
+    "typescript": "^5.8.3"
+  }
+}
