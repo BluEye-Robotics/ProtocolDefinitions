@@ -270,7 +270,7 @@ message AdisImuTel {
 
 // Calibrated ADIS IMU data
 message CalibratedAdisImuTel {
-  Imu imu = 1;
+  Imu imu = 1; // Calibrated ADIS IMU (no magnetometer)
 }
 
 // Medusa gamma ray sensor spectrometer data.
