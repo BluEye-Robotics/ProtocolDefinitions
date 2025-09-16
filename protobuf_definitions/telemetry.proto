@@ -263,14 +263,14 @@ message Imu2Tel {
   Imu imu = 1; // Raw IMU data.
 }
 
-// Raw IMU data from ADIS IMU
-message AdisImuTel {
-  Imu imu = 1; // Raw IMU data (no magnetometer)
+// Raw IMU data from High Precision IMU
+message HpImuTel {
+  Imu imu = 1; // Raw High Precision IMU data (no magnetometer)
 }
 
-// Calibrated ADIS IMU data
-message CalibratedAdisImuTel {
-  Imu imu = 1; // Calibrated ADIS IMU (no magnetometer)
+// Calibrated High Precision IMU data
+message CalibratedHpImuTel {
+  Imu imu = 1; // Calibrated High Precision IMU (no magnetometer)
 }
 
 // Medusa gamma ray sensor spectrometer data.
