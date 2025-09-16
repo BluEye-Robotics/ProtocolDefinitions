@@ -264,12 +264,12 @@ message Imu2Tel {
 }
 
 // Raw IMU data from High Precision IMU
-message HpImuTel {
+message ImuHpTel {
   Imu imu = 1; // Raw High Precision IMU data (no magnetometer)
 }
 
 // Calibrated High Precision IMU data
-message CalibratedHpImuTel {
+message CalibratedImuHpTel {
   Imu imu = 1; // Calibrated High Precision IMU (no magnetometer)
 }
 
