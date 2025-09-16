@@ -13,87 +13,46 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "latest"
+          cache: "pnpm"
           registry-url: "https://registry.npmjs.org/"
           scope: "@blueyerobotics"
-
-      - name: Create tsconfig
-        run: |
-          cd protobuf_definitions
-          echo '{
-            "compilerOptions": {
-              "target": "ES2020",
-              "module": "CommonJS",
-              "declaration": true,
-              "outDir": "dist",
-              "strict": true,
-              "esModuleInterop": true
-            },
-            "include": ["./**/*.ts"]
-          }' > tsconfig.json
-
-      - name: Create package
-        run: |
-          cd protobuf_definitions
-          SHORT_SHA=${GITHUB_SHA::8}
-          echo '{
-            "name": "@blueyerobotics/protocol-definitions",
-            "version": "3.2.0-'${SHORT_SHA}'",
-            "license": "LGPL-3.0-only",
-            "description": "TypeScript definitions for Blueye Robotics protocols",
-            "repository": {
-              "type": "git",
-              "url": "https://github.com/BluEye-Robotics/ProtocolDefinitions.git"
-            },
-            "main": "dist/index.js",
-            "types": "dist/index.d.ts",
-            "files": ["dist"],
-            "scripts": {
-              "build": "tsc"
-            },
-            "dependencies": {
-              "@bufbuild/protobuf": "^2.5.2"
-            },
-            "devDependencies": {
-              "ts-proto": "^2.7.5",
-              "typescript": "^5.8.3"
-            }
-          }' > package.json
 
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y protobuf-compiler
-          cd protobuf_definitions
-          npm install
+          pnpm install
 
       - name: Generate
         run: |
-          cd protobuf_definitions
           mkdir -p ./out/ &&
-          protoc *.proto --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./out \
+          protoc protobuf_definitions/*.proto \
+            --plugin=./node_modules/.bin/protoc-gen-ts_proto \
+            --proto_path=protobuf_definitions \
+            --ts_proto_out=./out \
             --ts_proto_opt=outputIndex=true \
             --ts_proto_opt=globalThisPolyfill=true \
             --ts_proto_opt=useExactTypes=false
 
       - name: Compile
-        run: |
-          cd protobuf_definitions
-          npm run build
+        run: pnpm run build
 
       - name: Publish to npm
         run: |
-          cp README.npm.md protobuf_definitions/README.md
-          cd protobuf_definitions
-          npm publish --access public --tag latest
+          cp README.npm.md README.md
+          VERSION=$(pnpm pkg get version | tr -d '"')
+          SHORT_SHA=${GITHUB_SHA::8}
+          pnpm version --no-git-tag-version "${VERSION}-${SHORT_SHA}"
+          pnpm publish --no-git-checks --access public --tag latest
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Check npm pack contents
-        run: |
-          cd protobuf_definitions
-          npm pack
-          tar -tzf *.tgz

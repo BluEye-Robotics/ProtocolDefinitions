@@ -47,13 +47,15 @@ message WatchdogCtrl {
   uint32 client_id = 2; // The ID of the client, received in the ConnectClientRep response.
 }
 
-// Issue a command to start video recording.
+// Issue a command to start video or multibeam recording.
 message RecordCtrl {
   RecordOn record_on = 1; // Message specifying which cameras to record.
+  StorageLocation storage_location = 2; // Storage location to use for the recordings.
 }
 
 // Issue a command to take a picture.
 message TakePictureCtrl {
+  StorageLocation storage_location = 1; // Storage location to use for the picture.
 }
 
 // Issue a command to start compass calibration.

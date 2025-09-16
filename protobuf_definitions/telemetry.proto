@@ -263,11 +263,12 @@ message Imu2Tel {
   Imu imu = 1; // Raw IMU data.
 }
 
-// Raw IMU data from high precision IMU
+// Raw IMU data from ADIS IMU
 message AdisImuTel {
   Imu imu = 1; // Raw IMU data (no magnetometer)
 }
 
+// Calibrated ADIS IMU data
 message CalibratedAdisImuTel {
   Imu imu = 1;
 }
@@ -301,4 +302,12 @@ message CPUInfoTel {
 message SurfaceUnitTel {
   SurfaceUnitBatteryInfo battery_info = 1; // Battery information.
   SurfaceUnitVersionInfo version_info = 2; // Version information.
+}
+
+// Log entry telemetry message.
+message LogEntryTel {
+  oneof log_entry {
+    LogEntry blunux = 1; // Blunux log entry.
+    KernelLogEntry kernel = 2; // Kernel log entry.
+  }
 }
