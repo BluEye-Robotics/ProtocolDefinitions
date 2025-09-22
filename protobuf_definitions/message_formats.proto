@@ -648,6 +648,7 @@ message StoragePartition {
   string file_system_type = 2; // File system type of the removable storage device.
   string device_path = 3; // Partition device path
   string mount_path = 4; // Mount path of the partition.
+  string label = 5; // Label of the partition.
 }
 
 // Removable storage device.
