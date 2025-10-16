@@ -1173,8 +1173,7 @@ message MultibeamPing {
   uint32 number_of_beams = 7; // Width of the ping image data.
   uint32 step = 8; // Size in bytes of each row in the ping data image.
 
-  // Bearing angle of each column of the sonar data
-  // (in 100th of a degree, multiply by 0.01 to get a value in degrees).
+  // Bearing angle of each column of the sonar data in degrees.
   // The sonar image is not sampled uniformly in the bearing direction.
   repeated float bearings = 9;
 
