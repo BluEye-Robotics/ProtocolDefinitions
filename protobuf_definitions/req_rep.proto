@@ -207,3 +207,22 @@ message FlashEscSettingsReq {
 message FlashEscSettingsRep {
   bool success = 1; // If the ESC settings were flashed successfully.
 }
+
+// Request to set iperf task status.
+message SetIperfStatusReq {
+  bool enabled = 1; // If background iperf task should be enabled or disabled.
+}
+
+// Response after setting iperf status.
+message SetIperfStatusRep {
+  bool enabled = 1; // If background iperf task is enabled or disabled.
+}
+
+// Request to get current iperf task status.
+message GetIperfStatusReq {
+}
+
+// Response with current iperf status.
+message GetIperfStatusRep {
+  bool enabled = 1; // If background iperf task is enabled or disabled.
+}
