@@ -1108,13 +1108,11 @@ message CpProbe {
 message GenericServo {
   float value = 1; // Servo value (0..1).
   GuestPortNumber guest_port_number = 2; // Guest port the servo is on.
-  float set_point = 3; // Servo set point (0..1).
 }
 
 // Servo message used to represent the angle of the servo.
 message MultibeamServo {
   float angle = 1; // Servo degrees (-30..30).
-  float set_point = 2; // Servo set point (-30..30).
 }
 
 // GuestPort current readings.

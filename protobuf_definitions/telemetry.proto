@@ -236,11 +236,13 @@ message ConnectedClientsTel {
 // State of a generic servo.
 message GenericServoTel {
   GenericServo servo = 1; // Servo state.
+  float set_point = 2; // Servo set point (0..1).
 }
 
 // State of the servo installed in the multibeam.
 message MultibeamServoTel {
   MultibeamServo servo = 1; // Multibeam servo state.
+  MultibeamServo set_point = 1; // Multibeam servo state.
 }
 
 // GuestPort current readings.
