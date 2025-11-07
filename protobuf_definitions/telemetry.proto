@@ -242,7 +242,7 @@ message GenericServoTel {
 // State of the servo installed in the multibeam.
 message MultibeamServoTel {
   MultibeamServo servo = 1; // Multibeam servo state.
-  MultibeamServo set_point = 1; // Multibeam servo state.
+  float set_point = 2; // Servo set point (-30..30).
 }
 
 // GuestPort current readings.
