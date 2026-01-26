@@ -883,6 +883,8 @@ message CameraParameters {
   StreamingProtocol streaming_protocol = 20; // Streaming protocol.
   Framerate framerate = 7; // Stream and recording framerate.
   Camera camera = 8; // Which camera the parameters belong to.
+
+  uint32 mtu_size = 24; // Network MTU size for video streaming (bytes). If unset, will default to 1400.
 }
 
 // Available temperature units.
