@@ -784,45 +784,45 @@ message ErrorFlags {
   bool inner_pressure_spike = 6; // Sudden spike in inner preassure.
   bool compass_calibration = 7; // Compass needs calibration.
   bool tilt_calibration = 8; // Error during calibration of tilt endpoints.
-  bool gp1_read = 9;  // Guest port 1 read error.
-  bool gp2_read = 10;  // Guest port 2 read error.
-  bool gp3_read = 11;  // Guest port 3 read error.
-  bool gp1_not_flashed = 12;  // Guest port 1 not flashed.
-  bool gp2_not_flashed = 13;  // Guest port 2 not flashed.
-  bool gp3_not_flashed = 14;  // Guest port 3 not flashed.
-  bool gp1_unknown_device = 15;  // Unknown device on guest port 1.
-  bool gp2_unknown_device = 16;  // Unknown device on guest port 2.
-  bool gp3_unknown_device = 17;  // Unknown device on guest port 3.
-  bool gp1_device_connection = 18;  // Guest port 1 connection error.
-  bool gp2_device_connection = 19;  // Guest port 2 connection error.
-  bool gp3_device_connection = 20;  // Guest port 3 connection error.
-  bool gp1_device = 21;  // Guest port 1 device error.
-  bool gp2_device = 22;  // Guest port 2 device error.
-  bool gp3_device = 23;  // Guest port 3 device error.
-  bool drone_serial_not_set = 24;  // Drone serial number not set.
-  bool drone_serial = 25;  // Drone serial number error.
-  bool mb_eeprom_read = 26;  // MB eeprom read error.
-  bool bb_eeprom_read = 27;  // BB eeprom read error.
-  bool mb_eeprom_not_flashed = 28;  // MB eeprom not flashed.
-  bool bb_eeprom_not_flashed = 29;  // BB eeprom not flashed.
-  bool main_camera_connection = 30;  // We don't get buffers from the main camera.
-  bool main_camera_firmware = 31;  // The main camera firmware is wrong.
-  bool guestport_camera_connection = 32;  // We don't get buffers from the guestport camera.
-  bool guestport_camera_firmware = 33;  // The guestport camera firmware is wrong.
-  bool mb_serial = 34;  // MB serial number error.
-  bool bb_serial = 35;  // BB serial number error.
-  bool ds_serial = 36;  // DS serial number error.
-  bool gp_current_read = 37;  // Error reading GP current.
-  bool gp_current = 38;  // Max GP current exceeded.
-  bool gp1_bat_current = 39;  // Max battery current exceeded on GP1.
-  bool gp2_bat_current = 40;  // Max battery current exceeded on GP2.
-  bool gp3_bat_current = 41;  // Max battery current exceeded on GP3.
-  bool gp_20v_current = 42;  // Max 20V current exceeded on GP.
-  bool dvl_thermal_protection_mode = 43;  // DVL is in thermal protection mode.
-  bool dvl_no_power = 44;  // GP protection has been triggered at boot or faulty DVL.
+  bool gp1_read = 9; // Guest port 1 read error.
+  bool gp2_read = 10; // Guest port 2 read error.
+  bool gp3_read = 11; // Guest port 3 read error.
+  bool gp1_not_flashed = 12; // Guest port 1 not flashed.
+  bool gp2_not_flashed = 13; // Guest port 2 not flashed.
+  bool gp3_not_flashed = 14; // Guest port 3 not flashed.
+  bool gp1_unknown_device = 15; // Unknown device on guest port 1.
+  bool gp2_unknown_device = 16; // Unknown device on guest port 2.
+  bool gp3_unknown_device = 17; // Unknown device on guest port 3.
+  bool gp1_device_connection = 18; // Guest port 1 connection error.
+  bool gp2_device_connection = 19; // Guest port 2 connection error.
+  bool gp3_device_connection = 20; // Guest port 3 connection error.
+  bool gp1_device = 21; // Guest port 1 device error.
+  bool gp2_device = 22; // Guest port 2 device error.
+  bool gp3_device = 23; // Guest port 3 device error.
+  bool drone_serial_not_set = 24; // Drone serial number not set.
+  bool drone_serial = 25; // Drone serial number error.
+  bool mb_eeprom_read = 26; // MB eeprom read error.
+  bool bb_eeprom_read = 27; // BB eeprom read error.
+  bool mb_eeprom_not_flashed = 28; // MB eeprom not flashed.
+  bool bb_eeprom_not_flashed = 29; // BB eeprom not flashed.
+  bool main_camera_connection = 30; // We don't get buffers from the main camera.
+  bool main_camera_firmware = 31; // The main camera firmware is wrong.
+  bool guestport_camera_connection = 32; // We don't get buffers from the guestport camera.
+  bool guestport_camera_firmware = 33; // The guestport camera firmware is wrong.
+  bool mb_serial = 34; // MB serial number error.
+  bool bb_serial = 35; // BB serial number error.
+  bool ds_serial = 36; // DS serial number error.
+  bool gp_current_read = 37; // Error reading GP current.
+  bool gp_current = 38; // Max GP current exceeded.
+  bool gp1_bat_current = 39; // Max battery current exceeded on GP1.
+  bool gp2_bat_current = 40; // Max battery current exceeded on GP2.
+  bool gp3_bat_current = 41; // Max battery current exceeded on GP3.
+  bool gp_20v_current = 42; // Max 20V current exceeded on GP.
+  bool dvl_thermal_protection_mode = 43; // DVL is in thermal protection mode.
+  bool dvl_no_power = 44; // GP protection has been triggered at boot or faulty DVL.
   bool usb_disconnect = 45; // USB disconnect.
-  bool video_urb_error = 46;  // Video URB error.
-  bool hardware_not_supported = 47;  // Hardware not supported on current blunux version.
+  bool video_urb_error = 46; // Video URB error.
+  bool hardware_not_supported = 47; // Hardware not supported on current blunux version.
 }
 
 // Available camera resolutions.
@@ -884,7 +884,9 @@ message CameraParameters {
   Framerate framerate = 7; // Stream and recording framerate.
   Camera camera = 8; // Which camera the parameters belong to.
 
-  // Network MTU size for video streaming (bytes). If 0 or unset, the system will use a default of 1400.
+  // Network MTU (Maximum Transmission Unit) size for video streaming in bytes (68..65535). 
+  // If 0 or unset, the system will use a default of 1400.
+  // The Blueye App allows users to set values between 500 and 1460.
   uint32 mtu_size = 24;
 }
 
@@ -936,7 +938,7 @@ message OverlayParameters {
   bool depth_enabled = 2; // If depth should be included.
   bool heading_enabled = 3; // If heading should be included.
   bool tilt_enabled = 4; // If camera tilt angle should be included.
-  bool thickness_enabled = 18;// If camera tilt angle should be included.
+  bool thickness_enabled = 18; // If camera tilt angle should be included.
   bool date_enabled = 5; // If date should be included.
   bool distance_enabled = 20; // If distance should be included.
   bool altitude_enabled = 21; // If altitude should be included.
