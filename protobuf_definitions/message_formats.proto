@@ -1313,3 +1313,28 @@ message SurfaceUnitBatteryInfo {
 message SurfaceUnitVersionInfo {
   string version = 1; // Surface Unit firmware version (x.y.z).
 }
+
+// Bounding box for object detection.
+//
+// Coordinates are in pixels relative to the camera image,
+// where (x, y) is the top-left corner of the bounding box.
+message BoundingBox {
+  uint32 x = 1; // Horizontal offset of the top-left corner (px).
+  uint32 y = 2; // Vertical offset of the top-left corner (px).
+  uint32 width = 3; // Width of the bounding box (px).
+  uint32 height = 4; // Height of the bounding box (px).
+}
+
+// A single object detection from a computer vision model.
+message ObjectDetection {
+  BoundingBox bounding_box = 1; // Bounding box of the detected object.
+  float confidence = 2; // Detection confidence score (0..1).
+  uint32 class_id = 3; // Numeric class identifier from the model.
+  string class_name = 4; // Human-readable class name.
+}
+
+// A list of object detections from a single video frame.
+message ObjectDetections {
+  repeated ObjectDetection detections = 1; // List of detections in the frame.
+  Camera camera = 2; // Which camera the detections are from.
+}

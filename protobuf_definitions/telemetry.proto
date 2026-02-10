@@ -313,3 +313,8 @@ message LogEntryTel {
     KernelLogEntry kernel = 2; // Kernel log entry.
   }
 }
+
+// Object detections from a computer vision model.
+message ObjectDetectionsTel {
+  ObjectDetections object_detections = 1; // List of object detections from a video frame.
+}
