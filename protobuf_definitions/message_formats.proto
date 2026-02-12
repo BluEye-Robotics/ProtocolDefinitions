@@ -1331,6 +1331,7 @@ message ObjectDetection {
   float confidence = 2; // Detection confidence score (0..1).
   uint32 class_id = 3; // Numeric class identifier from the model.
   string class_name = 4; // Human-readable class name.
+  uint32 tracking_id = 5; // Unique ID for tracking the same object across frames.
 }
 
 // A list of object detections from a single video frame.
