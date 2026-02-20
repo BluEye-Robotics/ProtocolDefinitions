@@ -228,6 +228,6 @@ message FormatRemovableStorageDeviceCtrl {
 }
 
 // Message sent when the user wants to set turbidity filter settings.
-message SetTurbidityFilter {
+message SetTurbidityFilterCtrl {
   TurbidityFilter turbidity_filter = 1; // Message with the turbidity filter settings to set.
 }
