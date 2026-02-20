@@ -199,12 +199,12 @@ message ErrorFlagsTel {
 
 // Receive the current state of the control system.
 message ControlModeTel {
-  ControlMode state = 1;  // State of the control system.
+  ControlMode state = 1; // State of the control system.
 }
 
 // Thickness gauge measurement telemetry message.
 message ThicknessGaugeTel {
-  ThicknessGauge thickness_gauge = 1;  // Thickness measurement with a cygnus gauge.
+  ThicknessGauge thickness_gauge = 1; // Thickness measurement with a cygnus gauge.
 }
 
 // Cathodic Protection Potential probe telemetry message
@@ -312,4 +312,11 @@ message LogEntryTel {
     LogEntry blunux = 1; // Blunux log entry.
     KernelLogEntry kernel = 2; // Kernel log entry.
   }
+}
+
+// Turbidity filter settings telemetry message.
+//
+// Message is published when the filter settings are changed.
+message TurbidityFilterTel {
+  TurbidityFilter turbidity_filter = 1; // Turbidity filter settings.
 }

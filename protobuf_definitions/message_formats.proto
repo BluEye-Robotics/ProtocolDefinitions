@@ -1313,3 +1313,9 @@ message SurfaceUnitBatteryInfo {
 message SurfaceUnitVersionInfo {
   string version = 1; // Surface Unit firmware version (x.y.z).
 }
+
+// Turbidity filter settings.
+message TurbidityFilter {
+  bool enabled = 1; // If the turbidity filter is enabled.
+  float intensity = 2; // Intensity of the turbidity filter (0..1).
+}
