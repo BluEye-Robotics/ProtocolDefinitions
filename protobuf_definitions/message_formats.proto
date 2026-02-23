@@ -1339,3 +1339,9 @@ message ObjectDetections {
   repeated ObjectDetection detections = 1; // List of detections in the frame.
   Camera camera = 2; // Which camera the detections are from.
 }
+
+// Turbidity filter settings.
+message TurbidityFilter {
+  bool enabled = 1; // If the turbidity filter is enabled.
+  float intensity = 2; // Intensity of the turbidity filter (0..1).
+}

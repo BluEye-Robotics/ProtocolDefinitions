@@ -226,3 +226,8 @@ message EndDiveCtrl {
 // Any data on the drive will be lost.
 message FormatRemovableStorageDeviceCtrl {
 }
+
+// Message sent when the user wants to set turbidity filter settings.
+message SetTurbidityFilterCtrl {
+  TurbidityFilter turbidity_filter = 1; // Message with the turbidity filter settings to set.
+}
