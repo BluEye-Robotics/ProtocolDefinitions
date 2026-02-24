@@ -320,3 +320,11 @@ message LogEntryTel {
 message TurbidityFilterTel {
   FilterMessage turbidity_filter = 1; // Turbidity filter settings.
 }
+
+// Digital pan, tilt, and zoom telemetry from the main camera.
+//
+// Reports the actual pan, tilt, and zoom state of the camera.
+// Only supported on X3 Ultra.
+message CameraPanTiltZoomTel {
+  CameraPanTiltZoom camera_pan_tilt_zoom = 1; // Current pan, tilt, and zoom state.
+}

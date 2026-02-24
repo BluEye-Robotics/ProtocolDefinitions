@@ -836,10 +836,14 @@ enum Resolution {
 }
 
 // Available camera frame rates.
+//
+// If the requested frame rate is higher than what is supported at the current resolution,
+// the frame rate will be reduced while the resolution is respected.
 enum Framerate {
   FRAMERATE_UNSPECIFIED = 0; // Framerate not specified.
   FRAMERATE_FPS_30 = 1; // 30 frames per second.
   FRAMERATE_FPS_25 = 2; // 25 frames per second. (Only supported on Pioneer/Pro/X1/X3)
+  FRAMERATE_FPS_60 = 3; // 60 frames per second. (Only supported on X3 Ultra at 1080p and 720p)
 }
 
 // Which camera to control.
@@ -1319,4 +1323,13 @@ message SurfaceUnitVersionInfo {
 message FilterMessage {
   bool enabled = 1; // If the filter is enabled.
   float intensity = 2; // Intensity of the filter (0..1).
+}
+
+// Digital pan, tilt, and zoom state for the main camera.
+//
+// Only supported on X3 Ultra. Controls digital (not mechanical) zoom.
+message CameraPanTiltZoom {
+  float pan = 1; // Horizontal pan (-1.0..1.0), where 0.0 is center.
+  float tilt = 2; // Vertical tilt (-1.0..1.0), where 0.0 is center.
+  float zoom = 3; // Zoom level (0.0..1.0), where 0.0 is no zoom and 1.0 is maximum zoom.
 }
