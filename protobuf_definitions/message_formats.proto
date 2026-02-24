@@ -884,7 +884,7 @@ message CameraParameters {
   Framerate framerate = 7; // Stream and recording framerate.
   Camera camera = 8; // Which camera the parameters belong to.
 
-  // Network MTU (Maximum Transmission Unit) size for video streaming in bytes (68..65535). 
+  // Network MTU (Maximum Transmission Unit) size for video streaming in bytes (68..65535).
   // If 0 or unset, the system will use a default of 1400.
   // The Blueye App allows users to set values between 500 and 1460.
   uint32 mtu_size = 24;
@@ -1340,8 +1340,8 @@ message ObjectDetections {
   Camera camera = 2; // Which camera the detections are from.
 }
 
-// Turbidity filter settings.
-message TurbidityFilter {
-  bool enabled = 1; // If the turbidity filter is enabled.
-  float intensity = 2; // Intensity of the turbidity filter (0..1).
+// Generic filter settings.
+message FilterMessage {
+  bool enabled = 1; // If the filter is enabled.
+  float intensity = 2; // Intensity of the filter (0..1).
 }
