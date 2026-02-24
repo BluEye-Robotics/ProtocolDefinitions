@@ -833,7 +833,7 @@ enum Resolution {
   RESOLUTION_HD_720P = 2; // 720p HD (1280x720).
   RESOLUTION_FULLHD_1080P = 1; // 1080p Full HD (1920x1080).
   RESOLUTION_UHD_4K = 3; // 4K Ultra HD (3840x2160, Only supported on X3 Ultra).
-  RESOLUTION_QHD_2_7K = 5; // 2.7K QHD (2720x1528, Only supported on X3 Ultra).
+  RESOLUTION_QHD_2K = 5; // 2K QHD (2560x1440, Only supported on X3 Ultra).
 }
 
 // Available camera frame rates.
@@ -844,7 +844,7 @@ enum Framerate {
   FRAMERATE_UNSPECIFIED = 0; // Framerate not specified.
   FRAMERATE_FPS_30 = 1; // 30 frames per second.
   FRAMERATE_FPS_25 = 2; // 25 frames per second. (Only supported on Pioneer/Pro/X1/X3)
-  FRAMERATE_FPS_60 = 3; // 60 frames per second. (Only supported on X3 Ultra at 1080p and 720p)
+  FRAMERATE_FPS_60 = 3; // 60 frames per second. (Only supported on X3 Ultra at QHD, 1080p and 720p)
 }
 
 // Which camera to control.
