@@ -833,6 +833,7 @@ enum Resolution {
   RESOLUTION_HD_720P = 2; // 720p HD (1280x720).
   RESOLUTION_FULLHD_1080P = 1; // 1080p Full HD (1920x1080).
   RESOLUTION_UHD_4K = 3; // 4K Ultra HD (3840x2160, Only supported on X3 Ultra).
+  RESOLUTION_QHD_2_7K = 5; // 2.7K QHD (2720x1528, Only supported on X3 Ultra).
 }
 
 // Available camera frame rates.
