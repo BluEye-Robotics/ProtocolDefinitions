@@ -318,5 +318,5 @@ message LogEntryTel {
 //
 // Message is published when the filter settings are changed.
 message TurbidityFilterTel {
-  TurbidityFilter turbidity_filter = 1; // Turbidity filter settings.
+  FilterMessage turbidity_filter = 1; // Turbidity filter settings.
 }
