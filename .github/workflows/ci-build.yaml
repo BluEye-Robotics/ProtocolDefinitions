@@ -1,6 +1,10 @@
 name: CI build
 
-on: [push, pull_request]
+on: [push]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   protolint:
@@ -47,7 +51,6 @@ jobs:
 
   build-container:
     runs-on: ubuntu-24.04
-
     container:
       image: blueyerobotics/blunux-ubuntu
       credentials:
