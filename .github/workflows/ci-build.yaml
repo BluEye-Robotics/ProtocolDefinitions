@@ -1,6 +1,10 @@
 name: CI build
 
-on: [push, pull_request]
+on: [push]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   protolint:
@@ -12,3 +16,35 @@ jobs:
         uses: plexsystems/protolint-action@v0.4.0
         with:
           configDirectory: .
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libprotobuf-dev protobuf-compiler
+      - name: Build
+        run: >
+          mkdir build
+          && cd build
+          && cmake ..
+          && make all
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install protobuf
+      - name: Build
+        run: >
+          mkdir build
+          && cd build
+          && cmake ..
+          && make all

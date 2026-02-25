@@ -7,6 +7,16 @@ include(GNUInstallDirs)
 find_package(Protobuf REQUIRED)
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 
+message(STATUS "Using protobuf ${Protobuf_VERSION}")
+message(STATUS "Protobuf libraries: ${Protobuf_LIBRARIES}")
+
+# We need to link abseil if protobuf version is 6.x or higher
+if(Protobuf_VERSION VERSION_GREATER_EQUAL "6.0.0")
+  message(STATUS "Protobuf version is ${Protobuf_VERSION}, linking abseil")
+  find_package(absl REQUIRED)
+  set(Protobuf_LIBRARIES ${Protobuf_LIBRARIES} absl::log absl::strings absl::base absl::status absl::log_internal_check_op absl::log_internal_message)
+endif()
+
 file(GLOB ProtoFiles "protobuf_definitions/*.proto")
 
 foreach(ProtoFile ${ProtoFiles})
@@ -19,7 +29,7 @@ protobuf_generate_python(PROTO_PY ${ProtoFiles})
 add_library(blueyeprotocol SHARED ${ProtoSources} ${ProtoHeaders})
 
 set(EXT_LIBS
-  ${PROTOBUF_LIBRARIES}
+  ${Protobuf_LIBRARIES}
 )
 
 target_link_libraries(blueyeprotocol PUBLIC ${EXT_LIBS})
