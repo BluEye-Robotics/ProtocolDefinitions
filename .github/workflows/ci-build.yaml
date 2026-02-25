@@ -48,27 +48,3 @@ jobs:
           && cd build
           && cmake ..
           && make all
-
-  build-container:
-    runs-on: ubuntu-24.04
-    container:
-      image: blueyerobotics/blunux-ubuntu
-      credentials:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    # Set default shell for all steps in this job
-    defaults:
-      run:
-        shell: zsh -e {0}
-
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-      - name: Build
-        run: >
-          source /opt/ros/jazzy/setup.zsh
-          && mkdir build
-          && cd build
-          && cmake ..
-          && make all
