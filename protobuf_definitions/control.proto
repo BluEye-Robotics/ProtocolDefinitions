@@ -231,3 +231,10 @@ message FormatRemovableStorageDeviceCtrl {
 message SetTurbidityFilterCtrl {
   FilterMessage turbidity_filter = 1; // Message with the turbidity filter settings to set.
 }
+
+// Issue a command to set the digital pan, tilt, and zoom of the main camera.
+//
+// Only supported on X3 Ultra.
+message CameraPanTiltZoomCtrl {
+  CameraPanTiltZoom camera_pan_tilt_zoom = 1; // The desired pan, tilt, and zoom state.
+}
