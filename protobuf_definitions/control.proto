@@ -238,3 +238,11 @@ message SetTurbidityFilterCtrl {
 message CameraPanTiltZoomCtrl {
   CameraPanTiltZoom camera_pan_tilt_zoom = 1; // The desired pan, tilt, and zoom state.
 }
+
+// Message sent to start streaming log entries to the client.
+message StartLogStreamingCtrl {
+}
+
+// Message sent to stop streaming log entries to the client.
+message StopLogStreamingCtrl {
+}
