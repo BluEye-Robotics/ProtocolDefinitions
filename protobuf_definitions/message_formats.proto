@@ -1345,10 +1345,12 @@ message ThermalZone {
   float temperature = 2; // Temperature (°C).
 }
 
-// Video codec engine utilization.
+// Video codec engine status.
 message VideoCodecInfo {
-  float encoder_load = 1; // Video encoder load (0..1).
-  float decoder_load = 2; // Video decoder load (0..1).
+  bool encoder_active = 1; // Video encoder (NVENC) is active.
+  float encoder_frequency_mhz = 2; // Video encoder clock frequency (MHz).
+  bool decoder_active = 3; // Video decoder (NVDEC) is active.
+  float decoder_frequency_mhz = 4; // Video decoder clock frequency (MHz).
 }
 
 // Power rail measurement.
