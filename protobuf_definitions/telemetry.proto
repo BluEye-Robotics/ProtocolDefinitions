@@ -295,7 +295,7 @@ message MultibeamDiscoveryTel {
   MultibeamDiscovery discovery = 1; // Discovery data from a multibeam sonar.
 }
 
-// Information about cpu and memory usage (deprecated, use SystemPerformanceInfoTel instead).
+// Information about CPU and memory usage (deprecated, use SystemPerformanceInfoTel instead).
 message CPUInfoTel {
   CPUInfo cpu_info = 1; // CPU information.
 }

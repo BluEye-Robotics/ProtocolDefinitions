@@ -1368,7 +1368,7 @@ message PowerRailInfo {
 // Fields not applicable to a platform are left at their zero/empty defaults.
 message SystemPerformanceInfo {
   repeated CpuCoreLoad cpu_cores = 1; // Per-core CPU utilization.
-  float cpu_load_average = 2; // Overall CPU load (0..1).
+  float cpu_utilization = 2; // Mean CPU utilization across all cores (0..1).
   GpuInfo gpu = 3; // GPU utilization.
   repeated DlaInfo dla_engines = 4; // DLA engine utilization (Jetson only).
   MemoryInfo memory = 5; // RAM and swap usage.
