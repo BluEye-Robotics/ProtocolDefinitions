@@ -295,9 +295,17 @@ message MultibeamDiscoveryTel {
   MultibeamDiscovery discovery = 1; // Discovery data from a multibeam sonar.
 }
 
-// Information about cpu and memory usage.
+// Information about cpu and memory usage (deprecated, use SystemPerformanceInfoTel instead).
 message CPUInfoTel {
   CPUInfo cpu_info = 1; // CPU information.
+}
+
+// System performance telemetry message.
+//
+// Comprehensive performance metrics including per-core CPU, GPU, DLA,
+// memory, thermals, power rails, and video codec utilization.
+message SystemPerformanceInfoTel {
+  SystemPerformanceInfo system_performance_info = 1; // System performance information.
 }
 
 // Surface Unit telemetry message.

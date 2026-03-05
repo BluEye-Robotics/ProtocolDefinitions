@@ -256,7 +256,7 @@ message WaterTemperature {
   float value = 1; // Water temperature (°C).
 }
 
-// CPU temperature.
+// CPU temperature (deprecated, use SystemPerformanceInfo.thermal_zones instead).
 message CPUTemperature {
   float value = 1; // CPU temperature (°C).
 }
@@ -1286,7 +1286,7 @@ message PersistentStorageSettings {
   bool acc_calibration = 9; // Indicates if accelerometer calibration data should be written to the data partition.
 }
 
-// CPU information.
+// CPU information (deprecated, use SystemPerformanceInfo instead).
 //
 // Contains information about the CPU load and memory usage of the drone.
 message CPUInfo {
@@ -1295,6 +1295,89 @@ message CPUInfo {
   float main_queue_load = 3; // Main queue load (0..1).
   float guestport_queue_load = 4 ; // Guestport queue load (0..1).
   float comm_queue_load = 5; // Communication queue load (0..1).
+}
+
+// Per-core CPU utilization.
+message CpuCoreLoad {
+  uint32 core_index = 1; // Core index (0-based).
+  float load = 2; // Core load (0..1).
+  float frequency_mhz = 3; // Current clock frequency (MHz).
+}
+
+// GPU utilization and status.
+message GpuInfo {
+  float load = 1; // GPU load (0..1).
+  float frequency_mhz = 2; // Current GPU clock frequency (MHz).
+  float temperature = 3; // GPU temperature (°C).
+}
+
+// Deep Learning Accelerator (DLA) utilization.
+//
+// Jetson Orin NX has two DLA engines used for inference offload.
+message DlaInfo {
+  uint32 engine_index = 1; // DLA engine index (0-based).
+  float load = 2; // DLA engine load (0..1).
+  float frequency_mhz = 3; // Current DLA clock frequency (MHz).
+}
+
+// System memory information.
+message MemoryInfo {
+  uint64 total_bytes = 1; // Total RAM (bytes).
+  uint64 used_bytes = 2; // Used RAM (bytes).
+  uint64 cached_bytes = 3; // Cached RAM (bytes).
+  uint64 swap_total_bytes = 4; // Total swap (bytes).
+  uint64 swap_used_bytes = 5; // Used swap (bytes).
+}
+
+// Thermal zone identifiers.
+enum ThermalZoneId {
+  THERMAL_ZONE_ID_UNSPECIFIED = 0; // Unspecified thermal zone.
+  THERMAL_ZONE_ID_CPU = 1; // CPU thermal zone.
+  THERMAL_ZONE_ID_GPU = 2; // GPU thermal zone.
+  THERMAL_ZONE_ID_SOC = 3; // System-on-chip thermal zone.
+  THERMAL_ZONE_ID_BOARD = 4; // Board thermal zone.
+  THERMAL_ZONE_ID_TJ = 5; // Junction temperature (Tj).
+}
+
+// Thermal zone reading.
+message ThermalZone {
+  ThermalZoneId zone = 1; // Thermal zone identifier.
+  float temperature = 2; // Temperature (°C).
+}
+
+// Video codec engine utilization.
+message VideoCodecInfo {
+  float encoder_load = 1; // Video encoder load (0..1).
+  float decoder_load = 2; // Video decoder load (0..1).
+}
+
+// Power rail measurement.
+//
+// Reports voltage, current, and power from INA sensor rails.
+message PowerRailInfo {
+  string name = 1; // Rail name (e.g. "VDD_CPU", "VDD_GPU", "VDD_SOC", "VDD_IN").
+  float voltage_mv = 2; // Voltage (mV).
+  float current_ma = 3; // Current (mA).
+  float power_mw = 4; // Power (mW).
+}
+
+// System performance information.
+//
+// Comprehensive performance metrics for the drone's compute platform.
+// Covers CPU, GPU, DLA, memory, thermals, power, and video codec utilization.
+// Fields not applicable to a platform are left at their zero/empty defaults.
+message SystemPerformanceInfo {
+  repeated CpuCoreLoad cpu_cores = 1; // Per-core CPU utilization.
+  float cpu_load_average = 2; // Overall CPU load (0..1).
+  GpuInfo gpu = 3; // GPU utilization.
+  repeated DlaInfo dla_engines = 4; // DLA engine utilization (Jetson only).
+  MemoryInfo memory = 5; // RAM and swap usage.
+  repeated ThermalZone thermal_zones = 6; // All thermal zone readings.
+  repeated PowerRailInfo power_rails = 7; // Power rail measurements (Jetson only).
+  VideoCodecInfo video_codec = 8; // Video encoder/decoder load (Jetson only).
+  float main_queue_load = 9; // Main queue load (0..1).
+  float guestport_queue_load = 10; // Guestport queue load (0..1).
+  float comm_queue_load = 11; // Communication queue load (0..1).
 }
 
 // Surface Unit battery information.
