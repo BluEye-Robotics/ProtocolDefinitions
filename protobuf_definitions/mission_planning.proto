@@ -136,8 +136,17 @@ message GoToHomeCommand {
 // The drone will drive parallel scan lines across the polygon at the specified angle and spacing.
 // On export, the planner expands this into individual WaypointCommands for execution.
 message SurveyCommand {
-  repeated LatLongPosition vertices = 1; // Polygon vertices defining the survey area boundary (decimal degrees).
-  float angle = 2; // Sweep direction relative to north (degrees, 0-360).
+  // Polygon vertices defining the survey area boundary (decimal degrees).
+  // The polygon is implicitly closed: the last vertex connects back to the first.
+  // Clients MUST NOT repeat the first vertex at the end of the list.
+  // Vertices should be ordered clockwise when viewed from above.
+  // The boundary must form a simple polygon (no self-intersections).
+  // At least three distinct vertices are required.
+  repeated LatLongPosition vertices = 1;
+  // Sweep direction relative to north in degrees (0-360).
+  // NOTE: Unlike PathSegment.course_to_target (which uses radians), this field
+  // uses degrees to match compass convention. Convert radians before assigning.
+  float angle = 2;
   float lane_spacing = 3; // Distance between parallel scan lines (m).
   float turnaround_distance = 4; // Overshoot distance past polygon boundary at each turn (m).
   float speed = 5; // Desired speed over ground during survey (m/s).
