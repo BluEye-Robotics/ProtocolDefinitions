@@ -36,6 +36,7 @@ message Instruction {
     GoToSurfaceCommand go_to_surface_command = 11; // Go to surface.
     GoToSeabedCommand go_to_seabed_command = 12; // Go to seabed.
     GoToHomeCommand go_to_home_command = 13; // Go to home position.
+    SurveyCommand survey_command = 14; // Execute a survey pattern over a polygon area.
   }
 }
 
@@ -131,6 +132,20 @@ message GoToHomeCommand {
   float desired_speed = 1; // Desired speed to home (m/s).
 }
 
+// A SurveyCommand defines a survey (lawn-mower) pattern over a polygon area.
+// The drone will drive parallel scan lines across the polygon at the specified angle and spacing.
+// On export, the planner expands this into individual WaypointCommands for execution.
+message SurveyCommand {
+  repeated LatLongPosition vertices = 1; // Polygon vertices defining the survey area boundary (decimal degrees).
+  float angle = 2; // Sweep direction relative to north (degrees, 0-360).
+  float lane_spacing = 3; // Distance between parallel scan lines (m).
+  float turnaround_distance = 4; // Overshoot distance past polygon boundary at each turn (m).
+  float speed = 5; // Desired speed over ground during survey (m/s).
+  float circle_of_acceptance = 6; // Radius of acceptance circle for generated waypoints (m).
+  DepthSetPoint depth_set_point = 7; // Optional depth set point for all generated waypoints.
+  bool reverse = 8; // If true, reverse the scan line order (swap start and end points).
+}
+
 // List of available camera actions.
 enum CameraAction {
   CAMERA_ACTION_UNSPECIFIED = 0; // Unspecified command.
@@ -170,6 +185,7 @@ enum InstructionType {
   INSTRUCTION_TYPE_GO_TO_SURFACE = 10; // Go to the surface.
   INSTRUCTION_TYPE_GO_TO_SEABED = 11; // Go to the seabed.
   INSTRUCTION_TYPE_GO_TO_HOME = 12; // Returning to home.
+  INSTRUCTION_TYPE_SURVEY = 13; // Execute a survey pattern over a polygon area.
 }
 
 // Reference for the auto pilot when a mission is active.
