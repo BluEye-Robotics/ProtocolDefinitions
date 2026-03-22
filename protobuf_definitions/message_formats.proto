@@ -1360,3 +1360,12 @@ message CameraPanTiltZoom {
   float tilt = 2; // Vertical tilt (-1.0..1.0), where 0.0 is center.
   float zoom = 3; // Zoom level (0.0..1.0), where 0.0 is no zoom and 1.0 is maximum zoom.
 }
+
+// Information about the operator controlling the drone.
+//
+// Used to identify who started a dive, for reporting and when importing
+// dives to Blueye Cloud.
+message OperatorInfo {
+  string name = 1; // Full name of the operator.
+  string email = 2; // E-mail address of the operator.
+}
