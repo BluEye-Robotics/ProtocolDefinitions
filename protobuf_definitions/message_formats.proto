@@ -1319,6 +1319,7 @@ message DlaInfo {
   float load = 2; // DLA engine load (0..1).
   float frequency_mhz = 3; // Core clock frequency (MHz). 0 when disabled.
   bool enabled = 4; // True when the engine is active (runtime_status == "active").
+  float falcon_frequency_mhz = 5; // Falcon microcontroller clock frequency (MHz). 0 when disabled.
 }
 
 // System memory information.
