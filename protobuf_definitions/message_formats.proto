@@ -1317,7 +1317,8 @@ message GpuInfo {
 message DlaInfo {
   uint32 engine_index = 1; // DLA engine index (0-based).
   float load = 2; // DLA engine load (0..1).
-  float frequency_mhz = 3; // Current DLA clock frequency (MHz).
+  float frequency_mhz = 3; // Core clock frequency (MHz). 0 when disabled.
+  bool enabled = 4; // True when the engine clock is enabled (clk_enable_count >= 1).
 }
 
 // System memory information.
@@ -1353,20 +1354,10 @@ message VideoCodecInfo {
   float decoder_frequency_mhz = 4; // Video decoder clock frequency (MHz).
 }
 
-// Power rail measurement.
-//
-// Reports voltage, current, and power from INA sensor rails.
-message PowerRailInfo {
-  string name = 1; // Rail name (e.g. "VDD_CPU", "VDD_GPU", "VDD_SOC", "VDD_IN").
-  float voltage_mv = 2; // Voltage (mV).
-  float current_ma = 3; // Current (mA).
-  float power_mw = 4; // Power (mW).
-}
-
 // System performance information.
 //
 // Comprehensive performance metrics for the drone's compute platform.
-// Covers CPU, GPU, DLA, memory, thermals, power, and video codec utilization.
+// Covers CPU, GPU, DLA, memory, thermals, and video codec utilization.
 // Fields not applicable to a platform are left at their zero/empty defaults.
 message SystemPerformanceInfo {
   repeated CpuCoreLoad cpu_cores = 1; // Per-core CPU utilization.
@@ -1375,11 +1366,14 @@ message SystemPerformanceInfo {
   repeated DlaInfo dla_engines = 4; // DLA engine utilization (Jetson only).
   MemoryInfo memory = 5; // RAM and swap usage.
   repeated ThermalZone thermal_zones = 6; // All thermal zone readings.
-  repeated PowerRailInfo power_rails = 7; // Power rail measurements (Jetson only).
+  reserved 7; // Was: power_rails (removed — no INA sensors on current hardware).
   VideoCodecInfo video_codec = 8; // Video encoder/decoder load (Jetson only).
   float main_queue_load = 9; // Main queue load (0..1).
   float guestport_queue_load = 10; // Guestport queue load (0..1).
   float comm_queue_load = 11; // Communication queue load (0..1).
+  float camera_queue_load = 12; // Camera queue load (0..1).
+  float overlay_queue_load = 13; // Overlay queue load (0..1).
+  float position_observer_queue_load = 14; // Position observer queue load (0..1).
 }
 
 // Surface Unit battery information.
