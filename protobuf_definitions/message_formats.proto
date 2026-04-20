@@ -1366,14 +1366,13 @@ message SystemPerformanceInfo {
   repeated DlaInfo dla_engines = 4; // DLA engine utilization (Jetson only).
   MemoryInfo memory = 5; // RAM and swap usage.
   repeated ThermalZone thermal_zones = 6; // All thermal zone readings.
-  reserved 7; // Was: power_rails (removed — no INA sensors on current hardware).
-  VideoCodecInfo video_codec = 8; // Video encoder/decoder load (Jetson only).
-  float main_queue_load = 9; // Main queue load (0..1).
-  float guestport_queue_load = 10; // Guestport queue load (0..1).
-  float comm_queue_load = 11; // Communication queue load (0..1).
-  float camera_queue_load = 12; // Camera queue load (0..1).
-  float overlay_queue_load = 13; // Overlay queue load (0..1).
-  float position_observer_queue_load = 14; // Position observer queue load (0..1).
+  VideoCodecInfo video_codec = 7; // Video encoder/decoder load (Jetson only).
+  float main_queue_load = 8; // Main queue load (0..1).
+  float guestport_queue_load = 9; // Guestport queue load (0..1).
+  float comm_queue_load = 10; // Communication queue load (0..1).
+  float camera_queue_load = 11; // Camera queue load (0..1).
+  float overlay_queue_load = 12; // Overlay queue load (0..1).
+  float position_observer_queue_load = 13; // Position observer queue load (0..1).
 }
 
 // Surface Unit battery information.
