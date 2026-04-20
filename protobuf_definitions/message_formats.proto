@@ -1308,7 +1308,6 @@ message CpuCoreLoad {
 message GpuInfo {
   float load = 1; // GPU load (0..1).
   float frequency_mhz = 2; // Current GPU clock frequency (MHz).
-  float temperature = 3; // GPU temperature (°C).
 }
 
 // Deep Learning Accelerator (DLA) utilization.
