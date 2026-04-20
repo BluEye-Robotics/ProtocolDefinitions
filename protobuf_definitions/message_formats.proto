@@ -1318,7 +1318,7 @@ message DlaInfo {
   uint32 engine_index = 1; // DLA engine index (0-based).
   float load = 2; // DLA engine load (0..1).
   float frequency_mhz = 3; // Core clock frequency (MHz). 0 when disabled.
-  bool enabled = 4; // True when the engine clock is enabled (clk_enable_count >= 1).
+  bool enabled = 4; // True when the engine is active (runtime_status == "active").
 }
 
 // System memory information.
@@ -1352,6 +1352,10 @@ message VideoCodecInfo {
   float encoder_frequency_mhz = 2; // Video encoder clock frequency (MHz).
   bool decoder_active = 3; // Video decoder (NVDEC) is active.
   float decoder_frequency_mhz = 4; // Video decoder clock frequency (MHz).
+  bool nvjpg_active = 5; // JPEG engine (NVJPG) is active.
+  float nvjpg_frequency_mhz = 6; // JPEG engine clock frequency (MHz).
+  bool vic_active = 7; // Video Image Compositor (VIC) is active.
+  float vic_frequency_mhz = 8; // VIC clock frequency (MHz).
 }
 
 // System performance information.
