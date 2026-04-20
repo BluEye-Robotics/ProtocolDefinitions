@@ -1333,11 +1333,7 @@ message MemoryInfo {
 // Thermal zone identifiers.
 enum ThermalZoneId {
   THERMAL_ZONE_ID_UNSPECIFIED = 0; // Unspecified thermal zone.
-  THERMAL_ZONE_ID_CPU = 1; // CPU thermal zone.
-  THERMAL_ZONE_ID_GPU = 2; // GPU thermal zone.
-  THERMAL_ZONE_ID_SOC = 3; // System-on-chip thermal zone.
-  THERMAL_ZONE_ID_BOARD = 4; // Board thermal zone.
-  THERMAL_ZONE_ID_TJ = 5; // Junction temperature (Tj).
+  THERMAL_ZONE_ID_TJ = 1; // Junction temperature (Tj).
 }
 
 // Thermal zone reading.
