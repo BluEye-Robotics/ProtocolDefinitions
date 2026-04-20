@@ -20,7 +20,10 @@ jobs:
 
       - name: Sanitize branch name
         id: branches
-        uses: transferwise/sanitize-branch-name@v1
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          SANITIZED=$(echo "$BRANCH" | sed 's/[^a-zA-Z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//;s/-$//' | tr '[:upper:]' '[:lower:]' | cut -c1-63)
+          echo "sanitized-branch-name=$SANITIZED" >> "$GITHUB_OUTPUT"
 
       - name: Build project and generate NuGet package
         run: |
