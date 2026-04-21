@@ -1317,7 +1317,7 @@ message DlaInfo {
   uint32 engine_index = 1; // DLA engine index (0-based).
   float load = 2; // DLA engine load (0..1).
   float frequency_mhz = 3; // Core clock frequency (MHz). 0 when disabled.
-  bool enabled = 4; // True when the engine is active (runtime_status == "active").
+  bool enabled = 4; // True when the DLA engine is actively processing.
   float falcon_frequency_mhz = 5; // Falcon microcontroller clock frequency (MHz). 0 when disabled.
 }
 
@@ -1365,7 +1365,7 @@ message SystemPerformanceInfo {
   repeated DlaInfo dla_engines = 4; // DLA engine utilization (Jetson only).
   MemoryInfo memory = 5; // RAM usage.
   repeated ThermalZone thermal_zones = 6; // All thermal zone readings.
-  VideoCodecInfo video_codec = 7; // Video encoder/decoder load (Jetson only).
+  VideoCodecInfo video_codec = 7; // Video encoder/decoder status (Jetson only).
   float main_queue_load = 8; // Main queue load (0..1).
   float guestport_queue_load = 9; // Guestport queue load (0..1).
   float comm_queue_load = 10; // Communication queue load (0..1).

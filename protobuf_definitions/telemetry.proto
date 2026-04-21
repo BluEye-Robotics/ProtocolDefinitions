@@ -303,7 +303,7 @@ message CPUInfoTel {
 // System performance telemetry message.
 //
 // Comprehensive performance metrics including per-core CPU, GPU, DLA,
-// memory, thermals, power rails, and video codec utilization.
+// memory, thermals, and video codec utilization.
 message SystemPerformanceInfoTel {
   SystemPerformanceInfo system_performance_info = 1; // System performance information.
 }
