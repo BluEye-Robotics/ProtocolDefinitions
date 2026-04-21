@@ -1326,14 +1326,13 @@ message MemoryInfo {
   uint64 total_bytes = 1; // Total RAM (bytes).
   uint64 used_bytes = 2; // Used RAM (bytes).
   uint64 cached_bytes = 3; // Cached RAM (bytes).
-  uint64 swap_total_bytes = 4; // Total swap (bytes).
-  uint64 swap_used_bytes = 5; // Used swap (bytes).
 }
 
 // Thermal zone identifiers.
 enum ThermalZoneId {
   THERMAL_ZONE_ID_UNSPECIFIED = 0; // Unspecified thermal zone.
   THERMAL_ZONE_ID_TJ = 1; // Junction temperature (Tj).
+  THERMAL_ZONE_ID_CANISTER = 2; // Canister temperature.
 }
 
 // Thermal zone reading.
@@ -1364,7 +1363,7 @@ message SystemPerformanceInfo {
   float cpu_utilization = 2; // Mean CPU utilization across all cores (0..1).
   GpuInfo gpu = 3; // GPU utilization.
   repeated DlaInfo dla_engines = 4; // DLA engine utilization (Jetson only).
-  MemoryInfo memory = 5; // RAM and swap usage.
+  MemoryInfo memory = 5; // RAM usage.
   repeated ThermalZone thermal_zones = 6; // All thermal zone readings.
   VideoCodecInfo video_codec = 7; // Video encoder/decoder load (Jetson only).
   float main_queue_load = 8; // Main queue load (0..1).
