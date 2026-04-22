@@ -1326,6 +1326,7 @@ message MemoryInfo {
   uint64 total_bytes = 1; // Total RAM (bytes).
   uint64 used_bytes = 2; // Used RAM (bytes).
   uint64 cached_bytes = 3; // Cached RAM (bytes).
+  float bus_load = 4; // Memory bus utilization (0..1). i.MX only.
 }
 
 // Thermal zone identifiers.
