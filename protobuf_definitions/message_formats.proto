@@ -1344,6 +1344,7 @@ message ThermalZone {
 
 // Video codec engine status.
 message VideoCodecInfo {
+  // Jetson only (NVENC/NVDEC/NVJPG/VIC devfreq).
   bool encoder_active = 1; // Video encoder (NVENC) is active.
   float encoder_frequency_mhz = 2; // Video encoder clock frequency (MHz).
   bool decoder_active = 3; // Video decoder (NVDEC) is active.
@@ -1352,6 +1353,11 @@ message VideoCodecInfo {
   float nvjpg_frequency_mhz = 6; // JPEG engine clock frequency (MHz).
   bool vic_active = 7; // Video Image Compositor (VIC) is active.
   float vic_frequency_mhz = 8; // VIC clock frequency (MHz).
+  // i.MX only (CODA VPU).
+  bool vpu_active = 9; // VPU clock is gated on.
+  float vpu_frequency_mhz = 10; // VPU AXI clock frequency (MHz).
+  uint32 vpu_codec_irq_count = 11; // Cumulative VPU_CODEC_IRQ count.
+  uint32 vpu_jpg_irq_count = 12; // Cumulative VPU_JPG_IRQ count.
 }
 
 // System performance information.
@@ -1366,7 +1372,7 @@ message SystemPerformanceInfo {
   repeated DlaInfo dla_engines = 4; // DLA engine utilization (Jetson only).
   MemoryInfo memory = 5; // RAM usage.
   repeated ThermalZone thermal_zones = 6; // All thermal zone readings.
-  VideoCodecInfo video_codec = 7; // Video encoder/decoder status (Jetson only).
+  VideoCodecInfo video_codec = 7; // Video encoder/decoder status.
   float main_queue_load = 8; // Main queue load (0..1).
   float guestport_queue_load = 9; // Guestport queue load (0..1).
   float comm_queue_load = 10; // Communication queue load (0..1).
