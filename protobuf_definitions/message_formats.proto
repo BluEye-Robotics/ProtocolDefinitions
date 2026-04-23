@@ -1428,6 +1428,8 @@ message ObjectDetection {
 message ObjectDetections {
   repeated ObjectDetection detections = 1; // List of detections in the frame.
   Camera camera = 2; // Which camera the detections are from.
+  uint32 image_width = 3; // Width of the source image (px).
+  uint32 image_height = 4; // Height of the source image (px).
 }
 
 // Generic filter settings.
