@@ -45,7 +45,9 @@ jobs:
             --ts_proto_out=./out \
             --ts_proto_opt=outputIndex=true \
             --ts_proto_opt=globalThisPolyfill=true \
-            --ts_proto_opt=useExactTypes=false
+            --ts_proto_opt=useExactTypes=false \
+            --ts_proto_opt=esModuleInterop=true \
+            --ts_proto_opt=importSuffix=.js
 
       - name: Compile
         run: pnpm run build
