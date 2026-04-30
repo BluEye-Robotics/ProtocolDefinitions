@@ -860,6 +860,13 @@ enum StreamingProtocol {
   STREAMING_PROTOCOL_RTSP_MJPEG = 2; // RTSP streaming protocol using MJPEG codec. No recording when activated.
 }
 
+// Recording video codec.
+enum RecordingCodec {
+  RECORDING_CODEC_UNSPECIFIED = 0; // Use platform default (H.264).
+  RECORDING_CODEC_H264 = 1; // H.264/AVC codec. Wider compatibility with players/editors.
+  RECORDING_CODEC_H265 = 2; // H.265/HEVC codec. Better compression, limited compatibility. Ultra only.
+}
+
 // Camera parameters.
 message CameraParameters {
   reserved 19;
@@ -894,6 +901,12 @@ message CameraParameters {
   // If 0 or unset, the system will use a default of 1400.
   // The Blueye App allows users to set values between 500 and 1460.
   uint32 mtu_size = 24;
+
+  // Recording video codec. If unset, uses platform default.
+  RecordingCodec recording_codec = 25;
+  // Recording bitrate in bits/sec. If 0 or unset, a default is computed based
+  // on resolution, framerate, and encoding. Set explicitly to override.
+  int32 recording_bitrate = 26;
 }
 
 // Available temperature units.
@@ -1015,6 +1028,7 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_BLUEYE_EXTERNAL_USB_STORAGE = 45; // Blueye External USB Storage.
   GUEST_PORT_DEVICE_ID_BLUEYE_MULTIBEAM_SERVO_V2 = 46; // Blueye Multibeam Skid Servo V2.
   GUEST_PORT_DEVICE_ID_CERULEAN_OMNISCAN_450_COMPACT = 47; // Cerulean Omniscan 450 Compact.
+  GUEST_PORT_DEVICE_ID_BLUEYE_SCALING_LASER = 48; // Blueye Scaling Laser.
 }
 
 // Guest port number.
@@ -1428,6 +1442,8 @@ message ObjectDetection {
 message ObjectDetections {
   repeated ObjectDetection detections = 1; // List of detections in the frame.
   Camera camera = 2; // Which camera the detections are from.
+  uint32 image_width = 3; // Width of the source image (px).
+  uint32 image_height = 4; // Height of the source image (px).
 }
 
 // Generic filter settings.
