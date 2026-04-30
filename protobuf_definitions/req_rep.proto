@@ -226,3 +226,12 @@ message GetIperfStatusReq {
 message GetIperfStatusRep {
   bool enabled = 1; // If background iperf task is enabled or disabled.
 }
+
+// Request to get the current log streaming status.
+message GetLogStreamingStatusReq {
+}
+
+// Response with the current log streaming status.
+message GetLogStreamingStatusRep {
+  bool enabled = 1; // If log streaming is enabled or disabled.
+}
