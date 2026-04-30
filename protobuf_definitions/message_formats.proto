@@ -256,7 +256,7 @@ message WaterTemperature {
   float value = 1; // Water temperature (°C).
 }
 
-// CPU temperature.
+// CPU temperature (deprecated, use SystemPerformanceInfo.thermal_zones instead).
 message CPUTemperature {
   float value = 1; // CPU temperature (°C).
 }
@@ -860,6 +860,13 @@ enum StreamingProtocol {
   STREAMING_PROTOCOL_RTSP_MJPEG = 2; // RTSP streaming protocol using MJPEG codec. No recording when activated.
 }
 
+// Recording video codec.
+enum RecordingCodec {
+  RECORDING_CODEC_UNSPECIFIED = 0; // Use platform default (H.264).
+  RECORDING_CODEC_H264 = 1; // H.264/AVC codec. Wider compatibility with players/editors.
+  RECORDING_CODEC_H265 = 2; // H.265/HEVC codec. Better compression, limited compatibility. Ultra only.
+}
+
 // Camera parameters.
 message CameraParameters {
   reserved 19;
@@ -894,6 +901,12 @@ message CameraParameters {
   // If 0 or unset, the system will use a default of 1400.
   // The Blueye App allows users to set values between 500 and 1460.
   uint32 mtu_size = 24;
+
+  // Recording video codec. If unset, uses platform default.
+  RecordingCodec recording_codec = 25;
+  // Recording bitrate in bits/sec. If 0 or unset, a default is computed based
+  // on resolution, framerate, and encoding. Set explicitly to override.
+  int32 recording_bitrate = 26;
 }
 
 // Available temperature units.
@@ -1015,6 +1028,7 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_BLUEYE_EXTERNAL_USB_STORAGE = 45; // Blueye External USB Storage.
   GUEST_PORT_DEVICE_ID_BLUEYE_MULTIBEAM_SERVO_V2 = 46; // Blueye Multibeam Skid Servo V2.
   GUEST_PORT_DEVICE_ID_CERULEAN_OMNISCAN_450_COMPACT = 47; // Cerulean Omniscan 450 Compact.
+  GUEST_PORT_DEVICE_ID_BLUEYE_SCALING_LASER = 48; // Blueye Scaling Laser.
 }
 
 // Guest port number.
@@ -1286,7 +1300,7 @@ message PersistentStorageSettings {
   bool acc_calibration = 9; // Indicates if accelerometer calibration data should be written to the data partition.
 }
 
-// CPU information.
+// CPU information (deprecated, use SystemPerformanceInfo instead).
 //
 // Contains information about the CPU load and memory usage of the drone.
 message CPUInfo {
@@ -1295,6 +1309,90 @@ message CPUInfo {
   float main_queue_load = 3; // Main queue load (0..1).
   float guestport_queue_load = 4 ; // Guestport queue load (0..1).
   float comm_queue_load = 5; // Communication queue load (0..1).
+}
+
+// Per-core CPU utilization.
+message CpuCoreLoad {
+  uint32 core_index = 1; // Core index (0-based).
+  float load = 2; // Core load (0..1).
+  float frequency_mhz = 3; // Current clock frequency (MHz).
+}
+
+// GPU utilization and status.
+message GpuInfo {
+  float load = 1; // GPU load (0..1).
+  float frequency_mhz = 2; // Current GPU clock frequency (MHz).
+}
+
+// Deep Learning Accelerator (DLA) utilization.
+//
+// Jetson Orin NX has two DLA engines used for inference offload.
+message DlaInfo {
+  uint32 engine_index = 1; // DLA engine index (0-based).
+  float load = 2; // DLA engine load (0..1).
+  float frequency_mhz = 3; // Core clock frequency (MHz). 0 when disabled.
+  bool enabled = 4; // True when the DLA engine is actively processing.
+  float falcon_frequency_mhz = 5; // Falcon microcontroller clock frequency (MHz). 0 when disabled.
+}
+
+// System memory information.
+message MemoryInfo {
+  uint64 total_bytes = 1; // Total RAM (bytes).
+  uint64 used_bytes = 2; // Used RAM (bytes).
+  uint64 cached_bytes = 3; // Cached RAM (bytes).
+  float bus_load = 4; // Memory bus utilization (0..1). i.MX only.
+}
+
+// Thermal zone identifiers.
+enum ThermalZoneId {
+  THERMAL_ZONE_ID_UNSPECIFIED = 0; // Unspecified thermal zone.
+  THERMAL_ZONE_ID_TJ = 1; // Junction temperature (Tj).
+  THERMAL_ZONE_ID_CANISTER = 2; // Canister temperature.
+}
+
+// Thermal zone reading.
+message ThermalZone {
+  ThermalZoneId zone = 1; // Thermal zone identifier.
+  float temperature = 2; // Temperature (°C).
+}
+
+// Video codec engine status.
+message VideoCodecInfo {
+  // Jetson only (NVENC/NVDEC/NVJPG/VIC devfreq).
+  bool encoder_active = 1; // Video encoder (NVENC) is active.
+  float encoder_frequency_mhz = 2; // Video encoder clock frequency (MHz).
+  bool decoder_active = 3; // Video decoder (NVDEC) is active.
+  float decoder_frequency_mhz = 4; // Video decoder clock frequency (MHz).
+  bool nvjpg_active = 5; // JPEG engine (NVJPG) is active.
+  float nvjpg_frequency_mhz = 6; // JPEG engine clock frequency (MHz).
+  bool vic_active = 7; // Video Image Compositor (VIC) is active.
+  float vic_frequency_mhz = 8; // VIC clock frequency (MHz).
+  // i.MX only (CODA VPU).
+  bool vpu_active = 9; // VPU clock is gated on.
+  float vpu_frequency_mhz = 10; // VPU AXI clock frequency (MHz).
+  uint32 vpu_codec_irq_count = 11; // Cumulative VPU_CODEC_IRQ count.
+  uint32 vpu_jpg_irq_count = 12; // Cumulative VPU_JPG_IRQ count.
+}
+
+// System performance information.
+//
+// Comprehensive performance metrics for the drone's compute platform.
+// Covers CPU, GPU, DLA, memory, thermals, and video codec utilization.
+// Fields not applicable to a platform are left at their zero/empty defaults.
+message SystemPerformanceInfo {
+  repeated CpuCoreLoad cpu_cores = 1; // Per-core CPU utilization.
+  float cpu_utilization = 2; // Mean CPU utilization across all cores (0..1).
+  GpuInfo gpu = 3; // GPU utilization.
+  repeated DlaInfo dla_engines = 4; // DLA engine utilization (Jetson only).
+  MemoryInfo memory = 5; // RAM usage.
+  repeated ThermalZone thermal_zones = 6; // All thermal zone readings.
+  VideoCodecInfo video_codec = 7; // Video encoder/decoder status.
+  float main_queue_load = 8; // Main queue load (0..1).
+  float guestport_queue_load = 9; // Guestport queue load (0..1).
+  float comm_queue_load = 10; // Communication queue load (0..1).
+  float camera_queue_load = 11; // Camera queue load (0..1).
+  float overlay_queue_load = 12; // Overlay queue load (0..1).
+  float position_observer_queue_load = 13; // Position observer queue load (0..1).
 }
 
 // Surface Unit battery information.
@@ -1344,6 +1442,8 @@ message ObjectDetection {
 message ObjectDetections {
   repeated ObjectDetection detections = 1; // List of detections in the frame.
   Camera camera = 2; // Which camera the detections are from.
+  uint32 image_width = 3; // Width of the source image (px).
+  uint32 image_height = 4; // Height of the source image (px).
 }
 
 // Generic filter settings.
@@ -1359,4 +1459,13 @@ message CameraPanTiltZoom {
   float pan = 1; // Horizontal pan (-1.0..1.0), where 0.0 is center.
   float tilt = 2; // Vertical tilt (-1.0..1.0), where 0.0 is center.
   float zoom = 3; // Zoom level (0.0..1.0), where 0.0 is no zoom and 1.0 is maximum zoom.
+}
+
+// Information about the operator controlling the drone.
+//
+// Used to identify who started a dive, for reporting and when importing
+// dives to Blueye Cloud.
+message OperatorInfo {
+  string name = 1; // Full name of the operator.
+  string email = 2; // E-mail address of the operator.
 }

@@ -209,6 +209,7 @@ message DeactivateMultibeamCtrl {
 // The message does not do anything, but is included in the log files so we can see
 // at which point the user entered the dive view.
 message StartDiveCtrl {
+  OperatorInfo operator_info = 1; // Optional information about the operator who started the dive.
 }
 
 // Message sent when the user hits the end dive button in the app.
