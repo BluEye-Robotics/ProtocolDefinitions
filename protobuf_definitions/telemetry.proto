@@ -322,9 +322,9 @@ message LogEntryTel {
   }
 }
 
-// Object detections from a computer vision model.
+// Object detections from all active computer vision models.
 message ObjectDetectionsTel {
-  ObjectDetections object_detections = 1; // List of object detections from a video frame.
+  repeated ModelDetections model_detections = 1; // Per-model detection results.
 }
 
 // Turbidity filter settings telemetry message.
