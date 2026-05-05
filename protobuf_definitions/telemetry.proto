@@ -334,6 +334,13 @@ message TurbidityFilterTel {
   FilterMessage turbidity_filter = 1; // Turbidity filter settings.
 }
 
+// Auto white balance settings telemetry message.
+//
+// Message is published when the filter settings are changed.
+message AutoWhiteBalanceTel {
+  FilterMessage awb_filter = 1; // Auto white balance settings.
+}
+
 // Digital pan, tilt, and zoom telemetry from the main camera.
 //
 // Reports the actual pan, tilt, and zoom state of the camera.
