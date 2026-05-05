@@ -1470,3 +1470,16 @@ message OperatorInfo {
   string name = 1; // Full name of the operator.
   string email = 2; // E-mail address of the operator.
 }
+
+// Single-object tracking (SOT) state reported by the computer vision pipeline.
+message SotState {
+  // Current state of the SOT tracker.
+  enum State {
+    STATE_UNSPECIFIED = 0; // Unspecified state.
+    STATE_IDLE = 1; // No target selected, waiting for a target bounding box.
+    STATE_TRACKING = 2; // Actively tracking a target.
+    STATE_LOST = 3; // Target was lost (tracker failed to follow the object).
+  }
+  State state = 1; // Current tracking state.
+  BoundingBox bounding_box = 2; // Current tracked bounding box (valid when TRACKING).
+}
