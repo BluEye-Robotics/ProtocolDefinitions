@@ -229,8 +229,17 @@ message FormatRemovableStorageDeviceCtrl {
 }
 
 // Message sent when the user wants to set turbidity filter settings.
+// Uses CLAHE to enhance the contrast of the video, which can make it easier to see details in turbid water.
+// Only supported on X3 Ultra.
 message SetTurbidityFilterCtrl {
   FilterMessage turbidity_filter = 1; // Message with the turbidity filter settings to set.
+}
+
+// Message sent when the user wants to set auto white balance settings.
+// Removes underwater color casts using the Gray World algorithm.
+// Only supported on X3 Ultra.
+message SetAutoWhiteBalanceCtrl {
+  FilterMessage awb_filter = 1; // Message with the auto white balance settings to set.
 }
 
 // Issue a command to set the digital pan, tilt, and zoom of the main camera.
