@@ -1482,4 +1482,6 @@ message SotState {
   }
   State state = 1; // Current tracking state.
   BoundingBox bounding_box = 2; // Current tracked bounding box (valid when TRACKING).
+  uint32 image_width = 3; // Width of the source frame in pixels.
+  uint32 image_height = 4; // Height of the source frame in pixels.
 }
