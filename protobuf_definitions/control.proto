@@ -256,4 +256,6 @@ message StopLogStreamingCtrl {
 // width and height set to zero.
 message SetSotTargetCtrl {
   BoundingBox bounding_box = 1; // Target bounding box. Zero size (width=0, height=0) clears the target.
+  uint32 image_width = 2; // Width of the frame the bounding box was drawn on.
+  uint32 image_height = 3; // Height of the frame the bounding box was drawn on.
 }
