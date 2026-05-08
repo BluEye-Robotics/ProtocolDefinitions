@@ -947,6 +947,7 @@ enum FontSize {
   FONT_SIZE_PX30 = 4; // 30 px.
   FONT_SIZE_PX35 = 5; // 35 px.
   FONT_SIZE_PX40 = 6; // 40 px.
+  FONT_SIZE_PX50 = 7; // 50 px.
 }
 
 // Overlay parameters.
