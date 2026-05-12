@@ -757,6 +757,20 @@ enum PressureSensorType {
 
 // Information about the drone.
 //
+// Information about a loaded computer vision model.
+message CvModelInfo {
+  enum ModelType {
+    MODEL_TYPE_UNSPECIFIED = 0;
+    MODEL_TYPE_DETECTION = 1;
+    MODEL_TYPE_SOT = 2;
+  }
+  string name = 1; // Human-readable model name (from model_meta.json).
+  ModelType type = 2; // Type of CV model.
+  bool running = 3; // Whether the model is currently running.
+  string device = 4; // Execution provider (e.g. "cuda", "tensorrt").
+  string package_id = 5; // Package directory name (e.g. "tinyyolov2_package"). Stable identifier.
+}
+
 // This message contains serial numbers and version information for
 // internal components in the drone. Primarily used for diagnostics, or to
 // determine the origin of a logfile.
@@ -772,6 +786,7 @@ message DroneInfo {
   bytes bb_uid = 8; // Backbone unique identifier.
   GuestPortInfo gp = 9; // Guest port information.
   PressureSensorType depth_sensor = 11; // Type of depth sensor that is connected to the drone.
+  repeated CvModelInfo cv_models = 12; // List of loaded computer vision models.
 }
 
 // Known error states for the drone.
