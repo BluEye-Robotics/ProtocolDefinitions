@@ -769,6 +769,7 @@ message CvModelInfo {
   bool running = 3; // Whether the model is currently running.
   string device = 4; // Execution provider (e.g. "cuda", "tensorrt").
   string package_id = 5; // Package directory name (e.g. "tinyyolov2_package"). Stable identifier.
+  repeated string labels = 6; // Class names the model can detect (indexed by class_id).
 }
 
 // This message contains serial numbers and version information for
