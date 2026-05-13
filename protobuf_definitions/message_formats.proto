@@ -757,6 +757,21 @@ enum PressureSensorType {
 
 // Information about the drone.
 //
+// Information about a loaded computer vision model.
+message CvModelInfo {
+  enum ModelType {
+    MODEL_TYPE_UNSPECIFIED = 0;
+    MODEL_TYPE_DETECTION = 1;
+    MODEL_TYPE_SOT = 2;
+  }
+  string name = 1; // Human-readable model name (from model_meta.json).
+  ModelType type = 2; // Type of CV model.
+  bool running = 3; // Whether the model is currently running.
+  string device = 4; // Execution provider (e.g. "cuda", "tensorrt").
+  string package_id = 5; // Package directory name (e.g. "tinyyolov2_package"). Stable identifier.
+  repeated string labels = 6; // Class names the model can detect (indexed by class_id).
+}
+
 // This message contains serial numbers and version information for
 // internal components in the drone. Primarily used for diagnostics, or to
 // determine the origin of a logfile.
@@ -772,6 +787,7 @@ message DroneInfo {
   bytes bb_uid = 8; // Backbone unique identifier.
   GuestPortInfo gp = 9; // Guest port information.
   PressureSensorType depth_sensor = 11; // Type of depth sensor that is connected to the drone.
+  repeated CvModelInfo cv_models = 12; // List of loaded computer vision models.
 }
 
 // Known error states for the drone.
@@ -1470,4 +1486,19 @@ message CameraPanTiltZoom {
 message OperatorInfo {
   string name = 1; // Full name of the operator.
   string email = 2; // E-mail address of the operator.
+}
+
+// Single-object tracking (SOT) state reported by the computer vision pipeline.
+message SotState {
+  // Current state of the SOT tracker.
+  enum State {
+    STATE_UNSPECIFIED = 0; // Unspecified state.
+    STATE_IDLE = 1; // No target selected, waiting for a target bounding box.
+    STATE_TRACKING = 2; // Actively tracking a target.
+    STATE_LOST = 3; // Target was lost (tracker failed to follow the object).
+  }
+  State state = 1; // Current tracking state.
+  BoundingBox bounding_box = 2; // Current tracked bounding box (valid when TRACKING).
+  uint32 image_width = 3; // Width of the source frame in pixels.
+  uint32 image_height = 4; // Height of the source frame in pixels.
 }
