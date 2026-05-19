@@ -259,3 +259,10 @@ message SetSotTargetCtrl {
   uint32 image_width = 2; // Width of the frame the bounding box was drawn on.
   uint32 image_height = 3; // Height of the frame the bounding box was drawn on.
 }
+
+// Explicitly clear the single-object tracking (SOT) target (stop tracking).
+//
+// Preferred over sending a zero-size bounding box in SetSotTargetCtrl.
+// Both methods are supported for backwards compatibility.
+message ClearSotTargetCtrl {
+}
