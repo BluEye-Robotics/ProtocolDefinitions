@@ -341,3 +341,11 @@ message TurbidityFilterTel {
 message CameraPanTiltZoomTel {
   CameraPanTiltZoom camera_pan_tilt_zoom = 1; // Current pan, tilt, and zoom state.
 }
+
+// Single-object tracking (SOT) state telemetry from the computer vision pipeline.
+//
+// Reports the current tracking state and the tracked bounding box when active.
+// Published periodically while the SOT pipeline is running.
+message SotStateTel {
+  SotState sot_state = 1; // Current SOT state and bounding box.
+}
