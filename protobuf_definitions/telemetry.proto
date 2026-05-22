@@ -87,6 +87,7 @@ message GuestPortLightsTel {
 // Receive the status of any lasers connected to the drone.
 message LaserTel {
   Laser laser = 1; // Laser status.
+  LaserDetection laser_detection = 2; // Detection of the laser by the computer vision pipeline. Only available on Ultra.
 }
 
 // Pilot position (originating from device GPS) for logging.

@@ -103,6 +103,30 @@ message Lights {
 // turns the laser on.
 message Laser {
   float value = 1; // Laser intensity, any value above 0 turns the laser on (0..1).
+  bool modulated = 2; // Modulate the laser at 5Hz for tracking. Only available on Ultra.
+}
+
+// Point in 2D space.
+message Point2D {
+  float x = 1; // X coordinate of the point (px).
+  float y = 2; // Y coordinate of the point (px).
+}
+
+// Message representing the detection of scaling lasers in the main camera.
+//
+// The message contains the centroids of the detected dots, the distance between them in pixels,
+// and the confidence of the detection. The dots are detected through temporal DFT analysis of
+// 5 Hz laser modulation, isolating flickering pixels from the static scene background.
+//
+// Only available on Ultra.
+message LaserDetection {
+  bool detected = 1; // True if the laser is detected by the drone.
+  Point2D dot1 = 2; // First dot centroid (leftmost).
+  Point2D dot2 = 3; // Second dot centroid (rightmost).
+  float pixel_distance = 4; // Distance between dots in pixels.
+  float confidence = 5; // Confidence of the detection (0..1).
+  int image_width = 6; // Source frame width.
+  int image_height = 7; // Source frame height.
 }
 
 // Latitude and longitude position in WGS 84 decimal degrees format.
