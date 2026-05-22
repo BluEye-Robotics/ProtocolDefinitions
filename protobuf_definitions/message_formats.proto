@@ -127,6 +127,7 @@ message LaserDetection {
   float confidence = 5; // Confidence of the detection (0..1).
   uint32 image_width = 6; // Source frame width.
   uint32 image_height = 7; // Source frame height.
+  float laser_width = 8; // Real world distance between the two laser dots (m).
 }
 
 // Latitude and longitude position in WGS 84 decimal degrees format.
