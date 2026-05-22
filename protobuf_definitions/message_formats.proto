@@ -125,8 +125,8 @@ message LaserDetection {
   Point2D dot2 = 3; // Second dot centroid (rightmost).
   float pixel_distance = 4; // Distance between dots in pixels.
   float confidence = 5; // Confidence of the detection (0..1).
-  int image_width = 6; // Source frame width.
-  int image_height = 7; // Source frame height.
+  uint32 image_width = 6; // Source frame width.
+  uint32 image_height = 7; // Source frame height.
 }
 
 // Latitude and longitude position in WGS 84 decimal degrees format.
