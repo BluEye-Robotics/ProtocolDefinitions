@@ -589,6 +589,7 @@ enum NotificationType {
   NOTIFICATION_TYPE_INSTRUCTION_SKIPPED = 30; // When an instruction is not available in the ROV.
   NOTIFICATION_TYPE_DVL_HIGH_TEMPERATURE_DETECTED = 31; // DVL high temperature detected.
   NOTIFICATION_TYPE_DVL_THERMAL_PROTECTION_MODE_DETECTED = 32; // DVL thermal protection mode detected.
+  NOTIFICATION_TYPE_VIDEO_PARTITION_NOT_MOUNTED = 33; // Video partition not mounted.
 }
 
 // List of available notification levels.
