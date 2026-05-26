@@ -128,6 +128,8 @@ message LaserDetection {
   uint32 image_width = 6; // Source frame width.
   uint32 image_height = 7; // Source frame height.
   float laser_width = 8; // Real world distance between the two laser dots (m).
+  float corrected_pixel_distance = 9; // Distance after lens undistortion (px).
+  float estimated_distance = 10; // Estimated subject distance (m).
 }
 
 // Latitude and longitude position in WGS 84 decimal degrees format.
