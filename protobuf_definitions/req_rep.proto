@@ -169,6 +169,17 @@ message SetPubFrequencyRep {
   bool success = 1; // True if message name valid and frequency successfully updated.
 }
 
+// Request to update the logging frequency
+message SetLogFrequencyReq {
+  string message_type = 1; // Message name, f. ex. "AttitudeTel"
+  float frequency = 2; // Logging frequency (max 100 Hz).
+}
+
+// Response after updating logging frequency
+message SetLogFrequencyRep {
+  bool success = 1; // True if message name valid and frequency successfully updated.
+}
+
 // Request to get latest telemetry data
 message GetTelemetryReq {
   string message_type = 1; // Message name, f. ex. "AttitudeTel".
