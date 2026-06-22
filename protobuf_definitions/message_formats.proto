@@ -1393,6 +1393,14 @@ enum ThermalZoneId {
   THERMAL_ZONE_ID_UNSPECIFIED = 0; // Unspecified thermal zone.
   THERMAL_ZONE_ID_TJ = 1; // Junction temperature (Tj).
   THERMAL_ZONE_ID_CANISTER = 2; // Canister temperature.
+  THERMAL_ZONE_ID_CPU = 3; // CPU thermal zone.
+  THERMAL_ZONE_ID_GPU = 4; // GPU thermal zone.
+  THERMAL_ZONE_ID_CV0 = 5; // Vision accelerator 0 thermal zone.
+  THERMAL_ZONE_ID_CV1 = 6; // Vision accelerator 1 thermal zone.
+  THERMAL_ZONE_ID_CV2 = 7; // Vision accelerator 2 thermal zone.
+  THERMAL_ZONE_ID_SOC0 = 8; // SoC 0 thermal zone.
+  THERMAL_ZONE_ID_SOC1 = 9; // SoC 1 thermal zone.
+  THERMAL_ZONE_ID_SOC2 = 10; // SoC 2 thermal zone.
 }
 
 // Thermal zone reading.
