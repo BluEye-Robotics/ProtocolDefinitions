@@ -1393,6 +1393,14 @@ enum ThermalZoneId {
   THERMAL_ZONE_ID_UNSPECIFIED = 0; // Unspecified thermal zone.
   THERMAL_ZONE_ID_TJ = 1; // Junction temperature (Tj).
   THERMAL_ZONE_ID_CANISTER = 2; // Canister temperature.
+  THERMAL_ZONE_ID_CPU = 3; // CPU thermal zone.
+  THERMAL_ZONE_ID_GPU = 4; // GPU thermal zone.
+  THERMAL_ZONE_ID_CV0 = 5; // Vision accelerator 0 thermal zone.
+  THERMAL_ZONE_ID_CV1 = 6; // Vision accelerator 1 thermal zone.
+  THERMAL_ZONE_ID_CV2 = 7; // Vision accelerator 2 thermal zone.
+  THERMAL_ZONE_ID_SOC0 = 8; // SoC 0 thermal zone.
+  THERMAL_ZONE_ID_SOC1 = 9; // SoC 1 thermal zone.
+  THERMAL_ZONE_ID_SOC2 = 10; // SoC 2 thermal zone.
 }
 
 // Thermal zone reading.
@@ -1412,11 +1420,18 @@ message VideoCodecInfo {
   float nvjpg_frequency_mhz = 6; // JPEG engine clock frequency (MHz).
   bool vic_active = 7; // Video Image Compositor (VIC) is active.
   float vic_frequency_mhz = 8; // VIC clock frequency (MHz).
+
   // i.MX only (CODA VPU).
   bool vpu_active = 9; // VPU clock is gated on.
   float vpu_frequency_mhz = 10; // VPU AXI clock frequency (MHz).
   uint32 vpu_codec_irq_count = 11; // Cumulative VPU_CODEC_IRQ count.
   uint32 vpu_jpg_irq_count = 12; // Cumulative VPU_JPG_IRQ count.
+
+  // Jetson only (host1x actmon engine utilization, 0..1).
+  float encoder_load = 13; // Video encoder (NVENC) utilization (0..1).
+  float decoder_load = 14; // Video decoder (NVDEC) utilization (0..1).
+  float nvjpg_load = 15; // JPEG engine (NVJPG) utilization (0..1).
+  float vic_load = 16; // Video Image Compositor (VIC) utilization (0..1).
 }
 
 // System performance information.
