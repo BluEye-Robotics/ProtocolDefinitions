@@ -880,7 +880,7 @@ message ErrorFlags {
   bool gp4_bat_current = 63; // Max battery current exceeded on guest port 4.
   bool gp5_bat_current = 64; // Max battery current exceeded on guest port 5.
   bool gp6_bat_current = 65; // Max battery current exceeded on guest port 6.
-  bool gp_24v_current = 42; // Max 24V current exceeded on GP.
+  bool gp_24v_current = 42; // Max 24V current exceeded on GP. Only present on X1/X3 (not X3 Ultra or X7).
   bool gp1_24v_current = 66; // Max 24V current exceeded on guest port 1.
   bool gp2_24v_current = 67; // Max 24V current exceeded on guest port 2.
   bool gp3_24v_current = 68; // Max 24V current exceeded on guest port 3.
