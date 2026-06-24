@@ -783,6 +783,17 @@ enum PressureSensorType {
   PRESSURE_SENSOR_TYPE_MS5637_02BA03 = 4; // The internal pressure sensor using the MS5637 02BA03 pressure sensor.
 }
 
+// How the drone is powered.
+//
+// Lets clients determine the power configuration (e.g. parallel batteries on the
+// X7) directly from DroneInfo, without waiting for telemetry. May be extended in
+// the future, e.g. with topside power.
+enum PowerSource {
+  POWER_SOURCE_UNSPECIFIED = 0; // Power source unknown / not determined.
+  POWER_SOURCE_SINGLE_BATTERY = 1; // A single battery.
+  POWER_SOURCE_PARALLEL_BATTERIES = 2; // Two batteries running in parallel (e.g. X7).
+}
+
 // Information about the drone.
 //
 // Information about a loaded computer vision model.
@@ -816,6 +827,7 @@ message DroneInfo {
   GuestPortInfo gp = 9; // Guest port information.
   PressureSensorType depth_sensor = 11; // Type of depth sensor that is connected to the drone.
   repeated CvModelInfo cv_models = 12; // List of loaded computer vision models.
+  PowerSource power_source = 13; // How the drone is powered.
 }
 
 // Known error states for the drone.

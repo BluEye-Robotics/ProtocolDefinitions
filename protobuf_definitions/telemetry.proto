@@ -108,14 +108,24 @@ message TimeLapseStateTel {
 }
 
 // Receive essential information about the battery status.
+//
+// On models with two batteries running in parallel (e.g. the X7), second_battery
+// holds the essential information for the second battery. When only a single
+// battery is used, second_battery is undefined (not set).
 message BatteryTel {
   Battery battery = 1; // Essential battery information.
+  Battery second_battery = 2; // Second battery, when present. Not set if only one battery is used.
 }
 
 // Receive detailed information about a battery using the
 // BQ40Z50 battery management system.
+//
+// On models with two batteries running in parallel (e.g. the X7), second_battery
+// holds the detailed information for the second battery. When only a single
+// battery is used, second_battery is undefined (not set).
 message BatteryBQ40Z50Tel {
   BatteryBQ40Z50 battery = 1; // Detailed battery information.
+  BatteryBQ40Z50 second_battery = 2; // Second battery, when present. Not set if only one battery is used.
 }
 
 // Receive the dive time of the drone.
