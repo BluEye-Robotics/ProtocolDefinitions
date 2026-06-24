@@ -887,6 +887,12 @@ message ErrorFlags {
   bool gp4_24v_current = 69; // Max 24V current exceeded on guest port 4.
   bool gp5_24v_current = 70; // Max 24V current exceeded on guest port 5.
   bool gp6_24v_current = 71; // Max 24V current exceeded on guest port 6.
+  bool gp1_5v_current = 72; // Max 5V current exceeded on guest port 1.
+  bool gp2_5v_current = 73; // Max 5V current exceeded on guest port 2.
+  bool gp3_5v_current = 74; // Max 5V current exceeded on guest port 3.
+  bool gp4_5v_current = 75; // Max 5V current exceeded on guest port 4.
+  bool gp5_5v_current = 76; // Max 5V current exceeded on guest port 5.
+  bool gp6_5v_current = 77; // Max 5V current exceeded on guest port 6.
   bool dvl_thermal_protection_mode = 43; // DVL is in thermal protection mode.
   bool dvl_no_power = 44; // GP protection has been triggered at boot or faulty DVL.
   bool usb_disconnect = 45; // USB disconnect.
@@ -1233,6 +1239,12 @@ message GuestPortCurrent {
   double gp4_24v = 11; // Current on GP4 24V supply (A).
   double gp5_24v = 12; // Current on GP5 24V supply (A).
   double gp6_24v = 13; // Current on GP6 24V supply (A).
+  double gp1_5v = 14; // Current on GP1 5V supply (A).
+  double gp2_5v = 15; // Current on GP2 5V supply (A).
+  double gp3_5v = 16; // Current on GP3 5V supply (A).
+  double gp4_5v = 17; // Current on GP4 5V supply (A).
+  double gp5_5v = 18; // Current on GP5 5V supply (A).
+  double gp6_5v = 19; // Current on GP6 5V supply (A).
 }
 
 // Vector with 3 elements.
