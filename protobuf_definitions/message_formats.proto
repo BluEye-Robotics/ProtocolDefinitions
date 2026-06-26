@@ -1497,6 +1497,50 @@ message VideoCodecInfo {
   float vic_load = 16; // Video Image Compositor (VIC) utilization (0..1).
 }
 
+// NVMe SSD health, wear and identity (Jetson only; i.MX drones boot/store on
+// an SD card and have no NVMe device, leaving this at its defaults).
+//
+// Read from the NVMe SMART/health log plus Identify Controller. Only the
+// composite temperature is trustworthy — per-sensor values are vendor-specific
+// and may be stuck at placeholder values, so they are not exposed.
+message NvmeInfo {
+  bool present = 1; // True if an NVMe device was found and read.
+
+  // Tier 1 — health & safety.
+  float composite_temperature_c = 2; // Composite drive temperature (°C).
+  uint32 critical_warning = 3; // NVMe critical-warning bitfield.
+  uint32 percentage_used = 4; // Wear indicator (%, may exceed 100).
+  uint32 available_spare = 5; // Remaining spare capacity (%).
+  uint32 available_spare_threshold = 6; // Spare alarm threshold (%).
+  uint64 media_errors = 7; // Uncorrected data-integrity errors.
+  uint64 unsafe_shutdowns = 8; // Power-loss / unsafe shutdown count.
+
+  // Tier 2 — thermal throttling.
+  uint32 warning_temp_time_min = 9; // Minutes above the warning temperature.
+  uint32 critical_temp_time_min = 10; // Minutes above the critical temperature.
+  uint32 thermal_mgmt_t1_trans_count = 11; // Times entered light throttling.
+  uint32 thermal_mgmt_t2_trans_count = 12; // Times entered heavy throttling.
+  uint32 thermal_mgmt_t1_total_time_s = 13; // Total seconds in light throttling.
+  uint32 thermal_mgmt_t2_total_time_s = 14; // Total seconds in heavy throttling.
+
+  // Tier 3 — endurance / workload.
+  uint64 data_units_written_bytes = 15; // Host data written (B).
+  uint64 data_units_read_bytes = 16; // Host data read (B).
+  uint64 host_write_commands = 17; // Host write command count.
+  uint64 host_read_commands = 18; // Host read command count.
+  uint64 power_on_hours = 19; // Power-on hours.
+  uint64 power_cycles = 20; // Power cycle count.
+  uint64 controller_busy_time_min = 21; // Controller busy time (min).
+  uint64 num_err_log_entries = 22; // Error-log entry count.
+
+  // Tier 4 — identity & capacity.
+  string model = 23; // Drive model.
+  string serial = 24; // Drive serial number.
+  string firmware_rev = 25; // Firmware revision.
+  uint64 capacity_bytes = 26; // Total drive capacity (B). Partition used/free is
+                              // reported separately via DataStorageSpaceTel.
+}
+
 // System performance information.
 //
 // Comprehensive performance metrics for the drone's compute platform.
@@ -1516,6 +1560,7 @@ message SystemPerformanceInfo {
   float camera_queue_load = 11; // Camera queue load (0..1).
   float overlay_queue_load = 12; // Overlay queue load (0..1).
   float position_observer_queue_load = 13; // Position observer queue load (0..1).
+  NvmeInfo nvme = 14; // NVMe SSD health/identity (Jetson only).
 }
 
 // Surface Unit battery information.
