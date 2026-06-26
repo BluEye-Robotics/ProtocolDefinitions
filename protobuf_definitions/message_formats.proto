@@ -1507,7 +1507,7 @@ message NvmeInfo {
   bool present = 1; // True if an NVMe device was found and read.
 
   // Tier 1 — health & safety.
-  float composite_temperature_c = 2; // Composite drive temperature (°C).
+  float composite_temperature = 2; // Composite drive temperature (°C).
   uint32 critical_warning = 3; // NVMe critical-warning bitfield.
   uint32 percentage_used = 4; // Wear indicator (%, may exceed 100).
   uint32 available_spare = 5; // Remaining spare capacity (%).
@@ -1544,8 +1544,9 @@ message NvmeInfo {
 // System performance information.
 //
 // Comprehensive performance metrics for the drone's compute platform.
-// Covers CPU, GPU, DLA, memory, thermals, and video codec utilization.
-// Fields not applicable to a platform are left at their zero/empty defaults.
+// Covers CPU, GPU, DLA, memory, thermals, video codec utilization and NVMe
+// SSD state. Fields not applicable to a platform are left at their
+// zero/empty defaults.
 message SystemPerformanceInfo {
   repeated CpuCoreLoad cpu_cores = 1; // Per-core CPU utilization.
   float cpu_utilization = 2; // Mean CPU utilization across all cores (0..1).
