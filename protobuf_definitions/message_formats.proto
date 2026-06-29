@@ -1497,11 +1497,50 @@ message VideoCodecInfo {
   float vic_load = 16; // Video Image Compositor (VIC) utilization (0..1).
 }
 
+// NVMe SSD health, wear and identity (Jetson only; i.MX drones boot/store on
+// an SD card and have no NVMe device, so this message is omitted there).
+message NvmeInfo {
+  // Tier 1 — health & safety.
+  float composite_temperature = 1; // Composite drive temperature (°C).
+  uint32 critical_warning = 2; // NVMe critical-warning bitfield.
+  uint32 percentage_used = 3; // Wear indicator (%, may exceed 100).
+  uint32 available_spare = 4; // Remaining spare capacity (%).
+  uint32 available_spare_threshold = 5; // Spare alarm threshold (%).
+  uint64 media_errors = 6; // Uncorrected data-integrity errors.
+  uint64 unsafe_shutdowns = 7; // Power-loss / unsafe shutdown count.
+
+  // Tier 2 — thermal throttling.
+  uint32 warning_temp_time_min = 8; // Minutes above the warning temperature.
+  uint32 critical_temp_time_min = 9; // Minutes above the critical temperature.
+  uint32 thermal_mgmt_t1_trans_count = 10; // Times entered light throttling.
+  uint32 thermal_mgmt_t2_trans_count = 11; // Times entered heavy throttling.
+  uint32 thermal_mgmt_t1_total_time_s = 12; // Total seconds in light throttling.
+  uint32 thermal_mgmt_t2_total_time_s = 13; // Total seconds in heavy throttling.
+
+  // Tier 3 — endurance / workload.
+  uint64 data_units_written_bytes = 14; // Host data written (B).
+  uint64 data_units_read_bytes = 15; // Host data read (B).
+  uint64 host_write_commands = 16; // Host write command count.
+  uint64 host_read_commands = 17; // Host read command count.
+  uint64 power_on_hours = 18; // Power-on hours.
+  uint64 power_cycles = 19; // Power cycle count.
+  uint64 controller_busy_time_min = 20; // Controller busy time (min).
+  uint64 num_err_log_entries = 21; // Error-log entry count.
+
+  // Tier 4 — identity & capacity.
+  string model = 22; // Drive model.
+  string serial = 23; // Drive serial number.
+  string firmware_rev = 24; // Firmware revision.
+  uint64 capacity_bytes = 25; // Total drive capacity (B). Partition used/free is
+                              // reported separately via DataStorageSpaceTel.
+}
+
 // System performance information.
 //
 // Comprehensive performance metrics for the drone's compute platform.
-// Covers CPU, GPU, DLA, memory, thermals, and video codec utilization.
-// Fields not applicable to a platform are left at their zero/empty defaults.
+// Covers CPU, GPU, DLA, memory, thermals, video codec utilization and NVMe
+// SSD state. Fields not applicable to a platform are left at their
+// zero/empty defaults.
 message SystemPerformanceInfo {
   repeated CpuCoreLoad cpu_cores = 1; // Per-core CPU utilization.
   float cpu_utilization = 2; // Mean CPU utilization across all cores (0..1).
@@ -1516,6 +1555,7 @@ message SystemPerformanceInfo {
   float camera_queue_load = 11; // Camera queue load (0..1).
   float overlay_queue_load = 12; // Overlay queue load (0..1).
   float position_observer_queue_load = 13; // Position observer queue load (0..1).
+  NvmeInfo nvme = 14; // NVMe SSD health/identity (Jetson only).
 }
 
 // Surface Unit battery information.
