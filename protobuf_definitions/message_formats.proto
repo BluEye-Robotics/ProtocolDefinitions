@@ -1621,3 +1621,49 @@ message SotState {
   uint32 image_width = 3; // Width of the source frame in pixels.
   uint32 image_height = 4; // Height of the source frame in pixels.
 }
+
+// Origin of an annotation. Mirrors the AnnotationSource enum in Blueye Cloud.
+enum AnnotationSource {
+  ANNOTATION_SOURCE_UNSPECIFIED = 0; // Origin not specified.
+  ANNOTATION_SOURCE_CLOUD = 1; // Created in Blueye Cloud after the dive.
+  ANNOTATION_SOURCE_APP = 2; // Created in the app during the dive.
+  ANNOTATION_SOURCE_DRONE = 3; // Emitted by the drone itself.
+}
+
+// A user-defined annotation type from a Blueye Cloud organisation's catalogue.
+//
+// The organisation maintains a catalogue of these in Blueye Cloud. It is synced
+// to the app, pushed to the drone, and embedded in the dive logfile. The cloud
+// is the authority on the documented length limits.
+message AnnotationType {
+  string slug = 1; // Stable per-org id, lower-case, unique, max 50 chars (e.g. "hazard").
+  string name = 2; // Title shown in the palette, max 50 chars (e.g. "Hazard").
+  string icon = 3; // Font Awesome solid icon name, kebab-case, no prefix (e.g. "triangle-exclamation").
+  string color = 4; // RGB hex including the leading '#', always 7 chars (e.g. "#DC2626").
+  int32 sort_order = 5; // Palette sort position, ascending, 0-based.
+  string id = 6; // Optional cloud UUID (RFC 4122). Informational; prefer slug. Empty if app-local.
+}
+
+// A single annotation added during a dive, e.g. by a diver tapping a type in the
+// app command palette, or emitted by the drone itself.
+//
+// The drone owns the timestamp: when this is logged the enclosing BinlogRecord
+// carries the time, like any other sample, so there is no time field here.
+message Annotation {
+  string type_slug = 1; // Slug of the chosen AnnotationType. Empty for a free-form annotation.
+  string title = 2; // Optional short title; cloud falls back to the type name if empty. Max 200 chars.
+  string body = 3; // Optional free-form note. Unbounded.
+  google.protobuf.Duration duration = 4; // Optional span; omit for a point-in-time marker.
+  AnnotationSource source = 5; // Where the annotation originated.
+}
+
+// A snapshot of an organisation's annotation-type catalogue.
+//
+// The drone logs one near the start of the dive so every Annotation.type_slug in
+// the logfile resolves to a name/icon/color even if the type is later renamed or
+// deleted in Blueye Cloud.
+message AnnotationCatalog {
+  string organisation_slug = 1; // Org the catalogue belongs to (e.g. "blueye-robotics").
+  repeated AnnotationType types = 2; // Available annotation types, ordered by sort_order.
+  google.protobuf.Timestamp synced_at = 3; // When the catalogue was fetched from cloud (UTC).
+}

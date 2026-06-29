@@ -362,3 +362,22 @@ message CameraPanTiltZoomTel {
 message SotStateTel {
   SotState sot_state = 1; // Current SOT state and bounding box.
 }
+
+// An annotation that now exists on the dive.
+//
+// Either added by a client (the drone echoes its AnnotationCtrl here) or emitted
+// by the drone itself; Annotation.source distinguishes the two. Published to
+// every connected client and written to the dive logfile. A late-joining client
+// can fetch the most recent one with GetTelemetryReq("AnnotationTel").
+message AnnotationTel {
+  Annotation annotation = 1; // The annotation that was added.
+}
+
+// The annotation-type catalogue currently active on the drone.
+//
+// Published when a client sets it with SetAnnotationCatalogReq and written to the
+// dive logfile. A late-joining client fetches it with
+// GetTelemetryReq("AnnotationCatalogTel") so it can render annotation icons.
+message AnnotationCatalogTel {
+  AnnotationCatalog catalog = 1; // The active catalogue.
+}

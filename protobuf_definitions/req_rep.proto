@@ -246,3 +246,17 @@ message GetLogStreamingStatusReq {
 message GetLogStreamingStatusRep {
   bool enabled = 1; // If log streaming is enabled or disabled.
 }
+
+// Set (replace) the annotation-type catalogue on the drone.
+//
+// Pushed by the app after it syncs the organisation's catalogue from Blueye
+// Cloud. The drone keeps it for the session, publishes it as an
+// AnnotationCatalogTel, and logs a snapshot so the dive logfile is
+// self-describing. Mirrors SetMissionReq/SetMissionRep.
+message SetAnnotationCatalogReq {
+  AnnotationCatalog catalog = 1; // The full catalogue. Replaces any previously set catalogue.
+}
+
+// Response after setting the annotation catalogue.
+message SetAnnotationCatalogRep {
+}
