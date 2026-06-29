@@ -1654,7 +1654,7 @@ message Annotation {
   string title = 2; // Optional short title; cloud falls back to the type name if empty. Max 200 chars.
   string body = 3; // Optional free-form note. Unbounded.
   google.protobuf.Duration duration = 4; // Optional span; omit for a point-in-time marker.
-  AnnotationSource source = 5; // Where the annotation originated.
+  AnnotationSource source = 5; // Origin of the annotation; the app sets APP, the drone sets DRONE for its own.
 }
 
 // A snapshot of an organisation's annotation-type catalogue.
