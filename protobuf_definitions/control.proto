@@ -261,3 +261,13 @@ message SetSotTargetCtrl {
 // Issue a command to clear the single-object tracking (SOT) target (stop tracking).
 message ClearSotTargetCtrl {
 }
+
+// Request to add an annotation to the current dive.
+//
+// Sent by the app when a diver picks a type from the in-dive command palette.
+// The drone stamps the authoritative time, publishes the result as an
+// AnnotationTel to every connected client, and writes it to the dive logfile, so
+// all clients converge on the same set. Fire-and-forget, like LightsCtrl.
+message AnnotationCtrl {
+  Annotation annotation = 1; // The annotation to record. The drone owns the timestamp, not this message.
+}

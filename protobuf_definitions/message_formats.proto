@@ -1661,3 +1661,33 @@ message SotState {
   uint32 image_width = 3; // Width of the source frame in pixels.
   uint32 image_height = 4; // Height of the source frame in pixels.
 }
+
+// Origin of an annotation. Mirrors the AnnotationSource enum in Blueye Cloud.
+enum AnnotationSource {
+  ANNOTATION_SOURCE_UNSPECIFIED = 0; // Origin not specified.
+  ANNOTATION_SOURCE_CLOUD = 1; // Created in Blueye Cloud after the dive.
+  ANNOTATION_SOURCE_APP = 2; // Created in the app during the dive.
+  ANNOTATION_SOURCE_DRONE = 3; // Emitted by the drone itself.
+}
+
+// A single annotation added during a dive, e.g. by a diver tapping a type in the
+// app command palette, or emitted by the drone itself.
+//
+// Self-contained: it carries the type's display fields (name/icon/color) inline,
+// so the drone, any connected client, and the dive logfile can render it without
+// a separate catalog. The app keeps the full catalog locally (synced from
+// Blueye Cloud) to drive its palette, but only complete annotations go over the
+// wire. type_slug lets Blueye Cloud correlate the annotation to its type on import.
+//
+// The drone owns the timestamp: when this is logged the enclosing BinlogRecord
+// carries the time, like any other sample, so there is no time field here.
+message Annotation {
+  string type_slug = 1; // Stable type id for grouping / Cloud correlation. Empty for a free-form annotation.
+  string type_name = 2; // Type display name, e.g. "Hazard". Snapshot of the type at creation time.
+  string type_icon = 3; // Font Awesome solid icon name, kebab-case (e.g. "triangle-exclamation").
+  string type_color = 4; // Type color, RGB hex incl. leading '#', 7 chars (e.g. "#DC2626").
+  string title = 5; // Optional annotation title; Cloud falls back to type_name if empty. Max 200 chars.
+  string body = 6; // Optional free-form note. Unbounded.
+  google.protobuf.Duration duration = 7; // Optional span; omit for a point-in-time marker.
+  AnnotationSource source = 8; // Origin of the annotation; the app sets APP, the drone sets DRONE for its own.
+}
