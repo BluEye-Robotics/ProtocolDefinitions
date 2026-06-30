@@ -373,12 +373,3 @@ message SotStateTel {
 message AnnotationTel {
   Annotation annotation = 1; // The annotation that was added.
 }
-
-// The annotation-type catalogue currently active on the drone.
-//
-// Published when a client sets it with SetAnnotationCatalogReq and written to the
-// dive logfile. A late-joining client fetches it with
-// GetTelemetryReq("AnnotationCatalogTel") so it can render annotation icons.
-message AnnotationCatalogTel {
-  AnnotationCatalog catalog = 1; // The active catalogue.
-}

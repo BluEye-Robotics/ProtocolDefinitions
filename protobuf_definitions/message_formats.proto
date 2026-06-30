@@ -1630,40 +1630,24 @@ enum AnnotationSource {
   ANNOTATION_SOURCE_DRONE = 3; // Emitted by the drone itself.
 }
 
-// A user-defined annotation type from a Blueye Cloud organisation's catalogue.
-//
-// The organisation maintains a catalogue of these in Blueye Cloud. It is synced
-// to the app, pushed to the drone, and embedded in the dive logfile. The cloud
-// is the authority on the documented length limits.
-message AnnotationType {
-  string slug = 1; // Stable per-org id, lower-case, unique, max 50 chars (e.g. "hazard").
-  string name = 2; // Title shown in the palette, max 50 chars (e.g. "Hazard").
-  string icon = 3; // Font Awesome solid icon name, kebab-case, no prefix (e.g. "triangle-exclamation").
-  string color = 4; // RGB hex including the leading '#', always 7 chars (e.g. "#DC2626").
-  int32 sort_order = 5; // Palette sort position, ascending, 0-based.
-  string id = 6; // Optional cloud UUID (RFC 4122). Informational; prefer slug. Empty if app-local.
-}
-
 // A single annotation added during a dive, e.g. by a diver tapping a type in the
 // app command palette, or emitted by the drone itself.
+//
+// Self-contained: it carries the type's display fields (name/icon/color) inline,
+// so the drone, any connected client, and the dive logfile can render it without
+// a separate catalogue. The app keeps the full catalogue locally (synced from
+// Blueye Cloud) to drive its palette, but only complete annotations go over the
+// wire. type_slug lets Blueye Cloud correlate the annotation to its type on import.
 //
 // The drone owns the timestamp: when this is logged the enclosing BinlogRecord
 // carries the time, like any other sample, so there is no time field here.
 message Annotation {
-  string type_slug = 1; // Slug of the chosen AnnotationType. Empty for a free-form annotation.
-  string title = 2; // Optional short title; cloud falls back to the type name if empty. Max 200 chars.
-  string body = 3; // Optional free-form note. Unbounded.
-  google.protobuf.Duration duration = 4; // Optional span; omit for a point-in-time marker.
-  AnnotationSource source = 5; // Origin of the annotation; the app sets APP, the drone sets DRONE for its own.
-}
-
-// A snapshot of an organisation's annotation-type catalogue.
-//
-// The drone logs one near the start of the dive so every Annotation.type_slug in
-// the logfile resolves to a name/icon/color even if the type is later renamed or
-// deleted in Blueye Cloud.
-message AnnotationCatalog {
-  string organisation_slug = 1; // Org the catalogue belongs to (e.g. "blueye-robotics").
-  repeated AnnotationType types = 2; // Available annotation types, ordered by sort_order.
-  google.protobuf.Timestamp synced_at = 3; // When the catalogue was fetched from cloud (UTC).
+  string type_slug = 1; // Stable type id for grouping / Cloud correlation. Empty for a free-form annotation.
+  string type_name = 2; // Type display name, e.g. "Hazard". Snapshot of the type at creation time.
+  string type_icon = 3; // Font Awesome solid icon name, kebab-case (e.g. "triangle-exclamation").
+  string type_color = 4; // Type colour, RGB hex incl. leading '#', 7 chars (e.g. "#DC2626").
+  string title = 5; // Optional annotation title; cloud falls back to type_name if empty. Max 200 chars.
+  string body = 6; // Optional free-form note. Unbounded.
+  google.protobuf.Duration duration = 7; // Optional span; omit for a point-in-time marker.
+  AnnotationSource source = 8; // Origin of the annotation; the app sets APP, the drone sets DRONE for its own.
 }
