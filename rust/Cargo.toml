@@ -1,0 +1,18 @@
+[package]
+name = "blueye-protocol"
+version = "0.1.0"
+edition = "2021"
+license = "LGPL-3.0-only"
+description = "Protocol definitions for Blueye Robotics underwater drones"
+repository = "https://github.com/BluEye-Robotics/ProtocolDefinitions"
+
+[lib]
+name = "blueye_protocol"
+
+[dependencies]
+prost = "0.14"
+prost-types = "0.14"
+
+[build-dependencies]
+prost-build = "0.14"
+protox = "0.9"

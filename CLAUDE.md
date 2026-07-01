@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Protocol definition repository for Blueye Robotics underwater drones. The core definitions live in `protobuf_definitions/*.proto` (proto3 syntax) and are compiled into language-specific libraries for C++, Python, TypeScript, and C#/.NET.
+Protocol definition repository for Blueye Robotics underwater drones. The core definitions live in `protobuf_definitions/*.proto` (proto3 syntax) and are compiled into language-specific libraries for C++, Python, TypeScript, C#/.NET, and Rust.
 
 Published packages:
 - **npm**: `@blueyerobotics/protocol-definitions`
@@ -38,6 +38,13 @@ pnpm run build
 ```
 dotnet pack Blueye.Protocol.Protobuf.csproj -c Release -o out
 ```
+
+### Rust
+```
+cargo build --manifest-path rust/Cargo.toml
+cargo test --manifest-path rust/Cargo.toml
+```
+Code is generated at build time by `rust/build.rs` (prost + protox, no protoc needed).
 
 ### Linting
 ```
