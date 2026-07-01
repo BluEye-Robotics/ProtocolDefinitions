@@ -5,9 +5,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Watch the directory so added/removed .proto files retrigger the build.
     println!("cargo:rerun-if-changed=../protobuf_definitions");
 
-    let mut protos: Vec<PathBuf> = std::fs::read_dir(&proto_dir)
+    let entries = std::fs::read_dir(&proto_dir)
         .map_err(|e| format!("failed to read {}: {e}", proto_dir.display()))?
-        .filter_map(|entry| entry.ok().map(|e| e.path()))
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(|e| format!("failed to read entry in {}: {e}", proto_dir.display()))?;
+    let mut protos: Vec<PathBuf> = entries
+        .into_iter()
+        .map(|entry| entry.path())
         .filter(|path| path.extension().is_some_and(|ext| ext == "proto"))
         .collect();
     protos.sort();
