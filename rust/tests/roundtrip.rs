@@ -36,3 +36,41 @@ fn decode_rejects_garbage() {
     let garbage: &[u8] = &[0x08];
     assert!(Attitude::decode(garbage).is_err());
 }
+
+#[test]
+fn reflect_descriptor_full_name() {
+    use blueye_protocol::prost_reflect::ReflectMessage;
+
+    let msg = Attitude::default();
+    assert_eq!(msg.descriptor().full_name(), "blueye.protocol.Attitude");
+}
+
+#[test]
+fn descriptor_pool_lookup_builds_dynamic_message() {
+    use blueye_protocol::prost_reflect::{DynamicMessage, ReflectMessage};
+    use blueye_protocol::DESCRIPTORS;
+
+    let descriptor = DESCRIPTORS
+        .get_message_by_name("blueye.protocol.Attitude")
+        .expect("Attitude must be in the descriptor pool");
+    let dynamic = DynamicMessage::new(descriptor);
+
+    assert_eq!(dynamic.descriptor().full_name(), "blueye.protocol.Attitude");
+}
+
+#[test]
+fn any_payload_roundtrip() {
+    use blueye_protocol::prost_types::Any;
+
+    let original = Attitude {
+        roll: 1.0,
+        pitch: 2.0,
+        yaw: 3.0,
+    };
+
+    let any = Any::from_msg(&original).expect("encode into Any");
+    assert_eq!(any.type_url, "type.googleapis.com/blueye.protocol.Attitude");
+
+    let decoded = any.to_msg::<Attitude>().expect("decode from Any");
+    assert_eq!(original, decoded);
+}

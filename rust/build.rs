@@ -1,5 +1,8 @@
 use std::path::PathBuf;
 
+use prost::Message as _;
+use prost_types::{DescriptorProto, FileDescriptorSet};
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let proto_dir = PathBuf::from("../protobuf_definitions");
     // Watch the directory so added/removed .proto files retrigger the build.
@@ -23,6 +26,63 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let file_descriptor_set = protox::compile(&protos, [&proto_dir])?;
-    prost_build::Config::new().compile_fds(file_descriptor_set)?;
+
+    // Persist the descriptor set so the crate can expose it for runtime
+    // reflection (decoding google.protobuf.Any payloads by type name).
+    let out_dir = PathBuf::from(std::env::var("OUT_DIR")?);
+    std::fs::write(
+        out_dir.join("file_descriptor_set.bin"),
+        file_descriptor_set.encode_to_vec(),
+    )?;
+
+    let mut config = prost_build::Config::new();
+    // Generate `impl prost::Name` so google.protobuf.Any type-URLs resolve.
+    config.enable_type_names();
+    config.type_name_domain(["."], "type.googleapis.com");
+
+    // Derive prost-reflect's ReflectMessage on every blueye.protocol message so
+    // consumers can reflect on them and look them up in DESCRIPTORS. This mirrors
+    // what prost-reflect-build injects, but sourced from our protox descriptor
+    // set instead of a protoc invocation.
+    for full_name in message_full_names(&file_descriptor_set) {
+        config.message_attribute(
+            &full_name,
+            format!(
+                "#[derive(::prost_reflect::ReflectMessage)]\n\
+                 #[prost_reflect(message_name = \"{full_name}\", \
+                 file_descriptor_set_bytes = \"crate::FILE_DESCRIPTOR_SET\")]"
+            ),
+        );
+    }
+
+    config.compile_fds(file_descriptor_set)?;
     Ok(())
+}
+
+/// Fully-qualified names of every message in the `blueye.protocol` package,
+/// including nested messages (e.g. `blueye.protocol.Parent.Nested`). Names use
+/// no leading dot, matching what prost-reflect-build passes to prost-build's
+/// path matcher.
+fn message_full_names(fds: &FileDescriptorSet) -> Vec<String> {
+    let mut names = Vec::new();
+    for file in &fds.file {
+        // Skip well-known-type files (google.protobuf.*): prost maps those to
+        // prost-types and generates no Rust for them, so an attribute on them
+        // would match nothing.
+        if file.package() != "blueye.protocol" {
+            continue;
+        }
+        for message in &file.message_type {
+            collect_message_names(file.package(), message, &mut names);
+        }
+    }
+    names
+}
+
+fn collect_message_names(prefix: &str, message: &DescriptorProto, names: &mut Vec<String>) {
+    let full_name = format!("{prefix}.{}", message.name());
+    for nested in &message.nested_type {
+        collect_message_names(&full_name, nested, names);
+    }
+    names.push(full_name);
 }

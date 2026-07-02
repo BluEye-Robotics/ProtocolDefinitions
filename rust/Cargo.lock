@@ -35,6 +35,7 @@ version = "0.1.0"
 dependencies = [
  "prost",
  "prost-build",
+ "prost-reflect",
  "prost-types",
  "protox",
 ]
@@ -348,7 +349,19 @@ dependencies = [
  "logos 0.16.1",
  "miette",
  "prost",
+ "prost-reflect-derive",
  "prost-types",
+]
+
+[[package]]
+name = "prost-reflect-derive"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7b6d90e29fa6c0d13c2c19ba5e4b3fb0efbf5975d27bcf4e260b7b15455bcabe"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
