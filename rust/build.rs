@@ -56,19 +56,28 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     config.compile_fds(file_descriptor_set)?;
 
     // With the `serde` feature, generate protobuf-JSON Serialize/Deserialize
-    // impls matching C++ MessageToJsonString conventions for the settings file
-    // (snake_case keys, defaults emitted, unknown fields ignored on read).
-    // Scoped to PersistentStorageSettings only: other messages (guest-port
-    // info) need the opposite emit-defaults behavior, and package-wide
-    // generation would also cover well-known types that prost-types has no
-    // serde impls for.
+    // impls matching C++ MessageToJsonString conventions (snake_case keys,
+    // defaults emitted, unknown fields ignored on read) for the persistent
+    // storage settings file and the guest-port info JSON. Scoped to those
+    // message closures rather than the whole package, which would also cover
+    // well-known types that prost-types has no serde impls for.
     if std::env::var_os("CARGO_FEATURE_SERDE").is_some() {
         pbjson_build::Builder::new()
             .register_descriptors(&descriptor_set_bytes)?
             .preserve_proto_field_names()
             .emit_fields()
             .ignore_unknown_fields()
-            .build(&[".blueye.protocol.PersistentStorageSettings"])?;
+            .build(&[
+                ".blueye.protocol.PersistentStorageSettings",
+                ".blueye.protocol.GuestPortInfo",
+                ".blueye.protocol.GuestPortConnectorInfo",
+                ".blueye.protocol.GuestPortDeviceList",
+                ".blueye.protocol.GuestPortDevice",
+                ".blueye.protocol.GuestPortDeviceID",
+                ".blueye.protocol.GuestPortNumber",
+                ".blueye.protocol.GuestPortDetachStatus",
+                ".blueye.protocol.GuestPortError",
+            ])?;
     }
     Ok(())
 }
