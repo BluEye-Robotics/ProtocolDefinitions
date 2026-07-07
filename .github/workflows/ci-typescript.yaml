@@ -57,3 +57,12 @@ jobs:
           SHORT_SHA=${GITHUB_SHA::8}
           pnpm version --no-git-tag-version "${VERSION}-${SHORT_SHA}"
           pnpm publish --no-git-checks --access public --tag latest
+          echo "PROTOCOL_VERSION=${VERSION}-${SHORT_SHA}" >> "$GITHUB_ENV"
+
+      - name: Trigger protocol bump in blueye-ts
+        env:
+          GH_TOKEN: ${{ secrets.BLUEYE_PROTOCOL_BUMP_PAT }}
+        run: |
+          gh api repos/BluEye-Robotics/blueye-ts/dispatches \
+            -f event_type=protocol-update \
+            -f "client_payload[version]=${PROTOCOL_VERSION}"
