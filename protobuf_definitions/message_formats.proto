@@ -871,6 +871,12 @@ message ErrorFlags {
   bool gp4_device = 60; // Guest port 4 device error.
   bool gp5_device = 61; // Guest port 5 device error.
   bool gp6_device = 62; // Guest port 6 device error.
+  bool gp1_incompatible_device = 78; // Device on guest port 1 requires interfaces the port does not provide.
+  bool gp2_incompatible_device = 79; // Device on guest port 2 requires interfaces the port does not provide.
+  bool gp3_incompatible_device = 80; // Device on guest port 3 requires interfaces the port does not provide.
+  bool gp4_incompatible_device = 81; // Device on guest port 4 requires interfaces the port does not provide.
+  bool gp5_incompatible_device = 82; // Device on guest port 5 requires interfaces the port does not provide.
+  bool gp6_incompatible_device = 83; // Device on guest port 6 requires interfaces the port does not provide.
   bool drone_serial_not_set = 24; // Drone serial number not set.
   bool drone_serial = 25; // Drone serial number error.
   bool mb_eeprom_read = 26; // MB eeprom read error.
@@ -1129,6 +1135,20 @@ enum GuestPortNumber {
   GUEST_PORT_NUMBER_PORT_6 = 6; // Guest port 6.
 }
 
+// Physical interfaces a guest port can provide.
+//
+// Used both for the interfaces a port provides and for the interfaces a
+// device requires from the port it is connected to.
+enum GuestPortCapability {
+  GUEST_PORT_CAPABILITY_UNSPECIFIED = 0; // Unspecified.
+  GUEST_PORT_CAPABILITY_ETHERNET = 1; // Ethernet.
+  GUEST_PORT_CAPABILITY_I2C = 2; // I2C.
+  GUEST_PORT_CAPABILITY_RS232 = 3; // RS232 serial.
+  GUEST_PORT_CAPABILITY_RS485 = 4; // RS485 serial.
+  GUEST_PORT_CAPABILITY_USB2 = 5; // USB 2.0.
+  GUEST_PORT_CAPABILITY_PWM = 6; // PWM.
+}
+
 // List of navigation sensors that can be used by the position observer.
 enum NavigationSensorID {
   NAVIGATION_SENSOR_ID_UNSPECIFIED = 0; // Unspecified.
@@ -1168,6 +1188,10 @@ message GuestPortDevice {
   float depth_rating = 5; // Depth rating (m).
   string required_blunux_version = 6; // Required Blunux version (x.y.z).
   GuestPortDetachStatus detach_status = 7; // Detach status based on detection pin.
+  repeated GuestPortCapability required_capabilities = 8; // Interfaces the device requires from the port.
+  // Ports on this drone where the device is fully supported. Computed by the
+  // drone from the port capabilities and the device requirements.
+  repeated GuestPortNumber compatible_guest_ports = 9;
 }
 
 // List of guest port devices.
@@ -1194,6 +1218,7 @@ message GuestPortConnectorInfo {
     GuestPortError error = 2; // Guest port connector error.
   }
   GuestPortNumber guest_port_number = 3; // Guest port the connector is connected to.
+  repeated GuestPortCapability capabilities = 4; // Interfaces this port provides.
 }
 
 // GuestPort information.
