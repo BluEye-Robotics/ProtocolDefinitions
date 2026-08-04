@@ -75,6 +75,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 ".blueye.protocol.GuestPortDevice",
                 ".blueye.protocol.GuestPortDeviceID",
                 ".blueye.protocol.GuestPortNumber",
+                ".blueye.protocol.GuestPortCapability",
                 ".blueye.protocol.GuestPortDetachStatus",
                 ".blueye.protocol.GuestPortError",
             ])?;
