@@ -1150,6 +1150,7 @@ enum GuestPortCapability {
   GUEST_PORT_CAPABILITY_RS485 = 4; // RS485 serial.
   GUEST_PORT_CAPABILITY_USB2 = 5; // USB 2.0.
   GUEST_PORT_CAPABILITY_PWM = 6; // PWM.
+  GUEST_PORT_CAPABILITY_ETHERNET_1G = 7; // Gigabit Ethernet.
 }
 
 // List of navigation sensors that can be used by the position observer.
