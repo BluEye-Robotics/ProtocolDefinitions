@@ -30,10 +30,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Persist the descriptor set so the crate can expose it for runtime
     // reflection (decoding google.protobuf.Any payloads by type name).
     let out_dir = PathBuf::from(std::env::var("OUT_DIR")?);
-    std::fs::write(
-        out_dir.join("file_descriptor_set.bin"),
-        file_descriptor_set.encode_to_vec(),
-    )?;
+    let descriptor_set_bytes = file_descriptor_set.encode_to_vec();
+    std::fs::write(out_dir.join("file_descriptor_set.bin"), &descriptor_set_bytes)?;
 
     let mut config = prost_build::Config::new();
     // Generate `impl prost::Name` so google.protobuf.Any type-URLs resolve.
@@ -56,6 +54,32 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     config.compile_fds(file_descriptor_set)?;
+
+    // With the `serde` feature, generate protobuf-JSON Serialize/Deserialize
+    // impls matching C++ MessageToJsonString conventions (snake_case keys,
+    // defaults emitted, unknown fields ignored on read) for the persistent
+    // storage settings file and the guest-port info JSON. Scoped to those
+    // message closures rather than the whole package, which would also cover
+    // well-known types that prost-types has no serde impls for.
+    if std::env::var_os("CARGO_FEATURE_SERDE").is_some() {
+        pbjson_build::Builder::new()
+            .register_descriptors(&descriptor_set_bytes)?
+            .preserve_proto_field_names()
+            .emit_fields()
+            .ignore_unknown_fields()
+            .build(&[
+                ".blueye.protocol.PersistentStorageSettings",
+                ".blueye.protocol.GuestPortInfo",
+                ".blueye.protocol.GuestPortConnectorInfo",
+                ".blueye.protocol.GuestPortDeviceList",
+                ".blueye.protocol.GuestPortDevice",
+                ".blueye.protocol.GuestPortDeviceID",
+                ".blueye.protocol.GuestPortNumber",
+                ".blueye.protocol.GuestPortCapability",
+                ".blueye.protocol.GuestPortDetachStatus",
+                ".blueye.protocol.GuestPortError",
+            ])?;
+    }
     Ok(())
 }
 
