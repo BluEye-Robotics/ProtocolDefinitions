@@ -10,14 +10,15 @@ npm install @blueyerobotics/protocol-definitions
 
 ## Module format
 
-This package is published as **ESM only**. `import` works natively:
+This package ships ES modules only — there is no separate CommonJS build. Both
+`import` and `require()` work on current Node.js releases.
 
 ```ts
 import { blueye } from "@blueyerobotics/protocol-definitions";
 ```
 
-CommonJS consumers can still `require()` it on Node.js 22.12+ (or 20.19+), which
-supports `require()` of ES modules:
+`require()` is supported on Node.js 22.12+ (or 20.19+), which can load an ES
+module from CommonJS:
 
 ```js
 const { blueye } = require("@blueyerobotics/protocol-definitions");
