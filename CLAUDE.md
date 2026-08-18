@@ -30,9 +30,11 @@ script, so keep changes in one place. `--ts_proto_opt=importSuffix=.js` is requi
 the package compiles as ESM with `moduleResolution: NodeNext`, which needs explicit
 file extensions on relative imports.
 
-The npm package is ESM-only (`"type": "module"` plus an `exports` map). The `.` entry
-uses a `default` condition rather than `import`, so `require()` still resolves on
-Node.js 22.12+ via `require(esm)`.
+The npm package ships ES modules only — `"type": "module"` plus an `exports` map,
+with no separate CommonJS build. The `.` entry uses a `default` condition rather
+than `import`, so `require()` still resolves on Node.js 22.12+ via `require(esm)`;
+an `import` condition would match ESM callers only and fail everything else with
+`ERR_PACKAGE_PATH_NOT_EXPORTED`. The `./dist/*` subpath keeps deep imports working.
 
 ### C#/.NET
 ```
