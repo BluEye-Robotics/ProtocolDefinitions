@@ -22,17 +22,17 @@ cmake --install build --prefix /usr/local
 ### TypeScript
 ```
 pnpm install
-# Generate TypeScript from proto files:
-mkdir -p ./out/ && protoc protobuf_definitions/*.proto \
-  --plugin=./node_modules/.bin/protoc-gen-ts_proto \
-  --proto_path=protobuf_definitions \
-  --ts_proto_out=./out \
-  --ts_proto_opt=outputIndex=true \
-  --ts_proto_opt=globalThisPolyfill=true \
-  --ts_proto_opt=useExactTypes=false
-# Compile TypeScript:
-pnpm run build
+pnpm run generate   # generate TypeScript from proto files into ./out (requires protoc)
+pnpm run build      # compile ./out into ./dist
 ```
+The protoc flags live in the `generate` script in `package.json`; CI runs the same
+script, so keep changes in one place. `--ts_proto_opt=importSuffix=.js` is required —
+the package compiles as ESM with `moduleResolution: NodeNext`, which needs explicit
+file extensions on relative imports.
+
+The npm package is ESM-only (`"type": "module"` plus an `exports` map). The `.` entry
+uses a `default` condition rather than `import`, so `require()` still resolves on
+Node.js 22.12+ via `require(esm)`.
 
 ### C#/.NET
 ```

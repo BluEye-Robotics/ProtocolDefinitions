@@ -37,20 +37,28 @@ jobs:
           pnpm install
 
       - name: Generate
-        run: |
-          mkdir -p ./out/ &&
-          protoc protobuf_definitions/*.proto \
-            --plugin=./node_modules/.bin/protoc-gen-ts_proto \
-            --proto_path=protobuf_definitions \
-            --ts_proto_out=./out \
-            --ts_proto_opt=outputIndex=true \
-            --ts_proto_opt=globalThisPolyfill=true \
-            --ts_proto_opt=useExactTypes=false \
-            --ts_proto_opt=esModuleInterop=true \
-            --ts_proto_opt=importSuffix=.js
+        run: pnpm run generate
 
       - name: Compile
         run: pnpm run build
+
+      - name: Verify package entrypoints
+        run: |
+          SMOKE=$(mktemp -d)
+          TARBALL=$(pnpm pack --pack-destination "$SMOKE" | tail -1)
+          cd "$SMOKE"
+          npm init -y > /dev/null
+          npm install "$TARBALL" > /dev/null
+          node --input-type=module -e "
+            import { blueye } from '@blueyerobotics/protocol-definitions';
+            if (!blueye.protocol.GetBatteryReq) throw new Error('missing expected export');
+            console.log('ESM import OK');
+          "
+          node --input-type=commonjs -e "
+            const { blueye } = require('@blueyerobotics/protocol-definitions');
+            if (!blueye.protocol.GetBatteryReq) throw new Error('missing expected export');
+            console.log('CJS require OK');
+          "
 
       - name: Publish to npm
         run: |

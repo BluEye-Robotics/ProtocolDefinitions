@@ -8,6 +8,29 @@ TypeScript protobuf definitions for Blueye Robotics protocols generated using [t
 npm install @blueyerobotics/protocol-definitions
 ```
 
+## Module format
+
+This package is published as **ESM only**. `import` works natively:
+
+```ts
+import { blueye } from "@blueyerobotics/protocol-definitions";
+```
+
+CommonJS consumers can still `require()` it on Node.js 22.12+ (or 20.19+), which
+supports `require()` of ES modules:
+
+```js
+const { blueye } = require("@blueyerobotics/protocol-definitions");
+```
+
+On older Node.js versions `require()` fails with `ERR_REQUIRE_ESM` — use `import`
+or a dynamic `await import()` instead.
+
+The package root is the supported entry point. Individual generated modules stay
+reachable under `./dist/` (for example
+`@blueyerobotics/protocol-definitions/dist/telemetry.js`) if you want to import a
+single protocol file to keep bundles small.
+
 ## Usage
 
 ```ts
