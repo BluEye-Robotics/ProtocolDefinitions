@@ -2,6 +2,16 @@
 
 TypeScript protobuf definitions for Blueye Robotics protocols generated using [ts-proto](https://github.com/stephenh/ts-proto).
 
+## Protocol version
+
+This package implements **version 3** of the Blueye communication protocol, used by
+drones running Blunux 3.0 and newer. Older drones use the separate
+[legacy protocol](https://github.com/BluEye-Robotics/blueye.legacyprotocol).
+
+The npm version above tracks releases of *this package* — packaging, module format
+and generated API surface — and is independent of the protocol version. A major
+version bump here does not indicate a new protocol generation.
+
 ## Installation
 
 ```bash
