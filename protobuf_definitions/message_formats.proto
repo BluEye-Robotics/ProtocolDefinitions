@@ -178,6 +178,32 @@ message AutoPilotHeaveState {
   bool enabled = 1; // If auto pilot heave is enabled.
 }
 
+// Spotlight state.
+//
+// Vision-based mode that keeps the tracked object centred in the frame
+// (auto heading and vertical centring) while the pilot retains manual
+// surge and sway control.
+message SpotlightState {
+  bool enabled = 1; // If spotlight is enabled.
+}
+
+// Active track state.
+//
+// Vision-based mode that keeps the tracked object centred in the frame and
+// automatically controls surge to maintain the desired distance to it.
+message ActiveTrackState {
+  bool enabled = 1; // If active track is enabled.
+}
+
+// Orbit state.
+//
+// Vision-based mode that keeps the tracked object centred in the frame while
+// the drone circles it laterally at the commanded angular rate.
+message OrbitState {
+  bool enabled = 1; // If orbit is enabled.
+  float rate = 2; // Orbit angular rate (deg/s); positive orbits clockwise seen from above. 0 keeps the current rate.
+}
+
 // Control mode from drone supervisor
 message ControlMode {
   bool auto_depth = 1; // If auto depth is enabled.
@@ -187,6 +213,9 @@ message ControlMode {
   bool weather_vaning = 5; // If weather vaning is enabled.
   bool auto_pilot_surge_yaw = 6; // If auto pilot surge yaw is enabled.
   bool auto_pilot_heave = 7; // If auto pilot heave is enabled.
+  bool spotlight = 8; // If the vision-based spotlight mode is enabled.
+  bool active_track = 9; // If the vision-based active track mode is enabled.
+  bool orbit = 10; // If the vision-based orbit mode is enabled.
 }
 
 // Tilt stabilization state.
@@ -1682,6 +1711,9 @@ message OperatorInfo {
 }
 
 // Single-object tracking (SOT) state reported by the computer vision pipeline.
+//
+// The velocity fields are Kalman filter estimates expressed in the CV frame
+// coordinate space (image_width x image_height pixels).
 message SotState {
   // Current state of the SOT tracker.
   enum State {
@@ -1694,6 +1726,11 @@ message SotState {
   BoundingBox bounding_box = 2; // Current tracked bounding box (valid when TRACKING).
   uint32 image_width = 3; // Width of the source frame in pixels.
   uint32 image_height = 4; // Height of the source frame in pixels.
+  float confidence = 5; // Tracker confidence of the last model update (0..1). 0 while coasting and when LOST.
+  float vx = 6; // Kalman velocity estimate of the bounding box centre, horizontal (px/s).
+  float vy = 7; // Kalman velocity estimate of the bounding box centre, vertical (px/s).
+  float vs = 8; // Kalman rate of change of the bounding box area, width * height (px²/s).
+  float vr = 9; // Kalman rate of change of the bounding box aspect ratio, width / height (1/s).
 }
 
 // Origin of an annotation. Mirrors the AnnotationSource enum in Blueye Cloud.
