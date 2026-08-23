@@ -105,28 +105,15 @@ message AutoPilotHeaveCtrl {
   AutoPilotHeaveState state = 1; // State of the auto pilot heave controller-
 }
 
-// Issue a command to set the vision-based spotlight mode to a desired state.
+// Issue a command to set the vision-based tracking mode.
 //
-// Requires an actively tracked single-object-tracking (SOT) target;
-// the drone refuses to enable the mode otherwise.
-message SpotlightCtrl {
-  SpotlightState state = 1; // State of the spotlight mode.
-}
-
-// Issue a command to set the vision-based active track mode to a desired state.
-//
-// Requires an actively tracked single-object-tracking (SOT) target;
-// the drone refuses to enable the mode otherwise.
-message ActiveTrackCtrl {
-  ActiveTrackState state = 1; // State of the active track mode.
-}
-
-// Issue a command to set the vision-based orbit mode to a desired state.
-//
-// Requires an actively tracked single-object-tracking (SOT) target;
-// the drone refuses to enable the mode otherwise.
-message OrbitCtrl {
-  OrbitState state = 1; // State of the orbit mode, including the orbit angular rate.
+// Setting a mode requires an actively tracked single-object-tracking (SOT)
+// target; the drone refuses to enable a mode otherwise. Setting a different
+// mode while one is active switches atomically. Sending a state with no
+// mode set disables vision tracking. An OrbitState with a zero rate is
+// rejected.
+message VisionTrackingCtrl {
+  VisionTrackingState state = 1; // The desired vision tracking mode, or none to disable.
 }
 
 // Issue a command to start and pause the loaded mission.

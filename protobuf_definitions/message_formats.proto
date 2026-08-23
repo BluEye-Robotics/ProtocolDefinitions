@@ -178,30 +178,41 @@ message AutoPilotHeaveState {
   bool enabled = 1; // If auto pilot heave is enabled.
 }
 
-// Spotlight state.
+// Spotlight mode parameters.
 //
 // Vision-based mode that keeps the tracked object centred in the frame
 // (auto heading and vertical centring) while the pilot retains manual
-// surge and sway control.
+// surge and sway control. Currently carries no parameters.
 message SpotlightState {
-  bool enabled = 1; // If spotlight is enabled.
 }
 
-// Active track state.
+// Active track mode parameters.
 //
 // Vision-based mode that keeps the tracked object centred in the frame and
 // automatically controls surge to maintain the desired distance to it.
+// Currently carries no parameters.
 message ActiveTrackState {
-  bool enabled = 1; // If active track is enabled.
 }
 
-// Orbit state.
+// Orbit mode parameters.
 //
 // Vision-based mode that keeps the tracked object centred in the frame while
 // the drone circles it laterally at the commanded angular rate.
 message OrbitState {
-  bool enabled = 1; // If orbit is enabled.
-  float rate = 2; // Orbit angular rate (deg/s); positive orbits clockwise seen from above. 0 keeps the current rate.
+  float rate = 1; // Orbit angular rate (deg/s); positive orbits clockwise seen from above. Must be non-zero.
+}
+
+// The active vision-based tracking mode.
+//
+// The modes are mutually exclusive, which the oneof encodes: at most one
+// mode is set at a time, and no field set means no vision tracking mode
+// is active.
+message VisionTrackingState {
+  oneof mode {
+    SpotlightState spotlight = 1; // Spotlight mode is active.
+    ActiveTrackState active_track = 2; // Active track mode is active.
+    OrbitState orbit = 3; // Orbit mode is active, at the reported angular rate.
+  }
 }
 
 // Control mode from drone supervisor
@@ -213,9 +224,7 @@ message ControlMode {
   bool weather_vaning = 5; // If weather vaning is enabled.
   bool auto_pilot_surge_yaw = 6; // If auto pilot surge yaw is enabled.
   bool auto_pilot_heave = 7; // If auto pilot heave is enabled.
-  bool spotlight = 8; // If the vision-based spotlight mode is enabled.
-  bool active_track = 9; // If the vision-based active track mode is enabled.
-  bool orbit = 10; // If the vision-based orbit mode is enabled.
+  VisionTrackingState vision_tracking = 8; // The active vision-based tracking mode, if any.
 }
 
 // Tilt stabilization state.
