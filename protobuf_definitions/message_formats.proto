@@ -181,23 +181,35 @@ message AutoPilotHeaveState {
 // Spotlight mode parameters.
 //
 // Vision-based mode that keeps the tracked object centred in the frame
-// (auto heading and vertical centring) while the pilot retains manual
-// surge and sway control. Currently carries no parameters.
+// while the pilot flies around it. Currently carries no parameters.
+//
+// Automatically controlled: yaw (horizontal centring) and depth
+// (vertical centring).
+// Pilot controlled: surge and sway.
 message SpotlightState {
 }
 
 // Active track mode parameters.
 //
-// Vision-based mode that keeps the tracked object centred in the frame and
-// automatically controls surge to maintain the desired distance to it.
-// Currently carries no parameters.
+// Vision-based mode that follows the tracked object, keeping it centred
+// and at a constant apparent size in the frame. Currently carries no
+// parameters.
+//
+// Automatically controlled: yaw (horizontal centring), depth (vertical
+// centring), and surge (distance keeping).
+// Pilot controlled: sway.
 message ActiveTrackState {
 }
 
 // Orbit mode parameters.
 //
-// Vision-based mode that keeps the tracked object centred in the frame while
-// the drone circles it laterally at the commanded angular rate.
+// Vision-based mode that circles the tracked object while keeping it
+// centred in the frame.
+//
+// Automatically controlled: yaw (horizontal centring), depth (vertical
+// centring), surge (distance keeping), and sway (tangential motion at
+// the commanded angular rate). No degree of freedom is pilot controlled
+// while orbit is active.
 message OrbitState {
   float rate = 1; // Orbit angular rate (deg/s); positive orbits clockwise seen from above. Must be non-zero.
 }
@@ -207,6 +219,11 @@ message OrbitState {
 // The modes are mutually exclusive, which the oneof encodes: at most one
 // mode is set at a time, and no field set means no vision tracking mode
 // is active.
+//
+// Each mode's message documents which degrees of freedom it controls
+// automatically; any degree of freedom not listed as automatic remains
+// under pilot control. Pilot input on an automatically controlled degree
+// of freedom is ignored while the mode is active.
 message VisionTrackingState {
   oneof mode {
     SpotlightState spotlight = 1; // Spotlight mode is active.
