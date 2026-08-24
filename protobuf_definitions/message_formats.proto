@@ -178,6 +178,60 @@ message AutoPilotHeaveState {
   bool enabled = 1; // If auto pilot heave is enabled.
 }
 
+// Spotlight mode parameters.
+//
+// Vision-based mode that keeps the tracked object centred in the frame
+// while the pilot flies around it. Currently carries no parameters.
+//
+// Automatically controlled: yaw (horizontal centring) and depth
+// (vertical centring).
+// Pilot controlled: surge and sway.
+message SpotlightState {
+}
+
+// Active track mode parameters.
+//
+// Vision-based mode that follows the tracked object, keeping it centred
+// and at a constant apparent size in the frame. Currently carries no
+// parameters.
+//
+// Automatically controlled: yaw (horizontal centring), depth (vertical
+// centring), and surge (distance keeping).
+// Pilot controlled: sway.
+message ActiveTrackState {
+}
+
+// Orbit mode parameters.
+//
+// Vision-based mode that circles the tracked object while keeping it
+// centred in the frame.
+//
+// Automatically controlled: yaw (horizontal centring), depth (vertical
+// centring), surge (distance keeping), and sway (tangential motion at
+// the commanded angular rate). No degree of freedom is pilot controlled
+// while orbit is active.
+message OrbitState {
+  float rate = 1; // Orbit angular rate (deg/s); positive orbits clockwise seen from above. Must be non-zero.
+}
+
+// The active vision-based tracking mode.
+//
+// The modes are mutually exclusive, which the oneof encodes: at most one
+// mode is set at a time, and no field set means no vision tracking mode
+// is active.
+//
+// Each mode's message documents which degrees of freedom it controls
+// automatically; any degree of freedom not listed as automatic remains
+// under pilot control. Pilot input on an automatically controlled degree
+// of freedom is ignored while the mode is active.
+message VisionTrackingState {
+  oneof mode {
+    SpotlightState spotlight = 1; // Spotlight mode is active.
+    ActiveTrackState active_track = 2; // Active track mode is active.
+    OrbitState orbit = 3; // Orbit mode is active, at the reported angular rate.
+  }
+}
+
 // Control mode from drone supervisor
 message ControlMode {
   bool auto_depth = 1; // If auto depth is enabled.
@@ -187,6 +241,7 @@ message ControlMode {
   bool weather_vaning = 5; // If weather vaning is enabled.
   bool auto_pilot_surge_yaw = 6; // If auto pilot surge yaw is enabled.
   bool auto_pilot_heave = 7; // If auto pilot heave is enabled.
+  VisionTrackingState vision_tracking = 8; // The active vision-based tracking mode, if any.
 }
 
 // Tilt stabilization state.
@@ -1682,6 +1737,9 @@ message OperatorInfo {
 }
 
 // Single-object tracking (SOT) state reported by the computer vision pipeline.
+//
+// The velocity fields are Kalman filter estimates expressed in the CV frame
+// coordinate space (image_width x image_height pixels).
 message SotState {
   // Current state of the SOT tracker.
   enum State {
@@ -1694,6 +1752,11 @@ message SotState {
   BoundingBox bounding_box = 2; // Current tracked bounding box (valid when TRACKING).
   uint32 image_width = 3; // Width of the source frame in pixels.
   uint32 image_height = 4; // Height of the source frame in pixels.
+  float confidence = 5; // Tracker confidence of the last model update (0..1). 0 while coasting and when LOST.
+  float vx = 6; // Kalman velocity estimate of the bounding box centre, horizontal (px/s).
+  float vy = 7; // Kalman velocity estimate of the bounding box centre, vertical (px/s).
+  float vs = 8; // Kalman rate of change of the bounding box area, width * height (px²/s).
+  float vr = 9; // Kalman rate of change of the bounding box aspect ratio, width / height (1/s).
 }
 
 // Origin of an annotation. Mirrors the AnnotationSource enum in Blueye Cloud.
