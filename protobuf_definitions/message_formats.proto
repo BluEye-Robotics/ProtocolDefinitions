@@ -858,12 +858,39 @@ message CvModelInfo {
     MODEL_TYPE_DETECTION = 1;
     MODEL_TYPE_SOT = 2;
   }
+  // Runtime state of a computer vision model.
+  enum State {
+    STATE_UNSPECIFIED = 0; // State unknown / not reported.
+    STATE_STOPPED = 1; // The model is not running.
+    STATE_RUNNING = 2; // The model is running (detection models).
+    STATE_IDLE = 3; // The SOT model is running with no target selected.
+    STATE_TRACKING = 4; // The SOT model is actively tracking a target.
+    STATE_LOST = 5; // The SOT model lost the target it was tracking.
+  }
   string name = 1; // Human-readable model name (from model_meta.json).
   ModelType type = 2; // Type of CV model.
   bool running = 3; // Whether the model is currently running.
   string device = 4; // Execution provider (e.g. "cuda", "tensorrt").
   string package_id = 5; // Package directory name (e.g. "tinyyolov2_package"). Stable identifier.
   repeated string labels = 6; // Class names the model can detect (indexed by class_id).
+  State state = 7; // Runtime state. SOT models report IDLE/TRACKING/LOST instead of RUNNING.
+}
+
+// Camera intrinsic calibration (pinhole model with OpenCV distortion coefficients).
+//
+// All values are in pixels at the calibration resolution (image_width x image_height).
+// When applying the calibration to an image of a different resolution, scale
+// fx, fy, cx and cy by the resolution ratio; the distortion coefficients are
+// resolution independent.
+message CameraCalibration {
+  float fx = 1; // Focal length x (pixels).
+  float fy = 2; // Focal length y (pixels).
+  float cx = 3; // Principal point x (pixels).
+  float cy = 4; // Principal point y (pixels).
+  repeated float distortion_coefficients = 5; // OpenCV order: k1, k2, p1, p2, k3.
+  uint32 image_width = 6; // Image width (pixels) the calibration was computed at.
+  uint32 image_height = 7; // Image height (pixels) the calibration was computed at.
+  bool is_default = 8; // True when this is the built-in default, not a per-drone calibration.
 }
 
 // This message contains serial numbers and version information for
@@ -881,8 +908,9 @@ message DroneInfo {
   bytes bb_uid = 8; // Backbone unique identifier.
   GuestPortInfo gp = 9; // Guest port information.
   PressureSensorType depth_sensor = 11; // Type of depth sensor that is connected to the drone.
-  repeated CvModelInfo cv_models = 12; // List of loaded computer vision models.
+  repeated CvModelInfo cv_models = 12; // Installed computer vision models, including models that are not running.
   PowerSource power_source = 13; // How the drone is powered.
+  CameraCalibration main_camera_calibration = 14; // Intrinsic calibration of the main camera. Unset when unknown.
 }
 
 // Known error states for the drone.

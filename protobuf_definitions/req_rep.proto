@@ -246,3 +246,27 @@ message GetLogStreamingStatusReq {
 message GetLogStreamingStatusRep {
   bool enabled = 1; // If log streaming is enabled or disabled.
 }
+
+// Request to start or stop a computer vision model.
+//
+// The reply only acknowledges that the model exists and the request was
+// accepted. The model starts or stops asynchronously; track progress through
+// the state field of CvModelInfo in DroneInfoTel or GetCvModelsRep.
+message SetCvModelStateReq {
+  string package_id = 1; // Identifies the model, from CvModelInfo.package_id.
+  bool running = 2; // Desired run state: true to start the model, false to stop it.
+}
+
+// Response after accepting a SetCvModelStateReq.
+message SetCvModelStateRep {
+  bool success = 1; // True if the model exists and the request was accepted for execution.
+}
+
+// Request the list of computer vision models installed on the drone.
+message GetCvModelsReq {
+}
+
+// Response with the list of installed computer vision models.
+message GetCvModelsRep {
+  repeated CvModelInfo cv_models = 1; // All installed models, including models that are not running.
+}
