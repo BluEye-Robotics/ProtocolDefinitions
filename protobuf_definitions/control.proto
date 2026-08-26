@@ -284,6 +284,13 @@ message SetSotTargetCtrl {
 message ClearSotTargetCtrl {
 }
 
+// Issue a command to rescan the computer vision model packages installed on the drone.
+//
+// The drone rediscovers model packages on disk and publishes an updated model
+// list. Use after installing or removing a model package without rebooting.
+message RescanCvModelsCtrl {
+}
+
 // Request to add an annotation to the current dive.
 //
 // Sent by the app when a diver picks a type from the in-dive command palette.
