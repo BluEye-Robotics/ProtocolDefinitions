@@ -259,7 +259,7 @@ message SetCvModelStateReq {
 
 // Response after accepting a SetCvModelStateReq.
 message SetCvModelStateRep {
-  bool success = 1; // True if the model exists and the request was accepted for execution.
+  bool accepted = 1; // True if the model exists and the request was accepted for execution.
 }
 
 // Request the list of computer vision models installed on the drone.

@@ -879,9 +879,9 @@ message CvModelInfo {
 // Camera intrinsic calibration (pinhole model with OpenCV distortion coefficients).
 //
 // All values are in pixels at the calibration resolution (image_width x image_height).
-// When applying the calibration to an image of a different resolution, scale
-// fx, fy, cx and cy by the resolution ratio; the distortion coefficients are
-// resolution independent.
+// When applying the calibration to an image of a different resolution, scale fx and cx
+// by the width ratio and fy and cy by the height ratio; the distortion coefficients
+// are resolution independent.
 message CameraCalibration {
   float fx = 1; // Focal length x (pixels).
   float fy = 2; // Focal length y (pixels).
