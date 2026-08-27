@@ -1728,7 +1728,7 @@ message SegmentationMask {
   uint32 mask_width = 1;  // Width of the RLE bitmap.
   uint32 mask_height = 2; // Height of the RLE bitmap.
   bytes counts = 3;       // RLE counts as packed uint16 little-endian.
-  BoundingBox mask_box = 4; // Image region the mask bitmap covers (raw detection position, not the tracking-smoothed bounding box).
+  BoundingBox mask_box = 4; // Image region the mask bitmap covers (raw detection position, never smoothed).
 }
 
 // A single object detection from a computer vision model.
