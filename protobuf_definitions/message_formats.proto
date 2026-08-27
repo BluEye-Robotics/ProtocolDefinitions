@@ -1724,8 +1724,6 @@ message BoundingBox {
 // Scale the mask to mask_box, not to the detection's bounding_box: the
 // bounding box may be smoothed by tracking, while mask_box is pinned to the
 // raw detection position, so the mask stays on the actual object pixels.
-// If mask_box is unset (all zero — messages from older drone versions),
-// fall back to scaling the mask to the detection's bounding_box.
 message SegmentationMask {
   uint32 mask_width = 1;  // Width of the RLE bitmap.
   uint32 mask_height = 2; // Height of the RLE bitmap.
