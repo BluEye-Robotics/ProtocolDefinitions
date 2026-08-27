@@ -118,8 +118,13 @@ message GetBatteryReq {
 }
 
 // Response with essential battery information.
+//
+// On models with two batteries running in parallel (e.g. the X7), second_battery
+// holds the essential information for the second battery. When only a single
+// battery is used, second_battery is undefined (not set).
 message GetBatteryRep {
   Battery battery = 1; // Essential battery information.
+  Battery second_battery = 2; // Second battery, when present. Not set if only one battery is used.
 }
 
 // Issue a desired mission to the reference_generator.
