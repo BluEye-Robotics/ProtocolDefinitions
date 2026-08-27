@@ -1711,21 +1711,29 @@ message BoundingBox {
   uint32 height = 4; // Height of the bounding box (px).
 }
 
-// RLE-encoded binary segmentation mask relative to the bounding box.
+// RLE-encoded binary segmentation mask with its own anchor box.
 //
 // The mask bitmap has dimensions (mask_width x mask_height) covering the
-// detection's bounding box area. The counts field stores run-length encoded
-// data as packed uint16 little-endian: alternating background/foreground
-// pixel runs starting with background.
+// mask_box region of the camera image. The counts field stores run-length
+// encoded data as packed uint16 little-endian: alternating
+// background/foreground pixel runs starting with background. Runs longer
+// than 65535 pixels are split by inserting a zero-length run of the
+// opposite class (e.g. 70000 becomes 65535, 0, 4465), so decoders need no
+// special handling — a zero-length run just toggles the class.
+//
+// Scale the mask to mask_box, not to the detection's bounding_box: the
+// bounding box may be smoothed by tracking, while mask_box is pinned to the
+// raw detection position, so the mask stays on the actual object pixels.
 message SegmentationMask {
   uint32 mask_width = 1;  // Width of the RLE bitmap.
   uint32 mask_height = 2; // Height of the RLE bitmap.
   bytes counts = 3;       // RLE counts as packed uint16 little-endian.
+  BoundingBox mask_box = 4; // Image region the mask bitmap covers (raw detection position, never smoothed).
 }
 
 // A single object detection from a computer vision model.
 message ObjectDetection {
-  BoundingBox bounding_box = 1; // Bounding box of the detected object.
+  BoundingBox bounding_box = 1; // Bounding box of the detected object (may be smoothed by tracking).
   float confidence = 2; // Detection confidence score (0..1).
   uint32 class_id = 3; // Numeric class identifier from the model.
   string class_name = 4; // Human-readable class name.
