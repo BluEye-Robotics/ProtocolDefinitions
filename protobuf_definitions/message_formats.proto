@@ -1261,6 +1261,42 @@ message NavigationSensorStatus {
   LatLongPosition global_position = 8; // Global position from sensor.
 }
 
+// GNSS constellation a satellite belongs to.
+enum GnssConstellation {
+  GNSS_CONSTELLATION_UNSPECIFIED = 0; // Unspecified.
+  GNSS_CONSTELLATION_GPS = 1; // GPS.
+  GNSS_CONSTELLATION_GLONASS = 2; // GLONASS.
+  GNSS_CONSTELLATION_GALILEO = 3; // Galileo.
+  GNSS_CONSTELLATION_BEIDOU = 4; // BeiDou.
+}
+
+// Satellite tracked by the Blueye GNSS receiver.
+message GnssSatellite {
+  GnssConstellation constellation = 1; // Constellation the satellite belongs to.
+  uint32 satellite_id = 2; // Satellite id within the constellation.
+  uint32 snr = 3; // Carrier to noise ratio (dB-Hz).
+}
+
+// Status of the onboard Blueye GNSS receiver and its driver.
+message GnssStatus {
+  bool receiver_connected = 1; // True when the receiver is connected and producing NMEA sentences.
+  uint32 fix_quality = 2; // NMEA GGA fix quality indicator (0 = no fix).
+  bool is_valid = 3; // True when the receiver reports a usable position fix.
+  uint32 satellites_used = 4; // Number of satellites used in the position fix.
+  uint32 satellites_in_view = 5; // Number of satellites currently tracked.
+  float hdop = 6; // Horizontal dilution of precision.
+  LatLongPosition global_position = 7; // Reported global position.
+  float stddev_latitude = 8; // Standard deviation of the latitude (m).
+  float stddev_longitude = 9; // Standard deviation of the longitude (m).
+  float course_over_ground = 10; // Course over ground (°).
+  float speed_over_ground = 11; // Speed over ground (m/s).
+  uint32 baud_rate = 12; // Serial baud rate in use (bit/s).
+  uint32 reconnect_count = 13; // Times the driver has reconnected to the receiver since boot.
+  uint32 receive_error_count = 14; // Receive errors seen by the driver since boot.
+  float time_since_last_sentence = 15; // Time since the last NMEA sentence was received (s).
+  repeated GnssSatellite satellites = 16; // Satellites currently tracked with signal strength.
+}
+
 // Status for guest port devices that can be attached and detached.
 enum GuestPortDetachStatus {
   GUEST_PORT_DETACH_STATUS_UNSPECIFIED = 0; // Unspecified (Default for non-detachable devices).

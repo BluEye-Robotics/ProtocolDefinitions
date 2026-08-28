@@ -97,6 +97,11 @@ message PilotGPSPositionTel {
   LatLongPosition position = 1; // The GPS position of the pilot.
 }
 
+// Status of the onboard Blueye GNSS receiver and its driver.
+message GnssStatusTel {
+  GnssStatus gnss_status = 1; // Status of the Blueye GNSS receiver.
+}
+
 // Record state from the drone.
 message RecordStateTel {
   RecordState record_state = 1; // Record state.
