@@ -1261,6 +1261,14 @@ message NavigationSensorStatus {
   LatLongPosition global_position = 8; // Global position from sensor.
 }
 
+// Position fix mode reported by the NMEA GSA sentence.
+enum GnssFixMode {
+  GNSS_FIX_MODE_UNSPECIFIED = 0; // No GSA sentence has been received.
+  GNSS_FIX_MODE_NO_FIX = 1; // The receiver has no position fix.
+  GNSS_FIX_MODE_2D = 2; // Horizontal fix only, no usable altitude.
+  GNSS_FIX_MODE_3D = 3; // Full three dimensional fix.
+}
+
 // GNSS constellation a satellite belongs to.
 enum GnssConstellation {
   GNSS_CONSTELLATION_UNSPECIFIED = 0; // Unspecified.
@@ -1277,6 +1285,7 @@ message GnssSatellite {
   uint32 snr = 3; // Carrier to noise ratio (dB-Hz).
   int32 elevation = 4; // Elevation above the horizon (°, 0..90), or -1 when the receiver did not report it.
   int32 azimuth = 5; // Azimuth clockwise from true north (°, 0..359), or -1 when the receiver did not report it.
+  bool used_in_fix = 6; // Whether GSA lists the satellite as used in the fix. Only meaningful if is_used_in_fix_valid.
 }
 
 // Status of the onboard Blueye GNSS receiver and its driver.
@@ -1287,14 +1296,26 @@ message GnssStatus {
   uint32 satellites_used = 4; // Number of satellites used in the position fix.
   uint32 satellites_tracked = 5; // Satellites in the satellites list: those with a signal, seen within the last 30 s.
   uint32 satellites_in_view = 17; // Satellites the receiver reports in view, summed over the constellations.
+  bool is_used_in_fix_valid = 20; // True when GSA could be attributed to a constellation, making used_in_fix usable.
+  GnssFixMode fix_mode = 21; // Fix mode from GSA (2D/3D).
   float hdop = 6; // Horizontal dilution of precision.
+  float pdop = 22; // Position (3D) dilution of precision, from GSA.
+  float vdop = 23; // Vertical dilution of precision, from GSA.
   LatLongPosition global_position = 7; // Reported global position.
+  float altitude = 24; // Altitude above mean sea level (m), from GGA.
   float stddev_latitude = 8; // Standard deviation of the latitude (m). Meaningless unless is_accuracy_valid.
   float stddev_longitude = 9; // Standard deviation of the longitude (m). Meaningless unless is_accuracy_valid.
+  float stddev_altitude = 25; // Standard deviation of the altitude (m). Meaningless unless is_accuracy_valid.
+  float stddev_semi_major = 26; // Semi-major axis of the horizontal error ellipse (m).
+  float stddev_semi_minor = 27; // Semi-minor axis of the horizontal error ellipse (m).
+  float error_ellipse_orientation = 28; // Orientation of the semi-major axis, clockwise from true north (°).
+  float range_rms = 29; // RMS of the range residuals (m), from GST.
   bool is_accuracy_valid = 18; // True once the receiver has reported a GST sentence to derive the deviations from.
   float course_over_ground = 10; // Course over ground (°). Meaningless unless is_course_valid.
   bool is_course_valid = 19; // True when the fix is valid and the receiver actually reported a course.
   float speed_over_ground = 11; // Speed over ground (m/s).
+  float differential_age = 30; // Age of the differential corrections (s), or -1 without DGPS/RTK.
+  int32 differential_station = 31; // Id of the station supplying the differential corrections, or -1 when absent.
   uint32 baud_rate = 12; // Serial baud rate in use (bit/s).
   uint32 reconnect_count = 13; // Times the driver has reconnected to the receiver since boot.
   uint32 receive_error_count = 14; // Receive errors seen by the driver since boot.
