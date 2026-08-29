@@ -1275,6 +1275,8 @@ message GnssSatellite {
   GnssConstellation constellation = 1; // Constellation the satellite belongs to.
   uint32 satellite_id = 2; // Satellite id within the constellation.
   uint32 snr = 3; // Carrier to noise ratio (dB-Hz).
+  int32 elevation = 4; // Elevation above the horizon (°, 0..90), or -1 when the receiver did not report it.
+  int32 azimuth = 5; // Azimuth clockwise from true north (°, 0..359), or -1 when the receiver did not report it.
 }
 
 // Status of the onboard Blueye GNSS receiver and its driver.
@@ -1283,12 +1285,15 @@ message GnssStatus {
   uint32 fix_quality = 2; // NMEA GGA fix quality indicator (0 = no fix).
   bool is_valid = 3; // True when the receiver reports a usable position fix.
   uint32 satellites_used = 4; // Number of satellites used in the position fix.
-  uint32 satellites_in_view = 5; // Number of satellites currently tracked.
+  uint32 satellites_tracked = 5; // Satellites in the satellites list: those with a signal, seen within the last 30 s.
+  uint32 satellites_in_view = 17; // Satellites the receiver reports in view, summed over the constellations.
   float hdop = 6; // Horizontal dilution of precision.
   LatLongPosition global_position = 7; // Reported global position.
-  float stddev_latitude = 8; // Standard deviation of the latitude (m).
-  float stddev_longitude = 9; // Standard deviation of the longitude (m).
-  float course_over_ground = 10; // Course over ground (°).
+  float stddev_latitude = 8; // Standard deviation of the latitude (m). Meaningless unless is_accuracy_valid.
+  float stddev_longitude = 9; // Standard deviation of the longitude (m). Meaningless unless is_accuracy_valid.
+  bool is_accuracy_valid = 18; // True once the receiver has reported a GST sentence to derive the deviations from.
+  float course_over_ground = 10; // Course over ground (°). Meaningless unless is_course_valid.
+  bool is_course_valid = 19; // True when the fix is valid and the receiver actually reported a course.
   float speed_over_ground = 11; // Speed over ground (m/s).
   uint32 baud_rate = 12; // Serial baud rate in use (bit/s).
   uint32 reconnect_count = 13; // Times the driver has reconnected to the receiver since boot.
