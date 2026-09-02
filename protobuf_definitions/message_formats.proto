@@ -1294,8 +1294,8 @@ message GnssStatus {
   uint32 fix_quality = 2; // NMEA GGA fix quality indicator (0 = no fix).
   bool is_valid = 3; // True when the receiver reports a usable position fix.
   uint32 satellites_used = 4; // Number of satellites used in the position fix.
-  uint32 satellites_tracked = 5; // Satellites in the satellites list: those with a signal, seen within the last 30 s.
-  uint32 satellites_in_view = 17; // Satellites the receiver reports in view, summed over the constellations.
+  uint32 satellites_tracked = 5; // Satellites in the satellites list: those with a signal in the receiver's latest GSV burst.
+  uint32 satellites_in_view = 17; // Satellites the receiver predicts above the horizon, summed over the constellations; needs no signal, so it stays high even when nothing is tracked.
   bool is_used_in_fix_valid = 20; // True when GSA could be attributed to a constellation, making used_in_fix usable.
   GnssFixMode fix_mode = 21; // Fix mode from GSA (2D/3D).
   float hdop = 6; // Horizontal dilution of precision.
