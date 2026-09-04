@@ -9,6 +9,11 @@
 //! payloads can be decoded by type name when the concrete type is only known at
 //! runtime.
 
+// Protobuf-JSON rendering of enum values outside the generated enum; the
+// pbjson-generated serializers are rewritten by build.rs to go through it.
+#[cfg(feature = "serde")]
+mod json_enum;
+
 mod generated {
     include!(concat!(env!("OUT_DIR"), "/blueye.protocol.rs"));
 

@@ -46,6 +46,7 @@ dependencies = [
  "prost-reflect",
  "prost-types",
  "protox",
+ "regex",
  "serde",
  "serde_json",
 ]
