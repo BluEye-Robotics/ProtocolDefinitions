@@ -57,7 +57,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // With the `serde` feature, generate protobuf-JSON Serialize/Deserialize
     // impls matching C++ MessageToJsonString conventions (snake_case keys,
-    // defaults emitted, unknown fields ignored on read) for the persistent
+    // defaults emitted, unknown fields ignored on read, and -- via
+    // render_unknown_enums_as_numbers below -- out-of-range enum values written
+    // as their number rather than failing the message) for the persistent
     // storage settings file and the guest-port info JSON. Scoped to those
     // message closures rather than the whole package, which would also cover
     // well-known types that prost-types has no serde impls for.
@@ -79,6 +81,68 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 ".blueye.protocol.GuestPortDetachStatus",
                 ".blueye.protocol.GuestPortError",
             ])?;
+        render_unknown_enums_as_numbers(&out_dir)?;
+    }
+    Ok(())
+}
+
+/// Rewrites the pbjson-generated serializers in `out_dir` so an enum value
+/// outside the generated enum renders as its bare number instead of failing.
+///
+/// pbjson emits `Enum::try_from(v).map_err(|_| ..custom("Invalid variant ..")))?`
+/// for every enum field. Because serde serialization is all-or-nothing, one
+/// unrecognised value fails the entire message -- a guest-port EEPROM flashed
+/// with a device id newer than the firmware reading it would cost the reader
+/// every port. C++ `MessageToJsonString`, whose conventions these impls exist to
+/// match, writes the number and carries on. Each site is redirected to
+/// [`crate::json_enum::enum_or_int`], which does the same.
+///
+/// Errors if any such site survives the rewrite, so a pbjson upgrade that
+/// changes the generated shape fails the build instead of silently restoring
+/// the whole-message failure.
+fn render_unknown_enums_as_numbers(
+    out_dir: &std::path::Path,
+) -> Result<(), Box<dyn std::error::Error>> {
+    // A path to an enum type as the generated code spells it (`GuestPortNumber`,
+    // or `parent_message::NestedEnum` for a nested one).
+    const ENUM_PATH: &str = r"[A-Za-z_][A-Za-z0-9_]*(?:::[A-Za-z_][A-Za-z0-9_]*)*";
+    // The `.map_err(..)` tail pbjson appends to every `try_from`; the value it
+    // formats is a plain expression (`self.device_id`, `*v`), never a call.
+    const MAP_ERR: &str = r#"\s*\.map_err\(\|_\| serde::ser::Error::custom\(format!\("Invalid variant \{\}", [^()]*\)\)\)"#;
+
+    // Repeated enum field: a fallible map over the values, collected into a
+    // Result. Rewritten first -- it contains a `try_from` site of its own that
+    // the singular pattern below would otherwise match in isolation.
+    let repeated = regex::Regex::new(&format!(
+        r"(?s)(self\.\w+)\.iter\(\)\.cloned\(\)\.map\(\|v\| \{{\s*({ENUM_PATH})::try_from\(v\){MAP_ERR}\s*\}}\)\.collect::<std::result::Result<Vec<_>, _>>\(\)\?"
+    ))?;
+    // Singular enum field, in a plain field or a oneof arm.
+    let singular = regex::Regex::new(&format!(
+        r"(?s)({ENUM_PATH})::try_from\(([^()]+)\){MAP_ERR}\?"
+    ))?;
+
+    for entry in std::fs::read_dir(out_dir)? {
+        let path = entry?.path();
+        if !path.to_string_lossy().ends_with(".serde.rs") {
+            continue;
+        }
+        let generated = std::fs::read_to_string(&path)?;
+        let rewritten = repeated.replace_all(
+            &generated,
+            "${1}.iter().cloned().map(crate::json_enum::enum_or_int::<${2}>).collect::<Vec<_>>()",
+        );
+        let rewritten =
+            singular.replace_all(&rewritten, "crate::json_enum::enum_or_int::<${1}>(${2})");
+
+        if rewritten.contains("Invalid variant") {
+            return Err(format!(
+                "{}: pbjson still rejects unknown enum values after the rewrite -- \
+                 its generated shape has changed, update render_unknown_enums_as_numbers",
+                path.display()
+            )
+            .into());
+        }
+        std::fs::write(&path, rewritten.as_ref())?;
     }
     Ok(())
 }
