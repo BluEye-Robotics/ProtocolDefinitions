@@ -1553,6 +1553,15 @@ message MultibeamDiscovery {
   MultibeamErrorFlags error_flags = 8; // Error flags specific for the connected multibeam device.
 }
 
+// Color filter used to render the multibeam sonar fan.
+//
+// The fan renderer maps each echo intensity (0..255) to a color through this
+// lookup table. The drone keeps the last filter received in memory and applies
+// it to the sonar RTSP stream; grayscale is used until one is set.
+message MultibeamColorFilter {
+  bytes rgb = 1; // 768 bytes: 256 consecutive R,G,B triplets, indexed by echo intensity.
+}
+
 // Error flags for multibeam sonar devices.
 message MultibeamErrorFlags {
   /*
