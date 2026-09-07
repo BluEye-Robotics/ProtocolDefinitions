@@ -275,3 +275,21 @@ message GetCvModelsReq {
 message GetCvModelsRep {
   repeated CvModelInfo cv_models = 1; // All installed models, including models that are not running.
 }
+
+// Request to set the color filter used to render the multibeam sonar fan.
+message SetMultibeamColorFilterReq {
+  MultibeamColorFilter color_filter = 1; // The color filter to apply.
+}
+
+// Response after setting the multibeam color filter.
+message SetMultibeamColorFilterRep {
+}
+
+// Request to get the color filter currently used to render the multibeam sonar fan.
+message GetMultibeamColorFilterReq {
+}
+
+// Response with the current multibeam color filter.
+message GetMultibeamColorFilterRep {
+  MultibeamColorFilter color_filter = 1; // The current color filter. Empty rgb means none is set (grayscale).
+}
