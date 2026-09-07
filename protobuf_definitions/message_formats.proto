@@ -672,6 +672,7 @@ enum NotificationType {
   NOTIFICATION_TYPE_DVL_HIGH_TEMPERATURE_DETECTED = 31; // DVL high temperature detected.
   NOTIFICATION_TYPE_DVL_THERMAL_PROTECTION_MODE_DETECTED = 32; // DVL thermal protection mode detected.
   NOTIFICATION_TYPE_VIDEO_PARTITION_NOT_MOUNTED = 33; // Video partition not mounted.
+  NOTIFICATION_TYPE_DVL_PROTOCOL_UNSUPPORTED = 34; // DVL firmware speaks a protocol version Blunux does not support.
 }
 
 // List of available notification levels.
@@ -996,6 +997,7 @@ message ErrorFlags {
   bool gp6_5v_current = 77; // Max 5V current exceeded on guest port 6.
   bool dvl_thermal_protection_mode = 43; // DVL is in thermal protection mode.
   bool dvl_no_power = 44; // GP protection has been triggered at boot or faulty DVL.
+  bool dvl_protocol_unsupported = 84; // DVL firmware speaks a protocol version Blunux does not support.
   bool usb_disconnect = 45; // USB disconnect.
   bool video_urb_error = 46; // Video URB error.
   bool hardware_not_supported = 47; // Hardware not supported on current blunux version.
