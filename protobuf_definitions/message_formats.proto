@@ -359,16 +359,16 @@ message CanisterHumidity {
   float humidity = 3; // Air humidity (%).
 }
 
-// Environmental measurements inside the X7 power canister.
+// Sensor readings inside the X7 power canister.
 message PowerCanister {
-  // Temperature and relative humidity measured by an ESC board's SHT40 sensor.
-  message Environment {
+  // Sensor readings from an ESC board.
+  message Sensors {
     float temperature = 1; // Temperature (°C).
     float humidity = 2; // Relative humidity (%).
   }
 
-  Environment front_esc = 1; // Front ESC board; absent when no recent reading is available.
-  Environment rear_esc = 2; // Rear ESC board; absent when no recent reading is available.
+  Sensors front_esc = 1; // Front ESC board; absent when no recent reading is available.
+  Sensors rear_esc = 2; // Rear ESC board; absent when no recent reading is available.
 }
 
 // Essential battery information.

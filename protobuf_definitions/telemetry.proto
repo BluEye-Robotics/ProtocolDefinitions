@@ -164,9 +164,9 @@ message CanisterBottomHumidityTel {
   CanisterHumidity humidity = 1; // Humidity information.
 }
 
-// Receive environmental measurements from the X7 power canister at 1 Hz.
+// Receive sensor readings from the X7 power canister at 1 Hz.
 message PowerCanisterTel {
-  PowerCanister power_canister = 1; // Front and rear ESC-board temperature and humidity.
+  PowerCanister power_canister = 1; // Front and rear ESC-board sensor readings.
 }
 
 // Video storage info.
