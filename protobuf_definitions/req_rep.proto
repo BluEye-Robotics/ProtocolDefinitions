@@ -134,7 +134,9 @@ message SetMissionReq {
 
 // Response after setting a new mission.
 message SetMissionRep {
-  bool accepted = 1; // True when the mission was loaded.
+  // True when the mission was loaded. Drones without this field answer an empty message, so not
+  // accepted with no reason means the mission was loaded the old way.
+  bool accepted = 1;
   string reason = 2; // Why the mission was refused.
 }
 
