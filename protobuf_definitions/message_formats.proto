@@ -685,6 +685,7 @@ enum NotificationType {
   NOTIFICATION_TYPE_DVL_THERMAL_PROTECTION_MODE_DETECTED = 32; // DVL thermal protection mode detected.
   NOTIFICATION_TYPE_VIDEO_PARTITION_NOT_MOUNTED = 33; // Video partition not mounted.
   NOTIFICATION_TYPE_DVL_PROTOCOL_UNSUPPORTED = 34; // DVL firmware speaks a protocol version Blunux does not support.
+  NOTIFICATION_TYPE_INSTRUCTION_STARTED = 35; // A mission instruction started; the value names it.
 }
 
 // List of available notification levels.
