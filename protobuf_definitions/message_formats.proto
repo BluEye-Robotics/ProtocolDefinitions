@@ -359,6 +359,18 @@ message CanisterHumidity {
   float humidity = 3; // Air humidity (%).
 }
 
+// Sensor readings inside the X7 power canister.
+message PowerCanister {
+  // Sensor readings from an ESC board.
+  message Sensors {
+    float temperature = 1; // Temperature (°C).
+    float humidity = 2; // Relative humidity (%).
+  }
+
+  Sensors front_esc = 1; // Front ESC board; absent when no recent reading is available.
+  Sensors rear_esc = 2; // Rear ESC board; absent when no recent reading is available.
+}
+
 // Essential battery information.
 message Battery {
   float voltage = 1; // Battery voltage (V).
