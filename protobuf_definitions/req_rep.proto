@@ -164,6 +164,26 @@ message SetInstructionUpdateRep {
   uint32 revision = 3; // Revision of the mission after the change.
 }
 
+// Replaces the mission rules. Rules run independently of missions.
+message SetMissionRulesReq {
+  repeated MissionRule rules = 1; // The rules to run; an empty list clears them.
+}
+
+// Response after setting the mission rules.
+message SetMissionRulesRep {
+  bool accepted = 1; // True when the rules were set.
+  string reason = 2; // Why the rules were refused.
+}
+
+// Get the mission rules.
+message GetMissionRulesReq {
+}
+
+// The mission rules.
+message GetMissionRulesRep {
+  repeated MissionRule rules = 1; // The rules currently set.
+}
+
 // Set the heading mode used in dead reckoning.
 message SetHeadingModeReq {
   HeadingMode heading_mode = 1; // The heading mode to set.
