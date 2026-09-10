@@ -120,8 +120,11 @@ message DetectionTrigger {
 //
 // A depth with a tolerance is the two bounds around it: 9 and 11 for ten metres give or take a
 // metre. Leaving max_depth at zero gives no upper bound, so a min_depth of 20 on its own is
-// satisfied deeper than 20 m. The drone always measures its depth, so this trigger never reports
-// sensor_unavailable.
+// satisfied deeper than 20 m. Neither bound may be negative, and a max_depth that is set has to be
+// above min_depth: the two are the edges of a band, not a single depth, and a rule whose band has
+// no width is refused rather than left never firing. The drone measures its depth from the moment
+// it is powered on, so this trigger reports sensor_unavailable only while no depth has reached the
+// mission at all.
 message DepthTrigger {
   float min_depth = 1; // Shallowest depth that satisfies the trigger (m below the surface).
   float max_depth = 2; // Deepest depth that satisfies the trigger (m). Zero means no upper bound.
@@ -130,10 +133,11 @@ message DepthTrigger {
 // AltitudeTrigger is satisfied while the drone is between two heights above the seabed.
 //
 // A height with a tolerance is the two bounds around it: 2.5 and 3.5 for three metres off the
-// bottom give or take half a metre. Leaving max_altitude at zero gives no upper bound. The height
-// comes from a DVL or an altimeter; with neither mounted, out of its range, or with a reading the
-// drone does not trust, the trigger is simply not satisfied and TriggerStatus reports
-// sensor_unavailable.
+// bottom give or take half a metre. Leaving max_altitude at zero gives no upper bound. Neither
+// bound may be negative, and a max_altitude that is set has to be above min_altitude, as for
+// DepthTrigger. The height comes from a DVL or an altimeter; with neither mounted, out of its
+// range, or with a reading the drone does not trust, the trigger is simply not satisfied and
+// TriggerStatus reports sensor_unavailable.
 message AltitudeTrigger {
   float min_altitude = 1; // Lowest height above the seabed that satisfies the trigger (m).
   float max_altitude = 2; // Highest height that satisfies the trigger (m). Zero means no upper bound.
@@ -170,8 +174,9 @@ enum TriggerKind {
 }
 
 // MissionRule runs instructions when all of its triggers are satisfied at once and when they stop
-// being so. A drone runs at most 16 rules with at most 8 triggers and 8 instructions per list. A
-// rule with no triggers never fires. Instructions that move the drone (waypoint, go to home,
+// being so. A drone runs at most 16 rules with at most 8 triggers and 8 instructions per list, and
+// a rule has to carry at least one instruction in one of its lists. A rule with no triggers never
+// fires. Instructions that move the drone (waypoint, go to home,
 // transect, survey, depth set point, relative depth, go to surface or seabed, control mode, set
 // heading) and waits are refused in rules; camera, tilt, lights, laser, multibeam, tilt
 // stabilization, CV model, annotation and set speed are allowed.
@@ -277,9 +282,12 @@ message MultibeamDriverCommand {
   bool activate = 1; // True to start the driver, false to stop it.
   MultibeamConfig config = 2; // Configuration to start with. When left out, the last known configuration is used.
   // The sonar `config` was made for, as the multibeam driver reports it. The driver still starts or
-  // stops when a different sonar is connected, but `config` is skipped and the drone sends a
+  // stops when a different sonar is connected, but `config` is skipped in favour of the last
+  // configuration the driver reported and the drone sends a
   // NOTIFICATION_TYPE_MULTIBEAM_SONAR_MISMATCH notification. Unspecified applies `config` to
-  // whichever sonar is connected.
+  // whichever sonar is connected. A `config` that the sonar cannot run, measured the same way as
+  // for SetMultibeamConfigCommand, skips the whole instruction instead, so the driver is never
+  // started with a configuration nobody asked for.
   GuestPortDeviceID expected_device_id = 3;
 }
 
@@ -290,6 +298,11 @@ message MultibeamDriverCommand {
 // what the guest port discovery found, and when they differ it skips the whole instruction and
 // sends a NOTIFICATION_TYPE_MULTIBEAM_SONAR_MISMATCH notification; the mission carries on with the
 // next instruction. Unspecified applies the configuration to whichever sonar is connected.
+//
+// The configuration is also measured against what that sonar can do: the range for the frequency
+// mode asked for, a high frequency mode on a sonar that has only one, and the number of beams. A
+// configuration outside them skips the instruction with a reason naming the sonar. Nothing is
+// quietly clamped, so a sonar never ends up running a configuration nobody asked for.
 message SetMultibeamConfigCommand {
   MultibeamConfig config = 1; // The configuration to apply.
   GuestPortDeviceID expected_device_id = 2; // The sonar this configuration was made for.
