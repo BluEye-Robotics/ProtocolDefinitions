@@ -101,32 +101,92 @@ message ControlModeCommand {
   ControlModeHorizontal control_mode_horizontal = 6; // Desired control mode in surge and yaw.
 }
 
-// DetectionTrigger fires a rule on what the computer vision models see.
+// DetectionTrigger is satisfied by what the computer vision models see.
+//
+// The trigger is satisfied while at least one detection of the running models matches all of the
+// filters below. The models have to be running; a trigger for a model that is not running is not
+// satisfied and TriggerStatus reports sensor_unavailable.
 message DetectionTrigger {
+  reserved 6, 7, 8; // hold_ms, release_ms and cooldown_ms, which moved to MissionRule.
+  reserved "hold_ms", "release_ms", "cooldown_ms";
   repeated string class_names = 1; // Any of these class names; empty matches every class.
   string model_name = 2; // Only detections from this model; empty matches every model.
   Camera camera = 3; // Only detections from this camera; unspecified matches every camera.
   float min_confidence = 4; // Detections below this confidence are ignored (0..1).
   float min_area_fraction = 5; // Least bounding box area over image area a detection must have (0..1).
-  uint32 hold_ms = 6; // How long the trigger must match before the rule fires. At most an hour.
-  uint32 release_ms = 7; // How long the trigger must stay unmatched before the rule releases. At most an hour.
-  uint32 cooldown_ms = 8; // Time after a release before the rule can fire again. At most an hour.
 }
 
-// MissionRule runs instructions when its trigger fires and when it releases. A drone runs at
-// most 16 rules with at most 8 instructions per list. Instructions that move the drone (waypoint,
-// go to home, transect, survey, depth set point, relative depth, go to surface or seabed, control
-// mode, set heading) and waits are refused in rules; camera, tilt, lights, laser, multibeam,
-// tilt stabilization, CV model, annotation and set speed are allowed.
+// DepthTrigger is satisfied while the drone is between two depths below the surface.
+//
+// A depth with a tolerance is the two bounds around it: 9 and 11 for ten metres give or take a
+// metre. Leaving max_depth at zero gives no upper bound, so a min_depth of 20 on its own is
+// satisfied deeper than 20 m. The drone always measures its depth, so this trigger never reports
+// sensor_unavailable.
+message DepthTrigger {
+  float min_depth = 1; // Shallowest depth that satisfies the trigger (m below the surface).
+  float max_depth = 2; // Deepest depth that satisfies the trigger (m). Zero means no upper bound.
+}
+
+// AltitudeTrigger is satisfied while the drone is between two heights above the seabed.
+//
+// A height with a tolerance is the two bounds around it: 2.5 and 3.5 for three metres off the
+// bottom give or take half a metre. Leaving max_altitude at zero gives no upper bound. The height
+// comes from a DVL or an altimeter; with neither mounted, out of its range, or with a reading the
+// drone does not trust, the trigger is simply not satisfied and TriggerStatus reports
+// sensor_unavailable.
+message AltitudeTrigger {
+  float min_altitude = 1; // Lowest height above the seabed that satisfies the trigger (m).
+  float max_altitude = 2; // Highest height that satisfies the trigger (m). Zero means no upper bound.
+}
+
+// LocationTrigger is satisfied while the drone is inside a circle around a position.
+//
+// Entering the circle makes the trigger satisfied and leaving it makes it unsatisfied, so a rule
+// with one location trigger can start a recording in its enter instructions and stop it in its exit
+// instructions. Any valid position estimate will do, whichever sensors it is built from; while the
+// drone has none the trigger is simply not satisfied and TriggerStatus reports sensor_unavailable.
+message LocationTrigger {
+  LatLongPosition position = 1; // Centre of the circle (decimal degrees).
+  float circle_of_acceptance = 2; // Radius of the circle around the position (m). Must be above zero.
+}
+
+// Trigger is one condition of a mission rule.
+message Trigger {
+  oneof condition {
+    DetectionTrigger detection_trigger = 1; // Satisfied by a detection from a computer vision model.
+    DepthTrigger depth_trigger = 2; // Satisfied at a depth below the surface.
+    AltitudeTrigger altitude_trigger = 3; // Satisfied at a height above the seabed.
+    LocationTrigger location_trigger = 4; // Satisfied inside a circle around a position.
+  }
+}
+
+// Which condition a Trigger carries. The values are the field numbers of the Trigger oneof.
+enum TriggerKind {
+  TRIGGER_KIND_UNSPECIFIED = 0; // No condition is set.
+  TRIGGER_KIND_DETECTION = 1; // A DetectionTrigger.
+  TRIGGER_KIND_DEPTH = 2; // A DepthTrigger.
+  TRIGGER_KIND_ALTITUDE = 3; // An AltitudeTrigger.
+  TRIGGER_KIND_LOCATION = 4; // A LocationTrigger.
+}
+
+// MissionRule runs instructions when all of its triggers are satisfied at once and when they stop
+// being so. A drone runs at most 16 rules with at most 8 triggers and 8 instructions per list. A
+// rule with no triggers never fires. Instructions that move the drone (waypoint, go to home,
+// transect, survey, depth set point, relative depth, go to surface or seabed, control mode, set
+// heading) and waits are refused in rules; camera, tilt, lights, laser, multibeam, tilt
+// stabilization, CV model, annotation and set speed are allowed.
 message MissionRule {
+  reserved 4; // The single detection_trigger, replaced by the triggers list.
+  reserved "detection_trigger";
   uint32 id = 1; // Rule id, defined by the client. Must be greater than zero and unique.
   string name = 2; // Rule name, for the log and the app.
   bool disabled = 3; // A disabled rule never fires. Rules run unless this is set.
-  oneof trigger {
-    DetectionTrigger detection_trigger = 4; // Fire on detections.
-  }
   repeated Instruction enter_instructions = 5; // Run when the rule fires.
   repeated Instruction exit_instructions = 6; // Run when the rule releases.
+  repeated Trigger triggers = 7; // Conditions that must all be satisfied at once for the rule to fire.
+  uint32 hold_ms = 8; // How long all the triggers must stay satisfied before the rule fires. At most an hour.
+  uint32 release_ms = 9; // How long a trigger must stay unsatisfied before the rule releases. At most an hour.
+  uint32 cooldown_ms = 10; // Time after a release before the rule can fire again. At most an hour.
 }
 
 // MissionRuleStatus is the state of one rule.
@@ -137,6 +197,15 @@ message MissionRuleStatus {
   google.protobuf.Timestamp last_fired = 4; // When the rule last fired; unset before the first time.
   InstructionResultState last_result = 5; // Outcome of the last instruction the rule ran.
   string last_reason = 6; // Reason of the last result, when there is one.
+  repeated TriggerStatus triggers = 7; // One entry per trigger, in the order the rule lists them.
+}
+
+// TriggerStatus is the state of one trigger of a rule, so a client can show which condition is
+// holding the rule back.
+message TriggerStatus {
+  TriggerKind kind = 1; // Which condition the trigger carries.
+  bool satisfied = 2; // True while the condition holds.
+  bool sensor_unavailable = 3; // True while the drone has no reading to judge the condition by.
 }
 
 // InsertInstruction adds an instruction to the loaded mission.
@@ -207,11 +276,23 @@ message MultibeamRecordCommand {
 message MultibeamDriverCommand {
   bool activate = 1; // True to start the driver, false to stop it.
   MultibeamConfig config = 2; // Configuration to start with. When left out, the last known configuration is used.
+  // The sonar `config` was made for, as the multibeam driver reports it. The driver still starts or
+  // stops when a different sonar is connected, but `config` is skipped and the drone sends a
+  // NOTIFICATION_TYPE_MULTIBEAM_SONAR_MISMATCH notification. Unspecified applies `config` to
+  // whichever sonar is connected.
+  GuestPortDeviceID expected_device_id = 3;
 }
 
 // SetMultibeamConfigCommand changes the configuration of a running multibeam sonar.
+//
+// A configuration is made for one sonar, because ranges, frequencies and beam counts differ between
+// them. The drone compares expected_device_id with the sonar the multibeam driver reports, not with
+// what the guest port discovery found, and when they differ it skips the whole instruction and
+// sends a NOTIFICATION_TYPE_MULTIBEAM_SONAR_MISMATCH notification; the mission carries on with the
+// next instruction. Unspecified applies the configuration to whichever sonar is connected.
 message SetMultibeamConfigCommand {
   MultibeamConfig config = 1; // The configuration to apply.
+  GuestPortDeviceID expected_device_id = 2; // The sonar this configuration was made for.
 }
 
 // Which lights a SetLightsCommand applies to.
