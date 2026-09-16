@@ -1013,6 +1013,10 @@ message ErrorFlags {
   bool usb_disconnect = 45; // USB disconnect.
   bool video_urb_error = 46; // Video URB error.
   bool hardware_not_supported = 47; // Hardware not supported on current blunux version.
+  bool imu_1 = 85; // MPU 1 unavailable at observer startup.
+  bool imu_2 = 86; // MPU 2 unavailable at observer startup.
+  bool imu_hp = 87; // HP IMU unavailable on X3 Ultra or X7.
+  bool imu_attitude = 88; // No attitude source: manual body-frame control only.
 }
 
 // Available camera resolutions.
