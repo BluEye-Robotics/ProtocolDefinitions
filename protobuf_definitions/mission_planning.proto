@@ -18,13 +18,14 @@ message Mission {
   float default_surge_speed = 7; // Default cruise speed of the mission (m/s) (optional).
   float default_heave_speed = 8; // Default heave speed of the mission (m/s) (optional).
   float default_circle_of_acceptance = 9; // Default circle of acceptance for waypoints (m) (optional).
+  uint32 revision = 10; // Set by the drone, increases with every SetInstructionUpdateReq.
 }
 
 // A mission consists of one or multiple instructions. One instruction can be of different types.
 message Instruction {
   uint32 id = 1;
   uint32 group_id = 2; // Group id used for polygons.
-  bool auto_continue = 3; // False will pause the mission after this instruction.
+  bool pause_on_completion = 3; // Pause the mission after this instruction. RunMissionCtrl continues it.
   oneof command {
     WaypointCommand waypoint_command = 4; // Go to waypoint.
     DepthSetPointCommand depth_set_point_command = 5; // Go to depth.
@@ -100,6 +101,12 @@ message ControlModeCommand {
 }
 
 // A WaypointCommand will request the drone to drive to a point automatically.
+// InsertInstruction adds an instruction to the loaded mission.
+message InsertInstruction {
+  Instruction instruction = 1; // The instruction to add. Its id must be new to the mission.
+  uint32 before_id = 2; // Id of the instruction to insert in front of. 0 appends to the end.
+}
+
 message WaypointCommand {
   Waypoint waypoint = 1; // Waypoint to go to.
 }
@@ -358,6 +365,9 @@ message MissionStatus {
   repeated uint32 completed_path_segment_ids = 7; // Ids of the completed path segments.
   uint32 total_number_of_path_segments = 8; // Total number of path segments in the mission.
   uint32 id = 9; // Mission id of the active mission.
+  uint32 active_instruction_id = 10; // Id of the instruction that is running, 0 when none.
+  uint32 revision = 11; // Revision of the loaded mission, see Mission.revision.
+  string failure_reason = 12; // Why the mission failed to load or start or was aborted by the drone.
 }
 
 // Outcome of an instruction started with RunInstructionCtrl.

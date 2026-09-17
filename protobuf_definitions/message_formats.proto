@@ -686,6 +686,8 @@ enum NotificationType {
   NOTIFICATION_TYPE_VIDEO_PARTITION_NOT_MOUNTED = 33; // Video partition not mounted.
   NOTIFICATION_TYPE_DVL_PROTOCOL_UNSUPPORTED = 34; // DVL firmware speaks a protocol version Blunux does not support.
   NOTIFICATION_TYPE_INSTRUCTION_STARTED = 35; // A mission instruction started; the value names it.
+  NOTIFICATION_TYPE_MISSION_PAUSED_BY_INSTRUCTION = 36; // Paused after an instruction with pause_on_completion.
+  NOTIFICATION_TYPE_MISSION_UPDATED = 37; // The loaded mission was changed; the value is its revision.
 }
 
 // List of available notification levels.
