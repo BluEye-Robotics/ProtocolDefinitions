@@ -37,6 +37,14 @@ message Instruction {
     GoToSeabedCommand go_to_seabed_command = 12; // Go to seabed.
     GoToHomeCommand go_to_home_command = 13; // Go to home position.
     SurveyCommand survey_command = 14; // Execute a survey pattern over a polygon area.
+    MultibeamRecordCommand multibeam_record_command = 15; // Start or stop multibeam recording.
+    MultibeamDriverCommand multibeam_driver_command = 16; // Start or stop the multibeam driver.
+    SetMultibeamConfigCommand set_multibeam_config_command = 17; // Change the multibeam configuration.
+    SetLightsCommand set_lights_command = 18; // Set the main or guest port lights.
+    SetLaserCommand set_laser_command = 19; // Set the laser.
+    SetTiltStabilizationCommand set_tilt_stabilization_command = 20; // Enable or disable tilt stabilization.
+    SetCvModelCommand set_cv_model_command = 21; // Start or stop a computer vision model.
+    AnnotationCommand annotation_command = 22; // Record an annotation in the dive log.
   }
 }
 
@@ -78,6 +86,7 @@ enum ControlModeHorizontal {
   CONTROL_MODE_HORIZONTAL_MANUAL = 1; // Manual control mode.
   CONTROL_MODE_HORIZONTAL_AUTO_HEADING = 2; // Auto heading control mode.
   CONTROL_MODE_HORIZONTAL_STATION_KEEPING = 3; // Station keeping control mode.
+  CONTROL_MODE_HORIZONTAL_WEATHER_VANING = 4; // Weather vaning control mode (station keeping into the current).
 }
 
 // A ControlModeCommand is used to set vertical and horizontal control mode during a mission.
@@ -115,6 +124,8 @@ message WaitForCommand {
 message CameraCommand {
   CameraAction camera_action = 1; // Camera command.
   float action_param = 2; // Used for taking photos based on a time or distance interval.
+  Camera camera = 3; // Which camera the action applies to. The main camera when unspecified.
+  StorageLocation storage_location = 4; // Where to store the photos or the recording. Internal when unspecified.
 }
 
 // GoToSurfaceCommand is used to go to the surface.
@@ -130,6 +141,62 @@ message GoToSeabedCommand {
 // GoToHomeCommand is used to go to the home position.
 message GoToHomeCommand {
   float desired_speed = 1; // Desired speed to home (m/s).
+}
+
+// MultibeamRecordCommand starts or stops recording of the multibeam sonar.
+message MultibeamRecordCommand {
+  bool enable = 1; // True to start recording, false to stop.
+  StorageLocation storage_location = 2; // Where to store the recording. Internal when unspecified.
+}
+
+// MultibeamDriverCommand starts or stops the multibeam sonar driver.
+//
+// The instruction completes when the driver reports the requested state, so a following
+// MultibeamRecordCommand or TiltMultibeamCommand finds the sonar ready.
+message MultibeamDriverCommand {
+  bool activate = 1; // True to start the driver, false to stop it.
+  MultibeamConfig config = 2; // Configuration to start with. When left out, the last known configuration is used.
+}
+
+// SetMultibeamConfigCommand changes the configuration of a running multibeam sonar.
+message SetMultibeamConfigCommand {
+  MultibeamConfig config = 1; // The configuration to apply.
+}
+
+// Which lights a SetLightsCommand applies to.
+enum LightTarget {
+  LIGHT_TARGET_UNSPECIFIED = 0; // Unspecified, treated as the main lights.
+  LIGHT_TARGET_MAIN = 1; // The drone's own lights.
+  LIGHT_TARGET_GUESTPORT = 2; // Lights connected to a guest port.
+}
+
+// SetLightsCommand sets the intensity of the lights.
+message SetLightsCommand {
+  float intensity = 1; // Light intensity (0..1).
+  LightTarget target = 2; // Which lights to set.
+}
+
+// SetLaserCommand sets the laser connected to a guest port.
+message SetLaserCommand {
+  Laser laser = 1; // Laser intensity and modulation.
+}
+
+// SetTiltStabilizationCommand enables or disables camera tilt stabilization.
+message SetTiltStabilizationCommand {
+  bool enabled = 1; // True to stabilize the camera tilt.
+}
+
+// SetCvModelCommand starts or stops a computer vision model on the drone.
+//
+// The instruction completes when the model reports the requested state.
+message SetCvModelCommand {
+  string package_id = 1; // The model package to start or stop, as listed in CvModelInfo.
+  bool running = 2; // True to start the model, false to stop it.
+}
+
+// AnnotationCommand records an annotation in the dive log, as AnnotationCtrl does.
+message AnnotationCommand {
+  Annotation annotation = 1; // The annotation to record. The drone sets the timestamp and the source.
 }
 
 // A SurveyCommand defines a survey (lawn-mower) pattern over a polygon area.
@@ -206,6 +273,14 @@ enum InstructionType {
   INSTRUCTION_TYPE_GO_TO_SEABED = 11; // Go to the seabed.
   INSTRUCTION_TYPE_GO_TO_HOME = 12; // Returning to home.
   INSTRUCTION_TYPE_SURVEY = 13; // Execute a survey pattern over a polygon area.
+  INSTRUCTION_TYPE_MULTIBEAM_RECORD = 14; // Start or stop multibeam recording.
+  INSTRUCTION_TYPE_MULTIBEAM_DRIVER = 15; // Start or stop the multibeam driver.
+  INSTRUCTION_TYPE_SET_MULTIBEAM_CONFIG = 16; // Change the multibeam configuration.
+  INSTRUCTION_TYPE_SET_LIGHTS = 17; // Set the lights.
+  INSTRUCTION_TYPE_SET_LASER = 18; // Set the laser.
+  INSTRUCTION_TYPE_SET_TILT_STABILIZATION = 19; // Enable or disable tilt stabilization.
+  INSTRUCTION_TYPE_SET_CV_MODEL = 20; // Start or stop a computer vision model.
+  INSTRUCTION_TYPE_ANNOTATION = 21; // Record an annotation.
 }
 
 // Reference for the auto pilot when a mission is active.
