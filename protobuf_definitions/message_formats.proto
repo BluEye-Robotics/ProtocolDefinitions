@@ -1133,7 +1133,9 @@ enum ThicknessUnit {
 
 // Available font sizes for overlay text elements.
 enum FontSize {
-  FONT_SIZE_UNSPECIFIED = 0; // Font size not specified.
+  // Font size and margins derived from the recording resolution (Blunux >= 5.2).
+  // Older firmware defaults to 25px.
+  FONT_SIZE_UNSPECIFIED = 0;
   FONT_SIZE_PX15 = 1; // 15 px.
   FONT_SIZE_PX20 = 2; // 20 px.
   FONT_SIZE_PX25 = 3; // 25 px.
@@ -1163,9 +1165,13 @@ message OverlayParameters {
   TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celsius or Fahrenheit.
   ThicknessUnit thickness_unit = 19; // Which unit should be used for thickness: Millimeters or Inches.
   int32 timezone_offset = 9; // Timezone offset from UTC (min).
-  int32 margin_width = 10; // Horizontal margins of text elements (px).
-  int32 margin_height = 11; // Vertical margins of text elements (px).
-  FontSize font_size = 12; // Font size of text elements.
+  // Horizontal margins of text elements (px). Ignored when font_size is FONT_SIZE_UNSPECIFIED (Blunux >= 5.2).
+  int32 margin_width = 10;
+  // Vertical margins of text elements (px). Ignored when font_size is FONT_SIZE_UNSPECIFIED (Blunux >= 5.2).
+  int32 margin_height = 11;
+  // Font size of text elements. FONT_SIZE_UNSPECIFIED derives font size and margins from the
+  // recording resolution (Blunux >= 5.2). Older firmware defaults to 25px.
+  FontSize font_size = 12;
   string title = 13; // Optional title.
   string subtitle = 14; // Optional subtitle.
   string date_format = 16; // Posix strftime format string for time stamp.
