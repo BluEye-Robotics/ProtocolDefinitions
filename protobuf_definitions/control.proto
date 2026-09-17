@@ -135,10 +135,12 @@ message ClearMissionRulesCtrl {
 
 // Run a single instruction right away, outside any mission.
 //
-// Instructions that do not move the drone (camera, tilt, lights, multibeam) run in any mission
-// state, alongside a running mission. Instructions that move the drone run only while no mission
-// is running, and are rejected otherwise. The outcome is reported in InstructionResultTel with
-// the same request_id.
+// Instructions that do not move the drone (camera, tilt, lights, laser, multibeam, tilt
+// stabilization, CV model, annotation, set speed) run in any mission state, alongside a running
+// mission. Instructions that move the drone (waypoint, go to home, transect, survey, depth set
+// point, relative depth, go to surface or seabed, control mode, set heading) run only while no
+// mission is running, one at a time, and are rejected otherwise. A wait is rejected. The outcome
+// is reported in InstructionResultTel with the same request_id.
 message RunInstructionCtrl {
   Instruction instruction = 1; // Instruction to execute.
   uint32 request_id = 2; // Client-chosen id, echoed in InstructionResultTel.
