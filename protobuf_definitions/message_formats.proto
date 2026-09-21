@@ -529,11 +529,23 @@ enum LocationSource {
   LOCATION_SOURCE_DRONE = 2; // Blueye GPS, DVL, or a USBL system.
 }
 
+// Fitness of the magnetic compass heading for holding position on it.
+enum CompassQuality {
+  COMPASS_QUALITY_UNSPECIFIED = 0; // Not assessed.
+  COMPASS_QUALITY_GOOD = 1; // The compass heading agrees with the gyro.
+  COMPASS_QUALITY_DISTURBED = 2; // The heading swung without a matching gyro turn, e.g. near steel or a hull.
+  COMPASS_QUALITY_UNCALIBRATED = 3; // The compass has no valid full calibration.
+}
+
 // The Magnetic Declination status used to get true North compass readings based on location.
 message MagneticDeclination {
   LocationSource location_source = 1; // Location source used for the magnetic declination look-up in geographiclib.
   float declination = 2; // The declination which is applied to the yaw field in the Attitude msg.
   LatLongPosition location = 3; // The location used for the magnetic declination look-up.
+  CompassQuality compass_quality = 4; // Fitness of the compass heading for holding position on it.
+  float heading_gyro_discrepancy = 5; // Compass heading change not explained by the gyro over the last 10 s (deg).
+  float inclination_error = 6; // Measured minus modelled magnetic inclination (deg), levelled with roll and pitch.
+  float field_strength_ratio = 7; // Measured over modelled total field strength; 1 when the field is undisturbed.
 }
 
 // Drone altitude over seabed, typically obtained from a DVL.
