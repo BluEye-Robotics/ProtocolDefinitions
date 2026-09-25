@@ -76,7 +76,7 @@ All proto definitions are in `protobuf_definitions/`:
 ## CI/CD Pipeline
 
 - **ci-build.yaml** — Protolint validation (all pushes and PRs)
-- **ci-typescript.yaml** — Generate TS, compile, publish to npm (master only)
+- **ci-typescript.yaml** — Generate TS, compile, smoke-test the packed tarball (PRs and master); publish to npm and trigger the blueye-ts bump (master only)
 - **ci-dotnet.yaml** — Build and publish NuGet package (all pushes)
 - **ci-python.yaml** — Triggers `blueye.protocol` repo update via repository dispatch (master, when proto files change)
 - **gen-docs.yaml** — Generate HTML docs, upload to Azure (master only)

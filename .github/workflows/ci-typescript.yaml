@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  pull_request:
 
 permissions:
   id-token: write # Required for OIDC
@@ -69,6 +70,7 @@ jobs:
           "
 
       - name: Publish to npm
+        if: github.event_name == 'push'
         run: |
           cp README.npm.md README.md
           VERSION=$(pnpm pkg get version | tr -d '"')
@@ -78,6 +80,7 @@ jobs:
           echo "PROTOCOL_VERSION=${VERSION}-${SHORT_SHA}" >> "$GITHUB_ENV"
 
       - name: Trigger protocol bump in blueye-ts
+        if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ secrets.BLUEYE_PROTOCOL_BUMP_PAT }}
         run: |
