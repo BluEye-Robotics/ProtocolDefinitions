@@ -2,16 +2,6 @@
 
 TypeScript protobuf definitions for Blueye Robotics protocols generated using [ts-proto](https://github.com/stephenh/ts-proto).
 
-## Protocol version
-
-This package implements **version 3** of the Blueye communication protocol, used by
-drones running Blunux 3.0 and newer. Older drones use the separate
-[legacy protocol](https://github.com/BluEye-Robotics/blueye.legacyprotocol).
-
-The npm version above tracks releases of *this package* — packaging, module format
-and generated API surface — and is independent of the protocol version. A major
-version bump here does not indicate a new protocol generation.
-
 ## Installation
 
 ```bash
@@ -38,8 +28,8 @@ On older Node.js versions `require()` fails with `ERR_REQUIRE_ESM` — use `impo
 or a dynamic `await import()` instead.
 
 The package root is the supported entry point. Individual generated modules stay
-reachable under `./dist/` (for example
-`@blueyerobotics/protocol-definitions/dist/telemetry.js`) if you want to import a
+reachable under `./dist/`, with or without the `.js` extension (for example
+`@blueyerobotics/protocol-definitions/dist/telemetry`) if you want to import a
 single protocol file to keep bundles small.
 
 ## Usage

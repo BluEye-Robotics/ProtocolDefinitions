@@ -34,7 +34,10 @@ The npm package ships ES modules only — `"type": "module"` plus an `exports` m
 with no separate CommonJS build. The `.` entry uses a `default` condition rather
 than `import`, so `require()` still resolves on Node.js 22.12+ via `require(esm)`;
 an `import` condition would match ESM callers only and fail everything else with
-`ERR_PACKAGE_PATH_NOT_EXPORTED`. The `./dist/*` subpath keeps deep imports working.
+`ERR_PACKAGE_PATH_NOT_EXPORTED`. Deep imports resolve through two `./dist/*` entries:
+`exports` targets never get an extension appended, so `./dist/*` maps to `./dist/*.js`
+to keep extensionless specifiers like `…/dist/mission_planning` working, and
+`./dist/*.js` takes precedence for specifiers that already end in `.js`.
 
 ### C#/.NET
 ```

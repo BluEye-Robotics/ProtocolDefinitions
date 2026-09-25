@@ -59,6 +59,14 @@ jobs:
             if (!blueye.protocol.GetBatteryReq) throw new Error('missing expected export');
             console.log('CJS require OK');
           "
+          node --input-type=module -e "
+            for (const spec of ['dist/mission_planning', 'dist/mission_planning.js']) {
+              const { Mission } = await import('@blueyerobotics/protocol-definitions/' + spec);
+              if (!Mission) throw new Error('missing expected export from ' + spec);
+            }
+            await import('@blueyerobotics/protocol-definitions/package.json', { with: { type: 'json' } });
+            console.log('Deep imports OK');
+          "
 
       - name: Publish to npm
         run: |

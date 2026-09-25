@@ -13,7 +13,9 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./dist/*": "./dist/*"
+    "./dist/*.js": "./dist/*.js",
+    "./dist/*": "./dist/*.js",
+    "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
   "files": [
