@@ -8,21 +8,18 @@ on:
 jobs:
   generate-documentation:
     runs-on: ubuntu-latest
-    container:
-      image: pseudomuto/protoc-gen-doc:1.5.1
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
-      - name: Print path
-        run: echo "${{ github.workspace }}/protobuf_definitions"
-      - name: Create output configDirectory
+      - name: Install protoc + protoc-gen-doc
+        run: |
+          sudo apt-get update && sudo apt-get install -y protobuf-compiler
+          go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@v1.5.1
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+      - name: Create output directory
         run: mkdir -p docs
-      - name: List files
-        run: ls -la
       - name: Generate documentation
         run: protoc --doc_out=docs --doc_opt=html,protocol.html --proto_path=protobuf_definitions protobuf_definitions/*.proto
-      - name: List doc files
-        run: ls -la docs
       - name: Publish artifacts
         uses: fixpoint/azblob-upload-artifact@v4
         with:

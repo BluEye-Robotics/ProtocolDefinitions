@@ -105,6 +105,17 @@ message AutoPilotHeaveCtrl {
   AutoPilotHeaveState state = 1; // State of the auto pilot heave controller-
 }
 
+// Issue a command to set the vision-based tracking mode.
+//
+// Setting a mode requires an actively tracked single-object-tracking (SOT)
+// target; the drone refuses to enable a mode otherwise. Setting a different
+// mode while one is active switches atomically. Sending a state with no
+// mode set disables vision tracking. An OrbitState with a zero rate is
+// rejected.
+message VisionTrackingCtrl {
+  VisionTrackingState state = 1; // The desired vision tracking mode, or none to disable.
+}
+
 // Issue a command to start and pause the loaded mission.
 message RunMissionCtrl {
 }
@@ -229,8 +240,19 @@ message FormatRemovableStorageDeviceCtrl {
 }
 
 // Message sent when the user wants to set turbidity filter settings.
+// Uses CLAHE to enhance the contrast of the video, which can make it easier to see details in turbid water.
+// Only supported on X3 Ultra.
 message SetTurbidityFilterCtrl {
   FilterMessage turbidity_filter = 1; // Message with the turbidity filter settings to set.
+}
+
+// Message sent when the user wants to set color correction settings.
+// Applies depth- and scene-driven underwater color correction, restoring the
+// red/blue balance lost with depth. The intensity field scales the correction
+// (0.0 = off/identity, 1.0 = full).
+// Only supported on X3 Ultra.
+message SetColorCorrectionCtrl {
+  FilterMessage color_correction_filter = 1; // Message with the color correction settings to set.
 }
 
 // Issue a command to set the digital pan, tilt, and zoom of the main camera.
@@ -238,4 +260,43 @@ message SetTurbidityFilterCtrl {
 // Only supported on X3 Ultra.
 message CameraPanTiltZoomCtrl {
   CameraPanTiltZoom camera_pan_tilt_zoom = 1; // The desired pan, tilt, and zoom state.
+}
+
+// Message sent to start streaming log entries to the client.
+message StartLogStreamingCtrl {
+}
+
+// Message sent to stop streaming log entries to the client.
+message StopLogStreamingCtrl {
+}
+
+// Issue a command to set the single-object tracking (SOT) target.
+//
+// Send a bounding box to start tracking a new target. The CV pipeline will
+// initialize the SOT tracker on the specified region of the video frame.
+message SetSotTargetCtrl {
+  BoundingBox bounding_box = 1; // Target bounding box.
+  uint32 image_width = 2; // Width of the frame the bounding box was drawn on.
+  uint32 image_height = 3; // Height of the frame the bounding box was drawn on.
+}
+
+// Issue a command to clear the single-object tracking (SOT) target (stop tracking).
+message ClearSotTargetCtrl {
+}
+
+// Issue a command to rescan the computer vision model packages installed on the drone.
+//
+// The drone rediscovers model packages on disk and publishes an updated model
+// list. Use after installing or removing a model package without rebooting.
+message RescanCvModelsCtrl {
+}
+
+// Request to add an annotation to the current dive.
+//
+// Sent by the app when a diver picks a type from the in-dive command palette.
+// The drone stamps the authoritative time, publishes the result as an
+// AnnotationTel to every connected client, and writes it to the dive logfile, so
+// all clients converge on the same set. Fire-and-forget, like LightsCtrl.
+message AnnotationCtrl {
+  Annotation annotation = 1; // The annotation to record. The drone owns the timestamp, not this message.
 }

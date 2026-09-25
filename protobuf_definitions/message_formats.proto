@@ -86,7 +86,7 @@ message MotionInput {
   float heave = 3; // Descend (positive) and ascend (negative) movement (-1..1).
   float roll = 7; // Roll left (negative) or right (positive). (-1..1).
   float pitch = 8; // Pitch down (negative) or up (positive). (-1..1).
-  float yaw = 4; // Left (positive) and right (negative) movement (-1..1).
+  float yaw = 4; // Clockwise (positive) and counter-clockwise (negative) rotation (-1..1).
   float slow = 5; // Modifier used to reduce the speed of the motion (0..1).
   float boost = 6; // Modifier used to increase the speed of the motion (0..1).
 }
@@ -103,6 +103,33 @@ message Lights {
 // turns the laser on.
 message Laser {
   float value = 1; // Laser intensity, any value above 0 turns the laser on (0..1).
+  bool modulated = 2; // Modulate the laser at 5Hz for tracking. Only available on Ultra.
+}
+
+// Point in 2D space.
+message Point2D {
+  float x = 1; // X coordinate of the point (px).
+  float y = 2; // Y coordinate of the point (px).
+}
+
+// Message representing the detection of scaling lasers in the main camera.
+//
+// The message contains the centroids of the detected dots, the distance between them in pixels,
+// and the confidence of the detection. The dots are detected through temporal DFT analysis of
+// 5 Hz laser modulation, isolating flickering pixels from the static scene background.
+//
+// Only available on Ultra.
+message LaserDetection {
+  bool detected = 1; // True if the laser is detected by the drone.
+  Point2D dot1 = 2; // First dot centroid (leftmost).
+  Point2D dot2 = 3; // Second dot centroid (rightmost).
+  float pixel_distance = 4; // Distance between dots in pixels.
+  float confidence = 5; // Confidence of the detection (0..1).
+  uint32 image_width = 6; // Source frame width.
+  uint32 image_height = 7; // Source frame height.
+  float laser_width = 8; // Real world distance between the two laser dots (m).
+  float corrected_pixel_distance = 9; // Distance after lens undistortion (px).
+  float estimated_distance = 10; // Estimated subject distance (m).
 }
 
 // Latitude and longitude position in WGS 84 decimal degrees format.
@@ -151,6 +178,60 @@ message AutoPilotHeaveState {
   bool enabled = 1; // If auto pilot heave is enabled.
 }
 
+// Spotlight mode parameters.
+//
+// Vision-based mode that keeps the tracked object centred in the frame
+// while the pilot flies around it. Currently carries no parameters.
+//
+// Automatically controlled: yaw (horizontal centring) and depth
+// (vertical centring).
+// Pilot controlled: surge and sway.
+message SpotlightState {
+}
+
+// Active track mode parameters.
+//
+// Vision-based mode that follows the tracked object, keeping it centred
+// and at a constant apparent size in the frame. Currently carries no
+// parameters.
+//
+// Automatically controlled: yaw (horizontal centring), depth (vertical
+// centring), and surge (distance keeping).
+// Pilot controlled: sway.
+message ActiveTrackState {
+}
+
+// Orbit mode parameters.
+//
+// Vision-based mode that circles the tracked object while keeping it
+// centred in the frame.
+//
+// Automatically controlled: yaw (horizontal centring), depth (vertical
+// centring), surge (distance keeping), and sway (tangential motion at
+// the commanded angular rate). No degree of freedom is pilot controlled
+// while orbit is active.
+message OrbitState {
+  float rate = 1; // Orbit angular rate (deg/s); positive orbits clockwise seen from above. Must be non-zero.
+}
+
+// The active vision-based tracking mode.
+//
+// The modes are mutually exclusive, which the oneof encodes: at most one
+// mode is set at a time, and no field set means no vision tracking mode
+// is active.
+//
+// Each mode's message documents which degrees of freedom it controls
+// automatically; any degree of freedom not listed as automatic remains
+// under pilot control. Pilot input on an automatically controlled degree
+// of freedom is ignored while the mode is active.
+message VisionTrackingState {
+  oneof mode {
+    SpotlightState spotlight = 1; // Spotlight mode is active.
+    ActiveTrackState active_track = 2; // Active track mode is active.
+    OrbitState orbit = 3; // Orbit mode is active, at the reported angular rate.
+  }
+}
+
 // Control mode from drone supervisor
 message ControlMode {
   bool auto_depth = 1; // If auto depth is enabled.
@@ -160,6 +241,7 @@ message ControlMode {
   bool weather_vaning = 5; // If weather vaning is enabled.
   bool auto_pilot_surge_yaw = 6; // If auto pilot surge yaw is enabled.
   bool auto_pilot_heave = 7; // If auto pilot heave is enabled.
+  VisionTrackingState vision_tracking = 8; // The active vision-based tracking mode, if any.
 }
 
 // Tilt stabilization state.
@@ -275,6 +357,18 @@ message CanisterTemperature {
 message CanisterHumidity {
   reserved 1, 2;
   float humidity = 3; // Air humidity (%).
+}
+
+// Sensor readings inside the X7 power canister.
+message PowerCanister {
+  // Sensor readings from an ESC board.
+  message Sensors {
+    float temperature = 1; // Temperature (°C).
+    float humidity = 2; // Relative humidity (%).
+  }
+
+  Sensors front_esc = 1; // Front ESC board; absent when no recent reading is available.
+  Sensors rear_esc = 2; // Rear ESC board; absent when no recent reading is available.
 }
 
 // Essential battery information.
@@ -589,6 +683,8 @@ enum NotificationType {
   NOTIFICATION_TYPE_INSTRUCTION_SKIPPED = 30; // When an instruction is not available in the ROV.
   NOTIFICATION_TYPE_DVL_HIGH_TEMPERATURE_DETECTED = 31; // DVL high temperature detected.
   NOTIFICATION_TYPE_DVL_THERMAL_PROTECTION_MODE_DETECTED = 32; // DVL thermal protection mode detected.
+  NOTIFICATION_TYPE_VIDEO_PARTITION_NOT_MOUNTED = 33; // Video partition not mounted.
+  NOTIFICATION_TYPE_DVL_PROTOCOL_UNSUPPORTED = 34; // DVL firmware speaks a protocol version Blunux does not support.
 }
 
 // List of available notification levels.
@@ -755,8 +851,61 @@ enum PressureSensorType {
   PRESSURE_SENSOR_TYPE_MS5637_02BA03 = 4; // The internal pressure sensor using the MS5637 02BA03 pressure sensor.
 }
 
+// How the drone is powered.
+//
+// Lets clients determine the power configuration (e.g. parallel batteries on the
+// X7) directly from DroneInfo, without waiting for telemetry. May be extended in
+// the future, e.g. with topside power.
+enum PowerSource {
+  POWER_SOURCE_UNSPECIFIED = 0; // Power source unknown / not determined.
+  POWER_SOURCE_SINGLE_BATTERY = 1; // A single battery.
+  POWER_SOURCE_PARALLEL_BATTERIES = 2; // Two batteries running in parallel (e.g. X7).
+}
+
 // Information about the drone.
 //
+// Information about a loaded computer vision model.
+message CvModelInfo {
+  enum ModelType {
+    MODEL_TYPE_UNSPECIFIED = 0;
+    MODEL_TYPE_DETECTION = 1;
+    MODEL_TYPE_SOT = 2;
+  }
+  // Runtime state of a computer vision model.
+  enum State {
+    STATE_UNSPECIFIED = 0; // State unknown / not reported.
+    STATE_STOPPED = 1; // The model is not running.
+    STATE_RUNNING = 2; // The model is running (detection models).
+    STATE_IDLE = 3; // The SOT model is running with no target selected.
+    STATE_TRACKING = 4; // The SOT model is actively tracking a target.
+    STATE_LOST = 5; // The SOT model lost the target it was tracking.
+  }
+  string name = 1; // Human-readable model name (from model_meta.json).
+  ModelType type = 2; // Type of CV model.
+  bool running = 3; // Whether the model is currently running.
+  string device = 4; // Execution provider (e.g. "cuda", "tensorrt").
+  string package_id = 5; // Package directory name (e.g. "tinyyolov2_package"). Stable identifier.
+  repeated string labels = 6; // Class names the model can detect (indexed by class_id).
+  State state = 7; // Runtime state. SOT models report IDLE/TRACKING/LOST instead of RUNNING.
+}
+
+// Camera intrinsic calibration (pinhole model with OpenCV distortion coefficients).
+//
+// All values are in pixels at the calibration resolution (image_width x image_height).
+// When applying the calibration to an image of a different resolution, scale fx and cx
+// by the width ratio and fy and cy by the height ratio; the distortion coefficients
+// are resolution independent.
+message CameraCalibration {
+  float fx = 1; // Focal length x (pixels).
+  float fy = 2; // Focal length y (pixels).
+  float cx = 3; // Principal point x (pixels).
+  float cy = 4; // Principal point y (pixels).
+  repeated float distortion_coefficients = 5; // OpenCV order: k1, k2, p1, p2, k3.
+  uint32 image_width = 6; // Image width (pixels) the calibration was computed at.
+  uint32 image_height = 7; // Image height (pixels) the calibration was computed at.
+  bool is_default = 8; // True when this is the built-in default, not a per-drone calibration.
+}
+
 // This message contains serial numbers and version information for
 // internal components in the drone. Primarily used for diagnostics, or to
 // determine the origin of a logfile.
@@ -772,6 +921,9 @@ message DroneInfo {
   bytes bb_uid = 8; // Backbone unique identifier.
   GuestPortInfo gp = 9; // Guest port information.
   PressureSensorType depth_sensor = 11; // Type of depth sensor that is connected to the drone.
+  repeated CvModelInfo cv_models = 12; // Installed computer vision models, including models that are not running.
+  PowerSource power_source = 13; // How the drone is powered.
+  CameraCalibration main_camera_calibration = 14; // Intrinsic calibration of the main camera. Unset when unknown.
 }
 
 // Known error states for the drone.
@@ -788,18 +940,39 @@ message ErrorFlags {
   bool gp1_read = 9; // Guest port 1 read error.
   bool gp2_read = 10; // Guest port 2 read error.
   bool gp3_read = 11; // Guest port 3 read error.
+  bool gp4_read = 48; // Guest port 4 read error.
+  bool gp5_read = 49; // Guest port 5 read error.
+  bool gp6_read = 50; // Guest port 6 read error.
   bool gp1_not_flashed = 12; // Guest port 1 not flashed.
   bool gp2_not_flashed = 13; // Guest port 2 not flashed.
   bool gp3_not_flashed = 14; // Guest port 3 not flashed.
+  bool gp4_not_flashed = 51; // Guest port 4 not flashed.
+  bool gp5_not_flashed = 52; // Guest port 5 not flashed.
+  bool gp6_not_flashed = 53; // Guest port 6 not flashed.
   bool gp1_unknown_device = 15; // Unknown device on guest port 1.
   bool gp2_unknown_device = 16; // Unknown device on guest port 2.
   bool gp3_unknown_device = 17; // Unknown device on guest port 3.
+  bool gp4_unknown_device = 54; // Unknown device on guest port 4.
+  bool gp5_unknown_device = 55; // Unknown device on guest port 5.
+  bool gp6_unknown_device = 56; // Unknown device on guest port 6.
   bool gp1_device_connection = 18; // Guest port 1 connection error.
   bool gp2_device_connection = 19; // Guest port 2 connection error.
   bool gp3_device_connection = 20; // Guest port 3 connection error.
+  bool gp4_device_connection = 57; // Guest port 4 connection error.
+  bool gp5_device_connection = 58; // Guest port 5 connection error.
+  bool gp6_device_connection = 59; // Guest port 6 connection error.
   bool gp1_device = 21; // Guest port 1 device error.
   bool gp2_device = 22; // Guest port 2 device error.
   bool gp3_device = 23; // Guest port 3 device error.
+  bool gp4_device = 60; // Guest port 4 device error.
+  bool gp5_device = 61; // Guest port 5 device error.
+  bool gp6_device = 62; // Guest port 6 device error.
+  bool gp1_incompatible_device = 78; // Device on guest port 1 requires interfaces the port does not provide.
+  bool gp2_incompatible_device = 79; // Device on guest port 2 requires interfaces the port does not provide.
+  bool gp3_incompatible_device = 80; // Device on guest port 3 requires interfaces the port does not provide.
+  bool gp4_incompatible_device = 81; // Device on guest port 4 requires interfaces the port does not provide.
+  bool gp5_incompatible_device = 82; // Device on guest port 5 requires interfaces the port does not provide.
+  bool gp6_incompatible_device = 83; // Device on guest port 6 requires interfaces the port does not provide.
   bool drone_serial_not_set = 24; // Drone serial number not set.
   bool drone_serial = 25; // Drone serial number error.
   bool mb_eeprom_read = 26; // MB eeprom read error.
@@ -815,15 +988,35 @@ message ErrorFlags {
   bool ds_serial = 36; // DS serial number error.
   bool gp_current_read = 37; // Error reading GP current.
   bool gp_current = 38; // Max GP current exceeded.
-  bool gp1_bat_current = 39; // Max battery current exceeded on GP1.
-  bool gp2_bat_current = 40; // Max battery current exceeded on GP2.
-  bool gp3_bat_current = 41; // Max battery current exceeded on GP3.
-  bool gp_20v_current = 42; // Max 20V current exceeded on GP.
+  bool gp1_bat_current = 39; // Max battery current exceeded on guest port 1.
+  bool gp2_bat_current = 40; // Max battery current exceeded on guest port 2.
+  bool gp3_bat_current = 41; // Max battery current exceeded on guest port 3.
+  bool gp4_bat_current = 63; // Max battery current exceeded on guest port 4.
+  bool gp5_bat_current = 64; // Max battery current exceeded on guest port 5.
+  bool gp6_bat_current = 65; // Max battery current exceeded on guest port 6.
+  bool gp_24v_current = 42; // Max 24V current exceeded on GP. Only present on X1/X3 (not X3 Ultra or X7).
+  bool gp1_24v_current = 66; // Max 24V current exceeded on guest port 1.
+  bool gp2_24v_current = 67; // Max 24V current exceeded on guest port 2.
+  bool gp3_24v_current = 68; // Max 24V current exceeded on guest port 3.
+  bool gp4_24v_current = 69; // Max 24V current exceeded on guest port 4.
+  bool gp5_24v_current = 70; // Max 24V current exceeded on guest port 5.
+  bool gp6_24v_current = 71; // Max 24V current exceeded on guest port 6.
+  bool gp1_5v_current = 72; // Max 5V current exceeded on guest port 1.
+  bool gp2_5v_current = 73; // Max 5V current exceeded on guest port 2.
+  bool gp3_5v_current = 74; // Max 5V current exceeded on guest port 3.
+  bool gp4_5v_current = 75; // Max 5V current exceeded on guest port 4.
+  bool gp5_5v_current = 76; // Max 5V current exceeded on guest port 5.
+  bool gp6_5v_current = 77; // Max 5V current exceeded on guest port 6.
   bool dvl_thermal_protection_mode = 43; // DVL is in thermal protection mode.
   bool dvl_no_power = 44; // GP protection has been triggered at boot or faulty DVL.
+  bool dvl_protocol_unsupported = 84; // DVL firmware speaks a protocol version Blunux does not support.
   bool usb_disconnect = 45; // USB disconnect.
   bool video_urb_error = 46; // Video URB error.
   bool hardware_not_supported = 47; // Hardware not supported on current blunux version.
+  bool imu_1 = 85; // MPU 1 unavailable at observer startup.
+  bool imu_2 = 86; // MPU 2 unavailable at observer startup.
+  bool imu_hp = 87; // HP IMU unavailable on X3 Ultra or X7.
+  bool imu_attitude = 88; // No attitude source: manual body-frame control only.
 }
 
 // Available camera resolutions.
@@ -940,13 +1133,16 @@ enum ThicknessUnit {
 
 // Available font sizes for overlay text elements.
 enum FontSize {
-  FONT_SIZE_UNSPECIFIED = 0; // Font size not specified.
+  // Font size and margins derived from the recording resolution (Blunux >= 5.2).
+  // Older firmware defaults to 25px.
+  FONT_SIZE_UNSPECIFIED = 0;
   FONT_SIZE_PX15 = 1; // 15 px.
   FONT_SIZE_PX20 = 2; // 20 px.
   FONT_SIZE_PX25 = 3; // 25 px.
   FONT_SIZE_PX30 = 4; // 30 px.
   FONT_SIZE_PX35 = 5; // 35 px.
   FONT_SIZE_PX40 = 6; // 40 px.
+  FONT_SIZE_PX50 = 7; // 50 px.
 }
 
 // Overlay parameters.
@@ -969,9 +1165,13 @@ message OverlayParameters {
   TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celsius or Fahrenheit.
   ThicknessUnit thickness_unit = 19; // Which unit should be used for thickness: Millimeters or Inches.
   int32 timezone_offset = 9; // Timezone offset from UTC (min).
-  int32 margin_width = 10; // Horizontal margins of text elements (px).
-  int32 margin_height = 11; // Vertical margins of text elements (px).
-  FontSize font_size = 12; // Font size of text elements.
+  // Horizontal margins of text elements (px). Ignored when font_size is FONT_SIZE_UNSPECIFIED (Blunux >= 5.2).
+  int32 margin_width = 10;
+  // Vertical margins of text elements (px). Ignored when font_size is FONT_SIZE_UNSPECIFIED (Blunux >= 5.2).
+  int32 margin_height = 11;
+  // Font size of text elements. FONT_SIZE_UNSPECIFIED derives font size and margins from the
+  // recording resolution (Blunux >= 5.2). Older firmware defaults to 25px.
+  FontSize font_size = 12;
   string title = 13; // Optional title.
   string subtitle = 14; // Optional subtitle.
   string date_format = 16; // Posix strftime format string for time stamp.
@@ -1029,6 +1229,11 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_BLUEYE_MULTIBEAM_SERVO_V2 = 46; // Blueye Multibeam Skid Servo V2.
   GUEST_PORT_DEVICE_ID_CERULEAN_OMNISCAN_450_COMPACT = 47; // Cerulean Omniscan 450 Compact.
   GUEST_PORT_DEVICE_ID_BLUEYE_SCALING_LASER = 48; // Blueye Scaling Laser.
+  // Cygnus Mini ROV Thickness Gauge on a connector that converts its RS485 to
+  // RS232, letting it be used on drones with no RS485, such as the X7.
+  GUEST_PORT_DEVICE_ID_CYGNUS_MINI_ROV_THICKNESS_GAUGE_RS232 = 49;
+  GUEST_PORT_DEVICE_ID_WATERLINKED_DVL_A100 = 50; // Waterlinked DVL A100.
+  GUEST_PORT_DEVICE_ID_OUTLAND_TECHNOLOGY_MP200 = 51; // Outland Technology MP-200 Manipulator.
 }
 
 // Guest port number.
@@ -1037,6 +1242,24 @@ enum GuestPortNumber {
   GUEST_PORT_NUMBER_PORT_1 = 1; // Guest port 1.
   GUEST_PORT_NUMBER_PORT_2 = 2; // Guest port 2.
   GUEST_PORT_NUMBER_PORT_3 = 3; // Guest port 3.
+  GUEST_PORT_NUMBER_PORT_4 = 4; // Guest port 4.
+  GUEST_PORT_NUMBER_PORT_5 = 5; // Guest port 5.
+  GUEST_PORT_NUMBER_PORT_6 = 6; // Guest port 6.
+}
+
+// Physical interfaces a guest port can provide.
+//
+// Used both for the interfaces a port provides and for the interfaces a
+// device requires from the port it is connected to.
+enum GuestPortCapability {
+  GUEST_PORT_CAPABILITY_UNSPECIFIED = 0; // Unspecified.
+  GUEST_PORT_CAPABILITY_ETHERNET = 1; // Ethernet.
+  GUEST_PORT_CAPABILITY_I2C = 2; // I2C.
+  GUEST_PORT_CAPABILITY_RS232 = 3; // RS232 serial.
+  GUEST_PORT_CAPABILITY_RS485 = 4; // RS485 serial.
+  GUEST_PORT_CAPABILITY_USB2 = 5; // USB 2.0.
+  GUEST_PORT_CAPABILITY_PWM = 6; // PWM.
+  GUEST_PORT_CAPABILITY_ETHERNET_1G = 7; // Gigabit Ethernet.
 }
 
 // List of navigation sensors that can be used by the position observer.
@@ -1048,6 +1271,7 @@ enum NavigationSensorID {
   NAVIGATION_SENSOR_ID_BLUEYE_GNSS = 4; // Blueye GNSS device on the ROV.
   NAVIGATION_SENSOR_ID_NORTEK_DVL_NUCLEUS = 5; // Nortek DVL Nucleus 1000.
   NAVIGATION_SENSOR_ID_CERULEAN_TRACKER_650 = 6; // Cerulean Tracker 650.
+  NAVIGATION_SENSOR_ID_WATERLINKED_DVL_A100 = 7; // Water Linked DVL A100.
 }
 
 // Navigation sensor used in the position observer with validity state.
@@ -1060,6 +1284,68 @@ message NavigationSensorStatus {
   float fom = 6; // Figure of merit.
   float std = 7; // Standard deviation.
   LatLongPosition global_position = 8; // Global position from sensor.
+}
+
+// Position fix mode reported by the NMEA GSA sentence.
+enum GnssFixMode {
+  GNSS_FIX_MODE_UNSPECIFIED = 0; // No GSA sentence has been received.
+  GNSS_FIX_MODE_NO_FIX = 1; // The receiver has no position fix.
+  GNSS_FIX_MODE_2D = 2; // Horizontal fix only, no usable altitude.
+  GNSS_FIX_MODE_3D = 3; // Full three dimensional fix.
+}
+
+// GNSS constellation a satellite belongs to.
+enum GnssConstellation {
+  GNSS_CONSTELLATION_UNSPECIFIED = 0; // Unspecified.
+  GNSS_CONSTELLATION_GPS = 1; // GPS.
+  GNSS_CONSTELLATION_GLONASS = 2; // GLONASS.
+  GNSS_CONSTELLATION_GALILEO = 3; // Galileo.
+  GNSS_CONSTELLATION_BEIDOU = 4; // BeiDou.
+}
+
+// Satellite tracked by the Blueye GNSS receiver.
+message GnssSatellite {
+  GnssConstellation constellation = 1; // Constellation the satellite belongs to.
+  uint32 satellite_id = 2; // Satellite id within the constellation.
+  uint32 snr = 3; // Carrier to noise ratio (dB-Hz).
+  int32 elevation = 4; // Elevation above the horizon (°, 0..90), or -1 when the receiver did not report it.
+  int32 azimuth = 5; // Azimuth clockwise from true north (°, 0..359), or -1 when the receiver did not report it.
+  bool used_in_fix = 6; // Whether GSA lists the satellite as used in the fix. Only meaningful if is_used_in_fix_valid.
+}
+
+// Status of the onboard Blueye GNSS receiver and its driver.
+message GnssStatus {
+  bool receiver_connected = 1; // True when the receiver is connected and producing NMEA sentences.
+  uint32 fix_quality = 2; // NMEA GGA fix quality indicator (0 = no fix).
+  bool is_valid = 3; // True when the receiver reports a usable position fix.
+  uint32 satellites_used = 4; // Number of satellites used in the position fix.
+  uint32 satellites_tracked = 5; // Satellites in the satellites list: those with a signal in the latest GSV burst.
+  uint32 satellites_in_view = 17; // Satellites predicted above the horizon, over all constellations; needs no signal.
+  bool is_used_in_fix_valid = 20; // True when GSA could be attributed to a constellation, making used_in_fix usable.
+  GnssFixMode fix_mode = 21; // Fix mode from GSA (2D/3D).
+  float hdop = 6; // Horizontal dilution of precision.
+  float pdop = 22; // Position (3D) dilution of precision, from GSA.
+  float vdop = 23; // Vertical dilution of precision, from GSA.
+  LatLongPosition global_position = 7; // Reported global position.
+  float altitude = 24; // Altitude above mean sea level (m), from GGA.
+  float stddev_latitude = 8; // Standard deviation of the latitude (m). Meaningless unless is_accuracy_valid.
+  float stddev_longitude = 9; // Standard deviation of the longitude (m). Meaningless unless is_accuracy_valid.
+  float stddev_altitude = 25; // Standard deviation of the altitude (m). Meaningless unless is_accuracy_valid.
+  float stddev_semi_major = 26; // Semi-major axis of the horizontal error ellipse (m).
+  float stddev_semi_minor = 27; // Semi-minor axis of the horizontal error ellipse (m).
+  float error_ellipse_orientation = 28; // Orientation of the semi-major axis, clockwise from true north (°).
+  float range_rms = 29; // RMS of the range residuals (m), from GST.
+  bool is_accuracy_valid = 18; // True once the receiver has reported a GST sentence to derive the deviations from.
+  float course_over_ground = 10; // Course over ground (°). Meaningless unless is_course_valid.
+  bool is_course_valid = 19; // True when the fix is valid and the receiver actually reported a course.
+  float speed_over_ground = 11; // Speed over ground (m/s).
+  float differential_age = 30; // Age of the differential corrections (s), or -1 without DGPS/RTK.
+  int32 differential_station = 31; // Id of the station supplying the differential corrections, or -1 when absent.
+  uint32 baud_rate = 12; // Serial baud rate in use (bit/s).
+  uint32 reconnect_count = 13; // Times the driver has reconnected to the receiver since boot.
+  uint32 receive_error_count = 14; // Receive errors seen by the driver since boot.
+  float time_since_last_sentence = 15; // Time since the last NMEA sentence was received (s).
+  repeated GnssSatellite satellites = 16; // Satellites currently tracked with signal strength.
 }
 
 // Status for guest port devices that can be attached and detached.
@@ -1078,6 +1364,10 @@ message GuestPortDevice {
   float depth_rating = 5; // Depth rating (m).
   string required_blunux_version = 6; // Required Blunux version (x.y.z).
   GuestPortDetachStatus detach_status = 7; // Detach status based on detection pin.
+  repeated GuestPortCapability required_capabilities = 8; // Interfaces the device requires from the port.
+  // Ports on this drone where the device is fully supported. Computed by the
+  // drone from the port capabilities and the device requirements.
+  repeated GuestPortNumber compatible_guest_ports = 9;
 }
 
 // List of guest port devices.
@@ -1104,6 +1394,7 @@ message GuestPortConnectorInfo {
     GuestPortError error = 2; // Guest port connector error.
   }
   GuestPortNumber guest_port_number = 3; // Guest port the connector is connected to.
+  repeated GuestPortCapability capabilities = 4; // Interfaces this port provides.
 }
 
 // GuestPort information.
@@ -1111,6 +1402,9 @@ message GuestPortInfo {
   GuestPortConnectorInfo gp1 = 1; // Information about guest port 1.
   GuestPortConnectorInfo gp2 = 2; // Information about guest port 2.
   GuestPortConnectorInfo gp3 = 3; // Information about guest port 3.
+  GuestPortConnectorInfo gp4 = 4; // Information about guest port 4.
+  GuestPortConnectorInfo gp5 = 5; // Information about guest port 5.
+  GuestPortConnectorInfo gp6 = 6; // Information about guest port 6.
 }
 
 // GuestPort restart information.
@@ -1148,7 +1442,22 @@ message GuestPortCurrent {
   double gp1_bat = 1; // Current on GP1 battery voltage (A).
   double gp2_bat = 2; // Current on GP2 battery voltage (A).
   double gp3_bat = 3; // Current on GP3 battery voltage (A).
-  double gp_20v = 4; // Current on common 20V supply (A).
+  double gp_24v = 4; // Current on common/input 24V supply (A). Only present on X1/X3 (not X3 Ultra or X7).
+  double gp4_bat = 5; // Current on GP4 battery voltage (A).
+  double gp5_bat = 6; // Current on GP5 battery voltage (A).
+  double gp6_bat = 7; // Current on GP6 battery voltage (A).
+  double gp1_24v = 8; // Current on GP1 24V supply (A).
+  double gp2_24v = 9; // Current on GP2 24V supply (A).
+  double gp3_24v = 10; // Current on GP3 24V supply (A).
+  double gp4_24v = 11; // Current on GP4 24V supply (A).
+  double gp5_24v = 12; // Current on GP5 24V supply (A).
+  double gp6_24v = 13; // Current on GP6 24V supply (A).
+  double gp1_5v = 14; // Current on GP1 5V supply (A).
+  double gp2_5v = 15; // Current on GP2 5V supply (A).
+  double gp3_5v = 16; // Current on GP3 5V supply (A).
+  double gp4_5v = 17; // Current on GP4 5V supply (A).
+  double gp5_5v = 18; // Current on GP5 5V supply (A).
+  double gp6_5v = 19; // Current on GP6 5V supply (A).
 }
 
 // Vector with 3 elements.
@@ -1209,6 +1518,11 @@ message MultibeamPing {
   bytes ping_data = 10; // Ping data (row major, 2D, grayscale image).
   GuestPortDeviceID device_id = 11; // Device ID of the sonar.
   google.protobuf.Timestamp frame_generation_timestamp = 12; // Timestamp when the frame was generated.
+  double heading = 13; // Heading (°).
+  double pitch = 14; // Pitch (°).
+  double roll = 15; // Roll (°).
+  double temperature = 16; // External temperature (°C).
+  double pressure = 17; // External pressure (bar).
 }
 
 
@@ -1260,6 +1574,15 @@ message MultibeamDiscovery {
   string connected_ip = 6; // IP address of the connected device.
   GuestPortDeviceID device_id = 7; // Device ID of the sonar.
   MultibeamErrorFlags error_flags = 8; // Error flags specific for the connected multibeam device.
+}
+
+// Color filter used to render the multibeam sonar fan.
+//
+// The fan renderer maps each echo intensity (0..255) to a color through this
+// lookup table. The drone keeps the last filter received in memory and applies
+// it to the sonar RTSP stream; grayscale is used until one is set.
+message MultibeamColorFilter {
+  bytes rgb = 1; // 768 bytes: 256 consecutive R,G,B triplets, indexed by echo intensity.
 }
 
 // Error flags for multibeam sonar devices.
@@ -1348,6 +1671,14 @@ enum ThermalZoneId {
   THERMAL_ZONE_ID_UNSPECIFIED = 0; // Unspecified thermal zone.
   THERMAL_ZONE_ID_TJ = 1; // Junction temperature (Tj).
   THERMAL_ZONE_ID_CANISTER = 2; // Canister temperature.
+  THERMAL_ZONE_ID_CPU = 3; // CPU thermal zone.
+  THERMAL_ZONE_ID_GPU = 4; // GPU thermal zone.
+  THERMAL_ZONE_ID_CV0 = 5; // Vision accelerator 0 thermal zone.
+  THERMAL_ZONE_ID_CV1 = 6; // Vision accelerator 1 thermal zone.
+  THERMAL_ZONE_ID_CV2 = 7; // Vision accelerator 2 thermal zone.
+  THERMAL_ZONE_ID_SOC0 = 8; // SoC 0 thermal zone.
+  THERMAL_ZONE_ID_SOC1 = 9; // SoC 1 thermal zone.
+  THERMAL_ZONE_ID_SOC2 = 10; // SoC 2 thermal zone.
 }
 
 // Thermal zone reading.
@@ -1367,18 +1698,64 @@ message VideoCodecInfo {
   float nvjpg_frequency_mhz = 6; // JPEG engine clock frequency (MHz).
   bool vic_active = 7; // Video Image Compositor (VIC) is active.
   float vic_frequency_mhz = 8; // VIC clock frequency (MHz).
+
   // i.MX only (CODA VPU).
   bool vpu_active = 9; // VPU clock is gated on.
   float vpu_frequency_mhz = 10; // VPU AXI clock frequency (MHz).
   uint32 vpu_codec_irq_count = 11; // Cumulative VPU_CODEC_IRQ count.
   uint32 vpu_jpg_irq_count = 12; // Cumulative VPU_JPG_IRQ count.
+
+  // Jetson only (host1x actmon engine utilization, 0..1).
+  float encoder_load = 13; // Video encoder (NVENC) utilization (0..1).
+  float decoder_load = 14; // Video decoder (NVDEC) utilization (0..1).
+  float nvjpg_load = 15; // JPEG engine (NVJPG) utilization (0..1).
+  float vic_load = 16; // Video Image Compositor (VIC) utilization (0..1).
+}
+
+// NVMe SSD health, wear and identity (Jetson only; i.MX drones boot/store on
+// an SD card and have no NVMe device, so this message is omitted there).
+message NvmeInfo {
+  // Tier 1 — health & safety.
+  float composite_temperature = 1; // Composite drive temperature (°C).
+  uint32 critical_warning = 2; // NVMe critical-warning bitfield.
+  uint32 percentage_used = 3; // Wear indicator (%, may exceed 100).
+  uint32 available_spare = 4; // Remaining spare capacity (%).
+  uint32 available_spare_threshold = 5; // Spare alarm threshold (%).
+  uint64 media_errors = 6; // Uncorrected data-integrity errors.
+  uint64 unsafe_shutdowns = 7; // Power-loss / unsafe shutdown count.
+
+  // Tier 2 — thermal throttling.
+  uint32 warning_temp_time_min = 8; // Minutes above the warning temperature.
+  uint32 critical_temp_time_min = 9; // Minutes above the critical temperature.
+  uint32 thermal_mgmt_t1_trans_count = 10; // Times entered light throttling.
+  uint32 thermal_mgmt_t2_trans_count = 11; // Times entered heavy throttling.
+  uint32 thermal_mgmt_t1_total_time_s = 12; // Total seconds in light throttling.
+  uint32 thermal_mgmt_t2_total_time_s = 13; // Total seconds in heavy throttling.
+
+  // Tier 3 — endurance / workload.
+  uint64 data_units_written_bytes = 14; // Host data written (B).
+  uint64 data_units_read_bytes = 15; // Host data read (B).
+  uint64 host_write_commands = 16; // Host write command count.
+  uint64 host_read_commands = 17; // Host read command count.
+  uint64 power_on_hours = 18; // Power-on hours.
+  uint64 power_cycles = 19; // Power cycle count.
+  uint64 controller_busy_time_min = 20; // Controller busy time (min).
+  uint64 num_err_log_entries = 21; // Error-log entry count.
+
+  // Tier 4 — identity & capacity.
+  string model = 22; // Drive model.
+  string serial = 23; // Drive serial number.
+  string firmware_rev = 24; // Firmware revision.
+  uint64 capacity_bytes = 25; // Total drive capacity (B). Partition used/free is
+                              // reported separately via DataStorageSpaceTel.
 }
 
 // System performance information.
 //
 // Comprehensive performance metrics for the drone's compute platform.
-// Covers CPU, GPU, DLA, memory, thermals, and video codec utilization.
-// Fields not applicable to a platform are left at their zero/empty defaults.
+// Covers CPU, GPU, DLA, memory, thermals, video codec utilization and NVMe
+// SSD state. Fields not applicable to a platform are left at their
+// zero/empty defaults.
 message SystemPerformanceInfo {
   repeated CpuCoreLoad cpu_cores = 1; // Per-core CPU utilization.
   float cpu_utilization = 2; // Mean CPU utilization across all cores (0..1).
@@ -1393,6 +1770,7 @@ message SystemPerformanceInfo {
   float camera_queue_load = 11; // Camera queue load (0..1).
   float overlay_queue_load = 12; // Overlay queue load (0..1).
   float position_observer_queue_load = 13; // Position observer queue load (0..1).
+  NvmeInfo nvme = 14; // NVMe SSD health/identity (Jetson only).
 }
 
 // Surface Unit battery information.
@@ -1429,21 +1807,43 @@ message BoundingBox {
   uint32 height = 4; // Height of the bounding box (px).
 }
 
+// RLE-encoded binary segmentation mask with its own anchor box.
+//
+// The mask bitmap has dimensions (mask_width x mask_height) covering the
+// mask_box region of the camera image. The counts field stores run-length
+// encoded data as packed uint16 little-endian: alternating
+// background/foreground pixel runs starting with background. Runs longer
+// than 65535 pixels are split by inserting a zero-length run of the
+// opposite class (e.g. 70000 becomes 65535, 0, 4465), so decoders need no
+// special handling — a zero-length run just toggles the class.
+//
+// Scale the mask to mask_box, not to the detection's bounding_box: the
+// bounding box may be smoothed by tracking, while mask_box is pinned to the
+// raw detection position, so the mask stays on the actual object pixels.
+message SegmentationMask {
+  uint32 mask_width = 1;  // Width of the RLE bitmap.
+  uint32 mask_height = 2; // Height of the RLE bitmap.
+  bytes counts = 3;       // RLE counts as packed uint16 little-endian.
+  BoundingBox mask_box = 4; // Image region the mask bitmap covers (raw detection position, never smoothed).
+}
+
 // A single object detection from a computer vision model.
 message ObjectDetection {
-  BoundingBox bounding_box = 1; // Bounding box of the detected object.
+  BoundingBox bounding_box = 1; // Bounding box of the detected object (may be smoothed by tracking).
   float confidence = 2; // Detection confidence score (0..1).
   uint32 class_id = 3; // Numeric class identifier from the model.
   string class_name = 4; // Human-readable class name.
   uint32 tracking_id = 5; // Unique ID for tracking the same object across frames.
+  SegmentationMask mask = 6; // Instance segmentation mask (absent if model has no segmentation).
 }
 
-// A list of object detections from a single video frame.
-message ObjectDetections {
+// A list of object detections from a single model for a single video frame.
+message ModelDetections {
   repeated ObjectDetection detections = 1; // List of detections in the frame.
   Camera camera = 2; // Which camera the detections are from.
   uint32 image_width = 3; // Width of the source image (px).
   uint32 image_height = 4; // Height of the source image (px).
+  string model_name = 5; // Name of the computer vision model that produced the detections.
 }
 
 // Generic filter settings.
@@ -1468,4 +1868,57 @@ message CameraPanTiltZoom {
 message OperatorInfo {
   string name = 1; // Full name of the operator.
   string email = 2; // E-mail address of the operator.
+}
+
+// Single-object tracking (SOT) state reported by the computer vision pipeline.
+//
+// The velocity fields are Kalman filter estimates expressed in the CV frame
+// coordinate space (image_width x image_height pixels).
+message SotState {
+  // Current state of the SOT tracker.
+  enum State {
+    STATE_UNSPECIFIED = 0; // Unspecified state.
+    STATE_IDLE = 1; // No target selected, waiting for a target bounding box.
+    STATE_TRACKING = 2; // Actively tracking a target.
+    STATE_LOST = 3; // Target was lost (tracker failed to follow the object).
+  }
+  State state = 1; // Current tracking state.
+  BoundingBox bounding_box = 2; // Current tracked bounding box (valid when TRACKING).
+  uint32 image_width = 3; // Width of the source frame in pixels.
+  uint32 image_height = 4; // Height of the source frame in pixels.
+  float confidence = 5; // Tracker confidence of the last model update (0..1). 0 while coasting and when LOST.
+  float vx = 6; // Kalman velocity estimate of the bounding box centre, horizontal (px/s).
+  float vy = 7; // Kalman velocity estimate of the bounding box centre, vertical (px/s).
+  float vs = 8; // Kalman rate of change of the bounding box area, width * height (px²/s).
+  float vr = 9; // Kalman rate of change of the bounding box aspect ratio, width / height (1/s).
+}
+
+// Origin of an annotation. Mirrors the AnnotationSource enum in Blueye Cloud.
+enum AnnotationSource {
+  ANNOTATION_SOURCE_UNSPECIFIED = 0; // Origin not specified.
+  ANNOTATION_SOURCE_CLOUD = 1; // Created in Blueye Cloud after the dive.
+  ANNOTATION_SOURCE_APP = 2; // Created in the app during the dive.
+  ANNOTATION_SOURCE_DRONE = 3; // Emitted by the drone itself.
+}
+
+// A single annotation added during a dive, e.g. by a diver tapping a type in the
+// app command palette, or emitted by the drone itself.
+//
+// Self-contained: it carries the type's display fields (name/icon/color) inline,
+// so the drone, any connected client, and the dive logfile can render it without
+// a separate catalog. The app keeps the full catalog locally (synced from
+// Blueye Cloud) to drive its palette, but only complete annotations go over the
+// wire. type_slug lets Blueye Cloud correlate the annotation to its type on import.
+//
+// The drone owns the timestamp: when this is logged the enclosing BinlogRecord
+// carries the time, like any other sample, so there is no time field here.
+message Annotation {
+  string type_slug = 1; // Stable type id for grouping / Cloud correlation. Empty for a free-form annotation.
+  string type_name = 2; // Type display name, e.g. "Hazard". Snapshot of the type at creation time.
+  string type_icon = 3; // Font Awesome solid icon name, kebab-case (e.g. "triangle-exclamation").
+  string type_color = 4; // Type color, RGB hex incl. leading '#', 7 chars (e.g. "#DC2626").
+  string title = 5; // Optional annotation title; Cloud falls back to type_name if empty. Max 200 chars.
+  string body = 6; // Optional free-form note. Unbounded.
+  google.protobuf.Duration duration = 7; // Optional span; omit for a point-in-time marker.
+  AnnotationSource source = 8; // Origin of the annotation; the app sets APP, the drone sets DRONE for its own.
 }

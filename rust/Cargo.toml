@@ -1,0 +1,34 @@
+[package]
+name = "blueye-protocol"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.80"
+license = "LGPL-3.0-only"
+description = "Protocol definitions for Blueye Robotics underwater drones"
+repository = "https://github.com/BluEye-Robotics/ProtocolDefinitions"
+
+[lib]
+name = "blueye_protocol"
+
+[features]
+# Protobuf-JSON serialization (via pbjson) for selected messages.
+serde = ["dep:pbjson", "dep:serde"]
+
+[dependencies]
+prost = "0.14"
+prost-types = "0.14"
+prost-reflect = { version = "0.16", features = ["derive"] }
+pbjson = { version = "0.9", optional = true }
+serde = { version = "1.0", optional = true }
+
+[build-dependencies]
+prost = "0.14"
+prost-build = "0.14"
+prost-types = "0.14"
+protox = "0.9"
+pbjson-build = "0.9"
+# Rewrites the pbjson-generated serializers; see render_unknown_enums_as_numbers.
+regex = "1"
+
+[dev-dependencies]
+serde_json = "1.0"

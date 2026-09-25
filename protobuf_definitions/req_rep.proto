@@ -118,8 +118,13 @@ message GetBatteryReq {
 }
 
 // Response with essential battery information.
+//
+// On models with two batteries running in parallel (e.g. the X7), second_battery
+// holds the essential information for the second battery. When only a single
+// battery is used, second_battery is undefined (not set).
 message GetBatteryRep {
   Battery battery = 1; // Essential battery information.
+  Battery second_battery = 2; // Second battery, when present. Not set if only one battery is used.
 }
 
 // Issue a desired mission to the reference_generator.
@@ -166,6 +171,17 @@ message SetPubFrequencyReq {
 
 // Response after updating publish frequency
 message SetPubFrequencyRep {
+  bool success = 1; // True if message name valid and frequency successfully updated.
+}
+
+// Request to update the logging frequency
+message SetLogFrequencyReq {
+  string message_type = 1; // Message name, f. ex. "AttitudeTel"
+  float frequency = 2; // Logging frequency (max 100 Hz).
+}
+
+// Response after updating logging frequency
+message SetLogFrequencyRep {
   bool success = 1; // True if message name valid and frequency successfully updated.
 }
 
@@ -225,4 +241,55 @@ message GetIperfStatusReq {
 // Response with current iperf status.
 message GetIperfStatusRep {
   bool enabled = 1; // If background iperf task is enabled or disabled.
+}
+
+// Request to get the current log streaming status.
+message GetLogStreamingStatusReq {
+}
+
+// Response with the current log streaming status.
+message GetLogStreamingStatusRep {
+  bool enabled = 1; // If log streaming is enabled or disabled.
+}
+
+// Request to start or stop a computer vision model.
+//
+// The reply only acknowledges that the model exists and the request was
+// accepted. The model starts or stops asynchronously; track progress through
+// the state field of CvModelInfo in DroneInfoTel or GetCvModelsRep.
+message SetCvModelStateReq {
+  string package_id = 1; // Identifies the model, from CvModelInfo.package_id.
+  bool running = 2; // Desired run state: true to start the model, false to stop it.
+}
+
+// Response after accepting a SetCvModelStateReq.
+message SetCvModelStateRep {
+  bool accepted = 1; // True if the model exists and the request was accepted for execution.
+}
+
+// Request the list of computer vision models installed on the drone.
+message GetCvModelsReq {
+}
+
+// Response with the list of installed computer vision models.
+message GetCvModelsRep {
+  repeated CvModelInfo cv_models = 1; // All installed models, including models that are not running.
+}
+
+// Request to set the color filter used to render the multibeam sonar fan.
+message SetMultibeamColorFilterReq {
+  MultibeamColorFilter color_filter = 1; // The color filter to apply.
+}
+
+// Response after setting the multibeam color filter.
+message SetMultibeamColorFilterRep {
+}
+
+// Request to get the color filter currently used to render the multibeam sonar fan.
+message GetMultibeamColorFilterReq {
+}
+
+// Response with the current multibeam color filter.
+message GetMultibeamColorFilterRep {
+  MultibeamColorFilter color_filter = 1; // The current color filter. Empty rgb means none is set (grayscale).
 }
