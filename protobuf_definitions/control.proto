@@ -166,6 +166,20 @@ message GripperCtrl {
   GripperVelocities gripper_velocities = 1; // The desired gripping and rotation velocity.
 }
 
+// Issue a command to move a manipulator arm.
+//
+// Supersedes GripperCtrl while it keeps arriving. The arm stops when the commands stop.
+message ManipulatorCtrl {
+  ManipulatorVelocities velocities = 1; // The desired arm, gripping and rotation velocities.
+}
+
+// Issue a command to move a manipulator arm to a named pose.
+//
+// A ManipulatorCtrl that asks for movement cancels it.
+message ManipulatorPoseCtrl {
+  ManipulatorPose pose = 1; // The pose to move to.
+}
+
 // Issue a command to set a generic servo value.
 message GenericServoCtrl {
   GenericServo servo = 1; // Message with the desired servo value.

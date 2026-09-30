@@ -268,6 +268,11 @@ message MultibeamServoTel {
   float set_point = 2; // Servo set point (-30..30).
 }
 
+// State of a manipulator arm, published while one is connected.
+message ManipulatorTel {
+  Manipulator manipulator = 1; // Manipulator state.
+}
+
 // GuestPort current readings.
 message GuestPortCurrentTel {
   GuestPortCurrent current = 1; // Guest port current readings.

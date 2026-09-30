@@ -265,6 +265,49 @@ message GripperVelocities {
   float rotate_velocity = 2; // The rotating velocity (-1.0..1.0).
 }
 
+// How the arm velocities of ManipulatorVelocities are read.
+enum ManipulatorControlMode {
+  MANIPULATOR_CONTROL_MODE_UNSPECIFIED = 0; // Drone default (cylindrical).
+  MANIPULATOR_CONTROL_MODE_CYLINDRICAL = 1; // Swing about the base, reach out from it, and heave.
+  MANIPULATOR_CONTROL_MODE_CARTESIAN = 2; // Surge, sway and heave of the end of the arm in the drone frame.
+}
+
+// Manipulator velocity values.
+//
+// The arm velocities (-1.0..1.0) are scaled by the drone to its configured maximum speeds, and use
+// the names and signs of MotionInput, so the same stick can drive the drone or the arm.
+message ManipulatorVelocities {
+  ManipulatorControlMode mode = 1; // How to read the arm velocities.
+  float surge = 2; // Cartesian: forward (positive). Cylindrical: reach out from the base (positive).
+  float sway = 3; // Cartesian: right (positive). Unused in cylindrical mode.
+  float heave = 4; // Descend (positive) and ascend (negative).
+  float yaw = 5; // Cylindrical: swing clockwise (positive) about the base. Unused in cartesian mode.
+  GripperVelocities gripper_velocities = 6; // The desired gripping and rotation velocity.
+  // Speed of the arm relative to the drone default (-1.0..1.0): negative is slower, positive is faster,
+  // and 0 is the default speed.
+  float speed_modifier = 7;
+}
+
+// Named manipulator poses.
+enum ManipulatorPose {
+  MANIPULATOR_POSE_UNSPECIFIED = 0; // No pose.
+  MANIPULATOR_POSE_STOWED = 1; // Folded for transport, launch and recovery.
+  MANIPULATOR_POSE_DEPLOYED = 2; // Unfolded and ready to work.
+}
+
+// Manipulator state.
+message Manipulator {
+  ManipulatorControlMode mode = 1; // Mode of the last command.
+  // Joint positions from the jaws to the base: jaws opening (m), then joint angles (rad).
+  repeated float joint_positions = 2;
+  Vector3 end_position = 3; // Position of the base of the jaws in the drone frame (m).
+  bool at_limit = 4; // A joint at the end of its range keeps the arm from going further.
+  bool collision = 5; // The arm stopped itself short of an obstacle or of itself.
+  bool holding = 6; // The jaws closed on something.
+  bool fault = 7; // A joint reports a hardware fault.
+  ManipulatorPose moving_to = 8; // Named pose the arm is moving to, if any.
+}
+
 // Information about a remote client.
 message ClientInfo {
   string type = 1; // The type of client (such as Blueye App, Observer App, SDK, etc).
