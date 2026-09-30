@@ -283,11 +283,21 @@ message CylindricalManipulatorInput {
   float azimuth = 3; // Swing about the base axis: clockwise seen from above (positive).
 }
 
+// Movement of a manipulator arm towards a named pose, along a path the drone chooses.
+//
+// Hold-to-run: the arm moves only while the velocity is above zero, and resumes from wherever it
+// stopped.
+message KnownPoseManipulatorInput {
+  ManipulatorPose pose = 1; // The pose to move towards.
+  float velocity = 2; // Speed along the path (0.0..1.0): 0 holds the arm where it is.
+}
+
 // How the arm input of the last command was read, as reported in telemetry.
 enum ManipulatorControlMode {
   MANIPULATOR_CONTROL_MODE_UNSPECIFIED = 0; // No arm input.
   MANIPULATOR_CONTROL_MODE_CYLINDRICAL = 1; // CylindricalManipulatorInput.
   MANIPULATOR_CONTROL_MODE_CARTESIAN = 2; // CartesianManipulatorInput.
+  MANIPULATOR_CONTROL_MODE_KNOWN_POSE = 3; // KnownPoseManipulatorInput.
 }
 
 // Named manipulator poses.
@@ -307,7 +317,7 @@ message Manipulator {
   bool collision = 5; // The arm stopped itself short of an obstacle or of itself.
   bool holding = 6; // The jaws closed on something.
   bool fault = 7; // A joint reports a hardware fault.
-  ManipulatorPose moving_to = 8; // Named pose the arm is moving to, if any.
+  ManipulatorPose moving_to = 8; // Named pose the arm is moving towards, if any.
 }
 
 // Information about a remote client.
