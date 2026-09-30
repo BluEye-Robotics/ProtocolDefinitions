@@ -302,7 +302,7 @@ message Manipulator {
   ManipulatorControlMode mode = 1; // How the arm input of the last command was read.
   // Joint positions from the jaws to the base: jaws opening (m), then joint angles (rad).
   repeated float joint_positions = 2;
-  Vector3 end_position = 3; // Position of the base of the jaws in the drone frame (m).
+  Vector3 end_position = 3; // Position of the base of the jaws in the drone body frame (m).
   bool at_limit = 4; // A joint at the end of its range keeps the arm from going further.
   bool collision = 5; // The arm stopped itself short of an obstacle or of itself.
   bool holding = 6; // The jaws closed on something.

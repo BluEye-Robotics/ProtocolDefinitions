@@ -174,14 +174,16 @@ message GripperCtrl {
     CylindricalManipulatorInput cylindrical = 3; // About the axis of the arm's base joint.
   }
 
-  // Speed of the arm relative to the drone default (-1.0..1.0): negative is slower, positive is faster,
-  // and 0 is the default speed.
+  // Speed of the arm input relative to the drone default (-1.0..1.0): negative is slower, positive is
+  // faster, and 0 is the default speed. Scales arm_input only, not gripper_velocities.
   float speed_modifier = 4;
 }
 
 // Issue a command to move a manipulator arm to a named pose.
 //
-// A GripperCtrl that asks for any movement cancels it.
+// The move runs to the end by itself; the client does not need to keep sending commands. A GripperCtrl
+// with a nonzero arm_input cancels it, as does a lapse of the client watchdog (WatchdogCtrl).
+// Gripper and rotation velocities do not cancel it.
 message ManipulatorPoseCtrl {
   ManipulatorPose pose = 1; // The pose to move to.
 }
