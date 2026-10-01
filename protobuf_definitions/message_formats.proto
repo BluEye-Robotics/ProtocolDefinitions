@@ -307,8 +307,8 @@ enum ManipulatorPose {
   MANIPULATOR_POSE_DEPLOYED = 2; // Unfolded and ready to work.
 }
 
-// Manipulator state.
-message Manipulator {
+// Gripper state: of its arm too, when the gripper is a manipulator arm.
+message Gripper {
   ManipulatorControlMode mode = 1; // How the arm input of the last command was read.
   // Joint positions from the jaws to the base: jaws opening (m), then joint angles (rad).
   repeated float joint_positions = 2;

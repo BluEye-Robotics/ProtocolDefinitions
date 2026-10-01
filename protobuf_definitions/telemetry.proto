@@ -268,9 +268,9 @@ message MultibeamServoTel {
   float set_point = 2; // Servo set point (-30..30).
 }
 
-// State of a manipulator arm, published while one is connected.
-message ManipulatorTel {
-  Manipulator manipulator = 1; // Manipulator state.
+// State of a gripper, published while one is connected.
+message GripperTel {
+  Gripper gripper = 1; // Gripper state.
 }
 
 // GuestPort current readings.
