@@ -162,8 +162,22 @@ message SystemTimeCtrl {
 }
 
 // Issue a command to control the gripper.
+//
+// On a manipulator arm the command can also move the arm. Each command stands until the next one: the
+// arm stops on a command without arm input, or when the client watchdog (WatchdogCtrl) lapses.
 message GripperCtrl {
   GripperVelocities gripper_velocities = 1; // The desired gripping and rotation velocity.
+
+  // The desired velocity of the end of a manipulator arm, if any.
+  oneof arm_input {
+    CartesianManipulatorInput cartesian = 2; // In the drone body frame.
+    CylindricalManipulatorInput cylindrical = 3; // About the axis of the arm's base joint.
+    KnownPoseManipulatorInput known_pose = 5; // Towards a named pose, such as stowed or deployed.
+  }
+
+  // Speed of the arm input relative to the drone default (-1.0..1.0): negative is slower, positive is
+  // faster, and 0 is the default speed. Scales arm_input only, not gripper_velocities.
+  float speed_modifier = 4;
 }
 
 // Issue a command to set a generic servo value.

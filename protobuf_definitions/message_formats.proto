@@ -265,6 +265,61 @@ message GripperVelocities {
   float rotate_velocity = 2; // The rotating velocity (-1.0..1.0).
 }
 
+// Cartesian velocity of the end of a manipulator arm, in the drone body frame.
+//
+// Each value is normalized (-1.0..1.0) and scaled by the drone to its configured maximum speed.
+message CartesianManipulatorInput {
+  float x = 1; // Forward (positive) and backward (negative).
+  float y = 2; // Right (positive) and left (negative).
+  float z = 3; // Down (positive) and up (negative).
+}
+
+// Cylindrical velocity of the end of a manipulator arm, about the axis of the arm's base joint.
+//
+// Each value is normalized (-1.0..1.0) and scaled by the drone to its configured maximum speed.
+message CylindricalManipulatorInput {
+  float radial = 1; // Out from the base axis (positive) and in towards it (negative).
+  float vertical = 2; // Along the base axis: down (positive) and up (negative), as in the drone body frame.
+  float azimuth = 3; // Swing about the base axis: clockwise seen from above (positive).
+}
+
+// Movement of a manipulator arm towards a named pose, along a path the drone chooses.
+//
+// Hold-to-run: the arm moves only while the velocity is above zero, and resumes from wherever it
+// stopped.
+message KnownPoseManipulatorInput {
+  ManipulatorPose pose = 1; // The pose to move towards.
+  float velocity = 2; // Speed along the path (0.0..1.0): 0 holds the arm where it is.
+}
+
+// How the arm input of the last command was read, as reported in telemetry.
+enum ManipulatorControlMode {
+  MANIPULATOR_CONTROL_MODE_UNSPECIFIED = 0; // No arm input.
+  MANIPULATOR_CONTROL_MODE_CYLINDRICAL = 1; // CylindricalManipulatorInput.
+  MANIPULATOR_CONTROL_MODE_CARTESIAN = 2; // CartesianManipulatorInput.
+  MANIPULATOR_CONTROL_MODE_KNOWN_POSE = 3; // KnownPoseManipulatorInput.
+}
+
+// Named manipulator poses.
+enum ManipulatorPose {
+  MANIPULATOR_POSE_UNSPECIFIED = 0; // No pose.
+  MANIPULATOR_POSE_STOWED = 1; // Folded for transport, launch and recovery.
+  MANIPULATOR_POSE_DEPLOYED = 2; // Unfolded and ready to work.
+}
+
+// Gripper state: of its arm too, when the gripper is a manipulator arm.
+message Gripper {
+  ManipulatorControlMode mode = 1; // How the arm input of the last command was read.
+  // Joint positions from the jaws to the base: jaws opening (m), then joint angles (rad).
+  repeated float joint_positions = 2;
+  Vector3 end_position = 3; // Position of the base of the jaws in the drone body frame (m).
+  bool at_limit = 4; // A joint at the end of its range keeps the arm from going further.
+  bool collision = 5; // The arm stopped itself short of an obstacle or of itself.
+  bool holding = 6; // The jaws closed on something.
+  bool fault = 7; // A joint reports a hardware fault.
+  ManipulatorPose moving_to = 8; // Named pose the arm is moving towards, if any.
+}
+
 // Information about a remote client.
 message ClientInfo {
   string type = 1; // The type of client (such as Blueye App, Observer App, SDK, etc).
@@ -1234,6 +1289,7 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_CYGNUS_MINI_ROV_THICKNESS_GAUGE_RS232 = 49;
   GUEST_PORT_DEVICE_ID_WATERLINKED_DVL_A100 = 50; // Waterlinked DVL A100.
   GUEST_PORT_DEVICE_ID_OUTLAND_TECHNOLOGY_MP200 = 51; // Outland Technology MP-200 Manipulator.
+  GUEST_PORT_DEVICE_ID_REACH_ROBOTICS_REACH_ALPHA_5 = 52; // Reach Robotics Reach Alpha 5 Manipulator.
 }
 
 // Guest port number.
