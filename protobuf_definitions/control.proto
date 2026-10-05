@@ -269,6 +269,18 @@ message SetColorCorrectionCtrl {
   FilterMessage color_correction_filter = 1; // Message with the color correction settings to set.
 }
 
+// Message sent when the user wants to set marine snow filter settings.
+// Removes the particles that the drone's lights make visible, such as marine snow, silt and plankton, by replacing
+// the pixels that are briefly brighter than in the neighbouring frames. Small moving objects, such as bubbles or thin
+// lines, can be removed too. The intensity field sets how faint a particle can be and still be removed
+// (0.0 = only the brightest particles, 1.0 = faint particles as well). Unlike the color correction intensity, 0.0
+// does not turn the filter off; only the enabled field does. The video is delayed by one frame while the filter is
+// enabled. Disable the filter while laser detection runs, as it can alter the laser dots.
+// Only supported on X3 Ultra.
+message SetMarineSnowFilterCtrl {
+  FilterMessage marine_snow_filter = 1; // Message with the marine snow filter settings to set.
+}
+
 // Issue a command to set the digital pan, tilt, and zoom of the main camera.
 //
 // Only supported on X3 Ultra.
