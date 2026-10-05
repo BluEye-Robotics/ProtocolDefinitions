@@ -374,6 +374,7 @@ message ColorCorrectionTel {
 // Message is published when the filter settings are changed.
 message MarineSnowFilterTel {
   FilterMessage marine_snow_filter = 1; // Marine snow filter settings.
+  MarineSnowFilterFrames frames = 2; // Frames that the filter compares with.
 }
 
 // Digital pan, tilt, and zoom telemetry from the main camera.

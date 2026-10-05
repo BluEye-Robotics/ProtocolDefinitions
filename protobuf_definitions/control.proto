@@ -275,6 +275,7 @@ message SetColorCorrectionCtrl {
 // Only supported on X3 Ultra.
 message SetMarineSnowFilterCtrl {
   FilterMessage marine_snow_filter = 1; // Message with the marine snow filter settings to set.
+  MarineSnowFilterFrames frames = 2; // Frames to compare with. Leave it unset to keep the current frames.
 }
 
 // Issue a command to set the digital pan, tilt, and zoom of the main camera.
