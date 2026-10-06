@@ -1908,6 +1908,12 @@ message FilterMessage {
   float intensity = 2; // Intensity of the filter (0..1).
 }
 
+// Frames that the marine snow filter compares each frame with.
+message MarineSnowFilterFrames {
+  uint32 past_frames = 1; // Past frames to compare with (1..4).
+  uint32 future_frames = 2; // Future frames to compare with (0..2). Each one delays the video by 33 to 40 ms.
+}
+
 // Digital pan, tilt, and zoom state for the main camera.
 //
 // Only supported on X3 Ultra. Controls digital (not mechanical) zoom.

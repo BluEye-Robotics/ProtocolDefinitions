@@ -269,6 +269,15 @@ message SetColorCorrectionCtrl {
   FilterMessage color_correction_filter = 1; // Message with the color correction settings to set.
 }
 
+// Message sent when the user wants to set marine snow filter settings.
+// Removes bright particles, such as marine snow, from the video. The intensity field sets how faint a particle can be
+// and still be removed (0.0 = only the brightest, 1.0 = faint particles as well). Turn it off during laser detection.
+// Only supported on X3 Ultra.
+message SetMarineSnowFilterCtrl {
+  FilterMessage marine_snow_filter = 1; // Message with the marine snow filter settings to set.
+  MarineSnowFilterFrames frames = 2; // Frames to compare with. Leave it unset to keep the current frames.
+}
+
 // Issue a command to set the digital pan, tilt, and zoom of the main camera.
 //
 // Only supported on X3 Ultra.
