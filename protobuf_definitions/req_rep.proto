@@ -145,13 +145,23 @@ message GetMissionRep {
   Mission mission = 1; // Active mission with waypoints.
 }
 
-// Updates an instruction in current mission with a new instruction payload.
+// Changes one instruction of the loaded mission. The mission is validated and
+// planned again as a whole and Mission.revision increases. An instruction that
+// has completed cannot be changed. Replacing or removing the instruction that
+// is running stops it; a replacement starts from where the drone is.
 message SetInstructionUpdateReq {
-  Instruction instruction = 1; // instruction that will replace the desired instruction.
+  oneof operation {
+    Instruction replace = 1; // Replace the instruction that has the same id.
+    InsertInstruction insert = 2; // Add an instruction.
+    uint32 remove_id = 3; // Remove the instruction with this id.
+  }
 }
 
 // Response after updating an instruction in the current mission.
 message SetInstructionUpdateRep {
+  bool accepted = 1; // True when the mission was changed.
+  string reason = 2; // Why the change was refused.
+  uint32 revision = 3; // Revision of the mission after the change.
 }
 
 // Set the heading mode used in dead reckoning.
