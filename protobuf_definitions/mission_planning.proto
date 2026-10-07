@@ -45,6 +45,10 @@ message Instruction {
     SetTiltStabilizationCommand set_tilt_stabilization_command = 20; // Enable or disable tilt stabilization.
     SetCvModelCommand set_cv_model_command = 21; // Start or stop a computer vision model.
     AnnotationCommand annotation_command = 22; // Record an annotation in the dive log.
+    SetHeadingCommand set_heading_command = 23; // Turn to a heading and hold it.
+    TransectCommand transect_command = 24; // Drive a straight line on a course for a distance.
+    RelativeDepthCommand relative_depth_command = 25; // Change the depth by an amount.
+    SetSpeedCommand set_speed_command = 26; // Change the cruise speed for the rest of the mission.
   }
 }
 
@@ -199,6 +203,33 @@ message AnnotationCommand {
   Annotation annotation = 1; // The annotation to record. The drone sets the timestamp and the source.
 }
 
+// SetHeadingCommand turns the drone to a heading and holds it with auto heading.
+message SetHeadingCommand {
+  float heading = 1; // Target heading relative to north (deg, 0..360), or the turn when relative is set.
+  bool relative = 2; // True to turn by `heading` degrees from the current heading; positive is clockwise.
+}
+
+// TransectCommand drives a straight line from the current position, like a waypoint the drone
+// computes itself from a course and a distance.
+message TransectCommand {
+  float course = 1; // Course relative to north (deg, 0..360).
+  float distance = 2; // Length of the line (m).
+  float speed = 3; // Desired speed over ground (m/s). The mission default when 0.
+  DepthSetPoint depth_set_point = 4; // Optional depth or altitude to hold along the line.
+  float circle_of_acceptance = 5; // Radius of acceptance at the end of the line (m). The mission default when 0.
+}
+
+// RelativeDepthCommand changes the depth by an amount from where the drone is when it starts.
+message RelativeDepthCommand {
+  float depth_change = 1; // Change in depth (m); positive is deeper, negative shallower.
+  float speed = 2; // Desired speed to the new depth (m/s). The mission default when 0.
+}
+
+// SetSpeedCommand changes the cruise speed used by the following instructions of the mission.
+message SetSpeedCommand {
+  float cruise_speed = 1; // Desired surge speed (m/s).
+}
+
 // A SurveyCommand defines a survey (lawn-mower) pattern over a polygon area.
 // The planner generates waypoints from the polygon + parameters and stores them
 // in the waypoints field. The drone executes these pre-computed waypoints directly
@@ -281,6 +312,10 @@ enum InstructionType {
   INSTRUCTION_TYPE_SET_TILT_STABILIZATION = 19; // Enable or disable tilt stabilization.
   INSTRUCTION_TYPE_SET_CV_MODEL = 20; // Start or stop a computer vision model.
   INSTRUCTION_TYPE_ANNOTATION = 21; // Record an annotation.
+  INSTRUCTION_TYPE_SET_HEADING = 22; // Turn to a heading.
+  INSTRUCTION_TYPE_TRANSECT = 23; // Drive a straight line.
+  INSTRUCTION_TYPE_RELATIVE_DEPTH = 24; // Change the depth by an amount.
+  INSTRUCTION_TYPE_SET_SPEED = 25; // Change the cruise speed.
 }
 
 // Reference for the auto pilot when a mission is active.
