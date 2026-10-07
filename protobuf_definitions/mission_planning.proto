@@ -101,7 +101,6 @@ message ControlModeCommand {
   ControlModeHorizontal control_mode_horizontal = 6; // Desired control mode in surge and yaw.
 }
 
-// A WaypointCommand will request the drone to drive to a point automatically.
 // DetectionTrigger fires a rule on what the computer vision models see.
 message DetectionTrigger {
   repeated string class_names = 1; // Any of these class names; empty matches every class.
@@ -109,20 +108,24 @@ message DetectionTrigger {
   Camera camera = 3; // Only detections from this camera; unspecified matches every camera.
   float min_confidence = 4; // Detections below this confidence are ignored (0..1).
   float min_area_fraction = 5; // Least bounding box area over image area a detection must have (0..1).
-  uint32 hold_ms = 6; // How long the trigger must match before the rule fires.
-  uint32 release_ms = 7; // How long the trigger must stay unmatched before the rule releases.
-  uint32 cooldown_ms = 8; // Time after a release before the rule can fire again.
+  uint32 hold_ms = 6; // How long the trigger must match before the rule fires. At most an hour.
+  uint32 release_ms = 7; // How long the trigger must stay unmatched before the rule releases. At most an hour.
+  uint32 cooldown_ms = 8; // Time after a release before the rule can fire again. At most an hour.
 }
 
-// MissionRule runs instructions when its trigger fires and when it releases.
+// MissionRule runs instructions when its trigger fires and when it releases. A drone runs at
+// most 16 rules with at most 8 instructions per list. Instructions that move the drone (waypoint,
+// go to home, transect, survey, depth set point, relative depth, go to surface or seabed, control
+// mode, set heading) and waits are refused in rules; camera, tilt, lights, laser, multibeam,
+// tilt stabilization, CV model, annotation and set speed are allowed.
 message MissionRule {
-  uint32 id = 1; // Rule id, defined by the client.
+  uint32 id = 1; // Rule id, defined by the client. Must be greater than zero and unique.
   string name = 2; // Rule name, for the log and the app.
-  bool enabled = 3; // A disabled rule never fires.
+  bool disabled = 3; // A disabled rule never fires. Rules run unless this is set.
   oneof trigger {
     DetectionTrigger detection_trigger = 4; // Fire on detections.
   }
-  repeated Instruction enter_instructions = 5; // Run when the rule fires. Instructions that move the drone are refused.
+  repeated Instruction enter_instructions = 5; // Run when the rule fires.
   repeated Instruction exit_instructions = 6; // Run when the rule releases.
 }
 
@@ -139,9 +142,11 @@ message MissionRuleStatus {
 // InsertInstruction adds an instruction to the loaded mission.
 message InsertInstruction {
   Instruction instruction = 1; // The instruction to add. Its id must be new to the mission.
-  uint32 before_id = 2; // Id of the instruction to insert in front of. 0 appends to the end.
+  uint32 before_id = 2; // Id of the instruction to insert in front of, unless append is set.
+  bool append = 3; // Add the instruction at the end of the mission.
 }
 
+// A WaypointCommand will request the drone to drive to a point automatically.
 message WaypointCommand {
   Waypoint waypoint = 1; // Waypoint to go to.
 }
@@ -269,7 +274,7 @@ message RelativeDepthCommand {
 
 // SetSpeedCommand changes the cruise speed used by the following instructions of the mission.
 message SetSpeedCommand {
-  float cruise_speed = 1; // Desired surge speed (m/s).
+  float cruise_speed = 1; // Desired surge speed (m/s). Must be greater than zero.
 }
 
 // A SurveyCommand defines a survey (lawn-mower) pattern over a polygon area.
@@ -400,21 +405,12 @@ message MissionStatus {
   repeated uint32 completed_path_segment_ids = 7; // Ids of the completed path segments.
   uint32 total_number_of_path_segments = 8; // Total number of path segments in the mission.
   uint32 id = 9; // Mission id of the active mission.
-  uint32 active_instruction_id = 10; // Id of the instruction that is running, 0 when none.
+  int32 active_instruction_id = 10; // Id of the instruction that is running, -1 when none.
   uint32 revision = 11; // Revision of the loaded mission, see Mission.revision.
   string failure_reason = 12; // Why the mission failed to load or start or was aborted by the drone.
 }
 
 // Outcome of an instruction started with RunInstructionCtrl.
-// MissionRuleState is where a rule is in its episode.
-enum MissionRuleState {
-  MISSION_RULE_STATE_UNSPECIFIED = 0; // Unspecified.
-  MISSION_RULE_STATE_IDLE = 1; // Waiting for the trigger.
-  MISSION_RULE_STATE_ACTIVE = 2; // The rule has fired and has not released yet.
-  MISSION_RULE_STATE_COOLDOWN = 3; // Released; waiting for the cooldown before it can fire again.
-  MISSION_RULE_STATE_DISABLED = 4; // The rule is disabled.
-}
-
 enum InstructionResultState {
   INSTRUCTION_RESULT_STATE_UNSPECIFIED = 0; // Unspecified.
   INSTRUCTION_RESULT_STATE_ACCEPTED = 1; // The instruction was accepted and has started.
@@ -422,6 +418,15 @@ enum InstructionResultState {
   INSTRUCTION_RESULT_STATE_COMPLETED = 3; // The instruction completed.
   INSTRUCTION_RESULT_STATE_FAILED = 4; // The instruction stopped before completing, see reason.
   INSTRUCTION_RESULT_STATE_CANCELLED = 5; // The instruction was cancelled by a client or by the drone.
+}
+
+// MissionRuleState is where a rule is in its episode.
+enum MissionRuleState {
+  MISSION_RULE_STATE_UNSPECIFIED = 0; // Unspecified.
+  MISSION_RULE_STATE_IDLE = 1; // Waiting for the trigger.
+  MISSION_RULE_STATE_ACTIVE = 2; // The rule has fired and has not released yet.
+  MISSION_RULE_STATE_COOLDOWN = 3; // Released; waiting for the cooldown before it can fire again.
+  MISSION_RULE_STATE_DISABLED = 4; // The rule is disabled.
 }
 
 // Result of an instruction started with RunInstructionCtrl.
