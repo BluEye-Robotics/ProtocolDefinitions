@@ -320,6 +320,61 @@ message Gripper {
   ManipulatorPose moving_to = 8; // Named pose the arm is moving towards, if any.
 }
 
+// Hardware status flags a device of a gripper raises about itself, named as a Reach Robotics device names them.
+message GripperHardwareStatus {
+  bool flash_failed_read = 1; // Reading the device's flash memory failed.
+  bool over_humidity = 2; // Humidity in the housing is too high: water may have got in.
+  bool over_temperature = 3; // The housing is too hot.
+  bool comms_serial_error = 4; // Error on the serial line.
+  bool comms_crc_error = 5; // A packet failed its checksum.
+  bool motor_driver_fault = 6; // The motor driver reports a fault.
+  bool encoder_position_error = 7; // The position encoder reads an invalid position.
+  bool encoder_not_detected = 8; // The position encoder is not detected.
+  bool device_axis_conflict = 9; // Another device has the same axis.
+  bool motor_not_connected = 10; // The motor is not connected.
+  bool motor_over_current = 11; // The motor draws too much current.
+  bool input_encoder_position_error = 12; // The input encoder reads an invalid position.
+  bool device_id_conflict = 13; // Another device has the same ID.
+  bool over_pressure = 14; // Pressure in the housing is too high: the seal may have failed.
+  bool motor_driver_over_current_and_under_voltage = 15; // Over current or under voltage in the motor driver.
+  bool motor_driver_over_temperature = 16; // The motor driver is too hot.
+  bool joint_service_due = 17; // The device is due for service.
+  bool encoder_fault = 18; // The position encoder reports a fault.
+  bool low_supply_voltage = 19; // The supply voltage is too low.
+  bool position_report_not_received = 20; // A position report the device waits for has not arrived.
+}
+
+// Health of one device of a gripper: a joint, or a device of its own.
+//
+// A value the device did not report is NaN.
+message GripperDeviceDiagnostics {
+  uint32 device_id = 1; // Address of the device on the gripper's bus. On a Reach Robotics arm, 1 is the jaws.
+  float supply_voltage = 2; // Supply voltage (V).
+  float temperature = 3; // Temperature in the housing (°C).
+  float humidity = 4; // Relative humidity in the housing (%).
+  float internal_pressure = 5; // Pressure in the housing (bar). It holds a partial vacuum: a rise can mean a leak.
+  float current = 6; // Motor current (A).
+  // Flags the device reported, and those it raised since the last report. Not set if it reported none.
+  GripperHardwareStatus hardware_status = 7;
+}
+
+// Identity of a gripper: what it is, and what it reports of itself.
+//
+// A value the gripper does not report is empty.
+message GripperInfo {
+  GuestPortNumber guest_port_number = 1; // Guest port the gripper is on.
+  GuestPortDeviceID device_id = 2; // What the gripper is, as its guest-port connector names it.
+  string serial_number = 3; // Serial number of the gripper, such as 5854.
+  string model_number = 4; // Model number of the gripper, such as 5001 for a Reach Alpha 5 (RA-5001).
+  string software_version = 5; // Firmware version of the gripper, such as 5.2.0.
+}
+
+// Health of a gripper and its devices, for diagnostics.
+message GripperDiagnostics {
+  repeated GripperDeviceDiagnostics devices = 1; // One for each device of the gripper that answered.
+  GuestPortNumber guest_port_number = 2; // Guest port the gripper is on.
+}
+
 // Information about a remote client.
 message ClientInfo {
   string type = 1; // The type of client (such as Blueye App, Observer App, SDK, etc).
