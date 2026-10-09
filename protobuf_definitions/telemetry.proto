@@ -273,6 +273,18 @@ message GripperTel {
   Gripper gripper = 1; // Gripper state.
 }
 
+// Identity of a gripper, published every minute for each connected gripper.
+// With several grippers, GetTelemetryReq returns the one that published last: its guest port tells which.
+message GripperInfoTel {
+  GripperInfo gripper_info = 1; // Gripper identity.
+}
+
+// Health of a gripper, published every few seconds for each connected gripper that reports it.
+// With several grippers, GetTelemetryReq returns the one that published last: its guest port tells which.
+message GripperDiagnosticsTel {
+  GripperDiagnostics gripper_diagnostics = 1; // Gripper diagnostics.
+}
+
 // GuestPort current readings.
 message GuestPortCurrentTel {
   GuestPortCurrent current = 1; // Guest port current readings.
