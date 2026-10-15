@@ -129,6 +129,10 @@ message PauseMissionCtrl {
 message ClearMissionCtrl {
 }
 
+// Clears the mission rules.
+message ClearMissionRulesCtrl {
+}
+
 // Run a single instruction right away, outside any mission.
 //
 // Instructions that do not move the drone (camera, tilt, lights, multibeam) run in any mission

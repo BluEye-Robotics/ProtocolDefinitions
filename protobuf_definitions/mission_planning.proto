@@ -4,6 +4,7 @@
 syntax = "proto3";
 
 package blueye.protocol;
+import "google/protobuf/timestamp.proto";
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
@@ -101,6 +102,40 @@ message ControlModeCommand {
 }
 
 // A WaypointCommand will request the drone to drive to a point automatically.
+// DetectionTrigger fires a rule on what the computer vision models see.
+message DetectionTrigger {
+  repeated string class_names = 1; // Any of these class names; empty matches every class.
+  string model_name = 2; // Only detections from this model; empty matches every model.
+  Camera camera = 3; // Only detections from this camera; unspecified matches every camera.
+  float min_confidence = 4; // Detections below this confidence are ignored (0..1).
+  float min_area_fraction = 5; // Least bounding box area over image area a detection must have (0..1).
+  uint32 hold_ms = 6; // How long the trigger must match before the rule fires.
+  uint32 release_ms = 7; // How long the trigger must stay unmatched before the rule releases.
+  uint32 cooldown_ms = 8; // Time after a release before the rule can fire again.
+}
+
+// MissionRule runs instructions when its trigger fires and when it releases.
+message MissionRule {
+  uint32 id = 1; // Rule id, defined by the client.
+  string name = 2; // Rule name, for the log and the app.
+  bool enabled = 3; // A disabled rule never fires.
+  oneof trigger {
+    DetectionTrigger detection_trigger = 4; // Fire on detections.
+  }
+  repeated Instruction enter_instructions = 5; // Run when the rule fires. Instructions that move the drone are refused.
+  repeated Instruction exit_instructions = 6; // Run when the rule releases.
+}
+
+// MissionRuleStatus is the state of one rule.
+message MissionRuleStatus {
+  uint32 id = 1; // Rule id.
+  MissionRuleState state = 2; // What the rule is doing.
+  uint32 episodes = 3; // Times the rule has fired since it was set.
+  google.protobuf.Timestamp last_fired = 4; // When the rule last fired; unset before the first time.
+  InstructionResultState last_result = 5; // Outcome of the last instruction the rule ran.
+  string last_reason = 6; // Reason of the last result, when there is one.
+}
+
 // InsertInstruction adds an instruction to the loaded mission.
 message InsertInstruction {
   Instruction instruction = 1; // The instruction to add. Its id must be new to the mission.
@@ -371,6 +406,15 @@ message MissionStatus {
 }
 
 // Outcome of an instruction started with RunInstructionCtrl.
+// MissionRuleState is where a rule is in its episode.
+enum MissionRuleState {
+  MISSION_RULE_STATE_UNSPECIFIED = 0; // Unspecified.
+  MISSION_RULE_STATE_IDLE = 1; // Waiting for the trigger.
+  MISSION_RULE_STATE_ACTIVE = 2; // The rule has fired and has not released yet.
+  MISSION_RULE_STATE_COOLDOWN = 3; // Released; waiting for the cooldown before it can fire again.
+  MISSION_RULE_STATE_DISABLED = 4; // The rule is disabled.
+}
+
 enum InstructionResultState {
   INSTRUCTION_RESULT_STATE_UNSPECIFIED = 0; // Unspecified.
   INSTRUCTION_RESULT_STATE_ACCEPTED = 1; // The instruction was accepted and has started.
