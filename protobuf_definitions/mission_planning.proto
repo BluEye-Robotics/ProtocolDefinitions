@@ -249,3 +249,21 @@ message MissionStatus {
   uint32 total_number_of_path_segments = 8; // Total number of path segments in the mission.
   uint32 id = 9; // Mission id of the active mission.
 }
+
+// Outcome of an instruction started with RunInstructionCtrl.
+enum InstructionResultState {
+  INSTRUCTION_RESULT_STATE_UNSPECIFIED = 0; // Unspecified.
+  INSTRUCTION_RESULT_STATE_ACCEPTED = 1; // The instruction was accepted and has started.
+  INSTRUCTION_RESULT_STATE_REJECTED = 2; // The instruction was not started, see reason.
+  INSTRUCTION_RESULT_STATE_COMPLETED = 3; // The instruction completed.
+  INSTRUCTION_RESULT_STATE_FAILED = 4; // The instruction stopped before completing, see reason.
+  INSTRUCTION_RESULT_STATE_CANCELLED = 5; // The instruction was cancelled by a client or by the drone.
+}
+
+// Result of an instruction started with RunInstructionCtrl.
+message InstructionResult {
+  uint32 request_id = 1; // The request_id given to RunInstructionCtrl.
+  uint32 instruction_id = 2; // Id of the instruction, as given by the client.
+  InstructionResultState state = 3; // Outcome so far.
+  string reason = 4; // Why the instruction was rejected, failed or was cancelled (optional).
+}

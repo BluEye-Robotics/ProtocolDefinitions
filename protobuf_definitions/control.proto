@@ -6,6 +6,7 @@ syntax = "proto3";
 package blueye.protocol;
 import "aquatroll.proto";
 import "message_formats.proto";
+import "mission_planning.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 
 // Issue a command to move the drone in the surge, sway, heave, or yaw direction.
@@ -126,6 +127,22 @@ message PauseMissionCtrl {
 
 // Clear the loaded mission.
 message ClearMissionCtrl {
+}
+
+// Run a single instruction right away, outside any mission.
+//
+// Instructions that do not move the drone (camera, tilt, lights, multibeam) run in any mission
+// state, alongside a running mission. Instructions that move the drone run only while no mission
+// is running, and are rejected otherwise. The outcome is reported in InstructionResultTel with
+// the same request_id.
+message RunInstructionCtrl {
+  Instruction instruction = 1; // Instruction to execute.
+  uint32 request_id = 2; // Client-chosen id, echoed in InstructionResultTel.
+}
+
+// Cancel an instruction started with RunInstructionCtrl.
+message CancelInstructionCtrl {
+  uint32 request_id = 1; // The request_id given to RunInstructionCtrl.
 }
 
 // Issue a command to reset the position estimate.
