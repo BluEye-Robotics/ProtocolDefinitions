@@ -43,9 +43,11 @@ Merging to master automatically creates the next stable package version. Update
 `version.txt` only when the Blueye App major/minor version changes. NuGet and Maven
 publish on upstream branch pushes; Swift receives master releases after both
 publish successfully. Its receiver generates and validates the pinned schema,
-then commits and tags it with the same version. Python keeps its separate
-repository and release versioning. Do not rename or recreate the coordinating
-workflow without preserving a monotonically increasing build counter.
+then commits and tags it with the same version. Delayed older releases are
+generated and tagged separately without moving the Swift default branch backward.
+Python keeps its separate repository and release versioning. Do not rename or
+recreate the coordinating workflow without preserving a monotonically increasing
+build counter.
 
 Once the Swift receiver is installed, set the Actions variable
 `SWIFT_PROTOCOL_REPOSITORY` to `BluEye-Robotics/blueye.protocol.swift`. The existing
