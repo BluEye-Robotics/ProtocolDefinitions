@@ -6,6 +6,7 @@ syntax = "proto3";
 package blueye.protocol;
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
+option java_multiple_files = true;
 
 // A list of waypoints describes a mission that the auto pilot can execute.
 message Mission {

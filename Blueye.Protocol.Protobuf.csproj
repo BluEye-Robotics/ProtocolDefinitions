@@ -5,7 +5,6 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>13.0</LangVersion>
     <PackageId>Blueye.Protocol.Protobuf</PackageId>
-    <VersionPrefix>6.3.0</VersionPrefix>
     <Company>Blueye Robotics AS</Company>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <PackageDescription>Library with dotnet representation of the ProtocolDefinition protobuf files.</PackageDescription>
@@ -25,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="**/*.proto" ProtoRoot="protobuf_definitions" GrpcServices="None" />
+    <Protobuf Include="protobuf_definitions/*.proto" ProtoRoot="protobuf_definitions" GrpcServices="None" />
   </ItemGroup>
 
 </Project>

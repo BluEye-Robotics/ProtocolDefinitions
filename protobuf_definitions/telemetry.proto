@@ -8,6 +8,7 @@ import "aquatroll.proto";
 import "message_formats.proto";
 import "mission_planning.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
+option java_multiple_files = true;
 
 // Receive the current attitude of the drone.
 message AttitudeTel {

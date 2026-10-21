@@ -38,3 +38,7 @@ node_modules
 
 # Rider directories
 .idea
+
+# Gradle build state
+.gradle
+.kotlin

@@ -1,0 +1,55 @@
+name: Kotlin package
+
+on:
+  workflow_call:
+    inputs:
+      package-version:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: kotlin
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build, test, and publish to a local test repository
+        env:
+          PACKAGE_VERSION: ${{ inputs.package-version }}
+        run: ./gradlew --no-daemon build publishProtocolPublicationToSmokeTestRepository -PpackageVersion="$PACKAGE_VERSION"
+      - name: Verify package from a separate consuming project
+        env:
+          PACKAGE_VERSION: ${{ inputs.package-version }}
+        run: ./gradlew --no-daemon -p smoke-test run -PpackageVersion="$PACKAGE_VERSION"
+
+  publish:
+    if: github.event_name != 'pull_request' && github.repository == 'BluEye-Robotics/ProtocolDefinitions'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Publish to GitHub Packages
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE_VERSION: ${{ inputs.package-version }}
+        run: ./gradlew --no-daemon publishProtocolPublicationToGitHubPackagesRepository -PpackageVersion="$PACKAGE_VERSION"
