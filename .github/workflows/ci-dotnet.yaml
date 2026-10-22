@@ -1,35 +1,74 @@
-name: dotnet CI build
+# Keep this filename: its existing run counter supplies all package versions.
+name: Protocol packages
 
-on: push
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  donet-ci-build:
+  version:
     runs-on: ubuntu-latest
+    outputs:
+      package-version: ${{ steps.version.outputs.version }}
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+      - name: Test shared version rules
+        run: python3 -B -m unittest discover -s scripts -p 'test_*.py'
+      - name: Calculate the shared package version
+        id: version
+        run: |
+          VERSION=$(python3 scripts/package-version.py)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Setup .NET Core @ Latest
-        uses: actions/setup-dotnet@v4
+  nuget:
+    needs: version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: |
-            9.0.x
+          dotnet-version: 9.0.x
           source-url: https://nuget.pkg.github.com/BluEye-Robotics/index.json
         env:
-          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Sanitize branch name
-        id: branches
-        run: |
-          BRANCH="${GITHUB_REF_NAME}"
-          SANITIZED=$(echo "$BRANCH" | sed 's/[^a-zA-Z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//;s/-$//' | tr '[:upper:]' '[:lower:]' | cut -c1-63)
-          echo "sanitized-branch-name=$SANITIZED" >> "$GITHUB_OUTPUT"
-
-      - name: Build project and generate NuGet package
-        run: |
-          dotnet pack Blueye.Protocol.Protobuf.csproj --version-suffix "${{ steps.branches.outputs.sanitized-branch-name }}.$GITHUB_RUN_NUMBER" -c Release -o out
-
-      - name: Push generated package to GitHub registry
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the NuGet package
         env:
-          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: dotnet nuget push ./out/*.nupkg --skip-duplicate --no-symbols --api-key $NUGET_AUTH_TOKEN
+          PACKAGE_VERSION: ${{ needs.version.outputs.package-version }}
+        run: dotnet pack Blueye.Protocol.Protobuf.csproj -p:Version="$PACKAGE_VERSION" -c Release -o out
+      - name: Publish to GitHub Packages
+        if: github.event_name != 'pull_request' && github.repository == 'BluEye-Robotics/ProtocolDefinitions'
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet nuget push ./out/*.nupkg --skip-duplicate --no-symbols \
+            --source https://nuget.pkg.github.com/BluEye-Robotics/index.json --api-key "$NUGET_AUTH_TOKEN"
+
+  kotlin:
+    needs: version
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/ci-kotlin.yaml
+    with:
+      package-version: ${{ needs.version.outputs.package-version }}
+
+  swift:
+    needs: [version, nuget, kotlin]
+    if: >-
+      github.event_name != 'pull_request' &&
+      github.repository == 'BluEye-Robotics/ProtocolDefinitions' &&
+      github.ref == 'refs/heads/master' &&
+      vars.SWIFT_PROTOCOL_REPOSITORY != ''
+    uses: ./.github/workflows/ci-swift.yaml
+    with:
+      package-version: ${{ needs.version.outputs.package-version }}
+    secrets:
+      CI_PAT: ${{ secrets.CI_PAT }}

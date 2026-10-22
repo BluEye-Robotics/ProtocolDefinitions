@@ -8,6 +8,7 @@ import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
+option java_multiple_files = true;
 
 // Wrapper message for each entry in the drone telemetry logfile.
 //
