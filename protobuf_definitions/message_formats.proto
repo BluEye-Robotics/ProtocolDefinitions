@@ -1354,6 +1354,9 @@ enum GuestPortDeviceID {
   GUEST_PORT_DEVICE_ID_WATERLINKED_DVL_A100 = 50; // Waterlinked DVL A100.
   GUEST_PORT_DEVICE_ID_OUTLAND_TECHNOLOGY_MP200 = 51; // Outland Technology MP-200 Manipulator.
   GUEST_PORT_DEVICE_ID_REACH_ROBOTICS_REACH_ALPHA_5 = 52; // Reach Robotics Reach Alpha 5 Manipulator.
+  GUEST_PORT_DEVICE_ID_BLUEYE_MULTIBEAM_SERVO_V3 = 53; // Blueye Multibeam Skid Servo V3.
+  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_DETACHABLE_NEWTON_V2 = 54; // Detachable Blue Robotics Newton V2.
+  GUEST_PORT_DEVICE_ID_BLUEYE_SCALING_LASER_V2 = 55; // Blueye Scaling Laser V2.
 }
 
 // Guest port number.
@@ -1380,6 +1383,8 @@ enum GuestPortCapability {
   GUEST_PORT_CAPABILITY_USB2 = 5; // USB 2.0.
   GUEST_PORT_CAPABILITY_PWM = 6; // PWM.
   GUEST_PORT_CAPABILITY_ETHERNET_1G = 7; // Gigabit Ethernet.
+  GUEST_PORT_CAPABILITY_I2C_IO = 8; // The original guest-port coin's I/O expander (TCA9536) is usable on the port.
+  GUEST_PORT_CAPABILITY_I2C_IO_V2 = 9; // The new guest-port coin's I/O expander (PCA9554A) is usable on the port.
 }
 
 // List of navigation sensors that can be used by the position observer.
