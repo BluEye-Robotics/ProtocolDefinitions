@@ -1383,8 +1383,8 @@ enum GuestPortCapability {
   GUEST_PORT_CAPABILITY_USB2 = 5; // USB 2.0.
   GUEST_PORT_CAPABILITY_PWM = 6; // PWM.
   GUEST_PORT_CAPABILITY_ETHERNET_1G = 7; // Gigabit Ethernet.
-  GUEST_PORT_CAPABILITY_I2C_IO = 8; // TCA9536 I/O expander compatibility.
-  GUEST_PORT_CAPABILITY_I2C_IO_V2 = 9; // PCA9554A I/O expander compatibility.
+  GUEST_PORT_CAPABILITY_I2C_IO = 8; // TCA9536 I/O expander.
+  GUEST_PORT_CAPABILITY_I2C_IO_V2 = 9; // PCA9554A I/O expander.
 }
 
 // List of navigation sensors that can be used by the position observer.
