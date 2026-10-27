@@ -8,6 +8,7 @@ import "aquatroll.proto";
 import "message_formats.proto";
 import "mission_planning.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
+option java_multiple_files = true;
 
 // Receive the current attitude of the drone.
 message AttitudeTel {
@@ -281,6 +282,23 @@ message MultibeamServoTel {
   float set_point = 2; // Servo set point (-30..30).
 }
 
+// State of a gripper, published while one is connected.
+message GripperTel {
+  Gripper gripper = 1; // Gripper state.
+}
+
+// Identity of a gripper, published every minute for each connected gripper.
+// With several grippers, GetTelemetryReq returns the one that published last: its guest port tells which.
+message GripperInfoTel {
+  GripperInfo gripper_info = 1; // Gripper identity.
+}
+
+// Health of a gripper, published every few seconds for each connected gripper that reports it.
+// With several grippers, GetTelemetryReq returns the one that published last: its guest port tells which.
+message GripperDiagnosticsTel {
+  GripperDiagnostics gripper_diagnostics = 1; // Gripper diagnostics.
+}
+
 // GuestPort current readings.
 message GuestPortCurrentTel {
   GuestPortCurrent current = 1; // Guest port current readings.
@@ -375,6 +393,14 @@ message TurbidityFilterTel {
 // Message is published when the filter settings are changed.
 message ColorCorrectionTel {
   FilterMessage color_correction_filter = 1; // Color correction settings.
+}
+
+// Marine snow filter settings telemetry message.
+//
+// Message is published when the filter settings are changed.
+message MarineSnowFilterTel {
+  FilterMessage marine_snow_filter = 1; // Marine snow filter settings.
+  MarineSnowFilterFrames frames = 2; // Frames that the filter compares with.
 }
 
 // Digital pan, tilt, and zoom telemetry from the main camera.

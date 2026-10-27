@@ -8,6 +8,7 @@ import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
+option java_multiple_files = true;
 
 // Wrapper message for each entry in the drone telemetry logfile.
 //
@@ -263,6 +264,123 @@ message SystemTime {
 message GripperVelocities {
   float grip_velocity = 1; // The gripping velocity (-1.0..1.0).
   float rotate_velocity = 2; // The rotating velocity (-1.0..1.0).
+}
+
+// Cartesian velocity of the end of a manipulator arm, in the drone body frame.
+//
+// Each value is normalized (-1.0..1.0) and scaled by the drone to its configured maximum speed.
+message CartesianManipulatorInput {
+  float x = 1; // Forward (positive) and backward (negative).
+  float y = 2; // Right (positive) and left (negative).
+  float z = 3; // Down (positive) and up (negative).
+}
+
+// Cylindrical velocity of the end of a manipulator arm, about the axis of the arm's base joint.
+//
+// Each value is normalized (-1.0..1.0) and scaled by the drone to its configured maximum speed.
+message CylindricalManipulatorInput {
+  float radial = 1; // Out from the base axis (positive) and in towards it (negative).
+  float vertical = 2; // Along the base axis: down (positive) and up (negative), as in the drone body frame.
+  float azimuth = 3; // Swing about the base axis: clockwise seen from above (positive).
+}
+
+// Movement of a manipulator arm towards a named pose, along a path the drone chooses.
+//
+// Hold-to-run: the arm moves only while the velocity is above zero, and resumes from wherever it
+// stopped.
+message KnownPoseManipulatorInput {
+  ManipulatorPose pose = 1; // The pose to move towards.
+  float velocity = 2; // Speed along the path (0.0..1.0): 0 holds the arm where it is.
+}
+
+// How the arm input of the last command was read, as reported in telemetry.
+enum ManipulatorControlMode {
+  MANIPULATOR_CONTROL_MODE_UNSPECIFIED = 0; // No arm input.
+  MANIPULATOR_CONTROL_MODE_CYLINDRICAL = 1; // CylindricalManipulatorInput.
+  MANIPULATOR_CONTROL_MODE_CARTESIAN = 2; // CartesianManipulatorInput.
+  MANIPULATOR_CONTROL_MODE_KNOWN_POSE = 3; // KnownPoseManipulatorInput.
+}
+
+// Named manipulator poses.
+enum ManipulatorPose {
+  MANIPULATOR_POSE_UNSPECIFIED = 0; // No pose.
+  MANIPULATOR_POSE_STOWED = 1; // Folded for transport, launch and recovery.
+  MANIPULATOR_POSE_DEPLOYED = 2; // Unfolded and ready to work.
+}
+
+// Gripper state: of its arm too, when the gripper is a manipulator arm.
+message Gripper {
+  ManipulatorControlMode mode = 1; // How the arm input of the last command was read.
+  // Joint positions from the jaws to the base: jaws opening (m), then joint angles (rad).
+  repeated float joint_positions = 2;
+  Vector3 end_position = 3; // Position of the base of the jaws in the drone body frame (m).
+  bool at_limit = 4; // A joint at the end of its range keeps the arm from going further.
+  bool collision = 5; // The arm stopped itself short of an obstacle or of itself.
+  bool holding = 6; // The jaws closed on something.
+  bool fault = 7; // A joint reports a hardware fault.
+  ManipulatorPose moving_to = 8; // Named pose the arm is moving towards, if any.
+}
+
+// Hardware status flags a device of a Reach Robotics gripper raises about itself, named as Reach names them.
+// A gripper of another make would need flags of its own.
+message ReachHardwareStatus {
+  bool flash_failed_read = 1; // Reading the device's flash memory failed.
+  bool over_humidity = 2; // Humidity in the housing is too high: water may have got in.
+  bool over_temperature = 3; // The housing is too hot.
+  bool comms_serial_error = 4; // Error on the serial line.
+  bool comms_crc_error = 5; // A packet failed its checksum.
+  bool motor_driver_fault = 6; // The motor driver reports a fault.
+  bool encoder_position_error = 7; // The position encoder reads an invalid position.
+  bool encoder_not_detected = 8; // The position encoder is not detected.
+  bool device_axis_conflict = 9; // Another device has the same axis.
+  bool motor_not_connected = 10; // The motor is not connected.
+  bool motor_over_current = 11; // The motor draws too much current.
+  bool input_encoder_position_error = 12; // The input encoder reads an invalid position.
+  bool device_id_conflict = 13; // Another device has the same ID.
+  bool over_pressure = 14; // Pressure in the housing is too high: the seal may have failed.
+  bool motor_driver_over_current_and_under_voltage = 15; // Over current or under voltage in the motor driver.
+  bool motor_driver_over_temperature = 16; // The motor driver is too hot.
+  bool joint_service_due = 17; // The device is due for service.
+  bool encoder_fault = 18; // The position encoder reports a fault.
+  bool low_supply_voltage = 19; // The supply voltage is too low.
+  bool position_report_not_received = 20; // A position report the device waits for has not arrived.
+}
+
+// Health of one device of a gripper: a joint, or a device of its own.
+//
+// A value the device did not report is 0, with its is_*_valid false.
+message GripperDeviceDiagnostics {
+  uint32 address = 1; // Address of the device on the gripper's bus. On a Reach Robotics arm, 1 is the jaws.
+  float supply_voltage = 2; // Supply voltage (V).
+  bool is_supply_voltage_valid = 8; // True when the device reported its supply voltage.
+  float temperature = 3; // Temperature in the housing (°C).
+  bool is_temperature_valid = 9; // True when the device reported the temperature in its housing.
+  float humidity = 4; // Relative humidity in the housing (%).
+  bool is_humidity_valid = 10; // True when the device reported the humidity in its housing.
+  float internal_pressure = 5; // Absolute pressure in the housing (bar), a partial vacuum: a rise can mean a leak.
+  bool is_internal_pressure_valid = 11; // True when the device reported the pressure in its housing.
+  float current = 6; // Motor current (A).
+  bool is_current_valid = 12; // True when the device reported its motor current.
+  // Flags the device reported, and those it raised since the last report.
+  // Not set if the device sent no hardware status.
+  ReachHardwareStatus hardware_status = 7;
+}
+
+// Identity of a gripper: what it is, and what it reports of itself.
+//
+// A value the gripper does not report is empty.
+message GripperInfo {
+  GuestPortNumber guest_port_number = 1; // Guest port the gripper is on.
+  GuestPortDeviceID device_id = 2; // What the gripper is, as its guest-port connector names it.
+  string serial_number = 3; // Serial number of the gripper, such as 5854.
+  string model_number = 4; // Model number of the gripper, such as 5001 for a Reach Alpha 5 or 2130 for a Reach Alpha 2.
+  string firmware_version = 5; // Firmware version of the gripper, such as 5.2.0.
+}
+
+// Health of a gripper and its devices, for diagnostics.
+message GripperDiagnostics {
+  repeated GripperDeviceDiagnostics devices = 1; // One for each device of the gripper that answered.
+  GuestPortNumber guest_port_number = 2; // Guest port the gripper is on.
 }
 
 // Information about a remote client.
@@ -1021,6 +1139,10 @@ message ErrorFlags {
   bool usb_disconnect = 45; // USB disconnect.
   bool video_urb_error = 46; // Video URB error.
   bool hardware_not_supported = 47; // Hardware not supported on current blunux version.
+  bool imu_1 = 85; // MPU 1 unavailable at observer startup.
+  bool imu_2 = 86; // MPU 2 unavailable at observer startup.
+  bool imu_hp = 87; // HP IMU unavailable on X3 Ultra or X7.
+  bool imu_attitude = 88; // No attitude source: manual body-frame control only.
 }
 
 // Available camera resolutions.
@@ -1036,12 +1158,13 @@ enum Resolution {
 // Available camera frame rates.
 //
 // If the requested frame rate is higher than what is supported at the current resolution,
-// the frame rate will be reduced while the resolution is respected.
+// the frame rate will be reduced while the resolution is respected: 60 to 30 and 50 to 25.
 enum Framerate {
   FRAMERATE_UNSPECIFIED = 0; // Framerate not specified.
   FRAMERATE_FPS_30 = 1; // 30 frames per second.
-  FRAMERATE_FPS_25 = 2; // 25 frames per second. (Only supported on Pioneer/Pro/X1/X3)
+  FRAMERATE_FPS_25 = 2; // 25 frames per second.
   FRAMERATE_FPS_60 = 3; // 60 frames per second. (Only supported on X3 Ultra at QHD, 1080p and 720p)
+  FRAMERATE_FPS_50 = 4; // 50 frames per second. (Only supported on X3 Ultra at QHD, 1080p and 720p)
 }
 
 // Which camera to control.
@@ -1137,7 +1260,9 @@ enum ThicknessUnit {
 
 // Available font sizes for overlay text elements.
 enum FontSize {
-  FONT_SIZE_UNSPECIFIED = 0; // Font size not specified.
+  // Font size and margins derived from the recording resolution (Blunux >= 5.2).
+  // Older firmware defaults to 25px.
+  FONT_SIZE_UNSPECIFIED = 0;
   FONT_SIZE_PX15 = 1; // 15 px.
   FONT_SIZE_PX20 = 2; // 20 px.
   FONT_SIZE_PX25 = 3; // 25 px.
@@ -1167,9 +1292,13 @@ message OverlayParameters {
   TemperatureUnit temperature_unit = 8; // Which unit should be used for temperature: Celsius or Fahrenheit.
   ThicknessUnit thickness_unit = 19; // Which unit should be used for thickness: Millimeters or Inches.
   int32 timezone_offset = 9; // Timezone offset from UTC (min).
-  int32 margin_width = 10; // Horizontal margins of text elements (px).
-  int32 margin_height = 11; // Vertical margins of text elements (px).
-  FontSize font_size = 12; // Font size of text elements.
+  // Horizontal margins of text elements (px). Ignored when font_size is FONT_SIZE_UNSPECIFIED (Blunux >= 5.2).
+  int32 margin_width = 10;
+  // Vertical margins of text elements (px). Ignored when font_size is FONT_SIZE_UNSPECIFIED (Blunux >= 5.2).
+  int32 margin_height = 11;
+  // Font size of text elements. FONT_SIZE_UNSPECIFIED derives font size and margins from the
+  // recording resolution (Blunux >= 5.2). Older firmware defaults to 25px.
+  FontSize font_size = 12;
   string title = 13; // Optional title.
   string subtitle = 14; // Optional subtitle.
   string date_format = 16; // Posix strftime format string for time stamp.
@@ -1231,6 +1360,11 @@ enum GuestPortDeviceID {
   // RS232, letting it be used on drones with no RS485, such as the X7.
   GUEST_PORT_DEVICE_ID_CYGNUS_MINI_ROV_THICKNESS_GAUGE_RS232 = 49;
   GUEST_PORT_DEVICE_ID_WATERLINKED_DVL_A100 = 50; // Waterlinked DVL A100.
+  GUEST_PORT_DEVICE_ID_OUTLAND_TECHNOLOGY_MP200 = 51; // Outland Technology MP-200 Manipulator.
+  GUEST_PORT_DEVICE_ID_REACH_ROBOTICS_REACH_ALPHA_5 = 52; // Reach Robotics Reach Alpha 5 Manipulator.
+  GUEST_PORT_DEVICE_ID_BLUEYE_MULTIBEAM_SERVO_V3 = 53; // Blueye Multibeam Skid Servo V3.
+  GUEST_PORT_DEVICE_ID_BLUE_ROBOTICS_DETACHABLE_NEWTON_V2 = 54; // Detachable Blue Robotics Newton V2.
+  GUEST_PORT_DEVICE_ID_BLUEYE_SCALING_LASER_V2 = 55; // Blueye Scaling Laser V2.
 }
 
 // Guest port number.
@@ -1257,6 +1391,8 @@ enum GuestPortCapability {
   GUEST_PORT_CAPABILITY_USB2 = 5; // USB 2.0.
   GUEST_PORT_CAPABILITY_PWM = 6; // PWM.
   GUEST_PORT_CAPABILITY_ETHERNET_1G = 7; // Gigabit Ethernet.
+  GUEST_PORT_CAPABILITY_I2C_IO = 8; // TCA9536 I/O expander.
+  GUEST_PORT_CAPABILITY_I2C_IO_V2 = 9; // PCA9554A I/O expander.
 }
 
 // List of navigation sensors that can be used by the position observer.
@@ -1847,6 +1983,12 @@ message ModelDetections {
 message FilterMessage {
   bool enabled = 1; // If the filter is enabled.
   float intensity = 2; // Intensity of the filter (0..1).
+}
+
+// Frames that the marine snow filter compares each frame with.
+message MarineSnowFilterFrames {
+  uint32 past_frames = 1; // Past frames to compare with (1..4).
+  uint32 future_frames = 2; // Future frames to compare with (0..2). Each one delays the video by 33 to 40 ms.
 }
 
 // Digital pan, tilt, and zoom state for the main camera.

@@ -1,0 +1,29 @@
+name: Release blueye.protocol.swift
+
+on:
+  workflow_call:
+    inputs:
+      package-version:
+        required: true
+        type: string
+    secrets:
+      CI_PAT:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch the protocol revision and shared version
+        env:
+          GH_TOKEN: ${{ secrets.CI_PAT }}
+          SWIFT_PROTOCOL_REPOSITORY: ${{ vars.SWIFT_PROTOCOL_REPOSITORY }}
+          PACKAGE_VERSION: ${{ inputs.package-version }}
+        run: |
+          gh api "repos/$SWIFT_PROTOCOL_REPOSITORY/dispatches" \
+            -f event_type=protocol-update \
+            -f "client_payload[sha]=$GITHUB_SHA" \
+            -f "client_payload[version]=$PACKAGE_VERSION"

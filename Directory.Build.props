@@ -1,0 +1,5 @@
+<Project>
+  <PropertyGroup>
+    <VersionPrefix>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)version.txt').Trim()).0</VersionPrefix>
+  </PropertyGroup>
+</Project>

@@ -7,6 +7,7 @@ package blueye.protocol;
 import "google/protobuf/timestamp.proto";
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
+option java_multiple_files = true;
 
 // A list of waypoints describes a mission that the auto pilot can execute.
 message Mission {
