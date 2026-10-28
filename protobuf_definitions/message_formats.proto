@@ -131,6 +131,9 @@ message LaserDetection {
   float laser_width = 8; // Real world distance between the two laser dots (m).
   float corrected_pixel_distance = 9; // Distance after lens undistortion (px).
   float estimated_distance = 10; // Estimated subject distance (m).
+  // Id of the camera frame the detection was computed from, 0 if unknown. Matches the frame id
+  // embedded in recorded video; ModelDetections describes the format.
+  uint64 frame_id = 11;
 }
 
 // Latitude and longitude position in WGS 84 decimal degrees format.
@@ -1963,12 +1966,32 @@ message ObjectDetection {
 }
 
 // A list of object detections from a single model for a single video frame.
+//
+// frame_id matches detections to the exact frame of a recording. The video pipeline on the X3 Ultra
+// assigns an id to each camera frame once, passes it to the computer vision models and the recorder,
+// and writes it into the recorded video. An id is never reused within one boot of the drone, and stays
+// below 2^53, so it is exact as a JavaScript number. The models do not process every frame, so the ids
+// of successive results can skip.
+//
+// Recorded video carries the id in a user_data_unregistered SEI message (payload type 5), one per access
+// unit, placed before the first slice: NAL unit type 6 in H.264 and PREFIX_SEI_NUT (type 39) in H.265.
+// The payload is 32 bytes, counted after the emulation prevention bytes are removed:
+//
+// - Bytes 0-15: UUID 6b1e2f0c-935d-4a8e-b17a-52d40e3c91f6, in the byte order written.
+// - Bytes 16-23: frame_id, uint64 big-endian.
+// - Bytes 24-31: capture time of the frame in CLOCK_MONOTONIC on the drone (ns), uint64 big-endian, 0 if unknown.
+//
+// A frame that the recorder repeats to keep the frame rate carries the id of the frame it repeats.
+// Re-encoding the video drops the SEI, so only the original recording carries the ids.
 message ModelDetections {
   repeated ObjectDetection detections = 1; // List of detections in the frame.
   Camera camera = 2; // Which camera the detections are from.
   uint32 image_width = 3; // Width of the source image (px).
   uint32 image_height = 4; // Height of the source image (px).
   string model_name = 5; // Name of the computer vision model that produced the detections.
+  // Id of the camera frame the detections were computed from, 0 if unknown. Matches the frame id
+  // embedded in recorded video; the message description gives the format.
+  uint64 frame_id = 6;
 }
 
 // Generic filter settings.
@@ -2022,6 +2045,9 @@ message SotState {
   float vy = 7; // Kalman velocity estimate of the bounding box centre, vertical (px/s).
   float vs = 8; // Kalman rate of change of the bounding box area, width * height (px²/s).
   float vr = 9; // Kalman rate of change of the bounding box aspect ratio, width / height (1/s).
+  // Id of the camera frame the state was computed from, 0 if unknown. Matches the frame id embedded
+  // in recorded video; ModelDetections describes the format.
+  uint64 frame_id = 10;
 }
 
 // Origin of an annotation. Mirrors the AnnotationSource enum in Blueye Cloud.
