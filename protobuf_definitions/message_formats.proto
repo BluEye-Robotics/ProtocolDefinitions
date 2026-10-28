@@ -1045,6 +1045,10 @@ message DroneInfo {
   repeated CvModelInfo cv_models = 12; // Installed computer vision models, including models that are not running.
   PowerSource power_source = 13; // How the drone is powered.
   CameraCalibration main_camera_calibration = 14; // Intrinsic calibration of the main camera. Unset when unknown.
+  uint32 dive_number = 15; // Dive number, the counter at the end of the logfile name. 0 when unknown.
+  // Name of the dive logfile without extension (e.g. BYEDP070012_ea9ac92e040aa9d4_00231).
+  // Unlike dive_number it stays unique when the counter restarts, e.g. after the storage is replaced.
+  string log_name = 16;
 }
 
 // Known error states for the drone.
