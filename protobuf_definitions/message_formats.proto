@@ -2176,4 +2176,7 @@ message SlamShot {
   uint32 map_id = 1; // Identifier of the map.
   SlamPose pose = 2; // Pose of the sensor at the shot.
   PointCloud points = 3; // Points of the shot in the sensor frame.
+  float fov_horizontal = 4; // Horizontal field of view of the sonar, about its z axis (°).
+  float fov_vertical = 5; // Vertical field of view of the sonar, about its y axis (°).
+  float max_range = 6; // Range the sonar is set to (m).
 }
