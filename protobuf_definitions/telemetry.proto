@@ -417,24 +417,33 @@ message AnnotationTel {
   Annotation annotation = 1; // The annotation that was added.
 }
 
-// SLAM estimate of the sonar pose.
+// SLAM estimate of the sensor pose.
 //
-// Published for every sonar shot on the SLAM publisher, not the main telemetry socket.
+// Published for every scan on the SLAM publisher, not the main telemetry socket.
 message SlamPoseTel {
   SlamPoseEstimate estimate = 1; // The pose estimate.
 }
 
 // A change to the SLAM map: new keyframes and points, or a corrected trajectory.
 //
-// Published on the SLAM publisher. A client starts from GetSlamMapReq and applies
-// the updates that follow the map's sequence number.
+// Published on the SLAM publisher. A client applies the updates that follow the
+// map it holds (SlamMapTel).
 message SlamMapUpdateTel {
   SlamMapUpdate update = 1; // The change.
 }
 
-// The latest sonar shot placed in the SLAM map.
+// The latest scan placed in the SLAM map.
 //
 // Published on the SLAM publisher for live display; not part of the map.
-message SlamShotTel {
-  SlamShot shot = 1; // The shot.
+message SlamScanTel {
+  SlamScan scan = 1; // The scan.
+}
+
+// The whole SLAM map.
+//
+// Published on the SLAM publisher when a client asks for it (GetSlamMapReq), and
+// when a SLAM recording stops. A client subscribes, asks, keeps the updates that
+// arrive meanwhile, and applies those that follow this map's sequence.
+message SlamMapTel {
+  SlamMap map = 1; // The map.
 }

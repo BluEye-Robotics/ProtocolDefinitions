@@ -2101,12 +2101,29 @@ message PointCloud {
   bytes intensities = 3; // count signal strengths, one byte each (0 to 255), or empty when unknown.
 }
 
-// State of the sonar SLAM (simultaneous localization and mapping).
+// State of the SLAM (simultaneous localization and mapping).
 enum SlamState {
   SLAM_STATE_UNSPECIFIED = 0; // Unspecified.
-  SLAM_STATE_WAITING = 1; // Waiting for the first sonar shot and orientation.
-  SLAM_STATE_TRACKING = 2; // The latest shot was matched against the map.
-  SLAM_STATE_COASTING = 3; // The latest shot could not be matched; the pose follows the motion model.
+  SLAM_STATE_WAITING = 1; // Waiting for the first scan and orientation.
+  SLAM_STATE_TRACKING = 2; // The latest scan was matched against the map.
+  SLAM_STATE_COASTING = 3; // The latest scan could not be matched; the pose follows the motion model.
+}
+
+// Kind of sensor a SLAM scan comes from.
+enum SlamSensorType {
+  SLAM_SENSOR_TYPE_UNSPECIFIED = 0; // Unspecified.
+  SLAM_SENSOR_TYPE_SONAR_3D = 1; // A 3D imaging sonar, e.g. the Water Linked Sonar 3D-15.
+  SLAM_SENSOR_TYPE_STEREO_CAMERA = 2; // A stereo camera's depth.
+  SLAM_SENSOR_TYPE_SIMULATED = 3; // A simulated sensor.
+}
+
+// A sensor whose scans feed the SLAM, and its field of view.
+message SlamSensor {
+  string id = 1; // Sensor id, e.g. "waterlinked-sonar-3d15".
+  SlamSensorType type = 2; // Kind of sensor.
+  float fov_horizontal = 3; // Horizontal field of view, about the sensor's z axis (°).
+  float fov_vertical = 4; // Vertical field of view, about the sensor's y axis (°).
+  float max_range = 5; // Range the sensor is set to (m).
 }
 
 // A pose in the SLAM map frame.
@@ -2119,26 +2136,26 @@ message SlamPose {
   Quaternion orientation = 2; // Rotation from the body frame to the map frame.
 }
 
-// The SLAM estimate of the sensor pose, published for every sonar shot.
+// The SLAM estimate of the sensor pose, published for every scan.
 message SlamPoseEstimate {
   uint32 map_id = 1; // Identifier of the map; a new one is chosen whenever the map restarts.
   SlamState state = 2; // State of the SLAM.
-  SlamPose pose = 3; // Pose of the sensor at the shot.
-  google.protobuf.Timestamp time = 4; // Host time the shot was received.
-  uint32 shot_points = 5; // Points of the shot used for matching.
+  SlamPose pose = 3; // Pose of the sensor at the scan.
+  google.protobuf.Timestamp time = 4; // Host time the scan was received.
+  uint32 scan_points = 5; // Points of the scan used for matching.
   float match_inlier_ratio = 6; // Share of those points matched to the map (0..1).
   float match_rms = 7; // Root mean square point-to-plane distance of the matched points (m).
   uint32 keyframe_count = 8; // Keyframes in the map.
   uint32 map_point_count = 9; // Points in the map.
-  optional float depth = 10; // Depth used for the shot (m), when there was one.
+  optional float depth = 10; // Depth used for the scan (m), when there was one.
 }
 
-// A keyframe: a shot kept in the map, the nodes of the SLAM trajectory.
+// A keyframe: a scan kept in the map, the nodes of the SLAM trajectory.
 message SlamKeyframe {
   uint32 id = 1; // Keyframe id, increasing along the trajectory.
   uint32 submap_id = 2; // Submap whose points the keyframe added to.
   SlamPose pose = 3; // Pose of the sensor at the keyframe.
-  google.protobuf.Timestamp time = 4; // Host time the keyframe's shot was received.
+  google.protobuf.Timestamp time = 4; // Host time the keyframe's scan was received.
 }
 
 // Points of a submap, in the frame of its anchor keyframe.
@@ -2154,7 +2171,7 @@ message SlamSubmapPoints {
 // A change to the SLAM map.
 //
 // Updates are numbered: a client that has the map at sequence N applies the
-// update with sequence N + 1 next, and fetches the whole map again (GetSlamMapReq)
+// update with sequence N + 1 next, and asks for the whole map again (GetSlamMapReq)
 // when it misses one or the map id changes.
 message SlamMapUpdate {
   uint32 map_id = 1; // Identifier of the map.
@@ -2165,18 +2182,16 @@ message SlamMapUpdate {
 
 // The whole SLAM map.
 message SlamMap {
-  uint32 map_id = 1; // Identifier of the map.
+  uint32 map_id = 1; // Identifier of the map (0 before the first scan).
   uint64 sequence = 2; // Sequence number of the last update the map includes (0 for none).
   repeated SlamKeyframe keyframes = 3; // Every keyframe, in id order.
   repeated SlamSubmapPoints submaps = 4; // Every submap's points.
 }
 
-// The latest sonar shot, as the SLAM placed it.
-message SlamShot {
+// The latest scan, as the SLAM placed it.
+message SlamScan {
   uint32 map_id = 1; // Identifier of the map.
-  SlamPose pose = 2; // Pose of the sensor at the shot.
-  PointCloud points = 3; // Points of the shot in the sensor frame.
-  float fov_horizontal = 4; // Horizontal field of view of the sonar, about its z axis (°).
-  float fov_vertical = 5; // Vertical field of view of the sonar, about its y axis (°).
-  float max_range = 6; // Range the sonar is set to (m).
+  SlamPose pose = 2; // Pose of the sensor at the scan.
+  PointCloud points = 3; // Points of the scan in the sensor frame.
+  SlamSensor sensor = 4; // Sensor the scan comes from.
 }
