@@ -294,3 +294,21 @@ message GetMultibeamColorFilterReq {
 message GetMultibeamColorFilterRep {
   MultibeamColorFilter color_filter = 1; // The current color filter. Empty rgb means none is set (grayscale).
 }
+
+// Request the whole SLAM map, from the SLAM replier.
+message GetSlamMapReq {
+}
+
+// Response with the whole SLAM map.
+message GetSlamMapRep {
+  SlamMap map = 1; // The map.
+}
+
+// Request to discard the SLAM map and start a new one from the current pose.
+message ResetSlamReq {
+}
+
+// Response after resetting the SLAM map.
+message ResetSlamRep {
+  uint32 map_id = 1; // Identifier of the new map.
+}

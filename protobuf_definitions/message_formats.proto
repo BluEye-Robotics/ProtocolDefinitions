@@ -2083,3 +2083,97 @@ message Annotation {
   google.protobuf.Duration duration = 7; // Optional span; omit for a point-in-time marker.
   AnnotationSource source = 8; // Origin of the annotation; the app sets APP, the drone sets DRONE for its own.
 }
+
+// Unit quaternion describing a rotation.
+message Quaternion {
+  double x = 1; // X-component of the vector part.
+  double y = 2; // Y-component of the vector part.
+  double z = 3; // Z-component of the vector part.
+  double w = 4; // Scalar part.
+}
+
+// Points packed for use as typed arrays without decoding them one by one.
+//
+// The frame the positions are in is the one the enclosing message names.
+message PointCloud {
+  uint32 count = 1; // Number of points.
+  bytes positions = 2; // count x, y, z triplets of little-endian float32 (m): 12 bytes per point.
+  bytes intensities = 3; // count signal strengths, one byte each (0 to 255), or empty when unknown.
+}
+
+// State of the sonar SLAM (simultaneous localization and mapping).
+enum SlamState {
+  SLAM_STATE_UNSPECIFIED = 0; // Unspecified.
+  SLAM_STATE_WAITING = 1; // Waiting for the first sonar shot and orientation.
+  SLAM_STATE_TRACKING = 2; // The latest shot was matched against the map.
+  SLAM_STATE_COASTING = 3; // The latest shot could not be matched; the pose follows the motion model.
+}
+
+// A pose in the SLAM map frame.
+//
+// The map frame is fixed where the map was started: z down, x along the heading
+// the map started with (north when a compass heading was used), y to the right
+// of it, in metres. The body frame is the sensor's: x forward, y right, z down.
+message SlamPose {
+  Vector3 position = 1; // Position of the body in the map frame (m).
+  Quaternion orientation = 2; // Rotation from the body frame to the map frame.
+}
+
+// The SLAM estimate of the sensor pose, published for every sonar shot.
+message SlamPoseEstimate {
+  uint32 map_id = 1; // Identifier of the map; a new one is chosen whenever the map restarts.
+  SlamState state = 2; // State of the SLAM.
+  SlamPose pose = 3; // Pose of the sensor at the shot.
+  google.protobuf.Timestamp time = 4; // Host time the shot was received.
+  uint32 shot_points = 5; // Points of the shot used for matching.
+  float match_inlier_ratio = 6; // Share of those points matched to the map (0..1).
+  float match_rms = 7; // Root mean square point-to-plane distance of the matched points (m).
+  uint32 keyframe_count = 8; // Keyframes in the map.
+  uint32 map_point_count = 9; // Points in the map.
+  optional float depth = 10; // Depth used for the shot (m), when there was one.
+}
+
+// A keyframe: a shot kept in the map, the nodes of the SLAM trajectory.
+message SlamKeyframe {
+  uint32 id = 1; // Keyframe id, increasing along the trajectory.
+  uint32 submap_id = 2; // Submap whose points the keyframe added to.
+  SlamPose pose = 3; // Pose of the sensor at the keyframe.
+  google.protobuf.Timestamp time = 4; // Host time the keyframe's shot was received.
+}
+
+// Points of a submap, in the frame of its anchor keyframe.
+//
+// A submap moves rigidly with its anchor keyframe, so a correction of the
+// trajectory moves its points without sending them again.
+message SlamSubmapPoints {
+  uint32 submap_id = 1; // Submap id.
+  uint32 anchor_keyframe_id = 2; // Keyframe whose frame the points are in.
+  PointCloud points = 3; // Points in the anchor keyframe's frame.
+}
+
+// A change to the SLAM map.
+//
+// Updates are numbered: a client that has the map at sequence N applies the
+// update with sequence N + 1 next, and fetches the whole map again (GetSlamMapReq)
+// when it misses one or the map id changes.
+message SlamMapUpdate {
+  uint32 map_id = 1; // Identifier of the map.
+  uint64 sequence = 2; // Sequence number of this update, from 1.
+  repeated SlamKeyframe keyframes = 3; // Keyframes added or moved.
+  repeated SlamSubmapPoints points = 4; // Points appended to submaps.
+}
+
+// The whole SLAM map.
+message SlamMap {
+  uint32 map_id = 1; // Identifier of the map.
+  uint64 sequence = 2; // Sequence number of the last update the map includes (0 for none).
+  repeated SlamKeyframe keyframes = 3; // Every keyframe, in id order.
+  repeated SlamSubmapPoints submaps = 4; // Every submap's points.
+}
+
+// The latest sonar shot, as the SLAM placed it.
+message SlamShot {
+  uint32 map_id = 1; // Identifier of the map.
+  SlamPose pose = 2; // Pose of the sensor at the shot.
+  PointCloud points = 3; // Points of the shot in the sensor frame.
+}
