@@ -315,3 +315,18 @@ message ResetSlamReq {
 message ResetSlamRep {
   uint32 map_id = 1; // Identifier of the new map, 0 if the SLAM is not running.
 }
+
+// Request to start or stop the SLAM.
+//
+// Starting switches the sensor on (for a sonar, its acoustics) and begins a new
+// map from the current pose. Stopping switches the sensor off and keeps the map,
+// so it can still be viewed. The SLAM reports its state in SlamStatusTel.
+message SetSlamActiveReq {
+  bool active = 1; // True to start the SLAM, false to stop it.
+}
+
+// Response after starting or stopping the SLAM.
+message SetSlamActiveRep {
+  bool available = 1; // True if the SLAM is running and answered.
+  bool active = 2; // True if the SLAM is now mapping (false if its sensor did not switch on).
+}
