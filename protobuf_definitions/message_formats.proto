@@ -492,6 +492,32 @@ message PowerCanister {
   Sensors rear_esc = 2; // Rear ESC board; absent when no recent reading is available.
 }
 
+// Feedback from the ESCs of the X7 power canister, read over bidirectional DSHOT.
+//
+// Every measurement carries its own validity flag: an ESC answers RPM on each frame
+// but sends voltage, current and temperature only every few frames, and a channel
+// without an ESC answers nothing. Zero with the flag set is a measurement (a stopped
+// motor, no current); a value whose flag is clear must be ignored.
+message EscTelemetry {
+  // Feedback from one ESC.
+  message Channel {
+    uint32 electrical_rpm = 1; // Electrical RPM, unsigned (no direction); shaft RPM is this over the pole pairs.
+    bool is_electrical_rpm_valid = 2; // True when the ESC answered within the canister's 250 ms limit.
+    float voltage = 3; // ESC supply voltage (V), 0.25 V resolution.
+    bool is_voltage_valid = 4; // True when the ESC reported its voltage within the last 2 s.
+    float current = 5; // Current (A), 1 A resolution; the ARK 4IN1 has one shunt shared by its four ESCs.
+    bool is_current_valid = 6; // True when the ESC reported its current within the last 2 s.
+    float temperature = 7; // ESC temperature (°C), not the motor's.
+    bool is_temperature_valid = 8; // True when the ESC reported its temperature within the last 2 s.
+    uint32 valid_responses = 9; // Well-formed replies since the canister MCU started (saturating).
+    uint32 invalid_responses = 10; // Malformed replies since the canister MCU started (saturating).
+    uint32 missing_responses = 11; // Frames without a reply while the ESC's bank was powered (saturating).
+  }
+
+  repeated Channel thrusters = 1; // One per thruster, T1 to T7, in thruster-number order.
+  Channel spare = 2; // The eighth ESC, which drives no thruster.
+}
+
 // Essential battery information.
 message Battery {
   float voltage = 1; // Battery voltage (V).
