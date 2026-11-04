@@ -2171,6 +2171,10 @@ message SlamPoseEstimate {
   uint32 keyframe_count = 8; // Keyframes in the map.
   uint32 map_point_count = 9; // Points in the map.
   optional float depth = 10; // Depth used for the scan (m), when there was one.
+  // The drone's pose in the map: the sensor's, through how the sensor is mounted on
+  // the drone. Unset when the mount is not known.
+  SlamPose vehicle_pose = 11;
+  optional float mount_tilt = 12; // Tilt of the sensor's mount used for vehicle_pose (°, positive up).
 }
 
 // A keyframe: a scan kept in the map, the nodes of the SLAM trajectory.
