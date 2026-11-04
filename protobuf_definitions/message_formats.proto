@@ -2126,6 +2126,29 @@ message SlamSensor {
   float max_range = 5; // Range the sensor is set to (m).
 }
 
+// Frequency mode of a 3D imaging sonar.
+enum Sonar3dFrequencyMode {
+  SONAR_3D_FREQUENCY_MODE_UNSPECIFIED = 0; // Unspecified: left as it is.
+  SONAR_3D_FREQUENCY_MODE_LOW = 1; // Wide view, long range (3D-15: 90° x 40°, 15 m, 5 scans/s).
+  SONAR_3D_FREQUENCY_MODE_HIGH = 2; // Narrow view, short range, fine detail (3D-15: 40° x 40°, 4 m, 20 scans/s).
+}
+
+// Settings of a 3D imaging sonar that feeds the SLAM.
+message SlamSonar3dSettings {
+  Sonar3dFrequencyMode frequency_mode = 1; // Frequency mode, unspecified to leave it.
+  float max_range = 2; // Maximum range (m), 0 to leave it.
+}
+
+// Settings of the sensor that feeds the SLAM.
+//
+// One message for each kind of sensor, so a client shows the settings of the
+// sensor the SLAM has, and a sensor takes only its own.
+message SlamSensorSettings {
+  oneof settings {
+    SlamSonar3dSettings sonar_3d = 1; // A 3D imaging sonar's settings.
+  }
+}
+
 // A pose in the SLAM map frame.
 //
 // The map frame is fixed where the map was started: z down, x along the heading

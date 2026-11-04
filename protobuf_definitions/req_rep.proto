@@ -330,3 +330,19 @@ message SetSlamActiveRep {
   bool available = 1; // True if the SLAM is running and answered.
   bool active = 2; // True if the SLAM is now mapping (false if its sensor did not switch on).
 }
+
+// Request to change the settings of the SLAM's sensor.
+//
+// Only settings for the kind of sensor the SLAM has apply, and those left
+// unspecified stay as they are. A change of a sonar's mode or range begins a new
+// map, as the map's resolution follows the sensor's range.
+message SetSlamSensorSettingsReq {
+  SlamSensorSettings settings = 1; // The settings to change.
+}
+
+// Response after changing the settings of the SLAM's sensor.
+message SetSlamSensorSettingsRep {
+  bool available = 1; // True if the SLAM is running and answered.
+  bool applied = 2; // True if the sensor took the settings.
+  SlamSensorSettings settings = 3; // The sensor's settings after the request.
+}
