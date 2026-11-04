@@ -2203,6 +2203,10 @@ message SlamKeyframe {
   uint32 submap_id = 2; // Submap whose points the keyframe added to.
   SlamPose pose = 3; // Pose of the sensor at the keyframe.
   google.protobuf.Timestamp time = 4; // Host time the keyframe's scan was received.
+  // The drone's pose at the keyframe: the sensor's, through how the sensor was
+  // mounted then. It moves with the keyframe when the trajectory is corrected.
+  // Unset when the mount is not known.
+  SlamPose vehicle_pose = 5;
 }
 
 // Points of a submap, in the frame of its anchor keyframe.
@@ -2225,6 +2229,41 @@ message SlamMapUpdate {
   uint64 sequence = 2; // Sequence number of this update, from 1.
   repeated SlamKeyframe keyframes = 3; // Keyframes added or moved.
   repeated SlamSubmapPoints points = 4; // Points appended to submaps.
+  // The map's frame, on the update that adds the first keyframe and on any that
+  // learns more of it: a recording cut short has it without its last SlamMapTel.
+  SlamMapFrame frame = 5;
+}
+
+// What the x axis of a SLAM map's frame points along.
+enum SlamHeadingReference {
+  SLAM_HEADING_REFERENCE_UNSPECIFIED = 0; // Not known.
+  // The sensor's heading at the map's first scan; without gravity alignment, the
+  // first scan's sensor frame as it is.
+  SLAM_HEADING_REFERENCE_FIRST_SCAN = 1;
+  // North, as the drone's compass heading (AttitudeTel yaw) gave it at the map's first scan.
+  SLAM_HEADING_REFERENCE_DRONE_COMPASS = 2;
+}
+
+// How a SLAM map's frame lies in the world, for placing the map on a chart.
+//
+// The frame is right-handed: x along the heading reference, y to its right, z
+// down (north-east-down with SLAM_HEADING_REFERENCE_DRONE_COMPASS). The origin is
+// the sensor's position at the map's first scan. The map's
+// heading may drift from its reference over a dive: placing a map on a chart
+// fits it to the drone's positions (PositionEstimateTel in the dive log).
+message SlamMapFrame {
+  bool gravity_aligned = 1; // True if z is down and x and y level; false: the first scan's sensor frame.
+  SlamHeadingReference heading_reference = 2; // What x points along.
+  // The magnetic declination the drone applied to its compass heading at the
+  // map's first scan (°, as MagneticDeclination.declination; 0 when it applied
+  // none), with SLAM_HEADING_REFERENCE_DRONE_COMPASS: x then points the place's
+  // declination less this east of true north (0 when the drone applied the
+  // place's). Unset when not known.
+  optional float magnetic_declination = 3;
+  // Depth of the origin below the surface (m), for a gravity-aligned map: a point
+  // at z in the map is at depth origin_depth + z. Unset without a depth.
+  optional float origin_depth = 4;
+  google.protobuf.Timestamp start_time = 5; // Host time of the map's first scan (its first keyframe's).
 }
 
 // The whole SLAM map.
@@ -2233,6 +2272,7 @@ message SlamMap {
   uint64 sequence = 2; // Sequence number of the last update the map includes (0 for none).
   repeated SlamKeyframe keyframes = 3; // Every keyframe, in id order.
   repeated SlamSubmapPoints submaps = 4; // Every submap's points.
+  SlamMapFrame frame = 5; // How the map's frame lies in the world (unset before the first scan).
 }
 
 // The latest scan, as the SLAM placed it.

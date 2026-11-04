@@ -357,6 +357,8 @@ message SetSlamActiveRep {
 //
 // A recording needs the SLAM to be mapping, and stopping the SLAM stops it. It is
 // stored with the drone's other media (picture, video and multibeam recordings).
+// Like a multibeam recording it holds the drone's DroneInfoTel, at its start and
+// when it changes, which names the dive log it belongs with (log_name).
 // Asking for the state the recording is in already changes nothing.
 message SetSlamRecordingReq {
   bool record = 1; // True to start recording, false to stop.
