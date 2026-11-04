@@ -2134,9 +2134,12 @@ enum Sonar3dFrequencyMode {
 }
 
 // Settings of a 3D imaging sonar that feeds the SLAM.
+//
+// In a request, unspecified or 0 leaves a setting as it is; in a report, it
+// means the sonar does not say (e.g. a firmware without frequency modes).
 message SlamSonar3dSettings {
-  Sonar3dFrequencyMode frequency_mode = 1; // Frequency mode, unspecified to leave it.
-  float max_range = 2; // Maximum range (m), 0 to leave it.
+  Sonar3dFrequencyMode frequency_mode = 1; // Frequency mode.
+  float max_range = 2; // Maximum range (m).
 }
 
 // Settings of the sensor that feeds the SLAM.
@@ -2153,7 +2156,8 @@ message SlamSensorSettings {
 //
 // The map frame is fixed where the map was started: z down, x along the heading
 // the map started with (north when a compass heading was used), y to the right
-// of it, in metres. The body frame is the sensor's: x forward, y right, z down.
+// of it, in metres. The body is the one the field names (the sensor, or the
+// drone), its frame x forward, y right, z down.
 message SlamPose {
   Vector3 position = 1; // Position of the body in the map frame (m).
   Quaternion orientation = 2; // Rotation from the body frame to the map frame.

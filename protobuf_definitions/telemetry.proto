@@ -454,5 +454,5 @@ message SlamMapTel {
 message SlamStatusTel {
   bool active = 1; // True while the SLAM is mapping: its sensor is on and scans are placed.
   uint32 map_id = 2; // Identifier of the current map, 0 before the first.
-  SlamSensorSettings sensor_settings = 3; // The sensor's settings, unset when it has none to change.
+  SlamSensorSettings sensor_settings = 3; // The sensor's settings, unset when it has none or they cannot be read.
 }
