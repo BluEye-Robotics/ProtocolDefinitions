@@ -186,6 +186,26 @@ message SetLogFrequencyRep {
   bool success = 1; // True if message name valid and frequency successfully updated.
 }
 
+// Request to reset the publishing frequency of a message to the drone's default.
+message ResetPubFrequencyReq {
+  string message_type = 1; // Message name, f. ex. "AttitudeTel"; empty resets every message.
+}
+
+// Response after resetting the publishing frequency.
+message ResetPubFrequencyRep {
+  bool success = 1; // True if the message name was valid and its frequency reset.
+}
+
+// Request to reset the logging frequency of a message to the drone's default.
+message ResetLogFrequencyReq {
+  string message_type = 1; // Message name, f. ex. "AttitudeTel"; empty resets every message.
+}
+
+// Response after resetting the logging frequency.
+message ResetLogFrequencyRep {
+  bool success = 1; // True if the message name was valid and its frequency reset.
+}
+
 // Request to get latest telemetry data
 message GetTelemetryReq {
   string message_type = 1; // Message name, f. ex. "AttitudeTel".
@@ -331,6 +351,23 @@ message SetSlamActiveReq {
 message SetSlamActiveRep {
   bool available = 1; // True if the SLAM is running and answered.
   bool active = 2; // True if the SLAM is now mapping (false if its sensor did not switch on).
+}
+
+// Request to start or stop recording the SLAM.
+//
+// A recording needs the SLAM to be mapping, and stopping the SLAM stops it. It is
+// stored with the drone's other media (picture, video and multibeam recordings).
+// Asking for the state the recording is in already changes nothing.
+message SetSlamRecordingReq {
+  bool record = 1; // True to start recording, false to stop.
+  bool sensor_data = 2; // Also the sensor's raw data, and the dive log faster, for running the SLAM offline.
+  StorageLocation storage_location = 3; // Where to store the recording.
+}
+
+// Response after starting or stopping a SLAM recording.
+message SetSlamRecordingRep {
+  bool available = 1; // True if the SLAM is running and answered.
+  SlamRecordingState recording = 2; // The recording after the request.
 }
 
 // Request to change the settings of the SLAM's sensor.

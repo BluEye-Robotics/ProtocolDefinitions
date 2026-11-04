@@ -2126,6 +2126,22 @@ message SlamSensor {
   float max_range = 5; // Range the sensor is set to (m).
 }
 
+// A recording of the SLAM, as the SLAM reports it.
+//
+// A recording is a .sbez file (a binlog) with the SLAM's output: the map at its
+// start, the poses, the map updates and the status, and the whole map as the last
+// record. With sensor data it also has the sensor's raw data beside it (for a 3D
+// sonar a .sonar file), and the drone's dive log logs its telemetry at higher
+// rates while it runs, so the SLAM can be run again on both without the drone.
+message SlamRecordingState {
+  bool is_recording = 1; // True while recording.
+  string name = 2; // File name of the .sbez, without its folder.
+  int32 seconds = 3; // Time recorded (s).
+  uint64 size = 4; // Size of the recording's files so far (bytes).
+  bool sensor_data = 5; // True if the sensor's raw data is recorded too.
+  StorageLocation storage_location = 6; // Where the recording is stored.
+}
+
 // Frequency mode of a 3D imaging sonar.
 enum Sonar3dFrequencyMode {
   SONAR_3D_FREQUENCY_MODE_UNSPECIFIED = 0; // Unspecified: left as it is.
