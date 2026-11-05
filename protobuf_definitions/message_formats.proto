@@ -504,7 +504,7 @@ message EscEdtEvent {
 message EscEdtBatch {
   repeated EscEdtEvent events = 1; // Original capture order, including equal values.
   uint32 firmware_dropped_events = 2; // Saturating queue/write-loss counter since MCU boot.
-  uint64 host_dropped_batches = 3; // Host subscription losses since the canister client started.
+  uint64 host_dropped_batches = 3; // Host subscription and publisher-queue overflow.
 }
 
 // Feedback from the ESCs of the X7 power canister, read over bidirectional DSHOT.
