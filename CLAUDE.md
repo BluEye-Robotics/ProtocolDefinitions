@@ -22,17 +22,22 @@ cmake --install build --prefix /usr/local
 ### TypeScript
 ```
 pnpm install
-# Generate TypeScript from proto files:
-mkdir -p ./out/ && protoc protobuf_definitions/*.proto \
-  --plugin=./node_modules/.bin/protoc-gen-ts_proto \
-  --proto_path=protobuf_definitions \
-  --ts_proto_out=./out \
-  --ts_proto_opt=outputIndex=true \
-  --ts_proto_opt=globalThisPolyfill=true \
-  --ts_proto_opt=useExactTypes=false
-# Compile TypeScript:
-pnpm run build
+pnpm run generate   # generate TypeScript from proto files into ./out (requires protoc)
+pnpm run build      # compile ./out into ./dist
 ```
+The protoc flags live in the `generate` script in `package.json`; CI runs the same
+script, so keep changes in one place. `--ts_proto_opt=importSuffix=.js` is required —
+the package compiles as ESM with `moduleResolution: NodeNext`, which needs explicit
+file extensions on relative imports.
+
+The npm package ships ES modules only — `"type": "module"` plus an `exports` map,
+with no separate CommonJS build. The `.` entry uses a `default` condition rather
+than `import`, so `require()` still resolves on Node.js 22.12+ via `require(esm)`;
+an `import` condition would match ESM callers only and fail everything else with
+`ERR_PACKAGE_PATH_NOT_EXPORTED`. Deep imports resolve through two `./dist/*` entries:
+`exports` targets never get an extension appended, so `./dist/*` maps to `./dist/*.js`
+to keep extensionless specifiers like `…/dist/mission_planning` working, and
+`./dist/*.js` takes precedence for specifiers that already end in `.js`.
 
 ### C#/.NET
 ```
@@ -71,7 +76,7 @@ All proto definitions are in `protobuf_definitions/`:
 ## CI/CD Pipeline
 
 - **ci-build.yaml** — Protolint validation (all pushes and PRs)
-- **ci-typescript.yaml** — Generate TS, compile, publish to npm (master only)
+- **ci-typescript.yaml** — Generate TS, compile, smoke-test the packed tarball (PRs and master); publish to npm and trigger the blueye-ts bump (master only)
 - **ci-dotnet.yaml** — Build and publish NuGet package (all pushes)
 - **ci-python.yaml** — Triggers `blueye.protocol` repo update via repository dispatch (master, when proto files change)
 - **gen-docs.yaml** — Generate HTML docs, upload to Azure (master only)

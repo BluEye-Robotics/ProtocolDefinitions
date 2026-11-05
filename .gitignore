@@ -27,6 +27,9 @@ bin
 obj
 out
 
+# typescript outputs
+dist
+
 # Other
 build
 build_imx
@@ -35,3 +38,7 @@ node_modules
 
 # Rider directories
 .idea
+
+# Gradle build state
+.gradle
+.kotlin
