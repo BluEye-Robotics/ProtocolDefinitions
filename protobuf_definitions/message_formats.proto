@@ -492,12 +492,24 @@ message PowerCanister {
   Sensors rear_esc = 2; // Rear ESC board; absent when no recent reading is available.
 }
 
+// One original extended DSHOT reply from an X7 ESC, without averaging.
+message EscEdtEvent {
+  uint64 captured_at_us = 1; // MCU monotonic reception time, not ADC or host time.
+  uint32 sequence = 2; // MCU-wide event sequence; wraps at 32 bits, resets on boot.
+  uint32 response = 3; // Raw 12-bit payload: types 2/4/6 = Celsius/250 mV/1 A.
+  uint32 channel = 4; // 0..6 = T1..T7, 7 = spare. ARK current uses a shared bank shunt.
+}
+
+// A transport batch, not a downsampled measurement. Every event is retained.
+message EscEdtBatch {
+  repeated EscEdtEvent events = 1; // Original capture order, including equal values.
+  uint32 firmware_dropped_events = 2; // Saturating queue/write-loss counter since MCU boot.
+  uint64 host_dropped_batches = 3; // Host subscription losses since the canister client started.
+}
+
 // Feedback from the ESCs of the X7 power canister, read over bidirectional DSHOT.
-//
-// Every measurement carries its own validity flag: an ESC answers RPM on each frame
-// but sends voltage, current and temperature only every few frames, and a channel
-// without an ESC answers nothing. Zero with the flag set is a measurement (a stopped
-// motor, no current); a value whose flag is clear must be ignored.
+// Every measurement has independent validity. A measured zero is valid; values
+// with a cleared flag must be ignored. This snapshot is separate from EDT events.
 message EscTelemetry {
   // Feedback from one ESC.
   message Channel {

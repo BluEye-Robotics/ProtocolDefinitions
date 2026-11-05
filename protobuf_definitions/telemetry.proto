@@ -170,11 +170,15 @@ message PowerCanisterTel {
   PowerCanister power_canister = 1; // Front and rear ESC-board sensor readings.
 }
 
-// Receive bidirectional DSHOT feedback from the X7's ESCs at 2 Hz: RPM, voltage,
-// current, temperature and reply counters per thruster. Empty once the drone has
-// stopped refreshing the feedback; never sent by models without a power canister.
+// X7-only, event-driven ESC telemetry. Log every snapshot and every EDT batch,
+// including repeated values. Clients receive the latest snapshot at up to 1 Hz.
+// Exactly one of esc_telemetry / edt is populated in an event record.
 message EscTelemetryTel {
-  EscTelemetry esc_telemetry = 1; // Feedback from every ESC of the power canister.
+  EscTelemetry esc_telemetry = 1; // Cached feedback snapshot, including retirement on disconnect.
+  EscEdtBatch edt = 2; // Every received extended reply, preserving MCU timestamps and sequences.
+  int64 published_at_monotonic_ns = 3; // Drone-node publication time (CLOCK_MONOTONIC).
+  int64 publisher_started_at_monotonic_ns = 4; // Distinguishes drone-node restarts.
+  uint64 host_sequence = 5; // Sequence across both kinds of ROS event; gaps reveal transport loss.
 }
 
 // Video storage info.
