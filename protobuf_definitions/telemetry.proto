@@ -452,8 +452,10 @@ message SlamMapTel {
 //
 // Published on the SLAM publisher once a second, and when it changes.
 message SlamStatusTel {
-  bool active = 1; // True while the SLAM is mapping: its sensor is on and scans are placed.
+  bool active = 1; // True while the SLAM is mapping: its sensors are on and scans are placed.
   uint32 map_id = 2; // Identifier of the current map, 0 before the first.
-  SlamSensorSettings sensor_settings = 3; // The sensor's settings, unset when it has none or they cannot be read.
+  reserved 3;
+  reserved "sensor_settings";
   SlamRecordingState recording = 4; // The recording, when one runs or ran.
+  repeated SlamSensorStatus sensors = 5; // The sensors that feed the SLAM.
 }

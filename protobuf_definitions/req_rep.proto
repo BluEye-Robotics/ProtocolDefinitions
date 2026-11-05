@@ -372,16 +372,16 @@ message SetSlamRecordingRep {
   SlamRecordingState recording = 2; // The recording after the request.
 }
 
-// Request to change the settings of the SLAM's sensor.
+// Request to change the settings of a SLAM sensor.
 //
-// Only settings for the kind of sensor the SLAM has apply, and those left
+// The settings go to the SLAM's sensor of their kind, and those left
 // unspecified stay as they are. A change of a sonar's mode or range begins a new
 // map, as the map's resolution follows the sensor's range.
 message SetSlamSensorSettingsReq {
   SlamSensorSettings settings = 1; // The settings to change.
 }
 
-// Response after changing the settings of the SLAM's sensor.
+// Response after changing the settings of a SLAM sensor.
 message SetSlamSensorSettingsRep {
   bool available = 1; // True if the SLAM is running and answered.
   bool applied = 2; // True if the sensor took the settings.

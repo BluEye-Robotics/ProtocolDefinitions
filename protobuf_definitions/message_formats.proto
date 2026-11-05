@@ -2117,6 +2117,16 @@ enum SlamSensorType {
   SLAM_SENSOR_TYPE_SIMULATED = 3; // A simulated sensor.
 }
 
+// What the SLAM's poses are the poses of: its platform.
+enum SlamPlatform {
+  SLAM_PLATFORM_UNSPECIFIED = 0; // Not known.
+  // The drone, its body frame x forward, y right, z down from the middle of the hull. Each
+  // sensor is on it through its mount (SlamPose mount in the messages that carry one).
+  SLAM_PLATFORM_DRONE = 1;
+  // The sensor itself: the SLAM did not know how the sensor is mounted.
+  SLAM_PLATFORM_SENSOR = 2;
+}
+
 // A sensor whose scans feed the SLAM, and its field of view.
 message SlamSensor {
   string id = 1; // Sensor id, e.g. "waterlinked-sonar-3d15".
@@ -2158,65 +2168,91 @@ message SlamSonar3dSettings {
   float max_range = 2; // Maximum range (m).
 }
 
-// Settings of the sensor that feeds the SLAM.
+// Settings of a sensor that feeds the SLAM.
 //
 // One message for each kind of sensor, so a client shows the settings of the
-// sensor the SLAM has, and a sensor takes only its own.
+// sensors the SLAM has, and a sensor takes only its own.
 message SlamSensorSettings {
   oneof settings {
     SlamSonar3dSettings sonar_3d = 1; // A 3D imaging sonar's settings.
   }
 }
 
-// A pose in the SLAM map frame.
-//
-// The map frame is fixed where the map was started: z down, x along the heading
-// the map started with (north when a compass heading was used), y to the right
-// of it, in metres. The body is the one the field names (the sensor, or the
-// drone), its frame x forward, y right, z down.
-message SlamPose {
-  Vector3 position = 1; // Position of the body in the map frame (m).
-  Quaternion orientation = 2; // Rotation from the body frame to the map frame.
+// A sensor that feeds the SLAM, as the SLAM reports it.
+message SlamSensorStatus {
+  // The sensor, as its latest scan described it (before its first scan, its id and type only).
+  SlamSensor sensor = 1;
+  SlamSensorSettings settings = 2; // The sensor's settings, unset when it has none or they cannot be read.
+  // The sensor's pose on the platform now: its mount, at the mount's tilt now. Unset when the
+  // platform is the sensor.
+  SlamPose mount = 3;
+  optional float mount_tilt = 4; // Tilt of the sensor's mount (°, positive up), for a mount that tilts.
 }
 
-// The SLAM estimate of the sensor pose, published for every scan.
+// A pose: of a body in the SLAM map frame, or of a sensor on the platform.
+//
+// The map frame is fixed where the map was started (see SlamMapFrame): z down, x
+// along the heading the map started with (north when a compass heading was used),
+// y to the right of it, in metres. The body is the one the field names (the
+// platform, or a sensor), its frame x forward, y right, z down. A mount is a
+// sensor's pose in the platform's frame instead: the sensor is in the map at the
+// platform's pose times its mount.
+message SlamPose {
+  Vector3 position = 1; // Position of the body (m).
+  Quaternion orientation = 2; // Rotation from the body's frame to the frame it is placed in.
+}
+
+// The SLAM estimate of its platform's pose, published for every scan.
 message SlamPoseEstimate {
   uint32 map_id = 1; // Identifier of the map; a new one is chosen whenever the map restarts.
   SlamState state = 2; // State of the SLAM.
-  SlamPose pose = 3; // Pose of the sensor at the scan.
+  SlamPose pose = 3; // Pose of the platform (SlamMapFrame.platform) at the scan.
   google.protobuf.Timestamp time = 4; // Host time the scan was received.
   uint32 scan_points = 5; // Points of the scan used for matching.
   float match_inlier_ratio = 6; // Share of those points matched to the map (0..1).
   float match_rms = 7; // Root mean square point-to-plane distance of the matched points (m).
   uint32 keyframe_count = 8; // Keyframes in the map.
   uint32 map_point_count = 9; // Points in the map.
-  optional float depth = 10; // Depth used for the scan (m), when there was one.
-  // The drone's pose in the map: the sensor's, through how the sensor is mounted on
-  // the drone. Unset when the mount is not known.
-  SlamPose vehicle_pose = 11;
-  optional float mount_tilt = 12; // Tilt of the sensor's mount used for vehicle_pose (°, positive up).
+  // Depth used for the scan (m), when there was one: the sensor's, from the drone's depth sensor
+  // through the mount (without a mount, the depth sensor's own).
+  optional float depth = 10;
+  reserved 11, 12;
+  reserved "vehicle_pose", "mount_tilt";
+  string sensor_id = 13; // Sensor whose scan was placed (SlamSensor.id).
+  // The sensor's pose on the platform at the scan: the sensor was at pose times mount.
+  // Unset when the platform is the sensor.
+  SlamPose mount = 14;
+  // Covariance of pose as the scan's match placed it against the map, given the
+  // prediction: 6 x 6, row by row, of a rotation about the map's x, y and z axes
+  // (rad) and then a position along them (m). It says how well this scan fixed the
+  // pose, not how far the map has drifted. Empty when the scan was not matched.
+  repeated float covariance_elements = 15;
 }
 
 // A keyframe: a scan kept in the map, the nodes of the SLAM trajectory.
 message SlamKeyframe {
   uint32 id = 1; // Keyframe id, increasing along the trajectory.
   uint32 submap_id = 2; // Submap whose points the keyframe added to.
-  SlamPose pose = 3; // Pose of the sensor at the keyframe.
+  // Pose of the platform at the keyframe. It moves when the trajectory is corrected.
+  SlamPose pose = 3;
   google.protobuf.Timestamp time = 4; // Host time the keyframe's scan was received.
-  // The drone's pose at the keyframe: the sensor's, through how the sensor was
-  // mounted then. It moves with the keyframe when the trajectory is corrected.
-  // Unset when the mount is not known.
-  SlamPose vehicle_pose = 5;
+  reserved 5;
+  reserved "vehicle_pose";
+  string sensor_id = 6; // Sensor whose scan the keyframe is (SlamSensor.id).
+  // The sensor's pose on the platform at the keyframe. Unset when the platform is the sensor.
+  SlamPose mount = 7;
 }
 
-// Points of a submap, in the frame of its anchor keyframe.
+// Points of a submap, in the platform's frame at its anchor keyframe.
 //
 // A submap moves rigidly with its anchor keyframe, so a correction of the
-// trajectory moves its points without sending them again.
+// trajectory moves its points without sending them again. A submap holds one
+// sensor's points.
 message SlamSubmapPoints {
   uint32 submap_id = 1; // Submap id.
-  uint32 anchor_keyframe_id = 2; // Keyframe whose frame the points are in.
-  PointCloud points = 3; // Points in the anchor keyframe's frame.
+  uint32 anchor_keyframe_id = 2; // Keyframe whose platform frame the points are in.
+  PointCloud points = 3; // Points in the platform's frame at the anchor keyframe.
+  string sensor_id = 4; // Sensor the points come from (SlamSensor.id).
 }
 
 // A change to the SLAM map.
@@ -2237,8 +2273,8 @@ message SlamMapUpdate {
 // What the x axis of a SLAM map's frame points along.
 enum SlamHeadingReference {
   SLAM_HEADING_REFERENCE_UNSPECIFIED = 0; // Not known.
-  // The sensor's heading at the map's first scan; without gravity alignment, the
-  // first scan's sensor frame as it is.
+  // The platform's heading at the map's first scan; without gravity alignment, the
+  // platform's frame at the first scan as it is.
   SLAM_HEADING_REFERENCE_FIRST_SCAN = 1;
   // North, as the drone's compass heading (AttitudeTel yaw) gave it at the map's first scan.
   SLAM_HEADING_REFERENCE_DRONE_COMPASS = 2;
@@ -2248,11 +2284,11 @@ enum SlamHeadingReference {
 //
 // The frame is right-handed: x along the heading reference, y to its right, z
 // down (north-east-down with SLAM_HEADING_REFERENCE_DRONE_COMPASS). The origin is
-// the sensor's position at the map's first scan. The map's
-// heading may drift from its reference over a dive: placing a map on a chart
-// fits it to the drone's positions (PositionEstimateTel in the dive log).
+// the platform's position at the map's first scan. The map's heading may drift
+// from its reference over a dive: placing a map on a chart fits it to the drone's
+// positions (PositionEstimateTel in the dive log).
 message SlamMapFrame {
-  bool gravity_aligned = 1; // True if z is down and x and y level; false: the first scan's sensor frame.
+  bool gravity_aligned = 1; // True if z is down and x and y level; false: the first scan's platform frame.
   SlamHeadingReference heading_reference = 2; // What x points along.
   // The magnetic declination the drone applied to its compass heading at the
   // map's first scan (°, as MagneticDeclination.declination; 0 when it applied
@@ -2264,6 +2300,7 @@ message SlamMapFrame {
   // at z in the map is at depth origin_depth + z. Unset without a depth.
   optional float origin_depth = 4;
   google.protobuf.Timestamp start_time = 5; // Host time of the map's first scan (its first keyframe's).
+  SlamPlatform platform = 6; // What the map's poses are the poses of.
 }
 
 // The whole SLAM map.
@@ -2275,10 +2312,12 @@ message SlamMap {
   SlamMapFrame frame = 5; // How the map's frame lies in the world (unset before the first scan).
 }
 
-// The latest scan, as the SLAM placed it.
+// The latest scan of a sensor, as the SLAM placed it.
 message SlamScan {
   uint32 map_id = 1; // Identifier of the map.
-  SlamPose pose = 2; // Pose of the sensor at the scan.
-  PointCloud points = 3; // Points of the scan in the sensor frame.
+  SlamPose pose = 2; // Pose of the platform at the scan.
+  PointCloud points = 3; // Points of the scan in the sensor frame: in the map at pose times mount.
   SlamSensor sensor = 4; // Sensor the scan comes from.
+  // The sensor's pose on the platform at the scan. Unset when the platform is the sensor.
+  SlamPose mount = 5;
 }
