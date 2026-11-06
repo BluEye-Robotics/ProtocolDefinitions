@@ -2152,12 +2152,17 @@ message SlamRecordingState {
   StorageLocation storage_location = 6; // Where the recording is stored.
 }
 
+// SONAR_3D reads better than protolint's SONAR3D for Sonar3d.
+// protolint:disable ENUM_FIELD_NAMES_PREFIX
+
 // Frequency mode of a 3D imaging sonar.
 enum Sonar3dFrequencyMode {
   SONAR_3D_FREQUENCY_MODE_UNSPECIFIED = 0; // Unspecified: left as it is.
   SONAR_3D_FREQUENCY_MODE_LOW = 1; // Wide view, long range (3D-15: 90° x 40°, 15 m, 5 scans/s).
   SONAR_3D_FREQUENCY_MODE_HIGH = 2; // Narrow view, short range, fine detail (3D-15: 40° x 40°, 4 m, 20 scans/s).
 }
+
+// protolint:enable ENUM_FIELD_NAMES_PREFIX
 
 // Settings of a 3D imaging sonar that feeds the SLAM.
 //
