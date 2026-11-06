@@ -492,6 +492,44 @@ message PowerCanister {
   Sensors rear_esc = 2; // Rear ESC board; absent when no recent reading is available.
 }
 
+// One original extended DSHOT reply from an X7 ESC, without averaging.
+message EscEdtEvent {
+  uint64 captured_at_us = 1; // MCU monotonic reception time, not ADC or host time.
+  uint32 sequence = 2; // MCU-wide event sequence; wraps at 32 bits, resets on boot.
+  uint32 response = 3; // Raw 12-bit payload: types 2/4/6 = Celsius/250 mV/1 A.
+  uint32 channel = 4; // 0..6 = T1..T7, 7 = spare. ARK current uses a shared bank shunt.
+}
+
+// A transport batch, not a downsampled measurement. Every event is retained.
+message EscEdtBatch {
+  repeated EscEdtEvent events = 1; // Original capture order, including equal values.
+  uint32 firmware_dropped_events = 2; // Saturating queue/write-loss counter since MCU boot.
+  uint64 host_dropped_batches = 3; // Host subscription and publisher-queue overflow.
+}
+
+// Feedback from the ESCs of the X7 power canister, read over bidirectional DSHOT.
+// Every measurement has independent validity. A measured zero is valid; values
+// with a cleared flag must be ignored. This snapshot is separate from EDT events.
+message EscTelemetry {
+  // Feedback from one ESC.
+  message Channel {
+    uint32 electrical_rpm = 1; // Electrical RPM, unsigned (no direction); shaft RPM is this over the pole pairs.
+    bool is_electrical_rpm_valid = 2; // True when the ESC answered within the canister's 250 ms limit.
+    float voltage = 3; // ESC supply voltage (V), 0.25 V resolution.
+    bool is_voltage_valid = 4; // True when the ESC reported its voltage within the last 2 s.
+    float current = 5; // Current (A), 1 A resolution; the ARK 4IN1 has one shunt shared by its four ESCs.
+    bool is_current_valid = 6; // True when the ESC reported its current within the last 2 s.
+    float temperature = 7; // ESC temperature (°C), not the motor's.
+    bool is_temperature_valid = 8; // True when the ESC reported its temperature within the last 2 s.
+    uint32 valid_responses = 9; // Well-formed replies since the canister MCU started (saturating).
+    uint32 invalid_responses = 10; // Malformed replies since the canister MCU started (saturating).
+    uint32 missing_responses = 11; // Frames without a reply while the ESC's bank was powered (saturating).
+  }
+
+  repeated Channel thrusters = 1; // One per thruster, T1 to T7, in thruster-number order.
+  Channel spare = 2; // The eighth ESC, which drives no thruster.
+}
+
 // Essential battery information.
 message Battery {
   float voltage = 1; // Battery voltage (V).
