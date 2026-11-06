@@ -518,6 +518,24 @@ message EscTelemetry {
   Channel spare = 2; // The eighth ESC, which drives no thruster.
 }
 
+// One voltage, current or temperature measurement an X7 ESC reported, converted to SI units
+// and to the drone's clock on the drone. Measurements keep the ESCs' relative timing; their
+// offset from the drone's clock is within the latency of the link to the power canister.
+message EscMeasurement {
+  // The quantity an ESC measured.
+  enum Quantity {
+    QUANTITY_UNSPECIFIED = 0; // Unspecified.
+    QUANTITY_VOLTAGE = 1; // ESC supply voltage (V), 0.25 V resolution.
+    QUANTITY_CURRENT = 2; // Current (A), 1 A resolution; the ARK 4IN1 has one shunt shared by its four ESCs.
+    QUANTITY_TEMPERATURE = 3; // ESC temperature (°C), not the motor's.
+  }
+
+  google.protobuf.Timestamp clock_monotonic = 1; // When the ESC reported it, on the drone's CLOCK_MONOTONIC.
+  uint32 esc = 2; // ESC index: 0 to 6 drive thrusters T1 to T7, 7 is the spare.
+  Quantity quantity = 3; // What the ESC measured.
+  float value = 4; // The measurement, in the unit of its quantity.
+}
+
 // Essential battery information.
 message Battery {
   float voltage = 1; // Battery voltage (V).
