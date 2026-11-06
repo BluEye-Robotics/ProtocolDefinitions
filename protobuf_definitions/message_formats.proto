@@ -738,7 +738,7 @@ message DvlVelocity {
   int32 status = 2; // Vendor-specific status of the DVL.
   float delta_time = 3; // Time since last velocity measurement (ms).
   float fom = 4; // Figure of merit, a measure of the accuracy of the velocities (m/s).
-  Vector3 velocity = 5; // Velocity, x forward, y left, z down (m/s).
+  Vector3 velocity = 5; // Velocity, x forward, y right, z down (m/s).
   bool is_water_tracking = 6; // Water tracking status.
   repeated DvlTransducer transducers = 7; // List of transducers.
 }
