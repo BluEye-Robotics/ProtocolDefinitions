@@ -2115,6 +2115,8 @@ enum SlamSensorType {
   SLAM_SENSOR_TYPE_SONAR_3D = 1; // A 3D imaging sonar, e.g. the Water Linked Sonar 3D-15.
   SLAM_SENSOR_TYPE_STEREO_CAMERA = 2; // A stereo camera's depth.
   SLAM_SENSOR_TYPE_SIMULATED = 3; // A simulated sensor.
+  // A 2D imaging sonar (multibeam), e.g. the Oculus M750D: range and bearing, no elevation.
+  SLAM_SENSOR_TYPE_MULTIBEAM_2D = 4;
 }
 
 // What the SLAM's poses are the poses of: its platform.
@@ -2173,6 +2175,25 @@ message SlamSonar3dSettings {
   float max_range = 2; // Maximum range (m).
 }
 
+// How the SLAM places the returns of a 2D multibeam sonar, which have a range
+// and a bearing but no elevation.
+enum SlamMultibeamMode {
+  SLAM_MULTIBEAM_MODE_UNSPECIFIED = 0; // Unspecified: left as it is.
+  // By the sonar's tilt: on the seabed when it looks down, in its own plane when it is near level.
+  SLAM_MULTIBEAM_MODE_AUTO = 1;
+  SLAM_MULTIBEAM_MODE_SEABED = 2; // On a flat seabed, at the drone's altitude above it (seabed surveys).
+  SLAM_MULTIBEAM_MODE_STRUCTURE = 3; // In the sonar's own plane, as on walls, piles and nets.
+}
+
+// Settings of a 2D multibeam sonar that feeds the SLAM.
+//
+// The sonar's own settings (range, gain, frequency, ping rate) belong to the
+// multibeam page: the SLAM reads the sonar's images and follows those settings
+// without changing them. In a request, unspecified leaves a setting as it is.
+message SlamMultibeamSettings {
+  SlamMultibeamMode mode = 1; // How the returns are placed.
+}
+
 // Settings of a sensor that feeds the SLAM.
 //
 // One message for each kind of sensor, so a client shows the settings of the
@@ -2180,6 +2201,7 @@ message SlamSonar3dSettings {
 message SlamSensorSettings {
   oneof settings {
     SlamSonar3dSettings sonar_3d = 1; // A 3D imaging sonar's settings.
+    SlamMultibeamSettings multibeam = 2; // A 2D multibeam sonar's settings.
   }
 }
 
@@ -2260,6 +2282,29 @@ message SlamSubmapPoints {
   string sensor_id = 4; // Sensor the points come from (SlamSensor.id).
 }
 
+// An image of the seabed made from a sensor's scans (a sonar mosaic) around a
+// submap, in its anchor keyframe's frame levelled: x along the anchor's heading,
+// y to its right and z down from the anchor's position, without its roll and
+// pitch. Like a submap's points it moves with its anchor keyframe. An image is
+// sent whole and replaced by a newer version as the submap grows.
+//
+// Row r and column c cover x from origin_x + r * resolution and y from
+// origin_y + c * resolution, each over one resolution.
+message SlamSubmapImage {
+  uint32 submap_id = 1; // Submap the image is of.
+  uint32 anchor_keyframe_id = 2; // Keyframe in whose levelled frame the image lies.
+  string sensor_id = 3; // Sensor the image comes from (SlamSensor.id).
+  uint32 version = 4; // Version of the submap's image, increasing: a client keeps the highest.
+  float resolution = 5; // Size of a pixel (m).
+  float origin_x = 6; // x of the corner of row 0 and column 0 (m).
+  float origin_y = 7; // y of the corner of row 0 and column 0 (m).
+  float z = 8; // z of the seabed the image lies on (m).
+  uint32 rows = 9; // Rows of the image, along x.
+  uint32 columns = 10; // Columns of the image, along y.
+  bytes intensity = 11; // rows x columns echo strengths, one byte each (0 to 255), row by row.
+  bytes coverage = 12; // rows x columns bytes, row by row: how well each pixel was seen (0: not seen).
+}
+
 // A loop closure: a keyframe's scan matched to the map where the trajectory had
 // been before, which corrected the trajectory. The keyframes the correction moved
 // come in the same update, so a client that held the map before has the
@@ -2287,6 +2332,7 @@ message SlamMapUpdate {
   // learns more of it: a recording cut short has it without its last SlamMapTel.
   SlamMapFrame frame = 5;
   repeated SlamLoopClosure loop_closures = 6; // Loop closures whose correction moved the keyframes.
+  repeated SlamSubmapImage images = 7; // Submap images added or replaced.
 }
 
 // What the x axis of a SLAM map's frame points along.
@@ -2330,6 +2376,7 @@ message SlamMap {
   repeated SlamSubmapPoints submaps = 4; // Every submap's points.
   SlamMapFrame frame = 5; // How the map's frame lies in the world (unset before the first scan).
   repeated SlamLoopClosure loop_closures = 6; // Every loop closure, in the order they were made.
+  repeated SlamSubmapImage images = 7; // Every submap's image, in its latest version.
 }
 
 // The latest scan of a sensor, as the SLAM placed it.
