@@ -416,3 +416,46 @@ message SotStateTel {
 message AnnotationTel {
   Annotation annotation = 1; // The annotation that was added.
 }
+
+// SLAM estimate of the sensor pose.
+//
+// Published for every scan on the SLAM publisher, not the main telemetry socket.
+message SlamPoseTel {
+  SlamPoseEstimate estimate = 1; // The pose estimate.
+}
+
+// A change to the SLAM map: new keyframes and points, or a corrected trajectory.
+//
+// Published on the SLAM publisher. A client applies the updates that follow the
+// map it holds (SlamMapTel).
+message SlamMapUpdateTel {
+  SlamMapUpdate update = 1; // The change.
+}
+
+// The latest scan placed in the SLAM map.
+//
+// Published on the SLAM publisher for live display; not part of the map.
+message SlamScanTel {
+  SlamScan scan = 1; // The scan.
+}
+
+// The whole SLAM map.
+//
+// Published on the SLAM publisher when a client asks for it (GetSlamMapReq), and
+// when a SLAM recording stops. A client subscribes, asks, keeps the updates that
+// arrive meanwhile, and applies those that follow this map's sequence.
+message SlamMapTel {
+  SlamMap map = 1; // The map.
+}
+
+// The SLAM's state.
+//
+// Published on the SLAM publisher once a second, and when it changes.
+message SlamStatusTel {
+  bool active = 1; // True while the SLAM is mapping: its sensors are on and scans are placed.
+  uint32 map_id = 2; // Identifier of the current map, 0 before the first.
+  reserved 3;
+  reserved "sensor_settings";
+  SlamRecordingState recording = 4; // The recording, when one runs or ran.
+  repeated SlamSensorStatus sensors = 5; // The sensors that feed the SLAM.
+}
