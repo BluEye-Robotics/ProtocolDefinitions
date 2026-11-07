@@ -2260,6 +2260,19 @@ message SlamSubmapPoints {
   string sensor_id = 4; // Sensor the points come from (SlamSensor.id).
 }
 
+// A loop closure: a keyframe's scan matched to the map where the trajectory had
+// been before, which corrected the trajectory. The keyframes the correction moved
+// come in the same update, so a client that held the map before has the
+// trajectory as it was.
+message SlamLoopClosure {
+  uint32 keyframe_id = 1; // Keyframe whose scan closed the loop.
+  uint32 matched_keyframe_id = 2; // Earlier keyframe it was matched near.
+  float position_correction = 3; // How far the correction moved the keyframe that closed the loop (m).
+  // How far it turned that keyframe about the map's z axis (°, positive clockwise seen from
+  // above in a gravity-aligned map).
+  float heading_correction = 4;
+}
+
 // A change to the SLAM map.
 //
 // Updates are numbered: a client that has the map at sequence N applies the
@@ -2273,6 +2286,7 @@ message SlamMapUpdate {
   // The map's frame, on the update that adds the first keyframe and on any that
   // learns more of it: a recording cut short has it without its last SlamMapTel.
   SlamMapFrame frame = 5;
+  repeated SlamLoopClosure loop_closures = 6; // Loop closures whose correction moved the keyframes.
 }
 
 // What the x axis of a SLAM map's frame points along.
@@ -2315,6 +2329,7 @@ message SlamMap {
   repeated SlamKeyframe keyframes = 3; // Every keyframe, in id order.
   repeated SlamSubmapPoints submaps = 4; // Every submap's points.
   SlamMapFrame frame = 5; // How the map's frame lies in the world (unset before the first scan).
+  repeated SlamLoopClosure loop_closures = 6; // Every loop closure, in the order they were made.
 }
 
 // The latest scan of a sensor, as the SLAM placed it.
