@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+      # Prereleases for the SLAM pull requests (p2-django builds against
+      # them); remove before merging.
+      - sonar3d-slam
   pull_request:
 
 permissions:
@@ -75,12 +78,22 @@ jobs:
           cp README.npm.md README.md
           VERSION=$(pnpm pkg get version | tr -d '"')
           SHORT_SHA=${GITHUB_SHA::8}
-          pnpm version --no-git-tag-version "${VERSION}-${SHORT_SHA}"
-          pnpm publish --no-git-checks --access public --tag latest
-          echo "PROTOCOL_VERSION=${VERSION}-${SHORT_SHA}" >> "$GITHUB_ENV"
+          # master is latest; another branch publishes a prerelease named and
+          # tagged after it, which leaves latest alone.
+          if [ "$GITHUB_REF_NAME" = master ]; then
+            RELEASE="${VERSION}-${SHORT_SHA}"
+            TAG=latest
+          else
+            TAG="${GITHUB_REF_NAME//\//-}"
+            RELEASE="${VERSION}-${TAG}.${SHORT_SHA}"
+          fi
+          pnpm version --no-git-tag-version "$RELEASE"
+          pnpm publish --no-git-checks --access public --tag "$TAG"
+          echo "PROTOCOL_VERSION=${RELEASE}" >> "$GITHUB_ENV"
 
       - name: Trigger protocol bump in blueye-ts
-        if: github.event_name == 'push'
+        # Releases only: a branch's prerelease is not for blueye-ts.
+        if: github.event_name == 'push' && github.ref_name == 'master'
         env:
           GH_TOKEN: ${{ secrets.BLUEYE_PROTOCOL_BUMP_PAT }}
         run: |
