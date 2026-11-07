@@ -2134,6 +2134,9 @@ message SlamSensor {
   float fov_horizontal = 3; // Horizontal field of view, about the sensor's z axis (°).
   float fov_vertical = 4; // Vertical field of view, about the sensor's y axis (°).
   float max_range = 5; // Range the sensor is set to (m).
+  // The sensor as a guest port device (e.g. GUEST_PORT_DEVICE_ID_WATERLINKED_SONAR_3D15), for a client
+  // to show the device itself; GUEST_PORT_DEVICE_ID_UNSPECIFIED when it is not one (a simulated sensor).
+  GuestPortDeviceID device_id = 6;
 }
 
 // A recording of the SLAM, as the SLAM reports it.
@@ -2213,11 +2216,13 @@ message SlamPoseEstimate {
   SlamState state = 2; // State of the SLAM.
   SlamPose pose = 3; // Pose of the platform (SlamMapFrame.platform) at the scan.
   google.protobuf.Timestamp time = 4; // Host time the scan was received.
-  uint32 scan_points = 5; // Points of the scan used for matching.
-  float match_inlier_ratio = 6; // Share of those points matched to the map (0..1).
-  float match_rms = 7; // Root mean square point-to-plane distance of the matched points (m).
+  uint32 scan_points = 5; // Points (or cells) of the scan used for matching.
+  float match_inlier_ratio = 6; // Share of those matched to the map (0..1).
+  // Root mean square residual of the matched points against the map (m); for a 3D sonar, their distance to the
+  // map's planes.
+  float match_rms = 7;
   uint32 keyframe_count = 8; // Keyframes in the map.
-  uint32 map_point_count = 9; // Points in the map.
+  uint32 map_point_count = 9; // Points (or cells) in the map.
   // Depth used for the scan (m), when there was one: the sensor's, from the drone's depth sensor
   // through the mount (without a mount, the depth sensor's own).
   optional float depth = 10;
@@ -2340,4 +2345,5 @@ message SlamScan {
   SlamSensor sensor = 4; // Sensor the scan comes from.
   // The sensor's pose on the platform at the scan. Unset when the platform is the sensor.
   SlamPose mount = 5;
+  google.protobuf.Timestamp time = 6; // Host time the scan was received (as SlamPoseEstimate.time).
 }

@@ -374,11 +374,13 @@ message SetSlamRecordingRep {
 
 // Request to change the settings of a SLAM sensor.
 //
-// The settings go to the SLAM's sensor of their kind, and those left
-// unspecified stay as they are. A change of a sonar's mode or range begins a new
-// map, as the map's resolution follows the sensor's range.
+// The settings go to the sensor named by sensor_id, or without one to the SLAM's
+// sensor of their kind, and those left unspecified stay as they are. A change of a
+// sonar's mode or range begins a new map, as the map's resolution follows the
+// sensor's range.
 message SetSlamSensorSettingsReq {
   SlamSensorSettings settings = 1; // The settings to change.
+  string sensor_id = 2; // The sensor to change (SlamSensor.id); empty: the SLAM's sensor of the settings' kind.
 }
 
 // Response after changing the settings of a SLAM sensor.
