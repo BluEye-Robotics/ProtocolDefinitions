@@ -85,7 +85,9 @@ jobs:
             TAG=latest
           else
             TAG="${GITHUB_REF_NAME//\//-}"
-            RELEASE="${VERSION}-${TAG}.${SHORT_SHA}"
+            # "g" before the hash: an all-digit one with a leading zero is not a
+            # valid SemVer prerelease identifier.
+            RELEASE="${VERSION}-${TAG}.g${SHORT_SHA}"
           fi
           pnpm version --no-git-tag-version "$RELEASE"
           pnpm publish --no-git-checks --access public --tag "$TAG"

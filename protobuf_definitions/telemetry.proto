@@ -417,7 +417,8 @@ message AnnotationTel {
   Annotation annotation = 1; // The annotation that was added.
 }
 
-// SLAM estimate of the sensor pose.
+// SLAM estimate of its platform's pose (the drone's; each sensor is on it at its
+// mount, which the estimate carries).
 //
 // Published for every scan on the SLAM publisher, not the main telemetry socket.
 message SlamPoseTel {
