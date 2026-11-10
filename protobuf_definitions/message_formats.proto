@@ -2136,9 +2136,10 @@ enum SlamPlatform {
 
 // A sensor whose scans feed the SLAM, and its field of view.
 message SlamSensor {
-  // Sensor id, unique among the SLAM's sensors and the same for as long as the sensor is connected:
-  // the model's (e.g. "waterlinked-sonar-3d15") while the SLAM has one sensor of that model, with the
-  // guest port it is on added when it has several (e.g. "waterlinked-sonar-3d15-gp2").
+  // Sensor id, unique among the SLAM's sensors. A sensor keeps the id it was given for as long as it
+  // is connected, whatever other sensors connect or disconnect: the model's (e.g.
+  // "waterlinked-sonar-3d15") when no sensor of that model is connected, and else the model's with the
+  // guest port the sensor is on added (e.g. "waterlinked-sonar-3d15-gp2").
   string id = 1;
   SlamSensorType type = 2; // Kind of sensor.
   float fov_horizontal = 3; // Horizontal field of view, about the sensor's z axis (°).
