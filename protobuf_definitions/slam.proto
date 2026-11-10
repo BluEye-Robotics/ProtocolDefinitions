@@ -36,6 +36,8 @@ enum SlamSensorType {
   SLAM_SENSOR_TYPE_STEREO_CAMERA = 2; // A stereo camera's depth.
   reserved 3;
   reserved "SLAM_SENSOR_TYPE_SIMULATED";
+  // A 2D imaging sonar (multibeam), e.g. the Oculus M750D: range and bearing, no elevation.
+  SLAM_SENSOR_TYPE_MULTIBEAM_2D = 4;
 }
 
 // What the SLAM's poses are the poses of: its platform.
@@ -104,6 +106,27 @@ message SlamSonar3dSettings {
   float max_range = 2; // Maximum range (m).
 }
 
+// How the SLAM places the returns of a 2D multibeam sonar, which have a range
+// and a bearing but no elevation.
+enum SlamMultibeamMode {
+  SLAM_MULTIBEAM_MODE_UNSPECIFIED = 0; // Unspecified: left as it is.
+  // By the sonar's tilt: on the seabed when it looks down, in a level plane through it when it is near level.
+  SLAM_MULTIBEAM_MODE_AUTO = 1;
+  SLAM_MULTIBEAM_MODE_SEABED = 2; // On a flat seabed, at the drone's altitude above it (seabed surveys).
+  // In a level plane through the sonar, each return at its range, as on walls, piles and nets (the sonar near level).
+  SLAM_MULTIBEAM_MODE_STRUCTURE = 3;
+}
+
+// Settings of a 2D multibeam sonar that feeds the SLAM.
+//
+// The sonar's own settings (range, gain, frequency, ping rate) belong to the
+// multibeam page: the SLAM reads the sonar's images and follows those settings
+// without changing them. In a request, unspecified leaves a setting as it is; in
+// a report, the mode is as set (AUTO, not the one it chose).
+message SlamMultibeamSettings {
+  SlamMultibeamMode mode = 1; // How the returns are placed.
+}
+
 // Settings of a sensor that feeds the SLAM.
 //
 // One message for each kind of sensor, so a client shows the settings of the
@@ -111,6 +134,7 @@ message SlamSonar3dSettings {
 message SlamSensorSettings {
   oneof settings {
     SlamSonar3dSettings sonar_3d = 1; // A 3D imaging sonar's settings.
+    SlamMultibeamSettings multibeam = 2; // A 2D multibeam sonar's settings.
   }
 }
 
@@ -132,7 +156,8 @@ message SlamSensorStatus {
 // y to the right of it, in metres. The body is the one the field names (the
 // platform, or a sensor), its frame x forward, y right, z down. A mount is a
 // sensor's pose in the platform's frame instead: the sensor is in the map at the
-// platform's pose times its mount.
+// platform's pose times its mount. A raster's origin is its pose in the frame the
+// enclosing message names (see SlamRaster).
 message SlamPose {
   Vector3 position = 1; // Position of the body (m).
   Quaternion orientation = 2; // Rotation from the body's frame to the frame it is placed in.
@@ -147,7 +172,7 @@ message SlamPoseEstimate {
   uint32 scan_points = 5; // Points (or cells) of the scan used for matching.
   float match_inlier_ratio = 6; // Share of those matched to the map (0..1).
   // Root mean square residual of the matched points against the map (m); for a 3D sonar, their distance to the
-  // map's planes.
+  // map's planes. 0 when the matcher has none (a 2D multibeam matches images).
   float match_rms = 7;
   uint32 keyframe_count = 8; // Keyframes in the map.
   uint32 map_point_count = 9; // Points (or cells) in the map.
@@ -169,7 +194,7 @@ message SlamPoseEstimate {
 // A keyframe: a scan kept in the map, the nodes of the SLAM trajectory.
 message SlamKeyframe {
   uint32 id = 1; // Keyframe id, increasing along the trajectory.
-  uint32 submap_id = 2; // Submap whose points the keyframe added to.
+  uint32 submap_id = 2; // Submap whose content the keyframe added to.
   // Pose of the platform at the keyframe. It moves when the trajectory is corrected.
   SlamPose pose = 3;
   google.protobuf.Timestamp time = 4; // Host time the keyframe's scan was received.
@@ -178,13 +203,55 @@ message SlamKeyframe {
   SlamPose mount = 6;
 }
 
+// How a raster's pixels are stored.
+enum SlamRasterFormat {
+  SLAM_RASTER_FORMAT_UNSPECIFIED = 0; // Unspecified.
+  SLAM_RASTER_FORMAT_UINT8 = 1; // One byte a pixel, 0 to 255.
+}
+
+// What a raster's pixels measure.
+enum SlamRasterValue {
+  SLAM_RASTER_VALUE_UNSPECIFIED = 0; // Unspecified.
+  // Echo strength (a sonar mosaic), on one relative scale for all of a sensor's rasters: higher is stronger.
+  SLAM_RASTER_VALUE_ECHO = 1;
+}
+
+// A raster: an image laid on a plane, such as a 2D imaging sonar's mosaic of what
+// it saw around a submap.
+//
+// The raster has a frame of its own, which origin places in the frame the
+// enclosing message names: in a SlamSubmap, the platform's frame at its anchor
+// keyframe, so the raster is in the map at the anchor's pose times its origin. It
+// lies on the plane z = 0 of its frame, with the corner of row 0 and column 0 at
+// the origin: row r and column c cover x from r * resolution and y from
+// c * resolution, each over one resolution.
+//
+// pixels holds exactly rows * columns pixels as pixel_format stores them, and
+// coverage is empty or exactly rows * columns bytes. A raster that disagrees, whose
+// resolution is not positive or origin is unset, or whose pixel_format or value the
+// client does not know, is not used: the submap keeps the raster it had. A change
+// to how pixels are placed or read comes as a new pixel_format or a new kind of
+// content, never as a field old clients would ignore.
+message SlamRaster {
+  SlamPose origin = 1; // The raster's frame, in the frame the enclosing message names.
+  uint32 rows = 2; // Rows: the raster spans rows * resolution along its x.
+  uint32 columns = 3; // Columns: the raster spans columns * resolution along its y.
+  float resolution = 4; // Size of a pixel, along x and along y (m).
+  SlamRasterFormat pixel_format = 5; // How the pixels are stored.
+  SlamRasterValue value = 6; // What the pixels measure.
+  bytes pixels = 7; // rows * columns pixels, row by row, each as pixel_format stores it.
+  // rows * columns bytes, row by row: how well each pixel was seen, from 0 (not seen: the pixel
+  // holds nothing) to 255, for weighing rasters where they overlap. Empty: every pixel seen fully, as 255.
+  bytes coverage = 8;
+}
+
 // A submap: part of the map from one sensor, in the platform's frame at its anchor
 // keyframe.
 //
 // A submap moves rigidly with its anchor keyframe, so a correction of the
 // trajectory moves its content without sending it again. A submap holds one kind
-// of content: points today; other kinds (e.g. a 2D sonar's mosaic) will be added
-// to the oneof, each saying how a later one replaces what the submap holds.
+// of content: points, or a raster (e.g. a 2D sonar's mosaic). Each kind says how
+// a later one replaces what the submap holds.
 message SlamSubmap {
   uint32 submap_id = 1; // Submap id.
   uint32 anchor_keyframe_id = 2; // Keyframe whose platform frame the content is in.
@@ -193,6 +260,9 @@ message SlamSubmap {
     // Points in the platform's frame at the anchor keyframe. In a map update they are appended to the
     // submap's points, unless replace is set.
     PointCloud points = 3;
+    // A raster placed in the platform's frame at the anchor keyframe (SlamRaster.origin). It is sent
+    // whole, and replaces the submap's raster so far: as the submap grows, its raster is sent again.
+    SlamRaster raster = 6;
   }
   bool replace = 5; // Points: true if they replace the submap's points so far, rather than adding to them.
 }
@@ -231,7 +301,8 @@ message SlamMapUpdate {
   uint32 map_id = 1; // Identifier of the map.
   uint64 sequence = 2; // Sequence number of this update, from 1.
   repeated SlamKeyframe keyframes = 3; // Keyframes added.
-  repeated SlamSubmap submaps = 4; // Content added to submaps, or replacing a submap's (SlamSubmap.replace).
+  // Content added to submaps, or replacing a submap's: points with SlamSubmap.replace set, and rasters.
+  repeated SlamSubmap submaps = 4;
   // The map's frame, on the update that adds the first keyframe and on any that
   // learns more of it: a recording cut short has it without its last SlamMapTel.
   SlamMapFrame frame = 5;
@@ -280,7 +351,7 @@ message SlamMapFrame {
 // every part, and puts them together field by field: every repeated field is the
 // parts' concatenated in part order, and every other field is taken from the part
 // that sets it. Which part carries what is up to the SLAM, but a submap is never
-// split: each comes whole, in one part.
+// split: each comes whole, in one part, with all its points or its raster.
 message SlamMap {
   // Identifier of the map (0 before the first scan); a new one each time the map starts, unique
   // while the SLAM runs.
