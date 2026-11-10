@@ -2226,8 +2226,6 @@ message SlamPoseEstimate {
   // Depth used for the scan (m), when there was one: the sensor's, from the drone's depth sensor
   // through the mount (without a mount, the depth sensor's own).
   optional float depth = 10;
-  reserved 11, 12;
-  reserved "vehicle_pose", "mount_tilt";
   string sensor_id = 13; // Sensor whose scan was placed (SlamSensor.id).
   // The sensor's pose on the platform at the scan: the sensor was at pose times mount.
   // Unset when the platform is the sensor.
@@ -2246,8 +2244,6 @@ message SlamKeyframe {
   // Pose of the platform at the keyframe. It moves when the trajectory is corrected.
   SlamPose pose = 3;
   google.protobuf.Timestamp time = 4; // Host time the keyframe's scan was received.
-  reserved 5;
-  reserved "vehicle_pose";
   string sensor_id = 6; // Sensor whose scan the keyframe is (SlamSensor.id).
   // The sensor's pose on the platform at the keyframe. Unset when the platform is the sensor.
   SlamPose mount = 7;
