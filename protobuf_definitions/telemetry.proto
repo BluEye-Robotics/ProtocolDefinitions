@@ -7,6 +7,7 @@ package blueye.protocol;
 import "aquatroll.proto";
 import "message_formats.proto";
 import "mission_planning.proto";
+import "slam.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 option java_multiple_files = true;
 
@@ -417,8 +418,9 @@ message AnnotationTel {
   Annotation annotation = 1; // The annotation that was added.
 }
 
-// SLAM estimate of its platform's pose (the drone's; each sensor is on it at its
-// mount, which the estimate carries).
+// SLAM estimate of its platform's pose (SlamMapFrame.platform: the drone's, each
+// sensor on it at its mount, which the estimate carries; or, without a known
+// mount, the sensor's own).
 //
 // Published for every scan on the SLAM publisher, not the main telemetry socket.
 message SlamPoseTel {
@@ -428,7 +430,7 @@ message SlamPoseTel {
 // A change to the SLAM map: new keyframes and points, or a corrected trajectory.
 //
 // Published on the SLAM publisher. A client applies the updates that follow the
-// map it holds (SlamMapTel).
+// map it holds (SlamMapTel); one it missed it asks for again (GetSlamMapReq).
 message SlamMapUpdateTel {
   SlamMapUpdate update = 1; // The change.
 }
@@ -445,7 +447,7 @@ message SlamScanTel {
 // Published on the SLAM publisher when a client asks for it (GetSlamMapReq). A
 // client subscribes, asks, keeps the updates that arrive meanwhile, and applies
 // those that follow the map's sequence once it has all of its parts. A SLAM
-// recording has the map at its start and at its end.
+// recording has the map at its start, and ends each map it holds with it.
 message SlamMapTel {
   SlamMap map = 1; // The map, or a part of it.
 }
@@ -460,4 +462,5 @@ message SlamStatusTel {
   repeated SlamSensorStatus sensors = 4; // The sensors that feed the SLAM.
   bool map_full = 5; // True if the map holds as many points as it may: it is placed in, but grows no more.
   bool loop_closure = 6; // True if the SLAM corrects its trajectory with loop closures (it has a back end).
+  SlamMapFrame frame = 7; // How the current map's frame lies in the world (unset before its first scan).
 }

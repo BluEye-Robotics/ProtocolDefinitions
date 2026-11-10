@@ -7,6 +7,7 @@ package blueye.protocol;
 import "google/protobuf/any.proto";
 import "message_formats.proto";
 import "mission_planning.proto";
+import "slam.proto";
 
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 option java_multiple_files = true;
@@ -315,23 +316,36 @@ message GetMultibeamColorFilterRep {
   MultibeamColorFilter color_filter = 1; // The current color filter. Empty rgb means none is set (grayscale).
 }
 
-// Request the whole SLAM map.
+// Request to catch up on the SLAM map.
 //
-// The map is large, so it is not the reply: the SLAM publishes it on its own
-// publisher (SlamMapTel), in parts when it is large, to the clients subscribed
-// there.
+// Nothing comes in the reply but what is coming: the SLAM publishes it on its own
+// publisher, to the clients subscribed there. The SLAM keeps its latest map
+// updates: when map_id is the current map and the updates after have_sequence are
+// still kept, it publishes those again (SlamMapUpdateTel, as they were, so a client
+// that has them already skips them by their sequence); otherwise it publishes the
+// whole map (SlamMapTel, in parts when it is large).
 message GetSlamMapReq {
+  uint32 map_id = 1; // The map the client holds; 0 when it holds none.
+  uint64 have_sequence = 2; // The sequence of the last update the client applied to that map.
 }
 
-// Response after requesting the SLAM map.
+// Response after asking to catch up on the SLAM map: what is published for it.
 message GetSlamMapRep {
-  bool available = 1; // True if the SLAM is running and publishes the map.
+  bool available = 1; // True if the SLAM is running and answered.
+  uint32 map_id = 2; // The current map (0 before its first scan).
+  uint64 sequence = 3; // The client has the map at this sequence once it has what is published.
+  oneof catch_up {
+    // The updates from from_sequence to sequence are published again (none when from_sequence is past
+    // sequence: the client has the map already).
+    uint64 from_sequence = 4;
+    uint32 part_count = 5; // The whole map is published, in this many SlamMapTel parts.
+  }
 }
 
 // Request to discard the SLAM map and start a new one from the current pose.
 message ResetSlamReq {
   // The map to discard: the SLAM resets only if it is still the current map, so that two clients
-  // asking at once start one new map, not two. 0: whatever the current map is.
+  // asking at once start one new map, not two. 0 (map ids never are): only if the SLAM has no map yet.
   uint32 map_id = 1;
 }
 
