@@ -318,7 +318,8 @@ message GetMultibeamColorFilterRep {
 // Request the whole SLAM map.
 //
 // The map is large, so it is not the reply: the SLAM publishes it on its own
-// publisher (SlamMapTel), to the clients subscribed there.
+// publisher (SlamMapTel), in parts when it is large, to the clients subscribed
+// there.
 message GetSlamMapReq {
 }
 
@@ -329,11 +330,18 @@ message GetSlamMapRep {
 
 // Request to discard the SLAM map and start a new one from the current pose.
 message ResetSlamReq {
+  // The map to discard: the SLAM resets only if it is still the current map, so that two clients
+  // asking at once start one new map, not two. 0: whatever the current map is.
+  uint32 map_id = 1;
 }
 
 // Response after resetting the SLAM map.
 message ResetSlamRep {
-  uint32 map_id = 1; // Identifier of the new map, 0 if the SLAM is not running.
+  // Identifier of the map now (the new one, or the current one when the request's map_id was not
+  // the current map's); 0 when the SLAM has no map yet (it starts one with its next scan).
+  uint32 map_id = 1;
+  bool available = 2; // True if the SLAM is running and answered.
+  bool reset = 3; // True if the map was discarded.
 }
 
 // Request to start or stop the SLAM.

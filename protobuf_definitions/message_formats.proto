@@ -2084,7 +2084,10 @@ message Annotation {
   AnnotationSource source = 8; // Origin of the annotation; the app sets APP, the drone sets DRONE for its own.
 }
 
-// Unit quaternion describing a rotation.
+// Unit quaternion describing a rotation (Hamilton convention: w + xi + yj + zk).
+//
+// Where it is a body's orientation, it rotates vectors from the body's frame to
+// the frame the body is placed in.
 message Quaternion {
   double x = 1; // X-component of the vector part.
   double y = 2; // Y-component of the vector part.
@@ -2107,6 +2110,9 @@ enum SlamState {
   SLAM_STATE_WAITING = 1; // Waiting for the first scan and orientation.
   SLAM_STATE_TRACKING = 2; // The latest scan was matched against the map.
   SLAM_STATE_COASTING = 3; // The latest scan could not be matched; the pose follows the motion model.
+  // Coasting long enough that the prediction may be far off: a scan is placed again only by a match
+  // that fixes the pose firmly.
+  SLAM_STATE_LOST = 4;
 }
 
 // Kind of sensor a SLAM scan comes from.
@@ -2114,7 +2120,8 @@ enum SlamSensorType {
   SLAM_SENSOR_TYPE_UNSPECIFIED = 0; // Unspecified.
   SLAM_SENSOR_TYPE_SONAR_3D = 1; // A 3D imaging sonar, e.g. the Water Linked Sonar 3D-15.
   SLAM_SENSOR_TYPE_STEREO_CAMERA = 2; // A stereo camera's depth.
-  SLAM_SENSOR_TYPE_SIMULATED = 3; // A simulated sensor.
+  reserved 3;
+  reserved "SLAM_SENSOR_TYPE_SIMULATED";
 }
 
 // What the SLAM's poses are the poses of: its platform.
@@ -2129,7 +2136,10 @@ enum SlamPlatform {
 
 // A sensor whose scans feed the SLAM, and its field of view.
 message SlamSensor {
-  string id = 1; // Sensor id, e.g. "waterlinked-sonar-3d15".
+  // Sensor id, unique among the SLAM's sensors and the same for as long as the sensor is connected:
+  // the model's (e.g. "waterlinked-sonar-3d15") while the SLAM has one sensor of that model, with the
+  // guest port it is on added when it has several (e.g. "waterlinked-sonar-3d15-gp2").
+  string id = 1;
   SlamSensorType type = 2; // Kind of sensor.
   float fov_horizontal = 3; // Horizontal field of view, about the sensor's z axis (°).
   float fov_vertical = 4; // Vertical field of view, about the sensor's y axis (°).
@@ -2137,6 +2147,7 @@ message SlamSensor {
   // The sensor as a guest port device (e.g. GUEST_PORT_DEVICE_ID_WATERLINKED_SONAR_3D15), for a client
   // to show the device itself; GUEST_PORT_DEVICE_ID_UNSPECIFIED when it is not one (a simulated sensor).
   GuestPortDeviceID device_id = 6;
+  bool simulated = 7; // True if the sensor is simulated (its scans are made up, for testing).
 }
 
 // A recording of the SLAM, as the SLAM reports it.
@@ -2249,16 +2260,27 @@ message SlamKeyframe {
   SlamPose mount = 7;
 }
 
-// Points of a submap, in the platform's frame at its anchor keyframe.
+// A submap: points of the map, in the platform's frame at its anchor keyframe.
 //
 // A submap moves rigidly with its anchor keyframe, so a correction of the
 // trajectory moves its points without sending them again. A submap holds one
-// sensor's points.
-message SlamSubmapPoints {
+// sensor's points. In a map update the points are appended to the submap's,
+// unless replace is set.
+message SlamSubmap {
   uint32 submap_id = 1; // Submap id.
   uint32 anchor_keyframe_id = 2; // Keyframe whose platform frame the points are in.
   PointCloud points = 3; // Points in the platform's frame at the anchor keyframe.
   string sensor_id = 4; // Sensor the points come from (SlamSensor.id).
+  bool replace = 5; // True if the points replace the submap's points so far, rather than adding to them.
+}
+
+// Poses of consecutive keyframes, packed: what a correction of the trajectory
+// moved, sent without the rest of each keyframe.
+message SlamKeyframePoses {
+  uint32 first_keyframe_id = 1; // Keyframe id of the first pose; the others follow it in id order.
+  // Platform poses as in SlamKeyframe.pose, 7 little-endian float32 each: x, y, z (m), then the
+  // orientation's x, y, z, w. 28 bytes per keyframe.
+  bytes poses = 2;
 }
 
 // A loop closure: a keyframe's scan matched to the map where the trajectory had
@@ -2268,7 +2290,9 @@ message SlamSubmapPoints {
 message SlamLoopClosure {
   uint32 keyframe_id = 1; // Keyframe whose scan closed the loop.
   uint32 matched_keyframe_id = 2; // Earlier keyframe it was matched near.
-  float position_correction = 3; // How far the correction moved the keyframe that closed the loop (m).
+  // How far the correction moved the newest keyframe it reached (m): the loop's keyframe, or one
+  // added while the loop was being closed.
+  float position_correction = 3;
   // How far it turned that keyframe about the map's z axis (°, positive clockwise seen from
   // above in a gravity-aligned map).
   float heading_correction = 4;
@@ -2282,12 +2306,14 @@ message SlamLoopClosure {
 message SlamMapUpdate {
   uint32 map_id = 1; // Identifier of the map.
   uint64 sequence = 2; // Sequence number of this update, from 1.
-  repeated SlamKeyframe keyframes = 3; // Keyframes added or moved.
-  repeated SlamSubmapPoints points = 4; // Points appended to submaps.
+  repeated SlamKeyframe keyframes = 3; // Keyframes added.
+  repeated SlamSubmap submaps = 4; // Points added to submaps, or replacing a submap's (SlamSubmap.replace).
   // The map's frame, on the update that adds the first keyframe and on any that
   // learns more of it: a recording cut short has it without its last SlamMapTel.
   SlamMapFrame frame = 5;
   repeated SlamLoopClosure loop_closures = 6; // Loop closures whose correction moved the keyframes.
+  repeated SlamKeyframePoses moved_poses = 7; // New poses of the keyframes a correction moved, in runs.
+  repeated uint32 removed_submap_ids = 8; // Submaps taken out of the map, with their points.
 }
 
 // What the x axis of a SLAM map's frame points along.
@@ -2323,14 +2349,23 @@ message SlamMapFrame {
   SlamPlatform platform = 6; // What the map's poses are the poses of.
 }
 
-// The whole SLAM map.
+// The whole SLAM map, or a part of it.
+//
+// A large map comes in parts (part_count of them, in order), each a message of
+// its own with the same map_id and sequence: the first has the frame, the
+// keyframes and the loop closures, and the submaps are spread over all of them.
+// A client has the map once it has every part.
 message SlamMap {
-  uint32 map_id = 1; // Identifier of the map (0 before the first scan).
+  // Identifier of the map (0 before the first scan); a new one each time the map starts, unique
+  // while the SLAM runs.
+  uint32 map_id = 1;
   uint64 sequence = 2; // Sequence number of the last update the map includes (0 for none).
   repeated SlamKeyframe keyframes = 3; // Every keyframe, in id order.
-  repeated SlamSubmapPoints submaps = 4; // Every submap's points.
+  repeated SlamSubmap submaps = 4; // Submaps, with all their points.
   SlamMapFrame frame = 5; // How the map's frame lies in the world (unset before the first scan).
   repeated SlamLoopClosure loop_closures = 6; // Every loop closure, in the order they were made.
+  uint32 part = 7; // Index of this part, from 0.
+  uint32 part_count = 8; // Parts the map comes in (0 or 1: this message is the whole map).
 }
 
 // The latest scan of a sensor, as the SLAM placed it.

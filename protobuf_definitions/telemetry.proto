@@ -440,13 +440,14 @@ message SlamScanTel {
   SlamScan scan = 1; // The scan.
 }
 
-// The whole SLAM map.
+// The whole SLAM map, or a part of it (SlamMap.part).
 //
-// Published on the SLAM publisher when a client asks for it (GetSlamMapReq), and
-// when a SLAM recording stops. A client subscribes, asks, keeps the updates that
-// arrive meanwhile, and applies those that follow this map's sequence.
+// Published on the SLAM publisher when a client asks for it (GetSlamMapReq). A
+// client subscribes, asks, keeps the updates that arrive meanwhile, and applies
+// those that follow the map's sequence once it has all of its parts. A SLAM
+// recording has the map at its start and at its end.
 message SlamMapTel {
-  SlamMap map = 1; // The map.
+  SlamMap map = 1; // The map, or a part of it.
 }
 
 // The SLAM's state.
@@ -457,4 +458,6 @@ message SlamStatusTel {
   uint32 map_id = 2; // Identifier of the current map, 0 before the first.
   SlamRecordingState recording = 4; // The recording, when one runs or ran.
   repeated SlamSensorStatus sensors = 5; // The sensors that feed the SLAM.
+  bool map_full = 6; // True if the map holds as many points as it may: it is placed in, but grows no more.
+  bool loop_closure = 7; // True if the SLAM corrects its trajectory with loop closures (it has a back end).
 }
