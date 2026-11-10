@@ -282,8 +282,8 @@ message SlamMapFrame {
 // that sets it. Which part carries what is up to the SLAM, but a submap is never
 // split: each comes whole, in one part.
 message SlamMap {
-  // Identifier of the map (0 before the first scan); a new one each time the map starts, unique
-  // while the SLAM runs.
+  // Identifier of the map (0 when the SLAM has no map); a new one each time the map starts,
+  // unique while the SLAM runs.
   uint32 map_id = 1;
   uint64 sequence = 2; // Sequence number of the last update the map includes (0 for none).
   repeated SlamKeyframe keyframes = 3; // Every keyframe, in id order.

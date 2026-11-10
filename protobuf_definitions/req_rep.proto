@@ -332,7 +332,7 @@ message GetSlamMapReq {
 // Response after asking to catch up on the SLAM map: what is published for it.
 message GetSlamMapRep {
   bool available = 1; // True if the SLAM is running and answered.
-  uint32 map_id = 2; // The current map (0 before its first scan).
+  uint32 map_id = 2; // The current map (0 when the SLAM has no map).
   uint64 sequence = 3; // The client has the map at this sequence once it has what is published.
   oneof catch_up {
     // The updates from from_sequence to sequence are published again (none when from_sequence is past
