@@ -351,10 +351,10 @@ message ResetSlamReq {
 
 // Response after resetting the SLAM map.
 message ResetSlamRep {
+  bool available = 1; // True if the SLAM is running and answered.
   // Identifier of the map now (the new one, or the current one when the request's map_id was not
   // the current map's); 0 when the SLAM has no map yet (it starts one with its next scan).
-  uint32 map_id = 1;
-  bool available = 2; // True if the SLAM is running and answered.
+  uint32 map_id = 2;
   bool reset = 3; // True if the map was discarded.
 }
 

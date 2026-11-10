@@ -3,6 +3,13 @@
 // The SLAM's (simultaneous localization and mapping) state, poses, map and
 // sensors: what its telemetry (Slam*Tel in telemetry.proto) and its requests
 // (in req_rep.proto) carry.
+//
+// The SLAM has its own publisher, not the drone's telemetry socket: a client
+// subscribes to it on the drone at TCP port 5561 (WebSocket 9989) to get the
+// Slam*Tel messages. Its requests (GetSlamMapReq, ResetSlamReq,
+// SetSlamActiveReq, SetSlamSensorSettingsReq, SetSlamRecordingReq) go to the
+// drone's request server as other requests do, which forwards them to the
+// SLAM's (TCP 5562, WebSocket 9990).
 syntax = "proto3";
 
 package blueye.protocol;
@@ -45,10 +52,10 @@ enum SlamPlatform {
 message SlamSensor {
   // Sensor id, unique among the SLAM's sensors. A sensor keeps the id it was given for as long as it
   // is connected, whatever other sensors connect or disconnect: the model's (e.g.
-  // "waterlinked-sonar-3d15") when no sensor of that model is connected, and else the model's with the
-  // guest port the sensor is on added (e.g. "waterlinked-sonar-3d15-gp2").
+  // "waterlinked-sonar-3d15") when no other sensor of that model is connected, and else the model's with
+  // the guest port the sensor is on added (e.g. "waterlinked-sonar-3d15-gp2").
   string id = 1;
-  SlamSensorType type = 2; // Kind of sensor.
+  SlamSensorType sensor_type = 2; // Kind of sensor.
   float fov_horizontal = 3; // Horizontal field of view, about the sensor's z axis (°).
   float fov_vertical = 4; // Vertical field of view, about the sensor's y axis (°).
   float max_range = 5; // Range the sensor is set to (m).
@@ -272,7 +279,8 @@ message SlamMapFrame {
 // its own with the same map_id and sequence. A client has the map once it has
 // every part, and puts them together field by field: every repeated field is the
 // parts' concatenated in part order, and every other field is taken from the part
-// that sets it. Which part carries what is up to the SLAM.
+// that sets it. Which part carries what is up to the SLAM, but a submap is never
+// split: each comes whole, in one part.
 message SlamMap {
   // Identifier of the map (0 before the first scan); a new one each time the map starts, unique
   // while the SLAM runs.
