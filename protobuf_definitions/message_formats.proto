@@ -2237,15 +2237,15 @@ message SlamPoseEstimate {
   // Depth used for the scan (m), when there was one: the sensor's, from the drone's depth sensor
   // through the mount (without a mount, the depth sensor's own).
   optional float depth = 10;
-  string sensor_id = 13; // Sensor whose scan was placed (SlamSensor.id).
+  string sensor_id = 11; // Sensor whose scan was placed (SlamSensor.id).
   // The sensor's pose on the platform at the scan: the sensor was at pose times mount.
   // Unset when the platform is the sensor.
-  SlamPose mount = 14;
+  SlamPose mount = 12;
   // Covariance of pose as the scan's match placed it against the map, given the
   // prediction: 6 x 6, row by row, of a rotation about the map's x, y and z axes
   // (rad) and then a position along them (m). It says how well this scan fixed the
   // pose, not how far the map has drifted. Empty when the scan was not matched.
-  repeated float covariance_elements = 15;
+  repeated float covariance_elements = 13;
 }
 
 // A keyframe: a scan kept in the map, the nodes of the SLAM trajectory.
@@ -2255,9 +2255,9 @@ message SlamKeyframe {
   // Pose of the platform at the keyframe. It moves when the trajectory is corrected.
   SlamPose pose = 3;
   google.protobuf.Timestamp time = 4; // Host time the keyframe's scan was received.
-  string sensor_id = 6; // Sensor whose scan the keyframe is (SlamSensor.id).
+  string sensor_id = 5; // Sensor whose scan the keyframe is (SlamSensor.id).
   // The sensor's pose on the platform at the keyframe. Unset when the platform is the sensor.
-  SlamPose mount = 7;
+  SlamPose mount = 6;
 }
 
 // A submap: points of the map, in the platform's frame at its anchor keyframe.
