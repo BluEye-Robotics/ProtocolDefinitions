@@ -162,6 +162,10 @@ message SlamPoseEstimate {
   // pose, not how far the map has drifted. Empty when the match gave none: the scan was not matched,
   // the map's first scan (nothing to match it against), or a fit whose covariance was not finite.
   repeated float covariance_elements = 13;
+  // The newest keyframe when the scan was placed (SlamKeyframe.id), 0 before the map's first. A client
+  // keeping poses can move one with that keyframe when a loop closure moves it: the pose becomes the
+  // keyframe's new pose times its pose then, inverted, times the pose.
+  uint32 keyframe_id = 14;
 }
 
 // A keyframe: a scan kept in the map, the nodes of the SLAM trajectory.
@@ -236,6 +240,35 @@ message SlamMapUpdate {
   repeated SlamLoopClosure loop_closures = 6; // Loop closures whose correction moved the keyframes.
   repeated SlamKeyframePoses moved_poses = 7; // New poses of the keyframes a correction moved, in runs.
   repeated uint32 removed_submap_ids = 8; // Submaps taken out of the map, with whatever they hold.
+}
+
+// Why the SLAM did not do what a request asked (the reply says what it did do).
+enum SlamRequestError {
+  SLAM_REQUEST_ERROR_UNSPECIFIED = 0; // None: the request was done, or asked for what already was.
+  SLAM_REQUEST_ERROR_NOT_READABLE = 1; // The request could not be read.
+  SLAM_REQUEST_ERROR_OTHER_MAP = 2; // The request named a map that is not the current one.
+  SLAM_REQUEST_ERROR_NO_SUCH_SENSOR = 3; // The request named a sensor the SLAM does not have.
+  SLAM_REQUEST_ERROR_SENSOR = 4; // The sensor did not take it (it did not answer, or refused).
+  SLAM_REQUEST_ERROR_BUSY = 5; // Another change to the sensor is under way; ask again after it.
+  SLAM_REQUEST_ERROR_NOT_MAPPING = 6; // It needs the SLAM to be mapping (a recording).
+  SLAM_REQUEST_ERROR_STORAGE = 7; // No storage to record to, or it is full.
+  SLAM_REQUEST_ERROR_NOT_SUPPORTED = 8; // The SLAM or its sensor cannot do it.
+}
+
+// Where the SLAM's orientation comes from.
+enum SlamOrientationSource {
+  SLAM_ORIENTATION_SOURCE_UNSPECIFIED = 0; // None: the scans are matched without an orientation.
+  SLAM_ORIENTATION_SOURCE_SENSOR_IMU = 1; // The sensor's own IMU.
+  SLAM_ORIENTATION_SOURCE_DRONE_ATTITUDE = 2; // The drone's attitude, its heading from the compass.
+  // The drone's attitude for roll and pitch, its turn from the drone's calibrated gyro (not the compass).
+  SLAM_ORIENTATION_SOURCE_DRONE_GYRO = 3;
+}
+
+// What other than its sensors the SLAM's estimate rests on now.
+message SlamAiding {
+  SlamOrientationSource orientation = 1; // Where the orientation comes from.
+  bool depth = 2; // True if a depth is used (from the drone's depth sensor).
+  bool velocity = 3; // True if a velocity over the ground is used (a DVL with bottom lock).
 }
 
 // What the x axis of a SLAM map's frame points along.

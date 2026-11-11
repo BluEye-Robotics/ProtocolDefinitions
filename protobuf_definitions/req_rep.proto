@@ -333,7 +333,9 @@ message GetSlamMapReq {
 message GetSlamMapRep {
   bool available = 1; // True if the SLAM is running and answered.
   uint32 map_id = 2; // The current map (0 when the SLAM has no map).
-  uint64 sequence = 3; // The client has the map at this sequence once it has what is published.
+  // The client has the map at this sequence once it has what is published. The whole map may be one
+  // made earlier (its parts say their sequence): the updates after it are published again after it.
+  uint64 sequence = 3;
   oneof catch_up {
     // The updates from from_sequence to sequence are published again (none when from_sequence is past
     // sequence: the client has the map already).
@@ -356,6 +358,7 @@ message ResetSlamRep {
   // the current map's); 0 when the SLAM has no map yet (it starts one with its next scan).
   uint32 map_id = 2;
   bool reset = 3; // True if the map was discarded.
+  SlamRequestError error = 4; // Why the map was not discarded, when it was not.
 }
 
 // Request to start or stop the SLAM.
@@ -373,6 +376,7 @@ message SetSlamActiveReq {
 message SetSlamActiveRep {
   bool available = 1; // True if the SLAM is running and answered.
   bool active = 2; // True if the SLAM is now mapping (false if its sensor did not switch on).
+  SlamRequestError error = 3; // Why the SLAM is not in the state asked for, when it is not.
 }
 
 // Request to start or stop recording the SLAM.
@@ -392,6 +396,7 @@ message SetSlamRecordingReq {
 message SetSlamRecordingRep {
   bool available = 1; // True if the SLAM is running and answered.
   SlamRecordingState recording = 2; // The recording after the request.
+  SlamRequestError error = 3; // Why the recording is not in the state asked for, when it is not.
 }
 
 // Request to change the settings of a SLAM sensor.
@@ -410,4 +415,5 @@ message SetSlamSensorSettingsRep {
   bool available = 1; // True if the SLAM is running and answered.
   bool applied = 2; // True if the sensor took the settings.
   SlamSensorSettings settings = 3; // The sensor's settings after the request.
+  SlamRequestError error = 4; // Why the settings were not applied, when they were not.
 }

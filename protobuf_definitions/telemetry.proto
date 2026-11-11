@@ -463,4 +463,10 @@ message SlamStatusTel {
   bool map_full = 5; // True if the map holds as many points as it may: it is placed in, but grows no more.
   bool loop_closure = 6; // True if the SLAM corrects its trajectory with loop closures (it has a back end).
   SlamMapFrame frame = 7; // How the current map's frame lies in the world (unset before its first scan).
+  // Sequence of the newest update of the current map (SlamMapUpdate.sequence), 0 for none: a client
+  // that has applied less of the current map has missed one, and catches up (GetSlamMapReq).
+  uint64 sequence = 8;
+  SlamAiding aiding = 9; // What other than its sensors the estimate rests on now.
+  // True if the SLAM's back end failed and was dropped: the current map has no more loop closures.
+  bool backend_failed = 10;
 }
