@@ -34,8 +34,6 @@ enum SlamSensorType {
   SLAM_SENSOR_TYPE_UNSPECIFIED = 0; // Unspecified.
   SLAM_SENSOR_TYPE_SONAR_3D = 1; // A 3D imaging sonar, e.g. the Water Linked Sonar 3D-15.
   SLAM_SENSOR_TYPE_STEREO_CAMERA = 2; // A stereo camera's depth.
-  reserved 3;
-  reserved "SLAM_SENSOR_TYPE_SIMULATED";
 }
 
 // What the SLAM's poses are the poses of: its platform.
@@ -188,11 +186,11 @@ message SlamKeyframe {
 message SlamSubmap {
   uint32 submap_id = 1; // Submap id.
   uint32 anchor_keyframe_id = 2; // Keyframe whose platform frame the content is in.
-  string sensor_id = 4; // Sensor the content comes from (SlamSensor.id).
+  string sensor_id = 3; // Sensor the content comes from (SlamSensor.id).
   oneof content {
     // Points in the platform's frame at the anchor keyframe. In a map update they are appended to the
     // submap's points, unless replace is set.
-    PointCloud points = 3;
+    PointCloud points = 4;
   }
   bool replace = 5; // Points: true if they replace the submap's points so far, rather than adding to them.
 }
