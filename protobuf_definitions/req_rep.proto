@@ -401,13 +401,15 @@ message SetSlamRecordingRep {
 
 // Request to change the settings of a SLAM sensor.
 //
-// The settings go to the sensor named by sensor_id, or without one to the SLAM's
-// sensor of their kind, and those left unspecified stay as they are. The map goes
-// on at the resolution it was made with; the next new map (a start, or
-// ResetSlamReq) takes the resolution the sensor's range then gives.
+// The settings go to the sensor named by sensor_id. Without one, they go to the
+// SLAM's sensor of their kind when it has exactly one; with several, the request
+// must name one (SLAM_REQUEST_ERROR_NO_SUCH_SENSOR otherwise). Settings left
+// unspecified stay as they are. The map goes on at the resolution it was made
+// with; the next new map (a start, or ResetSlamReq) takes the resolution the
+// sensor's range then gives.
 message SetSlamSensorSettingsReq {
   SlamSensorSettings settings = 1; // The settings to change.
-  string sensor_id = 2; // The sensor to change (SlamSensor.id); empty: the SLAM's sensor of the settings' kind.
+  string sensor_id = 2; // The sensor to change (SlamSensor.id); empty: the SLAM's only sensor of the settings' kind.
 }
 
 // Response after changing the settings of a SLAM sensor.

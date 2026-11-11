@@ -247,7 +247,7 @@ enum SlamRequestError {
   SLAM_REQUEST_ERROR_UNSPECIFIED = 0; // None: the request was done, or asked for what already was.
   SLAM_REQUEST_ERROR_NOT_READABLE = 1; // The request could not be read.
   SLAM_REQUEST_ERROR_OTHER_MAP = 2; // The request named a map that is not the current one.
-  SLAM_REQUEST_ERROR_NO_SUCH_SENSOR = 3; // The request named a sensor the SLAM does not have.
+  SLAM_REQUEST_ERROR_NO_SUCH_SENSOR = 3; // The request named a sensor the SLAM does not have, or named none where it has several that fit.
   SLAM_REQUEST_ERROR_SENSOR = 4; // The sensor did not take it (it did not answer, or refused).
   SLAM_REQUEST_ERROR_BUSY = 5; // Another change to the sensor is under way; ask again after it.
   SLAM_REQUEST_ERROR_NOT_MAPPING = 6; // It needs the SLAM to be mapping (a recording).
