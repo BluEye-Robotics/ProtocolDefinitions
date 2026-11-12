@@ -332,8 +332,10 @@ message GetSlamMapReq {
 // Response after asking to catch up on the SLAM map: what is published for it.
 message GetSlamMapRep {
   bool available = 1; // True if the SLAM is running and answered.
-  uint32 map_id = 2; // The current map (0 before its first scan).
-  uint64 sequence = 3; // The client has the map at this sequence once it has what is published.
+  uint32 map_id = 2; // The current map (0 when the SLAM has no map).
+  // The client has the map at this sequence once it has what is published. The whole map may be one
+  // made earlier (its parts say their sequence): the updates after it are published again after it.
+  uint64 sequence = 3;
   oneof catch_up {
     // The updates from from_sequence to sequence are published again (none when from_sequence is past
     // sequence: the client has the map already).
@@ -356,6 +358,7 @@ message ResetSlamRep {
   // the current map's); 0 when the SLAM has no map yet (it starts one with its next scan).
   uint32 map_id = 2;
   bool reset = 3; // True if the map was discarded.
+  SlamRequestError error = 4; // Why the map was not discarded, when it was not.
 }
 
 // Request to start or stop the SLAM.
@@ -373,6 +376,7 @@ message SetSlamActiveReq {
 message SetSlamActiveRep {
   bool available = 1; // True if the SLAM is running and answered.
   bool active = 2; // True if the SLAM is now mapping (false if its sensor did not switch on).
+  SlamRequestError error = 3; // Why the SLAM is not in the state asked for, when it is not.
 }
 
 // Request to start or stop recording the SLAM.
@@ -392,17 +396,20 @@ message SetSlamRecordingReq {
 message SetSlamRecordingRep {
   bool available = 1; // True if the SLAM is running and answered.
   SlamRecordingState recording = 2; // The recording after the request.
+  SlamRequestError error = 3; // Why the recording is not in the state asked for, when it is not.
 }
 
 // Request to change the settings of a SLAM sensor.
 //
-// The settings go to the sensor named by sensor_id, or without one to the SLAM's
-// sensor of their kind, and those left unspecified stay as they are. A change of a
-// sonar's mode or range begins a new map, as the map's resolution follows the
-// sensor's range.
+// The settings go to the sensor named by sensor_id. Without one, they go to the
+// SLAM's sensor of their kind when it has exactly one; with several, the request
+// must name one (SLAM_REQUEST_ERROR_NO_SUCH_SENSOR otherwise). Settings left
+// unspecified stay as they are. The map goes on at the resolution it was made
+// with; the next new map (a start, or ResetSlamReq) takes the resolution the
+// sensor's range then gives.
 message SetSlamSensorSettingsReq {
   SlamSensorSettings settings = 1; // The settings to change.
-  string sensor_id = 2; // The sensor to change (SlamSensor.id); empty: the SLAM's sensor of the settings' kind.
+  string sensor_id = 2; // The sensor to change (SlamSensor.id); empty: the SLAM's only sensor of the settings' kind.
 }
 
 // Response after changing the settings of a SLAM sensor.
@@ -410,4 +417,5 @@ message SetSlamSensorSettingsRep {
   bool available = 1; // True if the SLAM is running and answered.
   bool applied = 2; // True if the sensor took the settings.
   SlamSensorSettings settings = 3; // The sensor's settings after the request.
+  SlamRequestError error = 4; // Why the settings were not applied, when they were not.
 }
