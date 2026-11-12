@@ -334,6 +334,9 @@ enum SlamOrientationSource {
   SLAM_ORIENTATION_SOURCE_DRONE_ATTITUDE = 2; // The drone's attitude, its heading from the compass.
   // The drone's attitude for roll and pitch, its turn from the drone's calibrated gyro (not the compass).
   SLAM_ORIENTATION_SOURCE_DRONE_GYRO = 3;
+  // The drone's attitude for roll and pitch, its heading the one the drone's position estimate keeps (its
+  // navigation's: from a gyro, a DVL or the compass, as the drone has them).
+  SLAM_ORIENTATION_SOURCE_DRONE_ESTIMATE = 4;
 }
 
 // What other than its sensors the SLAM's estimate rests on now.
