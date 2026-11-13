@@ -308,13 +308,14 @@ message SlamMapFrame {
 // The whole SLAM map, or a part of it.
 //
 // A large map comes in parts (part_count of them, in order), each a message of
-// its own. Every field that is not repeated is set in the first part (part 0); a
-// later part may repeat those that identify the map (map_id, sequence, part_count),
-// which match the first part's, and has its own part. A client has the map once it
-// has every part, and puts them together field by field: every repeated field is
-// the parts' concatenated in part order, and every other field is the first
-// part's, whatever a later part has (proto3 does not tell a field set to its
-// default from an unset one, so a client could not tell which part sets it).
+// its own. Every part has the map's map_id, sequence and part_count, and its own
+// part: a client groups parts by them, and drops a set whose parts disagree (one
+// of another map or sequence, or missing). Every other field that is not repeated
+// is set in the first part (part 0). A client has the map once it has every part,
+// and puts them together field by field: every repeated field is the parts'
+// concatenated in part order, and every other field is the first part's, whatever
+// a later part has (proto3 does not tell a field set to its default from an unset
+// one, so a client could not tell which part sets it).
 // Which part carries which repeated values is up to the SLAM, but a submap is
 // never split: each comes whole, in one part.
 message SlamMap {
