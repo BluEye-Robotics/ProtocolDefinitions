@@ -1,0 +1,8 @@
+# buf config for the breaking-change check in CI (ci-build.yaml): a field that is
+# renumbered, retyped or removed against master fails the build. Additions pass.
+version: v2
+modules:
+  - path: protobuf_definitions
+breaking:
+  use:
+    - FILE

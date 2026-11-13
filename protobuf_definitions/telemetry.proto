@@ -446,8 +446,10 @@ message SlamScanTel {
 //
 // Published on the SLAM publisher when a client asks for it (GetSlamMapReq). A
 // client subscribes, asks, keeps the updates that arrive meanwhile, and applies
-// those that follow the map's sequence once it has all of its parts. A SLAM
-// recording has the map at its start, and ends each map it holds with it.
+// those that follow the map's sequence once it has all of its parts (put together
+// as SlamMap says: repeated fields concatenated, every other field the first
+// part's). A SLAM recording has the map at its start, and ends each map it holds
+// with it.
 message SlamMapTel {
   SlamMap map = 1; // The map, or a part of it.
 }
