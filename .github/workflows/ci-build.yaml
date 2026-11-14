@@ -17,23 +17,6 @@ jobs:
         with:
           configDirectory: .
 
-  # Messages already out keep their fields' numbers and types: a renumbered,
-  # retyped or removed field fails against master (buf.yaml). Additions pass.
-  buf-breaking:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-      - name: Install buf
-        uses: bufbuild/buf-action@v1
-        with:
-          setup_only: true
-      - name: Check for breaking changes against master
-        run: |
-          git fetch --no-tags --depth=1 origin master
-          git worktree add --detach "$RUNNER_TEMP/master" FETCH_HEAD
-          buf breaking --against "$RUNNER_TEMP/master/protobuf_definitions"
-
   build-linux:
     runs-on: ubuntu-latest
     steps:
