@@ -171,6 +171,21 @@ message PowerCanisterTel {
   PowerCanister power_canister = 1; // Front and rear ESC-board sensor readings.
 }
 
+// Receive bidirectional DSHOT feedback from the X7's ESCs at up to 1 Hz: RPM, voltage,
+// current, temperature and reply counters per thruster. The drone logs every snapshot it
+// receives. When the feedback stops, one snapshot with every flag cleared follows. Never
+// sent by models without a power canister.
+message EscTelemetryTel {
+  EscTelemetry esc_telemetry = 1; // Feedback from every ESC of the power canister.
+}
+
+// Every voltage, current and temperature measurement the X7's ESCs reported, in the order
+// they reported them, including repeated values. Logged by the drone; not sent to clients.
+message EscMeasurementsTel {
+  repeated EscMeasurement measurements = 1; // Measurements reported since the previous message.
+  uint64 lost_responses = 2; // ESC telemetry responses lost before logging, since the drone software started.
+}
+
 // Video storage info.
 message VideoStorageSpaceTel {
   StorageSpace storage_space = 1; // Internal Video storage information.
