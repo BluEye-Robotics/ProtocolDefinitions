@@ -427,7 +427,7 @@ message SlamPoseTel {
   SlamPoseEstimate estimate = 1; // The pose estimate.
 }
 
-// A change to the SLAM map: new keyframes and points, or a corrected trajectory.
+// A change to the SLAM map: new keyframes and submap content, or a corrected trajectory.
 //
 // Published on the SLAM publisher. A client applies the updates that follow the
 // map it holds (SlamMapTel); one it missed it asks for again (GetSlamMapReq).
