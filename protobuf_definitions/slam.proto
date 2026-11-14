@@ -10,6 +10,15 @@
 // SetSlamActiveReq, SetSlamSensorSettingsReq, SetSlamRecordingReq) go to the
 // drone's request server as other requests do, which forwards them to the
 // SLAM's (TCP 5562, WebSocket 9990).
+//
+// These messages change only by addition: new fields, messages, enum values and
+// oneof members, never a field renumbered, retyped or given another meaning (CI
+// checks the numbers and types, ci-buf.yaml). A client ignores what it does not
+// know: an enum value as UNSPECIFIED, a oneof set to a member it does not know as
+// unset (a submap with such content keeps its id and anchor and shows nothing),
+// and fields it does not know. Packed bytes (PointCloud, SlamKeyframePoses) keep
+// their layout: more data per point or per pose comes in a field of its own, with
+// the same count.
 syntax = "proto3";
 
 package blueye.protocol;
