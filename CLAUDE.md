@@ -72,10 +72,12 @@ All proto definitions are in `protobuf_definitions/`:
 - **req_rep.proto** — Request/response message patterns
 - **mission_planning.proto** — Mission planning messages
 - **aquatroll.proto** — AquaTroll sensor-specific messages
+- **slam.proto** — SLAM state, poses, map and sensors (its `Slam*Tel` messages are in telemetry.proto and its requests in req_rep.proto)
 
 ## CI/CD Pipeline
 
 - **ci-build.yaml** — Protolint validation (all pushes and PRs)
+- **ci-buf.yaml** — `buf breaking` (`buf.yaml`): a renumbered, retyped or removed field fails, against the base branch for a PR (forks too) and against the commit before for a push to master
 - **ci-typescript.yaml** — Generate TS, compile, smoke-test the packed tarball (PRs and master); publish to npm and trigger the blueye-ts bump (master only)
 - **ci-dotnet.yaml** — Build and publish NuGet package (all pushes)
 - **ci-python.yaml** — Triggers `blueye.protocol` repo update via repository dispatch (master, when proto files change)

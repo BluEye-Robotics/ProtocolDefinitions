@@ -738,7 +738,7 @@ message DvlVelocity {
   int32 status = 2; // Vendor-specific status of the DVL.
   float delta_time = 3; // Time since last velocity measurement (ms).
   float fom = 4; // Figure of merit, a measure of the accuracy of the velocities (m/s).
-  Vector3 velocity = 5; // Velocity, x forward, y left, z down (m/s).
+  Vector3 velocity = 5; // Velocity, x forward, y right, z down (m/s).
   bool is_water_tracking = 6; // Water tracking status.
   repeated DvlTransducer transducers = 7; // List of transducers.
 }
@@ -2082,4 +2082,28 @@ message Annotation {
   string body = 6; // Optional free-form note. Unbounded.
   google.protobuf.Duration duration = 7; // Optional span; omit for a point-in-time marker.
   AnnotationSource source = 8; // Origin of the annotation; the app sets APP, the drone sets DRONE for its own.
+}
+
+// Unit quaternion describing a rotation (Hamilton convention: w + xi + yj + zk).
+//
+// Where it is a body's orientation, it rotates vectors from the body's frame to
+// the frame the body is placed in.
+message Quaternion {
+  double x = 1; // X-component of the vector part.
+  double y = 2; // Y-component of the vector part.
+  double z = 3; // Z-component of the vector part.
+  double w = 4; // Scalar part.
+}
+
+// Points packed for use as typed arrays without decoding them one by one.
+//
+// The frame the positions are in is the one the enclosing message names.
+//
+// count says how many points the bytes hold: positions is exactly count * 12 bytes,
+// and intensities either empty or count bytes. A cloud whose bytes disagree with
+// count is malformed, and is not used.
+message PointCloud {
+  uint32 count = 1; // Number of points.
+  bytes positions = 2; // count x, y, z triplets of little-endian float32 (m): 12 bytes per point.
+  bytes intensities = 3; // count signal strengths, one byte each (0 to 255), or empty when unknown.
 }

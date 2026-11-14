@@ -7,6 +7,7 @@ package blueye.protocol;
 import "google/protobuf/any.proto";
 import "message_formats.proto";
 import "mission_planning.proto";
+import "slam.proto";
 
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 option java_multiple_files = true;
@@ -186,6 +187,26 @@ message SetLogFrequencyRep {
   bool success = 1; // True if message name valid and frequency successfully updated.
 }
 
+// Request to reset the publishing frequency of a message to the drone's default.
+message ResetPubFrequencyReq {
+  string message_type = 1; // Message name, f. ex. "AttitudeTel"; empty resets every message.
+}
+
+// Response after resetting the publishing frequency.
+message ResetPubFrequencyRep {
+  bool success = 1; // True if the message name was valid and its frequency reset.
+}
+
+// Request to reset the logging frequency of a message to the drone's default.
+message ResetLogFrequencyReq {
+  string message_type = 1; // Message name, f. ex. "AttitudeTel"; empty resets every message.
+}
+
+// Response after resetting the logging frequency.
+message ResetLogFrequencyRep {
+  bool success = 1; // True if the message name was valid and its frequency reset.
+}
+
 // Request to get latest telemetry data
 message GetTelemetryReq {
   string message_type = 1; // Message name, f. ex. "AttitudeTel".
@@ -293,4 +314,108 @@ message GetMultibeamColorFilterReq {
 // Response with the current multibeam color filter.
 message GetMultibeamColorFilterRep {
   MultibeamColorFilter color_filter = 1; // The current color filter. Empty rgb means none is set (grayscale).
+}
+
+// Request to catch up on the SLAM map.
+//
+// Nothing comes in the reply but what is coming: the SLAM publishes it on its own
+// publisher, to the clients subscribed there. The SLAM keeps its latest map
+// updates: when map_id is the current map and the updates after have_sequence are
+// still kept, it publishes those again (SlamMapUpdateTel, as they were, so a client
+// that has them already skips them by their sequence); otherwise it publishes the
+// whole map (SlamMapTel, in parts when it is large).
+message GetSlamMapReq {
+  uint32 map_id = 1; // The map the client holds; 0 when it holds none.
+  uint64 have_sequence = 2; // The sequence of the last update the client applied to that map.
+}
+
+// Response after asking to catch up on the SLAM map: what is published for it.
+message GetSlamMapRep {
+  bool available = 1; // True if the SLAM is running and answered.
+  uint32 map_id = 2; // The current map (0 when the SLAM has no map).
+  // The client has the map at this sequence once it has what is published. The whole map may be one
+  // made earlier (its parts say their sequence): the updates after it are published again after it.
+  uint64 sequence = 3;
+  oneof catch_up {
+    // The updates from from_sequence to sequence are published again (none when from_sequence is past
+    // sequence: the client has the map already).
+    uint64 from_sequence = 4;
+    uint32 part_count = 5; // The whole map is published, in this many SlamMapTel parts.
+  }
+}
+
+// Request to discard the SLAM map and start a new one from the current pose.
+message ResetSlamReq {
+  // The map to discard: the SLAM resets only if it is still the current map, so that two clients
+  // asking at once start one new map, not two. 0 (map ids never are): only if the SLAM has no map yet.
+  uint32 map_id = 1;
+}
+
+// Response after resetting the SLAM map.
+message ResetSlamRep {
+  bool available = 1; // True if the SLAM is running and answered.
+  // Identifier of the map now (the new one, or the current one when the request's map_id was not
+  // the current map's); 0 when the SLAM has no map yet (it starts one with its next scan).
+  uint32 map_id = 2;
+  bool reset = 3; // True if the map was discarded.
+  SlamRequestError error = 4; // Why the map was not discarded, when it was not.
+}
+
+// Request to start or stop the SLAM.
+//
+// Starting switches the sensor on (for a sonar, its acoustics) and begins a new
+// map from the current pose. Stopping switches the sensor off and keeps the map,
+// so it can still be viewed. Asking for the state the SLAM is in already changes
+// nothing (ResetSlamReq begins a new map). The SLAM reports its state in
+// SlamStatusTel.
+message SetSlamActiveReq {
+  bool active = 1; // True to start the SLAM, false to stop it.
+}
+
+// Response after starting or stopping the SLAM.
+message SetSlamActiveRep {
+  bool available = 1; // True if the SLAM is running and answered.
+  bool active = 2; // True if the SLAM is now mapping (false if its sensor did not switch on).
+  SlamRequestError error = 3; // Why the SLAM is not in the state asked for, when it is not.
+}
+
+// Request to start or stop recording the SLAM.
+//
+// A recording needs the SLAM to be mapping, and stopping the SLAM stops it. It is
+// stored with the drone's other media (picture, video and multibeam recordings).
+// Like a multibeam recording it holds the drone's DroneInfoTel, at its start and
+// when it changes, which names the dive log it belongs with (log_name).
+// Asking for the state the recording is in already changes nothing.
+message SetSlamRecordingReq {
+  bool record = 1; // True to start recording, false to stop.
+  bool sensor_data = 2; // Also the sensor's raw data, and the dive log faster, for running the SLAM offline.
+  StorageLocation storage_location = 3; // Where to store the recording.
+}
+
+// Response after starting or stopping a SLAM recording.
+message SetSlamRecordingRep {
+  bool available = 1; // True if the SLAM is running and answered.
+  SlamRecordingState recording = 2; // The recording after the request.
+  SlamRequestError error = 3; // Why the recording is not in the state asked for, when it is not.
+}
+
+// Request to change the settings of a SLAM sensor.
+//
+// The settings go to the sensor named by sensor_id. Without one, they go to the
+// SLAM's sensor of their kind when it has exactly one; with several, the request
+// must name one (SLAM_REQUEST_ERROR_NO_SUCH_SENSOR otherwise). Settings left
+// unspecified stay as they are. The map goes on at the resolution it was made
+// with; the next new map (a start, or ResetSlamReq) takes the resolution the
+// sensor's range then gives.
+message SetSlamSensorSettingsReq {
+  SlamSensorSettings settings = 1; // The settings to change.
+  string sensor_id = 2; // The sensor to change (SlamSensor.id); empty: the SLAM's only sensor of the settings' kind.
+}
+
+// Response after changing the settings of a SLAM sensor.
+message SetSlamSensorSettingsRep {
+  bool available = 1; // True if the SLAM is running and answered.
+  bool applied = 2; // True if the sensor took the settings.
+  SlamSensorSettings settings = 3; // The sensor's settings after the request.
+  SlamRequestError error = 4; // Why the settings were not applied, when they were not.
 }
