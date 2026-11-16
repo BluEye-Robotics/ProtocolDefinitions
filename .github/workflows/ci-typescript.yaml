@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - master
-      # Prereleases for the SLAM pull requests (p2-django builds against
-      # them); remove before merging.
-      - sonar3d-slam
   pull_request:
 
 permissions:

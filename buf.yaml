@@ -1,4 +1,4 @@
-# buf config for the breaking-change check in CI (ci-build.yaml): a field that is
+# buf config for the breaking-change check in CI (ci-buf.yaml): a field that is
 # renumbered, retyped or removed against master fails the build. Additions pass.
 version: v2
 modules:
