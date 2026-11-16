@@ -471,4 +471,19 @@ message SlamStatusTel {
   SlamAiding aiding = 9; // What other than its sensors the estimate rests on now.
   // True if the SLAM's back end failed and was dropped: the current map has no more loop closures.
   bool backend_failed = 10;
+  // The base map and where finding the map in it stands; unset when the SLAM cannot localize in one. Also
+  // published when it changes.
+  SlamBaseMapState base_map = 11;
+}
+
+// The base map the SLAM localizes in (SlamStatusTel.base_map), whole or a
+// part of it (SlamMap.part, put together as SlamMapTel's).
+//
+// Recorded, not published: a SLAM recording holds it once, when it is loaded
+// while recording, or when a recording starts with one loaded, so that playing
+// the recording back draws it where the status puts it. A client reads the
+// base map from its file (SlamBaseMapState.name).
+message SlamBaseMapTel {
+  uint32 load_id = 1; // The load it is (SlamBaseMapState.load_id).
+  SlamMap map = 2; // The base map, or a part of it.
 }

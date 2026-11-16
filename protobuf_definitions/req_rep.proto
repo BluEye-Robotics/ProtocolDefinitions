@@ -419,3 +419,28 @@ message SetSlamSensorSettingsRep {
   SlamSensorSettings settings = 3; // The sensor's settings after the request.
   SlamRequestError error = 4; // Why the settings were not applied, when they were not.
 }
+
+// Request to change the SLAM's base map: load one, clear it, reject the place
+// found in it, or hint where the drone is in it (SlamBaseMapState).
+//
+// One request for every action, each a member of action, so that the drone's
+// request server passes on actions added later without knowing them. A SLAM
+// that does not know the action set (or none) answers
+// SLAM_REQUEST_ERROR_NOT_SUPPORTED; SlamBaseMapState.actions says beforehand
+// which it takes. Every action is answered at once: a load goes on after the
+// reply, and the status follows it.
+message SetSlamBaseMapReq {
+  oneof action {
+    SlamBaseMapLoad load = 1; // Load a base map, in place of any loaded before.
+    SlamBaseMapClear clear = 2; // Take the base map away.
+    SlamBaseMapReject reject = 3; // The place found is wrong: search again without it.
+    SlamBaseMapHint hint = 4; // Where the drone is in the base map, roughly.
+  }
+}
+
+// Response after changing the SLAM's base map.
+message SetSlamBaseMapRep {
+  bool available = 1; // True if the SLAM is running and answered.
+  SlamBaseMapState base_map = 2; // The base map after the request (unset: the SLAM cannot localize in one).
+  SlamRequestError error = 3; // Why the action was not done, when it was not.
+}
