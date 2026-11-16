@@ -1,0 +1,32 @@
+name: Breaking changes
+
+# Messages already out keep their fields' numbers and types: a renumbered,
+# retyped or removed field fails (buf.yaml); additions pass. A pull request,
+# from a fork too, is checked against the branch it goes into; a push to
+# master against master before it.
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  buf-breaking:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Install buf
+        uses: bufbuild/buf-action@v1
+        with:
+          setup_only: true
+      - name: Check against the base
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && github.base_ref || github.event.before }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BASE"
+          git worktree add --detach "$RUNNER_TEMP/base" FETCH_HEAD
+          buf breaking --against "$RUNNER_TEMP/base/protobuf_definitions"
