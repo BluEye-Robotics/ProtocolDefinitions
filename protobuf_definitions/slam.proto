@@ -514,7 +514,7 @@ message SlamMapSummary {
 // each later match.
 enum SlamBaseMapStage {
   SLAM_BASE_MAP_STAGE_UNSPECIFIED = 0; // No base map.
-  SLAM_BASE_MAP_STAGE_LOADING = 1; // Being read (progress); a recording without its map file takes longest.
+  SLAM_BASE_MAP_STAGE_LOADING = 1; // Being read; a recording without its map file takes longest.
   SLAM_BASE_MAP_STAGE_SWEEPING = 2; // Loaded; too little swept yet to search with (progress).
   SLAM_BASE_MAP_STAGE_SEARCHING = 3; // Searched, no place taken yet (miss says why).
   SLAM_BASE_MAP_STAGE_CANDIDATE = 4; // A place passed one search; the next must agree before it is taken.
@@ -559,7 +559,7 @@ message SlamBaseMapState {
   // the file it read only when they agree.
   uint32 base_map_id = 7;
   google.protobuf.Timestamp base_map_start_time = 8;
-  float progress = 9; // LOADING and SWEEPING: how far, from 0 to 1.
+  float progress = 9; // SWEEPING: how much of the sweep a search needs is there, from 0 to 1.
   SlamBaseMapMiss miss = 10; // SEARCHING: why the last search took no place.
   uint32 map_id = 11; // The SLAM map base_map_pose is in (SlamPoseEstimate.map_id).
   // FOUND: the base map's frame in that map's frame, as the SLAM's back end has it: a point p of the base map is
