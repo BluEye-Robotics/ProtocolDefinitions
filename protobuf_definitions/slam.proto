@@ -485,11 +485,12 @@ message SlamScan {
   google.protobuf.Timestamp time = 6; // Host time the scan was received (as SlamPoseEstimate.time).
 }
 
-// A map the SLAM saved, in brief: the first record of the file it keeps
-// beside a recording with the map the recording ends with
-// (<recording>_map.sbez: this, then that map as SlamMapTel parts with its
-// rasters deflated), so that a client lists maps and shows them small
-// without reading them whole.
+// A saved map, in brief: the first record of a map file
+// (<recording>_map.sbez: this, then the map as SlamMapTel parts, its rasters
+// deflated), so that a client lists maps and shows them small without
+// reading them whole. The SLAM writes one beside each of its recordings; a
+// client makes one of a recording it has (a file on the pilot's device) and
+// puts it in the drone's media folder, where the SLAM loads it as its own.
 message SlamMapSummary {
   string recording = 1; // File name of the recording the map ends (.sbez), without its folder.
   uint32 map_id = 2; // The map's id in that recording.
@@ -504,7 +505,9 @@ message SlamMapSummary {
   float max_y = 10;
   string log_name = 11; // The dive log the recording belongs with (DroneInfo.log_name), when known.
   // The map's mosaic, coarse (at most 256 pixels a side), its origin in the map's frame: for a list to show.
+  // Unset when the client that made the file did not draw one.
   SlamRaster preview = 12;
+  bool uploaded = 13; // Made by a client from a recording it had, not by the SLAM beside its own.
 }
 
 // Where finding the SLAM's map in a base map stands. A base map is a map
