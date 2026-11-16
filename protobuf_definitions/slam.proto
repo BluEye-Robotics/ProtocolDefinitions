@@ -385,13 +385,46 @@ enum SlamHeadingReference {
   SLAM_HEADING_REFERENCE_DRONE_COMPASS = 2;
 }
 
+// What placed a SLAM map on the Earth.
+enum SlamGeoreferenceSource {
+  SLAM_GEOREFERENCE_SOURCE_UNSPECIFIED = 0; // Unspecified.
+  SLAM_GEOREFERENCE_SOURCE_GNSS = 1; // The drone's GNSS receiver (the Blueye GNSS), from its fixes at the surface.
+}
+
+// Where a SLAM map lies on the Earth, as position fixes placed it: a point of the map, where it lies, and the
+// bearing of the map's x axis.
+//
+// The fixes do not bend the map: it moves and turns as a whole. A point (x, y) of the map lies
+// R(bearing) (x - anchor_x, y - anchor_y) north and east of anchor_position, where R turns north towards east
+// (clockwise seen from above): with bearing 0, x is north and y east. The bearing is known only once fixes from
+// places far enough apart pin it (bearing_known). Until then it is the map's own, as the drone's heading gave it at
+// the map's first scan, which near steel can be far off; anchor_position holds whatever the bearing.
+message SlamGeoreference {
+  SlamGeoreferenceSource source = 1; // What placed the map.
+  float anchor_x = 2; // x of the map point the fixes place (m, in the map frame): where they were taken, weighted.
+  float anchor_y = 3; // y of the map point the fixes place (m, in the map frame).
+  LatLongPosition anchor_position = 4; // Where the anchor lies (WGS84).
+  float anchor_stddev = 5; // Standard deviation of the anchor's position (m), along its least sure direction.
+  float bearing = 6; // Bearing of the map's x axis from true north (°, clockwise, 0 to 360).
+  float bearing_stddev = 7; // Standard deviation of the bearing as the fixes give it (°).
+  bool bearing_known = 8; // True if fixes pin the bearing; false: the map's own (the drone's heading at its start).
+  LatLongPosition origin_position = 9; // Where the map's origin lies, at that bearing.
+  // Standard deviation of the origin's position (m). With the bearing unknown, the anchor's plus the origin's
+  // distance from it: any bearing may hold.
+  float origin_stddev = 10;
+  uint32 places = 11; // Places the fixes were taken at (surfacings, each counted as one position).
+  uint32 fixes = 12; // Fixes used.
+  google.protobuf.Timestamp last_fix_time = 13; // Host time of the newest fix used.
+}
+
 // How a SLAM map's frame lies in the world, for placing the map on a chart.
 //
 // The frame is right-handed: x along the heading reference, y to its right, z
 // down (north-east-down with SLAM_HEADING_REFERENCE_DRONE_COMPASS). The origin is
 // the platform's position at the map's first scan. The map's heading may drift
 // from its reference over a dive: placing a map on a chart fits it to the drone's
-// positions (PositionEstimateTel in the dive log).
+// positions (PositionEstimateTel in the dive log), or takes georeference where
+// position fixes have placed it.
 message SlamMapFrame {
   bool gravity_aligned = 1; // True if z is down and x and y level; false: the first scan's platform frame.
   SlamHeadingReference heading_reference = 2; // What x points along.
@@ -406,6 +439,8 @@ message SlamMapFrame {
   optional float origin_depth = 4;
   google.protobuf.Timestamp start_time = 5; // Host time of the map's first scan (its first keyframe's).
   SlamPlatform platform = 6; // What the map's poses are the poses of.
+  // Where the map lies on the Earth, once position fixes have placed it (be-slam --gnss); unset without.
+  SlamGeoreference georeference = 7;
 }
 
 // The whole SLAM map, or a part of it.
