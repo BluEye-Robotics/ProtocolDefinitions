@@ -134,8 +134,10 @@ message SlamMultibeamSettings {
   SlamMultibeamMode mode = 1; // How the returns are placed.
   // The mosaic's resolution (m a pixel). 0: from the sonar's range, the resolution the pings are matched at.
   // It applies to the mosaic's tiles begun after the change; one finer than finest_mosaic_resolution takes that.
+  // A tile may be finer where its pings' range is short and coarser where it is long: each raster has its own.
   optional float mosaic_resolution = 2;
-  // In a report, the finest mosaic resolution the SLAM paints (m a pixel), as its computer allows.
+  // In a report, the finest mosaic_resolution the SLAM takes (m a pixel), as its computer allows; a tile of a
+  // short range may still be finer (SlamRaster.resolution).
   optional float finest_mosaic_resolution = 3;
 }
 
@@ -255,7 +257,9 @@ message SlamRaster {
   SlamPose origin = 1; // The raster's frame, in the frame the enclosing message names.
   uint32 rows = 2; // Rows: the raster spans rows * resolution along its x.
   uint32 columns = 3; // Columns: the raster spans columns * resolution along its y.
-  float resolution = 4; // Size of a pixel, along x and along y (m).
+  // Size of a pixel, along x and along y (m). Rasters of one map may differ in it: a multibeam's submaps are
+  // painted as finely as their sonar's range calls for.
+  float resolution = 4;
   SlamRasterFormat pixel_format = 5; // How the pixels are stored.
   SlamRasterValue value = 6; // What the pixels measure.
   bytes pixels = 7; // rows * columns pixels, row by row, each as pixel_format stores it.
