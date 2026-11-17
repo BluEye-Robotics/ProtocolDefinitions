@@ -353,7 +353,7 @@ message AnnotationCommand {
 // HeadingCommand turns the drone to a heading and holds it with auto heading. It completes once the
 // heading has settled.
 message HeadingCommand {
-  float heading = 1; // Target heading relative to north (deg, 0..360), or the turn when relative is set.
+  float heading = 1; // Target heading from north (deg, 0..360), or the turn when relative is set (deg, -180..180).
   bool relative = 2; // True to turn by `heading` degrees from the current heading; positive is clockwise.
 }
 
