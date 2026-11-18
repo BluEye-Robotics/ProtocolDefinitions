@@ -155,12 +155,18 @@ message GetMissionRep {
 // planned again as a whole and Mission.revision increases. An instruction that
 // has completed cannot be changed. Replacing or removing the instruction that
 // is running stops it; a replacement starts from where the drone is.
+//
+// The change applies only to the mission and revision the client edited. When
+// mission_uuid or revision differs from the loaded mission's, because the
+// mission was replaced or changed since, the drone refuses it and changes nothing.
 message SetInstructionUpdateReq {
   oneof operation {
     Instruction replace = 1; // Replace the instruction that has the same id.
     InsertInstruction insert = 2; // Add an instruction.
     uint32 remove_id = 3; // Remove the instruction with this id.
   }
+  string mission_uuid = 4; // Mission.uuid of the mission the client edited.
+  uint32 revision = 5; // Mission.revision the client edited.
 }
 
 // Response after updating an instruction in the current mission.
