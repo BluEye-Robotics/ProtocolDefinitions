@@ -24,8 +24,11 @@ message Mission {
   uint32 revision = 10; // Set by the drone, increases with every SetInstructionUpdateReq.
   // Client-defined identifier of the mission, such as a UUID, for clients to match the drone's status with
   // their own records (optional, at most 64 characters). The drone keeps it through instruction updates and
-  // echoes it in GetMissionRep, MissionStatus and MissionOutcome.
+  // echoes it in GetMissionRep, MissionStatus and MissionOutcome. It does not tell loads apart: see load_id.
   string uuid = 11;
+  // Set by the drone: a random id it draws for every mission it loads, never 0. An instruction update names
+  // it (SetInstructionUpdateReq.load_id), so it cannot change a mission loaded since. Ignored in SetMissionReq.
+  uint64 load_id = 12;
 }
 
 // A mission consists of one or multiple instructions. One instruction can be of different types.
@@ -224,11 +227,14 @@ message TriggerStatus {
   bool sensor_unavailable = 3; // True while the drone has no reading to judge the condition by.
 }
 
-// InsertInstruction adds an instruction to the loaded mission.
+// InsertInstruction adds an instruction to the loaded mission. It must say where: an insert that sets
+// neither before_id nor append true is refused.
 message InsertInstruction {
   Instruction instruction = 1; // The instruction to add. Its id must be new to the mission.
-  uint32 before_id = 2; // Id of the instruction to insert in front of, unless append is set.
-  bool append = 3; // Add the instruction at the end of the mission.
+  oneof placement {
+    uint32 before_id = 2; // Id of the instruction to insert in front of.
+    bool append = 3; // True adds the instruction at the end of the mission.
+  }
 }
 
 // A WaypointCommand will request the drone to drive to a point automatically.
@@ -510,24 +516,27 @@ message MissionStatus {
   uint32 time_elapsed = 2; // Time elapsed since mission started (s).
   uint32 estimated_time_to_complete = 3; // Estimated time to complete the mission (s).
   uint32 distance_to_complete = 4; // Distance left of the mission (m).
-  repeated uint32 completed_instruction_ids = 5; // Ids of the completed instructions.
+  repeated uint32 completed_instruction_ids = 5; // Ids of the completed instructions, skipped ones included.
   uint32 total_number_of_instructions = 6; // Total number of instructions in the mission.
   repeated uint32 completed_path_segment_ids = 7; // Ids of the completed path segments.
   uint32 total_number_of_path_segments = 8; // Total number of path segments in the mission.
   uint32 id = 9; // Mission id of the active mission.
-  int32 active_instruction_id = 10; // Id of the instruction that is running, -1 when none.
+  optional uint32 active_instruction_id = 10; // Id of the instruction that is running, not set when none.
   uint32 revision = 11; // Revision of the loaded mission, see Mission.revision.
   string failure_reason = 12; // Why the mission failed to load or start or was aborted by the drone.
   string uuid = 13; // Mission.uuid of the loaded mission.
   // How the last mission run ended. It stays when the mission is cleared or another one is loaded, is
   // replaced when a run ends again, including one resumed after an abort, and is lost when the drone restarts.
   MissionOutcome last_outcome = 14;
+  uint64 load_id = 15; // Mission.load_id of the loaded mission, 0 when none.
 }
 
 // How a mission run ended.
 enum MissionResult {
   MISSION_RESULT_UNSPECIFIED = 0; // No mission has ended since the drone started.
-  MISSION_RESULT_COMPLETED = 1; // Every instruction completed.
+  // The run reached the end of the mission. Instructions can have been skipped on the way, for a device
+  // that is not connected: see MissionOutcome.skipped_instruction_ids.
+  MISSION_RESULT_COMPLETED = 1;
   MISSION_RESULT_ABORTED = 2; // The drone stopped the mission, see MissionOutcome.abort_reason.
   MISSION_RESULT_CANCELLED = 3; // A client cleared or replaced the mission while it was running or paused.
 }
@@ -554,10 +563,12 @@ message MissionOutcome {
   uint32 mission_id = 2; // Mission.id of the mission.
   string mission_uuid = 3; // Mission.uuid of the mission.
   uint32 revision = 4; // Mission.revision when the run ended.
-  int32 instruction_id = 5; // Id of the instruction that was running when it ended, -1 when none.
+  optional uint32 instruction_id = 5; // Id of the instruction that was running when it ended, not set when none.
   MissionAbortReason abort_reason = 6; // Why the drone aborted the mission.
   string reason = 7; // Why the drone aborted the mission, as text.
   google.protobuf.Timestamp end_time = 8; // When the run ended, by the drone's clock.
+  repeated uint32 skipped_instruction_ids = 9; // Ids of the instructions the run skipped.
+  uint64 load_id = 10; // Mission.load_id of the mission.
 }
 
 // Outcome of an instruction started with RunInstructionCtrl.

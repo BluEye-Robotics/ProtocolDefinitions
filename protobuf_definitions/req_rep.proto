@@ -141,6 +141,7 @@ message SetMissionRep {
   // therefore only confirms receipt: wait for MissionStatusTel to show whether the mission loaded.
   bool accepted = 1;
   string reason = 2; // Why the mission was refused.
+  uint64 load_id = 3; // Mission.load_id the drone gave the mission, when it was loaded.
 }
 
 // Service request to the reference_generator to get the active mission.
@@ -157,8 +158,8 @@ message GetMissionRep {
 // has completed cannot be changed. Replacing or removing the instruction that
 // is running stops it; a replacement starts from where the drone is.
 //
-// The change applies only to the mission and revision the client edited. When
-// mission_uuid or revision differs from the loaded mission's, because the
+// The change applies only to the mission load and revision the client edited.
+// When load_id or revision differs from the loaded mission's, because the
 // mission was replaced or changed since, the drone refuses it and changes nothing.
 message SetInstructionUpdateReq {
   oneof operation {
@@ -166,7 +167,7 @@ message SetInstructionUpdateReq {
     InsertInstruction insert = 2; // Add an instruction.
     uint32 remove_id = 3; // Remove the instruction with this id.
   }
-  string mission_uuid = 4; // Mission.uuid of the mission the client edited.
+  uint64 load_id = 4; // Mission.load_id of the mission the client edited.
   uint32 revision = 5; // Mission.revision the client edited.
 }
 
