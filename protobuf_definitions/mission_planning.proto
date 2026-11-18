@@ -22,6 +22,10 @@ message Mission {
   float default_heave_speed = 8; // Default heave speed of the mission (m/s) (optional).
   float default_circle_of_acceptance = 9; // Default circle of acceptance for waypoints (m) (optional).
   uint32 revision = 10; // Set by the drone, increases with every SetInstructionUpdateReq.
+  // Client-defined identifier of the mission, such as a UUID, for clients to match the drone's status with
+  // their own records (optional, at most 64 characters). The drone keeps it through instruction updates and
+  // echoes it in GetMissionRep, MissionStatus and MissionOutcome.
+  string uuid = 11;
 }
 
 // A mission consists of one or multiple instructions. One instruction can be of different types.
@@ -509,6 +513,46 @@ message MissionStatus {
   int32 active_instruction_id = 10; // Id of the instruction that is running, -1 when none.
   uint32 revision = 11; // Revision of the loaded mission, see Mission.revision.
   string failure_reason = 12; // Why the mission failed to load or start or was aborted by the drone.
+  string uuid = 13; // Mission.uuid of the loaded mission.
+  // How the last mission run ended. It stays when the mission is cleared or another one is loaded, is
+  // replaced when a run ends again, including one resumed after an abort, and is lost when the drone restarts.
+  MissionOutcome last_outcome = 14;
+}
+
+// How a mission run ended.
+enum MissionResult {
+  MISSION_RESULT_UNSPECIFIED = 0; // No mission has ended since the drone started.
+  MISSION_RESULT_COMPLETED = 1; // Every instruction completed.
+  MISSION_RESULT_ABORTED = 2; // The drone stopped the mission, see MissionOutcome.abort_reason.
+  MISSION_RESULT_CANCELLED = 3; // A client cleared or replaced the mission while it was running or paused.
+}
+
+// Why the drone aborted a mission. A client that does not know a value treats it as unspecified.
+enum MissionAbortReason {
+  MISSION_ABORT_REASON_UNSPECIFIED = 0; // Unspecified, see MissionOutcome.reason.
+  MISSION_ABORT_REASON_CONTROL_MODE_LOST = 1; // A control mode the instruction needs was refused or lost.
+  MISSION_ABORT_REASON_POSITION_UNKNOWN = 2; // The instruction needs the drone's position, which is unknown.
+  MISSION_ABORT_REASON_STUCK = 3; // The drone stopped making progress towards its target.
+  MISSION_ABORT_REASON_WAYPOINT_TOO_FAR = 4; // A waypoint is farther away than the drone goes.
+  MISSION_ABORT_REASON_HEADING_UNKNOWN = 5; // A turn needs the drone's heading, which is unknown.
+  MISSION_ABORT_REASON_HEADING_NOT_REACHED = 6; // A turn did not reach its heading in time.
+  MISSION_ABORT_REASON_DEVICE_TIMEOUT = 7; // A camera, multibeam or other device did not confirm a command in time.
+  MISSION_ABORT_REASON_DURATION_TOO_LONG = 8; // The time left to complete the mission grew past the limit.
+  // The drone's supervisor stopped the mission: the pilot took control, the controlling client stopped
+  // answering, or the drone lost its position or attitude.
+  MISSION_ABORT_REASON_SUPERVISOR = 9;
+}
+
+// How a mission run ended, kept after the mission is cleared so a client that reconnects can tell.
+message MissionOutcome {
+  MissionResult result = 1; // How the run ended.
+  uint32 mission_id = 2; // Mission.id of the mission.
+  string mission_uuid = 3; // Mission.uuid of the mission.
+  uint32 revision = 4; // Mission.revision when the run ended.
+  int32 instruction_id = 5; // Id of the instruction that was running when it ended, -1 when none.
+  MissionAbortReason abort_reason = 6; // Why the drone aborted the mission.
+  string reason = 7; // Why the drone aborted the mission, as text.
+  google.protobuf.Timestamp end_time = 8; // When the run ended, by the drone's clock.
 }
 
 // Outcome of an instruction started with RunInstructionCtrl.
