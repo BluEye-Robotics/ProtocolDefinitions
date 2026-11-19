@@ -26,8 +26,9 @@ message Mission {
   // their own records (optional, at most 64 characters). The drone keeps it through instruction updates and
   // echoes it in GetMissionRep, MissionStatus and MissionOutcome. It does not tell loads apart: see load_id.
   string uuid = 11;
-  // Set by the drone: a random id it draws for every mission it loads, never 0. An instruction update names
-  // it (SetInstructionUpdateReq.load_id), so it cannot change a mission loaded since. Ignored in SetMissionReq.
+  // Set by the drone: a random id it draws for every mission it loads, from 1 to 2^53 - 1 so that clients that
+  // hold numbers as doubles, such as JavaScript, read it exactly. An instruction update names it
+  // (SetInstructionUpdateReq.load_id), so it cannot change a mission loaded since. Ignored in SetMissionReq.
   uint64 load_id = 12;
 }
 
