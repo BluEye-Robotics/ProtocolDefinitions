@@ -508,6 +508,11 @@ message SlamMapSummary {
   // Unset when the client that made the file did not draw one.
   SlamRaster preview = 12;
   bool uploaded = 13; // Made by a client from a recording it had, not by the SLAM beside its own.
+  // Where the drone was at the map's first scan, as its own position estimate had it
+  // (PositionEstimate.global_position), or else where it was when the estimate was first valid
+  // after that: a rough place of the map on the Earth, for a list to tell the maps nearby.
+  // Unset when the estimate was not valid while the map was made.
+  LatLongPosition start_position = 14;
 }
 
 // Where finding the SLAM's map in a base map stands. A base map is a map
