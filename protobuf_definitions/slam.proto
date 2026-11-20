@@ -44,7 +44,7 @@ enum SlamSensorType {
   SLAM_SENSOR_TYPE_SONAR_3D = 1; // A 3D imaging sonar, e.g. the Water Linked Sonar 3D-15.
   SLAM_SENSOR_TYPE_STEREO_CAMERA = 2; // A stereo camera's depth.
   // A 2D imaging sonar (multibeam), e.g. the Oculus M750D: range and bearing, no elevation.
-  SLAM_SENSOR_TYPE_MULTIBEAM_2D = 4;
+  SLAM_SENSOR_TYPE_MULTIBEAM_2D = 3;
 }
 
 // What the SLAM's poses are the poses of: its platform.
