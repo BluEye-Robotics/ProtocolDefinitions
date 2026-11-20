@@ -4,6 +4,8 @@
 syntax = "proto3";
 
 package blueye.protocol;
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
 import "message_formats.proto";
 option csharp_namespace = "Blueye.Protocol.Protobuf";
 option java_multiple_files = true;
@@ -19,13 +21,24 @@ message Mission {
   float default_surge_speed = 7; // Default cruise speed of the mission (m/s) (optional).
   float default_heave_speed = 8; // Default heave speed of the mission (m/s) (optional).
   float default_circle_of_acceptance = 9; // Default circle of acceptance for waypoints (m) (optional).
+  uint32 revision = 10; // Set by the drone, increases with every accepted SetInstructionUpdateReq.
+  // Client-defined identifier of the mission, such as a UUID, for clients to match the drone's status with
+  // their own records (optional, at most 64 characters). The drone keeps it through instruction updates and
+  // echoes it in GetMissionRep, MissionStatus and MissionOutcome. It does not tell loads apart: see load_id.
+  string uuid = 11;
+  // Set by the drone: a random id it draws for every mission it loads, from 1 to 2^53 - 1 so that clients that
+  // hold numbers as doubles, such as JavaScript, read it exactly. An instruction update names it
+  // (SetInstructionUpdateReq.load_id), so it cannot change a mission loaded since. Ignored in SetMissionReq.
+  uint64 load_id = 12;
 }
 
 // A mission consists of one or multiple instructions. One instruction can be of different types.
 message Instruction {
   uint32 id = 1;
   uint32 group_id = 2; // Group id used for polygons.
-  bool auto_continue = 3; // False will pause the mission after this instruction.
+  reserved 3; // auto_continue, which the drone never read; replaced by pause_on_completion.
+  reserved "auto_continue";
+  bool pause_on_completion = 27; // Pause the mission after this instruction. RunMissionCtrl continues it.
   oneof command {
     WaypointCommand waypoint_command = 4; // Go to waypoint.
     DepthSetPointCommand depth_set_point_command = 5; // Go to depth.
@@ -38,6 +51,18 @@ message Instruction {
     GoToSeabedCommand go_to_seabed_command = 12; // Go to seabed.
     GoToHomeCommand go_to_home_command = 13; // Go to home position.
     SurveyCommand survey_command = 14; // Execute a survey pattern over a polygon area.
+    RecordMultibeamCommand record_multibeam_command = 15; // Start or stop multibeam recording.
+    ActivateMultibeamCommand activate_multibeam_command = 16; // Start or stop the multibeam driver.
+    MultibeamConfigCommand multibeam_config_command = 17; // Change the multibeam configuration.
+    LightsCommand lights_command = 18; // Set the main or guest port lights.
+    LaserCommand laser_command = 19; // Set the laser.
+    TiltStabilizationCommand tilt_stabilization_command = 20; // Enable or disable tilt stabilization.
+    CvModelStateCommand cv_model_state_command = 21; // Start or stop a computer vision model.
+    AnnotationCommand annotation_command = 22; // Record an annotation in the dive log.
+    HeadingCommand heading_command = 23; // Turn to a heading and hold it.
+    TransectCommand transect_command = 24; // Drive a straight line on a course for a distance.
+    RelativeDepthCommand relative_depth_command = 25; // Change the depth by an amount.
+    CruiseSpeedCommand cruise_speed_command = 26; // Change the cruise speed for the rest of the mission.
   }
 }
 
@@ -79,12 +104,138 @@ enum ControlModeHorizontal {
   CONTROL_MODE_HORIZONTAL_MANUAL = 1; // Manual control mode.
   CONTROL_MODE_HORIZONTAL_AUTO_HEADING = 2; // Auto heading control mode.
   CONTROL_MODE_HORIZONTAL_STATION_KEEPING = 3; // Station keeping control mode.
+  CONTROL_MODE_HORIZONTAL_WEATHER_VANING = 4; // Weather vaning control mode (station keeping into the current).
 }
 
 // A ControlModeCommand is used to set vertical and horizontal control mode during a mission.
 message ControlModeCommand {
   ControlModeVertical control_mode_vertical = 5; // Desired control mode in heave.
   ControlModeHorizontal control_mode_horizontal = 6; // Desired control mode in surge and yaw.
+}
+
+// DetectionTrigger is satisfied by what the computer vision models see.
+//
+// The trigger is satisfied while at least one detection of the running models matches all of the
+// filters below. The models have to be running; a trigger for a model that is not running is not
+// satisfied and TriggerStatus reports sensor_unavailable.
+message DetectionTrigger {
+  reserved 6, 7, 8; // hold_ms, release_ms and cooldown_ms; the times are now durations in MissionRule.
+  reserved "hold_ms", "release_ms", "cooldown_ms";
+  repeated string class_names = 1; // Any of these class names; empty matches every class.
+  string model_name = 2; // Only detections from this model; empty matches every model.
+  Camera camera = 3; // Only detections from this camera; unspecified matches every camera.
+  float min_confidence = 4; // Detections below this confidence are ignored (0..1).
+  float min_area_fraction = 5; // Least bounding box area over image area a detection must have (0..1).
+}
+
+// DepthTrigger is satisfied while the drone is between two depths below the surface.
+//
+// A depth with a tolerance is the two bounds around it: 9 and 11 for ten metres give or take a
+// metre. Leaving max_depth at zero gives no upper bound, so a min_depth of 20 on its own is
+// satisfied deeper than 20 m. Neither bound may be negative, and a max_depth that is set has to be
+// above min_depth: the two are the edges of a band, not a single depth, and a rule whose band has
+// no width is refused rather than left never firing. The drone measures its depth from the moment
+// it is powered on, so this trigger reports sensor_unavailable only while no depth has reached the
+// mission at all.
+message DepthTrigger {
+  float min_depth = 1; // Shallowest depth that satisfies the trigger (m below the surface).
+  float max_depth = 2; // Deepest depth that satisfies the trigger (m). Zero means no upper bound.
+}
+
+// AltitudeTrigger is satisfied while the drone is between two heights above the seabed.
+//
+// A height with a tolerance is the two bounds around it: 2.5 and 3.5 for three metres off the
+// bottom give or take half a metre. Leaving max_altitude at zero gives no upper bound. Neither
+// bound may be negative, and a max_altitude that is set has to be above min_altitude, as for
+// DepthTrigger. The height comes from a DVL or an altimeter; with neither mounted, out of its
+// range, or with a reading the drone does not trust, the trigger is simply not satisfied and
+// TriggerStatus reports sensor_unavailable.
+message AltitudeTrigger {
+  float min_altitude = 1; // Lowest height above the seabed that satisfies the trigger (m).
+  float max_altitude = 2; // Highest height that satisfies the trigger (m). Zero means no upper bound.
+}
+
+// LocationTrigger is satisfied while the drone is inside a circle around a position.
+//
+// Entering the circle makes the trigger satisfied and leaving it makes it unsatisfied, so a rule
+// with one location trigger can start a recording in its enter instructions and stop it in its exit
+// instructions. Any valid position estimate will do, whichever sensors it is built from; while the
+// drone has none the trigger is simply not satisfied and TriggerStatus reports sensor_unavailable.
+message LocationTrigger {
+  LatLongPosition position = 1; // Centre of the circle (decimal degrees).
+  float circle_of_acceptance = 2; // Radius of the circle around the position (m). Must be above zero.
+}
+
+// Trigger is one condition of a mission rule.
+message Trigger {
+  oneof condition {
+    DetectionTrigger detection_trigger = 1; // Satisfied by a detection from a computer vision model.
+    DepthTrigger depth_trigger = 2; // Satisfied at a depth below the surface.
+    AltitudeTrigger altitude_trigger = 3; // Satisfied at a height above the seabed.
+    LocationTrigger location_trigger = 4; // Satisfied inside a circle around a position.
+  }
+}
+
+// Which condition a Trigger carries. The values are the field numbers of the Trigger oneof.
+enum TriggerKind {
+  TRIGGER_KIND_UNSPECIFIED = 0; // No condition is set.
+  TRIGGER_KIND_DETECTION = 1; // A DetectionTrigger.
+  TRIGGER_KIND_DEPTH = 2; // A DepthTrigger.
+  TRIGGER_KIND_ALTITUDE = 3; // An AltitudeTrigger.
+  TRIGGER_KIND_LOCATION = 4; // A LocationTrigger.
+}
+
+// MissionRule runs instructions when all of its triggers are satisfied at once and when they stop
+// being so. A drone runs at most 16 rules with at most 8 triggers and 8 instructions per list, and
+// a rule has to carry at least one instruction in one of its lists. A rule with no triggers never
+// fires. Instructions that move the drone (waypoint, go to home,
+// transect, survey, depth set point, relative depth, go to surface or seabed, control mode,
+// heading) and waits are refused in rules; camera, tilt, lights, laser, multibeam, tilt
+// stabilization, CV model, annotation and cruise speed are allowed.
+message MissionRule {
+  reserved 4; // The single detection_trigger, replaced by the triggers list.
+  reserved "detection_trigger";
+  uint32 id = 1; // Rule id, defined by the client. Must be greater than zero and unique.
+  string name = 2; // Rule name, for the log and the app.
+  bool disabled = 3; // A disabled rule never fires. Rules run unless this is set.
+  repeated Instruction enter_instructions = 5; // Run when the rule fires.
+  repeated Instruction exit_instructions = 6; // Run when the rule releases.
+  repeated Trigger triggers = 7; // Conditions that must all be satisfied at once for the rule to fire.
+  // How long all the triggers must stay satisfied before the rule fires. At most an hour.
+  google.protobuf.Duration hold_duration = 8;
+  // How long a trigger must stay unsatisfied before the rule releases. At most an hour.
+  google.protobuf.Duration release_duration = 9;
+  // Time after a release before the rule can fire again. At most an hour.
+  google.protobuf.Duration cooldown_duration = 10;
+}
+
+// MissionRuleStatus is the state of one rule.
+message MissionRuleStatus {
+  uint32 id = 1; // Rule id.
+  MissionRuleState state = 2; // What the rule is doing.
+  uint32 episodes = 3; // Times the rule has fired since it was set.
+  google.protobuf.Timestamp last_fired = 4; // When the rule last fired; unset before the first time.
+  InstructionResultState last_result = 5; // Outcome of the last instruction the rule ran.
+  string last_reason = 6; // Reason of the last result, when there is one.
+  repeated TriggerStatus triggers = 7; // One entry per trigger, in the order the rule lists them.
+}
+
+// TriggerStatus is the state of one trigger of a rule, so a client can show which condition is
+// holding the rule back.
+message TriggerStatus {
+  TriggerKind kind = 1; // Which condition the trigger carries.
+  bool satisfied = 2; // True while the condition holds.
+  bool sensor_unavailable = 3; // True while the drone has no reading to judge the condition by.
+}
+
+// InsertInstruction adds an instruction to the loaded mission. It must say where: an insert that sets
+// neither before_id nor append true is refused.
+message InsertInstruction {
+  Instruction instruction = 1; // The instruction to add. Its id must be new to the mission.
+  oneof placement {
+    uint32 before_id = 2; // Id of the instruction to insert in front of.
+    bool append = 3; // True adds the instruction at the end of the mission.
+  }
 }
 
 // A WaypointCommand will request the drone to drive to a point automatically.
@@ -116,6 +267,8 @@ message WaitForCommand {
 message CameraCommand {
   CameraAction camera_action = 1; // Camera command.
   float action_param = 2; // Used for taking photos based on a time or distance interval.
+  Camera camera = 3; // Which camera the action applies to. The main camera when unspecified or unrecognised.
+  StorageLocation storage_location = 4; // Where to store the photos or the recording. Internal when unspecified.
 }
 
 // GoToSurfaceCommand is used to go to the surface.
@@ -131,6 +284,111 @@ message GoToSeabedCommand {
 // GoToHomeCommand is used to go to the home position.
 message GoToHomeCommand {
   float desired_speed = 1; // Desired speed to home (m/s).
+}
+
+// RecordMultibeamCommand starts or stops recording of the multibeam sonar.
+message RecordMultibeamCommand {
+  bool enable = 1; // True to start recording, false to stop.
+  StorageLocation storage_location = 2; // Where to store the recording. Internal when unspecified.
+}
+
+// ActivateMultibeamCommand starts or stops the multibeam sonar driver, as ActivateMultibeamCtrl and
+// DeactivateMultibeamCtrl do.
+//
+// The instruction completes when the driver reports the requested state, so a following
+// RecordMultibeamCommand or TiltMultibeamCommand finds the sonar ready.
+message ActivateMultibeamCommand {
+  bool activate = 1; // True to start the driver, false to stop it.
+  MultibeamConfig config = 2; // Configuration to start with. When left out, the last known configuration is used.
+  // The sonar `config` was made for, as the multibeam driver reports it. The driver still starts or
+  // stops when a different sonar is connected, but `config` is skipped in favour of the last
+  // configuration the driver reported and the drone sends a
+  // NOTIFICATION_TYPE_MULTIBEAM_SONAR_MISMATCH notification. Unspecified applies `config` to
+  // whichever sonar is connected. A `config` that the sonar cannot run, measured the same way as
+  // for MultibeamConfigCommand, skips the whole instruction instead, so the driver is never
+  // started with a configuration nobody asked for.
+  GuestPortDeviceID expected_device_id = 3;
+}
+
+// MultibeamConfigCommand changes the configuration of a running multibeam sonar.
+//
+// A configuration is made for one sonar, because ranges, frequencies and beam counts differ between
+// them. The drone compares expected_device_id with the sonar the multibeam driver reports, not with
+// what the guest port discovery found, and when they differ it skips the whole instruction and
+// sends a NOTIFICATION_TYPE_MULTIBEAM_SONAR_MISMATCH notification; the mission carries on with the
+// next instruction. Unspecified applies the configuration to whichever sonar is connected.
+//
+// The configuration is also measured against what that sonar can do: the range for the frequency
+// mode asked for, a high frequency mode on a sonar that has only one, and the number of beams. A
+// configuration outside them skips the instruction with a reason naming the sonar. Nothing is
+// quietly clamped, so a sonar never ends up running a configuration nobody asked for.
+message MultibeamConfigCommand {
+  MultibeamConfig config = 1; // The configuration to apply.
+  GuestPortDeviceID expected_device_id = 2; // The sonar this configuration was made for.
+}
+
+// Which lights a LightsCommand applies to.
+enum LightTarget {
+  LIGHT_TARGET_UNSPECIFIED = 0; // Unspecified, treated as the main lights.
+  LIGHT_TARGET_MAIN = 1; // The drone's own lights.
+  LIGHT_TARGET_GUESTPORT = 2; // Lights connected to a guest port.
+}
+
+// LightsCommand sets the intensity of the main or guest port lights, as LightsCtrl and GuestportLightsCtrl do.
+message LightsCommand {
+  Lights lights = 1; // Light intensity (0..1).
+  LightTarget target = 2; // Which lights to set. The main lights when unspecified or unrecognised.
+}
+
+// LaserCommand sets the laser connected to a guest port, as LaserCtrl does.
+message LaserCommand {
+  Laser laser = 1; // Laser intensity and modulation.
+}
+
+// TiltStabilizationCommand enables or disables camera tilt stabilization, as TiltStabilizationCtrl does.
+message TiltStabilizationCommand {
+  TiltStabilizationState state = 1; // The tilt stabilization state to set.
+}
+
+// CvModelStateCommand starts or stops a computer vision model on the drone, as SetCvModelStateReq does.
+//
+// The instruction completes when the model reports the requested state.
+message CvModelStateCommand {
+  string package_id = 1; // The model package to start or stop, as listed in CvModelInfo.
+  bool running = 2; // True to start the model, false to stop it.
+}
+
+// AnnotationCommand records an annotation in the dive log, as AnnotationCtrl does.
+message AnnotationCommand {
+  Annotation annotation = 1; // The annotation to record. The drone sets the timestamp and the source.
+}
+
+// HeadingCommand turns the drone to a heading and holds it with auto heading. It completes once the
+// heading has settled.
+message HeadingCommand {
+  float heading = 1; // Target heading from north (deg, 0..360), or the turn when relative is set (deg, -180..180).
+  bool relative = 2; // True to turn by `heading` degrees from the current heading; positive is clockwise.
+}
+
+// TransectCommand drives a straight line from the current position, like a waypoint the drone
+// computes itself from a course and a distance.
+message TransectCommand {
+  float course = 1; // Course relative to north (deg, 0..360).
+  float distance = 2; // Length of the line (m).
+  float speed_to_target = 3; // Desired speed over ground (m/s). The mission default when 0.
+  DepthSetPoint depth_set_point = 4; // Optional depth or altitude to hold along the line.
+  float circle_of_acceptance = 5; // Radius of acceptance at the end of the line (m). The mission default when 0.
+}
+
+// RelativeDepthCommand changes the depth by an amount from where the drone is when it starts.
+message RelativeDepthCommand {
+  float depth_change = 1; // Change in depth (m); positive is deeper, negative shallower.
+  float speed_to_depth = 2; // Desired speed to the new depth (m/s). The mission default when 0.
+}
+
+// CruiseSpeedCommand changes the cruise speed used by the following instructions of the mission.
+message CruiseSpeedCommand {
+  float cruise_speed = 1; // Desired surge speed (m/s). Must be greater than zero.
 }
 
 // A SurveyCommand defines a survey (lawn-mower) pattern over a polygon area.
@@ -157,7 +415,10 @@ message SurveyCommand {
   float cruise_speed = 5; // Desired speed over ground during survey (m/s).
   float circle_of_acceptance = 6; // Radius of acceptance circle for generated waypoints (m).
   DepthSetPoint depth_set_point = 7; // Optional depth set point for all generated waypoints.
-  bool reverse = 8; // If true, reverse the scan line order (swap start and end points).
+  // The planner generated the pattern in reverse, from its last scan line to its first.
+  // The waypoints are already in that order: the drone flies them as given, and
+  // the planner reads this back to rebuild the pattern.
+  bool reverse = 8;
   // Pre-computed waypoints generated by the planner from the polygon and parameters.
   // The drone executes these directly. Individual waypoint parameters (speed, CoA,
   // depth) can be tweaked after generation without modifying the survey shape.
@@ -207,6 +468,18 @@ enum InstructionType {
   INSTRUCTION_TYPE_GO_TO_SEABED = 11; // Go to the seabed.
   INSTRUCTION_TYPE_GO_TO_HOME = 12; // Returning to home.
   INSTRUCTION_TYPE_SURVEY = 13; // Execute a survey pattern over a polygon area.
+  INSTRUCTION_TYPE_RECORD_MULTIBEAM = 14; // Start or stop multibeam recording.
+  INSTRUCTION_TYPE_ACTIVATE_MULTIBEAM = 15; // Start or stop the multibeam driver.
+  INSTRUCTION_TYPE_SET_MULTIBEAM_CONFIG = 16; // Change the multibeam configuration.
+  INSTRUCTION_TYPE_SET_LIGHTS = 17; // Set the lights.
+  INSTRUCTION_TYPE_SET_LASER = 18; // Set the laser.
+  INSTRUCTION_TYPE_SET_TILT_STABILIZATION = 19; // Enable or disable tilt stabilization.
+  INSTRUCTION_TYPE_SET_CV_MODEL = 20; // Start or stop a computer vision model.
+  INSTRUCTION_TYPE_ANNOTATION = 21; // Record an annotation.
+  INSTRUCTION_TYPE_GO_TO_HEADING = 22; // Turn to a heading.
+  INSTRUCTION_TYPE_TRANSECT = 23; // Drive a straight line.
+  INSTRUCTION_TYPE_GO_TO_RELATIVE_DEPTH = 24; // Change the depth by an amount.
+  INSTRUCTION_TYPE_SET_CRUISE_SPEED = 25; // Change the cruise speed.
 }
 
 // Reference for the auto pilot when a mission is active.
@@ -244,9 +517,84 @@ message MissionStatus {
   uint32 time_elapsed = 2; // Time elapsed since mission started (s).
   uint32 estimated_time_to_complete = 3; // Estimated time to complete the mission (s).
   uint32 distance_to_complete = 4; // Distance left of the mission (m).
-  repeated uint32 completed_instruction_ids = 5; // Ids of the completed instructions.
+  repeated uint32 completed_instruction_ids = 5; // Ids of the completed instructions, skipped ones included.
   uint32 total_number_of_instructions = 6; // Total number of instructions in the mission.
   repeated uint32 completed_path_segment_ids = 7; // Ids of the completed path segments.
   uint32 total_number_of_path_segments = 8; // Total number of path segments in the mission.
   uint32 id = 9; // Mission id of the active mission.
+  optional uint32 active_instruction_id = 10; // Id of the instruction that is running, not set when none.
+  uint32 revision = 11; // Revision of the loaded mission, see Mission.revision.
+  string failure_reason = 12; // Why the mission failed to load or start or was aborted by the drone.
+  string uuid = 13; // Mission.uuid of the loaded mission.
+  // How the last mission run ended. It stays when the mission is cleared or another one is loaded, is
+  // replaced when a run ends again, including one resumed after an abort, and is lost when the drone restarts.
+  MissionOutcome last_outcome = 14;
+  uint64 load_id = 15; // Mission.load_id of the loaded mission, 0 when none.
+}
+
+// How a mission run ended.
+enum MissionResult {
+  MISSION_RESULT_UNSPECIFIED = 0; // No mission has ended since the drone started.
+  // The run reached the end of the mission. Instructions can have been skipped on the way, for a device
+  // that is not connected: see MissionOutcome.skipped_instruction_ids.
+  MISSION_RESULT_COMPLETED = 1;
+  MISSION_RESULT_ABORTED = 2; // The drone stopped the mission, see MissionOutcome.abort_reason.
+  MISSION_RESULT_CANCELLED = 3; // A client cleared or replaced the mission while it was running or paused.
+}
+
+// Why the drone aborted a mission. A client that does not know a value treats it as unspecified.
+enum MissionAbortReason {
+  MISSION_ABORT_REASON_UNSPECIFIED = 0; // Unspecified, see MissionOutcome.reason.
+  MISSION_ABORT_REASON_CONTROL_MODE_LOST = 1; // A control mode the instruction needs was refused or lost.
+  MISSION_ABORT_REASON_POSITION_UNKNOWN = 2; // The instruction needs the drone's position, which is unknown.
+  MISSION_ABORT_REASON_STUCK = 3; // The drone stopped making progress towards its target.
+  MISSION_ABORT_REASON_WAYPOINT_TOO_FAR = 4; // A waypoint is farther away than the drone goes.
+  MISSION_ABORT_REASON_HEADING_UNKNOWN = 5; // A turn needs the drone's heading, which is unknown.
+  MISSION_ABORT_REASON_HEADING_NOT_REACHED = 6; // A turn did not reach its heading in time.
+  MISSION_ABORT_REASON_DEVICE_TIMEOUT = 7; // A camera, multibeam or other device did not confirm a command in time.
+  MISSION_ABORT_REASON_DURATION_TOO_LONG = 8; // The time left to complete the mission grew past the limit.
+  // The drone's supervisor stopped the mission: the pilot took control, the controlling client stopped
+  // answering, or the drone lost its position or attitude.
+  MISSION_ABORT_REASON_SUPERVISOR = 9;
+}
+
+// How a mission run ended, kept after the mission is cleared so a client that reconnects can tell.
+message MissionOutcome {
+  MissionResult result = 1; // How the run ended.
+  uint32 mission_id = 2; // Mission.id of the mission.
+  string mission_uuid = 3; // Mission.uuid of the mission.
+  uint32 revision = 4; // Mission.revision when the run ended.
+  optional uint32 instruction_id = 5; // Id of the instruction that was running when it ended, not set when none.
+  MissionAbortReason abort_reason = 6; // Why the drone aborted the mission.
+  string reason = 7; // Why the drone aborted the mission, as text.
+  google.protobuf.Timestamp end_time = 8; // When the run ended, by the drone's clock.
+  repeated uint32 skipped_instruction_ids = 9; // Ids of the instructions the run skipped.
+  uint64 load_id = 10; // Mission.load_id of the mission.
+}
+
+// Outcome of an instruction started with RunInstructionCtrl.
+enum InstructionResultState {
+  INSTRUCTION_RESULT_STATE_UNSPECIFIED = 0; // Unspecified.
+  INSTRUCTION_RESULT_STATE_ACCEPTED = 1; // The instruction was accepted and has started.
+  INSTRUCTION_RESULT_STATE_REJECTED = 2; // The instruction was not started, see reason.
+  INSTRUCTION_RESULT_STATE_COMPLETED = 3; // The instruction completed.
+  INSTRUCTION_RESULT_STATE_FAILED = 4; // The instruction stopped before completing, see reason.
+  INSTRUCTION_RESULT_STATE_CANCELLED = 5; // The instruction was cancelled by a client or by the drone.
+}
+
+// MissionRuleState is where a rule is in its episode.
+enum MissionRuleState {
+  MISSION_RULE_STATE_UNSPECIFIED = 0; // Unspecified.
+  MISSION_RULE_STATE_IDLE = 1; // Waiting for the trigger.
+  MISSION_RULE_STATE_ACTIVE = 2; // The rule has fired and has not released yet.
+  MISSION_RULE_STATE_COOLDOWN = 3; // Released; waiting for the cooldown before it can fire again.
+  MISSION_RULE_STATE_DISABLED = 4; // The rule is disabled.
+}
+
+// Result of an instruction started with RunInstructionCtrl.
+message InstructionResult {
+  uint32 request_id = 1; // The request_id given to RunInstructionCtrl.
+  uint32 instruction_id = 2; // Id of the instruction, as given by the client.
+  InstructionResultState state = 3; // Outcome so far.
+  string reason = 4; // Why the instruction was rejected, failed or was cancelled (optional).
 }
