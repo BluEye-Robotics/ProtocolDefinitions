@@ -355,7 +355,9 @@ enum SlamRequestError {
   SLAM_REQUEST_ERROR_STORAGE = 7; // No storage to record to, or it is full.
   SLAM_REQUEST_ERROR_NOT_SUPPORTED = 8; // The SLAM or its sensor cannot do it.
   SLAM_REQUEST_ERROR_NO_BASE_MAP = 9; // It needs a base map, and none is loaded.
-  // The file named is not there, or holds no map the SLAM can localize in (SlamBaseMapState.error says which).
+  // The base map named cannot be loaded. For a name that is not a bare file name (.sbez), or a file that is not
+  // there, the reply has this error at once, and the base map before stays. A file that holds no map the SLAM can
+  // localize in ends its load FAILED, with this error in SlamBaseMapState.error.
   SLAM_REQUEST_ERROR_BASE_MAP_UNREADABLE = 10;
   SLAM_REQUEST_ERROR_OTHER_BASE_MAP = 11; // The request named a load of a base map that is not the current one.
   SLAM_REQUEST_ERROR_OTHER_FIX = 12; // The request named a place found that is not the current one.
@@ -411,7 +413,10 @@ message SlamGeoreference {
   LatLongPosition anchor_position = 4; // Where the anchor lies (WGS84).
   float anchor_stddev = 5; // Standard deviation of the anchor's position (m), along its least sure direction.
   float bearing = 6; // Bearing of the map's x axis from true north (°, clockwise, 0 to 360).
-  float bearing_stddev = 7; // Standard deviation of the bearing as the fixes give it (°).
+  // Standard deviation of the bearing as the fixes give it (°). While bearing_known is false, it is how unsure the
+  // fixes so far leave the bearing, up to 180° (fixes from one place say nothing of it); it is not the uncertainty
+  // of bearing, which is then the map's own (from the drone's heading), and a client does not draw it as one.
+  float bearing_stddev = 7;
   bool bearing_known = 8; // True if fixes pin the bearing; false: the map's own (the drone's heading at its start).
   LatLongPosition origin_position = 9; // Where the map's origin lies, at that bearing.
   // Standard deviation of the origin's position (m). With the bearing unknown, the anchor's plus the origin's
@@ -504,8 +509,9 @@ message SlamMapSummary {
   float min_y = 9;
   float max_y = 10;
   string log_name = 11; // The dive log the recording belongs with (DroneInfo.log_name), when known.
-  // The map's mosaic, coarse (at most 256 pixels a side), its origin in the map's frame: for a list to show.
-  // Unset when the client that made the file did not draw one.
+  // The map's mosaic, coarse (at most 256 pixels a side), its origin in the map's frame: for a list to show. A
+  // reader may rely on that bound, e.g. to size how much of a file it reads for the summary. Unset when the client
+  // that made the file did not draw one.
   SlamRaster preview = 12;
   bool uploaded = 13; // Made by a client from a recording it had, not by the SLAM beside its own.
   // Where the drone was at the map's first scan, as its own position estimate had it
@@ -573,12 +579,14 @@ message SlamBaseMapState {
   // FOUND: the base map's frame in that map's frame, as the SLAM's back end has it: a point p of the base map is
   // at base_map_pose times p in the map.
   SlamPose base_map_pose = 12;
-  uint32 fix_id = 13; // The place found (FOUND), or passed (CANDIDATE): a new one each, for SlamBaseMapReject.
+  // The place found (FOUND), or passed (CANDIDATE): a new one each, for SlamBaseMapReject. An id is never
+  // repeated while the SLAM runs, whatever base maps it loads.
+  uint32 fix_id = 13;
   uint32 matches = 14; // FOUND: the matches that keep it.
   google.protobuf.Timestamp last_match_time = 15; // FOUND: host time of the scan the last match was made at.
   // The last search's best place: its score (from 0, nothing alike, to 1), how far it stands above the next
-  // place's (margin; one is taken from 0.10), and the share of the sweep that lies on the base map there
-  // (overlap; from 0.6).
+  // place's (margin), and the share of the sweep that lies on the base map there (overlap). A place is taken
+  // only with the margin and the overlap the SLAM requires.
   float score = 16;
   float margin = 17;
   float overlap = 18;
@@ -589,8 +597,8 @@ message SlamBaseMapState {
 // Load a base map (SetSlamBaseMapReq): a file in the drone's media folder,
 // in place of any loaded before. The reply comes at once; the status follows
 // the load (LOADING, then SWEEPING or FAILED). A map of this dive is searched
-// within 20° of its heading (both maps are north up, by a compass that drifts
-// a few degrees between them); one of another dive at every heading.
+// in a window around its heading (both maps are north up, by a compass that
+// drifts a few degrees between them); one of another dive at every heading.
 message SlamBaseMapLoad {
   string name = 1; // The file (.sbez), without a folder: a recording, or its map file (<recording>_map.sbez).
   StorageLocation storage_location = 2; // Where it is.
@@ -599,14 +607,19 @@ message SlamBaseMapLoad {
 // Take the base map away (SetSlamBaseMapReq): the map goes back to where its
 // own scans put it.
 message SlamBaseMapClear {
-  uint32 load_id = 1; // The load to clear (SlamBaseMapState.load_id): only if it is still the current one.
+  // The load to clear. It must be the current one (SlamBaseMapState.load_id), else the request is refused with
+  // SLAM_REQUEST_ERROR_OTHER_BASE_MAP. 0 is the current one only before any base map was loaded: once one was,
+  // a clear with 0 is refused.
+  uint32 load_id = 1;
 }
 
 // The place found (or passed) is wrong (SetSlamBaseMapReq): it is dropped,
 // the map goes back to where its own scans put it, and the search goes on
 // without that place or one near it.
 message SlamBaseMapReject {
-  uint32 fix_id = 1; // The place (SlamBaseMapState.fix_id): only if it is still the current one.
+  // The place (SlamBaseMapState.fix_id): only if it is still the current one. A fix id is never repeated while
+  // the SLAM runs, so a late reject drops no place found since, in this load or another.
+  uint32 fix_id = 1;
 }
 
 // Where the drone is in the base map, roughly (SetSlamBaseMapReq): until
@@ -614,7 +627,10 @@ message SlamBaseMapReject {
 // outside scores better by the margin a place needs (else the hint is
 // dropped: SLAM_BASE_MAP_MISS_OUTSIDE_HINT). Radius 0 drops the hint.
 message SlamBaseMapHint {
-  uint32 load_id = 1; // The load it is for (SlamBaseMapState.load_id).
+  // The load it is for. It must be the current one (SlamBaseMapState.load_id), else the request is refused with
+  // SLAM_REQUEST_ERROR_OTHER_BASE_MAP; once a base map was loaded, a hint with 0 is refused. A hint also needs a
+  // base map loaded, else SLAM_REQUEST_ERROR_NO_BASE_MAP.
+  uint32 load_id = 1;
   Vector3 position = 2; // The drone's position in the base map's frame (m; z is not used).
   float radius = 3; // How far from position it may be (m).
 }

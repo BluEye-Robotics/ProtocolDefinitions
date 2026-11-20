@@ -441,6 +441,8 @@ message SetSlamBaseMapReq {
 // Response after changing the SLAM's base map.
 message SetSlamBaseMapRep {
   bool available = 1; // True if the SLAM is running and answered.
-  SlamBaseMapState base_map = 2; // The base map after the request (unset: the SLAM cannot localize in one).
+  // The base map after the request. Unset when the SLAM cannot localize in one, and when available is false (no
+  // SLAM answered, and the drone's request server answered for it).
+  SlamBaseMapState base_map = 2;
   SlamRequestError error = 3; // Why the action was not done, when it was not.
 }
