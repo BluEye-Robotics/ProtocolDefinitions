@@ -759,6 +759,8 @@ message Reference {
   float depth = 5; // Reference drone depth below surface (m).
   float heading = 6; // Reference used in auto heading mode, gyro based (°).
   float altitude = 7; // Reference used in auto altitude mode (m).
+  float roll = 8; // Reference roll angle (°). Zero on drones without roll control.
+  float pitch = 9; // Reference pitch angle (°). Zero on drones without pitch control.
 }
 
 // Notification is used for displaying info, warnings, and errors to the user.
