@@ -132,13 +132,10 @@ enum SlamMultibeamMode {
 // a report, the mode is as set (AUTO, not the one it chose).
 message SlamMultibeamSettings {
   SlamMultibeamMode mode = 1; // How the returns are placed.
-  // The mosaic's resolution (m a pixel). 0: from the sonar's range, the resolution the pings are matched at.
-  // It applies to the mosaic's tiles begun after the change; one finer than finest_mosaic_resolution takes that.
-  // A tile may be finer where its pings' range is short and coarser where it is long: each raster has its own.
-  optional float mosaic_resolution = 2;
-  // In a report, the finest mosaic_resolution the SLAM takes (m a pixel), as its computer allows; a tile of a
-  // short range may still be finer (SlamRaster.resolution).
-  optional float finest_mosaic_resolution = 3;
+  // The mosaic's resolution was a setting once; the SLAM now paints each tile as finely as its pings' range
+  // calls for (SlamRaster.resolution).
+  reserved 2, 3;
+  reserved "mosaic_resolution", "finest_mosaic_resolution";
 }
 
 // Settings of a sensor that feeds the SLAM.
@@ -449,7 +446,7 @@ message SlamMapFrame {
   optional float origin_depth = 4;
   google.protobuf.Timestamp start_time = 5; // Host time of the map's first scan (its first keyframe's).
   SlamPlatform platform = 6; // What the map's poses are the poses of.
-  // Where the map lies on the Earth, once position fixes have placed it (be-slam --gnss); unset without.
+  // Where the map lies on the Earth, once position fixes have placed it; unset without.
   SlamGeoreference georeference = 7;
 }
 
@@ -492,15 +489,18 @@ message SlamScan {
 
 // A saved map, in brief: the first record of a map file
 // (<recording>_map.sbez: this, then the map as SlamMapTel parts, its rasters
-// deflated), so that a client lists maps and shows them small without
-// reading them whole. The SLAM writes one beside each of its recordings; a
-// client makes one of a recording it has (a file on the pilot's device) and
-// puts it in the drone's media folder, where the SLAM loads it as its own.
+// deflated, which a client's file may follow with SlamMapUpdateTel), so that a
+// client lists maps and shows them small without reading them whole. A SLAM
+// that can localize in a base map writes one beside each of its recordings;
+// a client makes one of a recording it has (a file on the pilot's device) and
+// puts it in the drone's media folder, where the SLAM loads it as its own. A
+// map file is written under a name ending in .part.sbez and renamed once
+// whole: a reader skips such names.
 message SlamMapSummary {
   string recording = 1; // File name of the recording the map ends (.sbez), without its folder.
   uint32 map_id = 2; // The map's id in that recording.
   SlamMapFrame frame = 3; // How the map's frame lies in the world; start_time is its first scan's.
-  google.protobuf.Timestamp end_time = 4; // Host time of the map's last scan.
+  google.protobuf.Timestamp end_time = 4; // Host time of the map's last scan (in a client's file, its last record).
   SlamSensorType sensor_type = 5; // Kind of sensor that made the map.
   uint32 keyframe_count = 6; // Keyframes in the map.
   // What the map's content covers in its frame (m), along x and along y.
@@ -561,8 +561,10 @@ enum SlamBaseMapAction {
 // (SlamStatusTel.base_map, SetSlamBaseMapRep). Set only by a SLAM that can
 // localize in a base map: unset, a client offers none.
 message SlamBaseMapState {
-  // One more at each change: of this and of a reply, the one with the higher revision is the newer. It starts at
-  // the SLAM's start time (in milliseconds), so a SLAM started again is newer still.
+  // One more at each change, but for what a search updates as it goes (progress, score, margin, overlap,
+  // base_map_pose, last_match_time): of this and of a reply, the one with the higher revision is the newer, and
+  // of two with the same, the later. It starts at the SLAM's start time (in milliseconds), so a SLAM started again
+  // is newer still.
   uint64 revision = 1;
   repeated SlamBaseMapAction actions = 2; // What this SLAM takes; a client offers no other.
   SlamBaseMapStage stage = 3; // Where it stands.
