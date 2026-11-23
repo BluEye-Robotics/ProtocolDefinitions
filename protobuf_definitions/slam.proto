@@ -509,9 +509,9 @@ message SlamMapSummary {
   float min_y = 9;
   float max_y = 10;
   string log_name = 11; // The dive log the recording belongs with (DroneInfo.log_name), when known.
-  // The map's mosaic, coarse (at most 256 pixels a side), its origin in the map's frame: for a list to show. A
-  // reader may rely on that bound, e.g. to size how much of a file it reads for the summary. Unset when the client
-  // that made the file did not draw one.
+  // The map's mosaic, coarse (at most 256 pixels a side), its origin in the map's frame: for a list to show. Unset
+  // when the client that made the file did not draw one. A client's file (uploaded) may break the bound, so a
+  // reader checks it and treats a larger preview as absent.
   SlamRaster preview = 12;
   bool uploaded = 13; // Made by a client from a recording it had, not by the SLAM beside its own.
   // Where the drone was at the map's first scan, as its own position estimate had it
@@ -568,7 +568,9 @@ message SlamBaseMapState {
   SlamBaseMapStage stage = 3; // Where it stands.
   string name = 4; // The base map's file (.sbez) in the drone's media folder, without the folder.
   StorageLocation storage_location = 5; // Where the file is.
-  uint32 load_id = 6; // The load, a new one each time a base map is loaded (0: none yet).
+  // The load, a new one each time a base map is loaded (0: none yet). A Clear keeps it: a Clear naming it again is
+  // taken, and a Hint after it is refused with SLAM_REQUEST_ERROR_NO_BASE_MAP, whatever load it names.
+  uint32 load_id = 6;
   // Which map the file holds (SlamMapSummary): its id in its recording, and its first scan's time. A client draws
   // the file it read only when they agree.
   uint32 base_map_id = 7;
