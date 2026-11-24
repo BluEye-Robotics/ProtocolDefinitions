@@ -237,15 +237,14 @@ enum SlamRasterValue {
 // the origin: row r and column c cover x from r * resolution and y from
 // c * resolution, each over one resolution.
 //
-// pixels holds exactly rows * columns pixels as pixel_format stores them, and
-// coverage is empty or exactly rows * columns bytes. They may come deflated
-// instead (pixels_deflated, coverage_deflated), with pixels and coverage empty:
-// inflated, they hold what pixels and coverage would. A raster that disagrees, whose
+// Its planes come deflated (zlib): pixels_deflated inflates to exactly
+// rows * columns pixels as pixel_format stores them, and coverage_deflated is
+// empty or inflates to exactly rows * columns bytes. A raster that disagrees, whose
 // resolution is not positive or origin is unset, or whose pixel_format or value the
 // client does not know, is not used: the submap keeps the raster it had. A change
 // to how pixels are placed or read comes as a new pixel_format, a new kind of
-// content, or new fields that leave pixels empty, never as a field old clients
-// would ignore while they read pixels.
+// content, or new fields that leave pixels_deflated empty, never as a field old
+// clients would ignore while they read pixels_deflated.
 message SlamRaster {
   SlamPose origin = 1; // The raster's frame, in the frame the enclosing message names.
   uint32 rows = 2; // Rows: the raster spans rows * resolution along its x.
@@ -255,18 +254,13 @@ message SlamRaster {
   float resolution = 4;
   SlamRasterFormat pixel_format = 5; // How the pixels are stored.
   SlamRasterValue value = 6; // What the pixels measure.
-  bytes pixels = 7; // rows * columns pixels, row by row, each as pixel_format stores it.
-  // rows * columns bytes, row by row: how well each pixel was seen, from 0 (not seen: the pixel
-  // holds nothing) to 255, for weighing rasters where they overlap. Empty, and coverage_deflated
-  // empty too: every pixel seen fully, as 255.
-  bytes coverage = 8;
-  // pixels compressed with zlib (deflate in a zlib stream, RFC 1950), in place of pixels, which is then
-  // empty: a fraction of the bytes over the link. A client that does not know it sees no pixels, and keeps
-  // the raster it had.
-  bytes pixels_deflated = 9;
-  // coverage compressed the same way, in place of coverage, which is then empty. Only with
-  // pixels_deflated, so that a client that knows neither never takes the coverage for full.
-  bytes coverage_deflated = 10;
+  // The pixels, rows * columns of them row by row, each as pixel_format stores it, compressed with zlib
+  // (deflate in a zlib stream, RFC 1950): a fraction of the bytes over the link.
+  bytes pixels_deflated = 7;
+  // How well each pixel was seen, compressed the same way: rows * columns bytes, row by row, from 0 (not
+  // seen: the pixel holds nothing) to 255, for weighing rasters where they overlap. Empty: every pixel seen
+  // fully, as 255.
+  bytes coverage_deflated = 8;
 }
 
 // A submap: part of the map from one sensor, in the platform's frame at its anchor
