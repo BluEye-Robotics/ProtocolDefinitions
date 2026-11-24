@@ -119,8 +119,6 @@ message ControlModeCommand {
 // filters below. The models have to be running; a trigger for a model that is not running is not
 // satisfied and TriggerStatus reports sensor_unavailable.
 message DetectionTrigger {
-  reserved 6, 7, 8; // hold_ms, release_ms and cooldown_ms; the times are now durations in MissionRule.
-  reserved "hold_ms", "release_ms", "cooldown_ms";
   repeated string class_names = 1; // Any of these class names; empty matches every class.
   string model_name = 2; // Only detections from this model; empty matches every model.
   Camera camera = 3; // Only detections from this camera; unspecified matches every camera.
@@ -190,23 +188,21 @@ enum TriggerKind {
 // a rule has to carry at least one instruction in one of its lists. A rule with no triggers never
 // fires. Instructions that move the drone (waypoint, go to home,
 // transect, survey, depth set point, relative depth, go to surface or seabed, control mode,
-// heading) and waits are refused in rules; camera, tilt, lights, laser, multibeam, tilt
-// stabilization, CV model, annotation and cruise speed are allowed.
+// heading), waits and cruise speed are refused in rules; camera, tilt, lights, laser, multibeam,
+// tilt stabilization, CV model and annotation are allowed.
 message MissionRule {
-  reserved 4; // The single detection_trigger, replaced by the triggers list.
-  reserved "detection_trigger";
   uint32 id = 1; // Rule id, defined by the client. Must be greater than zero and unique.
   string name = 2; // Rule name, for the log and the app.
   bool disabled = 3; // A disabled rule never fires. Rules run unless this is set.
-  repeated Instruction enter_instructions = 5; // Run when the rule fires.
-  repeated Instruction exit_instructions = 6; // Run when the rule releases.
-  repeated Trigger triggers = 7; // Conditions that must all be satisfied at once for the rule to fire.
+  repeated Trigger triggers = 4; // Conditions that must all be satisfied at once for the rule to fire.
   // How long all the triggers must stay satisfied before the rule fires. At most an hour.
-  google.protobuf.Duration hold_duration = 8;
+  google.protobuf.Duration hold_duration = 5;
   // How long a trigger must stay unsatisfied before the rule releases. At most an hour.
-  google.protobuf.Duration release_duration = 9;
+  google.protobuf.Duration release_duration = 6;
   // Time after a release before the rule can fire again. At most an hour.
-  google.protobuf.Duration cooldown_duration = 10;
+  google.protobuf.Duration cooldown_duration = 7;
+  repeated Instruction enter_instructions = 8; // Run when the rule fires.
+  repeated Instruction exit_instructions = 9; // Run when the rule releases.
 }
 
 // MissionRuleStatus is the state of one rule.
