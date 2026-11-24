@@ -87,7 +87,9 @@ message Waypoint {
   LatLongPosition global_position = 3; // Position if the waypoint (decimal degrees).
   float circle_of_acceptance = 4; // Radius of the acceptance circle around the waypoint (m).
   float speed_to_target = 5; // Desired speed over ground to waypoint (m/s).
-  DepthSetPoint depth_set_point = 6; // Depth set point (optional).
+  // Depth set point (optional). Left out, the drone keeps its depth. A depth of 0 m from the
+  // surface brings the drone to the surface and holds it there; an altitude of 0 m counts as left out.
+  DepthSetPoint depth_set_point = 6;
 }
 
 // Control mode for the vertical axis of the drone.
@@ -372,7 +374,9 @@ message TransectCommand {
   float course = 1; // Course relative to north (deg, 0..360).
   float distance = 2; // Length of the line (m).
   float speed_to_target = 3; // Desired speed over ground (m/s). The mission default when 0.
-  DepthSetPoint depth_set_point = 4; // Optional depth or altitude to hold along the line.
+  // Optional depth or altitude to hold along the line. Left out, the drone keeps its depth.
+  // A depth of 0 m from the surface holds the surface; an altitude of 0 m counts as left out.
+  DepthSetPoint depth_set_point = 4;
   float circle_of_acceptance = 5; // Radius of acceptance at the end of the line (m). The mission default when 0.
 }
 
@@ -410,7 +414,9 @@ message SurveyCommand {
   float turnaround_distance = 4; // Overshoot distance past polygon boundary at each turn (m).
   float cruise_speed = 5; // Desired speed over ground during survey (m/s).
   float circle_of_acceptance = 6; // Radius of acceptance circle for generated waypoints (m).
-  DepthSetPoint depth_set_point = 7; // Optional depth set point for all generated waypoints.
+  // Optional depth set point for the generated waypoints that carry none, which they then hold
+  // as a waypoint's own depth set point. Left out, the drone keeps its depth.
+  DepthSetPoint depth_set_point = 7;
   // The planner generated the pattern in reverse, from its last scan line to its first.
   // The waypoints are already in that order: the drone flies them as given, and
   // the planner reads this back to rebuild the pattern.
