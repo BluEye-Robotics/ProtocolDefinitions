@@ -132,10 +132,6 @@ enum SlamMultibeamMode {
 // a report, the mode is as set (AUTO, not the one it chose).
 message SlamMultibeamSettings {
   SlamMultibeamMode mode = 1; // How the returns are placed.
-  // The mosaic's resolution was a setting once; the SLAM now paints each tile as finely as its pings' range
-  // calls for (SlamRaster.resolution).
-  reserved 2, 3;
-  reserved "mosaic_resolution", "finest_mosaic_resolution";
 }
 
 // Settings of a sensor that feeds the SLAM.
