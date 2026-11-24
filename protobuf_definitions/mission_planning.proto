@@ -87,7 +87,9 @@ message Waypoint {
   LatLongPosition global_position = 3; // Position if the waypoint (decimal degrees).
   float circle_of_acceptance = 4; // Radius of the acceptance circle around the waypoint (m).
   float speed_to_target = 5; // Desired speed over ground to waypoint (m/s).
-  DepthSetPoint depth_set_point = 6; // Depth set point (optional).
+  // Depth set point (optional). Left out, the drone keeps its depth. A depth of 0 m from the
+  // surface brings the drone to the surface and holds it there; an altitude of 0 m counts as left out.
+  DepthSetPoint depth_set_point = 6;
 }
 
 // Control mode for the vertical axis of the drone.
@@ -119,8 +121,6 @@ message ControlModeCommand {
 // filters below. The models have to be running; a trigger for a model that is not running is not
 // satisfied and TriggerStatus reports sensor_unavailable.
 message DetectionTrigger {
-  reserved 6, 7, 8; // hold_ms, release_ms and cooldown_ms; the times are now durations in MissionRule.
-  reserved "hold_ms", "release_ms", "cooldown_ms";
   repeated string class_names = 1; // Any of these class names; empty matches every class.
   string model_name = 2; // Only detections from this model; empty matches every model.
   Camera camera = 3; // Only detections from this camera; unspecified matches every camera.
@@ -190,23 +190,21 @@ enum TriggerKind {
 // a rule has to carry at least one instruction in one of its lists. A rule with no triggers never
 // fires. Instructions that move the drone (waypoint, go to home,
 // transect, survey, depth set point, relative depth, go to surface or seabed, control mode,
-// heading) and waits are refused in rules; camera, tilt, lights, laser, multibeam, tilt
-// stabilization, CV model, annotation and cruise speed are allowed.
+// heading), waits and cruise speed are refused in rules; camera, tilt, lights, laser, multibeam,
+// tilt stabilization, CV model and annotation are allowed.
 message MissionRule {
-  reserved 4; // The single detection_trigger, replaced by the triggers list.
-  reserved "detection_trigger";
   uint32 id = 1; // Rule id, defined by the client. Must be greater than zero and unique.
   string name = 2; // Rule name, for the log and the app.
   bool disabled = 3; // A disabled rule never fires. Rules run unless this is set.
-  repeated Instruction enter_instructions = 5; // Run when the rule fires.
-  repeated Instruction exit_instructions = 6; // Run when the rule releases.
-  repeated Trigger triggers = 7; // Conditions that must all be satisfied at once for the rule to fire.
+  repeated Trigger triggers = 4; // Conditions that must all be satisfied at once for the rule to fire.
   // How long all the triggers must stay satisfied before the rule fires. At most an hour.
-  google.protobuf.Duration hold_duration = 8;
+  google.protobuf.Duration hold_duration = 5;
   // How long a trigger must stay unsatisfied before the rule releases. At most an hour.
-  google.protobuf.Duration release_duration = 9;
+  google.protobuf.Duration release_duration = 6;
   // Time after a release before the rule can fire again. At most an hour.
-  google.protobuf.Duration cooldown_duration = 10;
+  google.protobuf.Duration cooldown_duration = 7;
+  repeated Instruction enter_instructions = 8; // Run when the rule fires.
+  repeated Instruction exit_instructions = 9; // Run when the rule releases.
 }
 
 // MissionRuleStatus is the state of one rule.
@@ -376,7 +374,9 @@ message TransectCommand {
   float course = 1; // Course relative to north (deg, 0..360).
   float distance = 2; // Length of the line (m).
   float speed_to_target = 3; // Desired speed over ground (m/s). The mission default when 0.
-  DepthSetPoint depth_set_point = 4; // Optional depth or altitude to hold along the line.
+  // Optional depth or altitude to hold along the line. Left out, the drone keeps its depth.
+  // A depth of 0 m from the surface holds the surface; an altitude of 0 m counts as left out.
+  DepthSetPoint depth_set_point = 4;
   float circle_of_acceptance = 5; // Radius of acceptance at the end of the line (m). The mission default when 0.
 }
 
@@ -414,7 +414,9 @@ message SurveyCommand {
   float turnaround_distance = 4; // Overshoot distance past polygon boundary at each turn (m).
   float cruise_speed = 5; // Desired speed over ground during survey (m/s).
   float circle_of_acceptance = 6; // Radius of acceptance circle for generated waypoints (m).
-  DepthSetPoint depth_set_point = 7; // Optional depth set point for all generated waypoints.
+  // Optional depth set point for the generated waypoints that carry none, which they then hold
+  // as a waypoint's own depth set point. Left out, the drone keeps its depth.
+  DepthSetPoint depth_set_point = 7;
   // The planner generated the pattern in reverse, from its last scan line to its first.
   // The waypoints are already in that order: the drone flies them as given, and
   // the planner reads this back to rebuild the pattern.
